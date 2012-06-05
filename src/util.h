@@ -26,9 +26,11 @@
 #include "stdlib.h"
 #include "math.h"
 
+const double PI = atan(1.0)*4;
 
 void initrand();
-float map(float, float, float);
+float mapf(float, float, float);
+float unmapf(float, float, float);
 int randint(int, int);
 float randf();
 double randd();
@@ -44,5 +46,7 @@ bool between(int, int, int);
 float clipf(float, float, float);
 double roundd(double, int);
 int fold(int, int, int);
+double linInterp(double, double, double);
+double cosInterp(double, double, double);
 
 #endif

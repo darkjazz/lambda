@@ -23,9 +23,16 @@
 #ifndef OGL_H
 #define OGL_H
 
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
+#include "cinder/app/AppBasic.h"
+#include "cinder/gl/gl.h"
+#include "cinder/Camera.h"
+
 #include "world.h"
+
+using namespace ci;
+using namespace ci::app;
+
+//const double pi = 3.1415926535;
 
 const int numPatterns = 16;
 
@@ -33,8 +40,11 @@ struct pattern {
 
 	bool active; 
 	double alpha;
+	int colormap;
+	int alphamap;
+	Color color;
 	
-	pattern(): active(false), alpha(0) {};
+	pattern(): active(false), alpha(0), colormap(0), alphamap(0) { color = Color(0.0, 0.0, 0.0); };
 	~pattern() {};
 };
 
@@ -42,10 +52,11 @@ struct pattern {
 class GraphicsRenderer {
 
 public:
-	GraphicsRenderer(int winWidth, int winHeight) {
+	GraphicsRenderer(World* world) {
 		patternLib = new pattern[numPatterns];
-		fragSizeX = (double)(winWidth / world->sizeX()) * 0.1;
-		fragSizeY = (double)(winHeight / world->sizeY()) * 0.1;
+		rotateXYZ = Vec3f( 1.0f, 0.0f, 0.0f);
+		rotateAngle = 0.0f;
+		ptrWorld = world;
 	};
 	
 	~GraphicsRenderer() {
@@ -61,26 +72,47 @@ public:
 
 	void setupOgl();
 	
-	void reshape(double, double);
+	void reshape();
 	
-	void prepareFrame();
-
 	// *** draw cells *** //
-
-	void drawFragment(Cell*, Cell*, int, int);
+	
+	void startDraw();
+	
+	void endDraw();
+	
+	void drawFragment(Cell*);
 	
 	void drawRow();
 	
 	void drawWorld();
+	
+	void update();
+	
+	void setBackground(float r, float g, float b) {
+		_bgr = r; _bgg = g; _bgb = b;
+	};
+	
+	Vec3f rotateXYZ;
+	
+	float rotateAngle;
+	
+	CameraPersp mCam;	
+	Matrix44f mRotation;
+	
+	Vec3f mEye, mCenter, mUp;
+	
+	float mDirectional;
+	Vec2f mMousePos;	
 		
 private:
 	
-	double fragSizeX, fragSizeY, state;
+	double fragSizeX, fragSizeY, fragSizeZ, state;
 	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha;
 	int currentIndex, vectorSize;
 	Cell* currentCell;
 	Cell* ptrBMU;
-	World* world;
+	World* ptrWorld;
+	float _bgr, _bgg, _bgb;
 	
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
 	
@@ -114,10 +146,10 @@ private:
 	
 	void pattern13(int, int);
 	
-	void pattern14(int, int);
+	void pattern14(int, int, int);
 
-	void pattern15(int, int);
-
+	void pattern15(int, int, int);
+	
 	// *** basic drawing functions *** //
 	
 	void fillRect (int);

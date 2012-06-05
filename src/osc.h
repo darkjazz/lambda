@@ -23,8 +23,6 @@
 #ifndef OSC_H
 #define OSC_H
 
-#include "cinder/app/AppBasic.h"
-
 #include "OscSender.h"
 #include "OscListener.h"
 
@@ -44,11 +42,14 @@ public:
 		_receivePort = receivePort;
 		_sender.setup(remoteHost, sendToPort);
 		_listener.setup(receivePort);
+		_receivedQuit = false;
 	};
 	
 	~OSCMessenger() {};
 	
-	void sendMessage(int);
+	void sendAlive();
+	
+	void sendStates();
 	
 	void collectMessages();
 	

@@ -23,14 +23,32 @@
 
 #include "osc.h"
 
-void OSCMessenger::sendMessage(int alive) {
+void OSCMessenger::sendAlive() {
+	
 	osc::Message msg;
 	
 	msg.setAddress("/lambda/world/alive");
-	msg.addIntArg(alive);
+	msg.addIntArg( _world->alive() );
 	
 	msg.setRemoteEndpoint(_remoteHost, _sendToPort);
 	_sender.sendMessage(msg);
+	
+}
+
+void OSCMessenger::sendStates() {
+		
+	int i;
+	
+	osc::Message msg;
+	msg.setAddress("/lambda/world/states");
+	
+	for (i = 0; i < _world->getQueryStatesSize(); i++) {
+		msg.addFloatArg(_world->getQueryStateAtIndex(i));
+	}
+		
+	msg.setRemoteEndpoint(_remoteHost, _sendToPort);
+	_sender.sendMessage(msg);
+	
 }
 
 void OSCMessenger::collectMessages() {
@@ -43,8 +61,12 @@ void OSCMessenger::collectMessages() {
 		if (addr.compare("/lambda/world/init") == 0) {
 			_world->init(msg.getArgAsInt32(0), msg.getArgAsInt32(1), msg.getArgAsInt32(2));
 		}
+		else if (addr.compare("/lambda/world/interpl") == 0) {
+			_world->setInterpolation((Interpolation)msg.getArgAsInt32(0), msg.getArgAsInt32(1));
+ 		}
 		else if (addr.compare("/lambda/world/rule/init") == 0) {
 			_world->initRule((R)msg.getArgAsInt32(0));
+			_world->mapStates();
  		}
 		else if (addr.compare("/lambda/world/rule/births") == 0) {
 			int *b;
@@ -71,16 +93,13 @@ void OSCMessenger::collectMessages() {
 			_world->rule()->setAdd((double)msg.getArgAsFloat(0));
 		}
 		else if (addr.compare("/lambda/world/rule/weights") == 0) {
-			vector<double> v; 
-			int size;
-			if (_world->sizeZ() > 1) 
-				size = 26;
-			else
-				size = 8;
-			for (i = 0; i < size; i++) {
-				v.push_back((double)msg.getArgAsFloat(i));
+			double* w;
+			w = new double[_world->rule()->nSize()];
+			for (i = 0; i < _world->rule()->nSize(); i++) {
+				w[i] = (double)msg.getArgAsFloat(i);
 			}
-			_world->rule()->setWeights(v);
+			_world->rule()->setWeights(w);
+			delete [] w;
 		}
 		else if (addr.compare("/lambda/world/reset/rand") == 0) {
 			bool include;
@@ -110,7 +129,50 @@ void OSCMessenger::collectMessages() {
 								 msg.getArgAsInt32(4), 
 								 msg.getArgAsInt32(5) 
 								 );
+		}	
+		else if (addr.compare("/lambda/world/query/states") == 0) {
+			int* ind;
+			ind = new int[msg.getNumArgs()];
+			for (i = 0; i < msg.getNumArgs(); i++) {
+				ind[i] = msg.getArgAsInt32(i);
+			}
+			_world->setQueryIndices(ind, msg.getNumArgs());
+			delete [] ind;
+ 		}		
+		else if (addr.compare("/lambda/world/query/stop") == 0) {
+			_world->stopQuery();
+ 		}
+		else if (addr.compare("/lambda/graphics/rotate") == 0) {
+			_ogl->rotateXYZ = Vec3f(
+				msg.getArgAsFloat(0),
+				msg.getArgAsFloat(1),
+				msg.getArgAsFloat(2)
+			);
+			_ogl->rotateAngle = msg.getArgAsFloat(3);
+		}
+		else if (addr.compare("/lambda/graphics/view") == 0) {
+			_ogl->mEye = Vec3f(
+				msg.getArgAsFloat(0),
+				msg.getArgAsFloat(1),
+				msg.getArgAsFloat(2)
+			);
+		}
+		else if (addr.compare("/lambda/graphics/background") == 0) {
+			_ogl->setBackground(
+				msg.getArgAsFloat(0),
+				msg.getArgAsFloat(1),
+				msg.getArgAsFloat(2)
+			);
 		}		
+		else if (addr.compare("/lambda/graphics/pattern") == 0) {
+			_ogl->patternLib[msg.getArgAsInt32(0)].active = (bool)msg.getArgAsInt32(1); 
+			_ogl->patternLib[msg.getArgAsInt32(0)].alpha = msg.getArgAsFloat(2); 
+			_ogl->patternLib[msg.getArgAsInt32(0)].colormap = msg.getArgAsInt32(3); 
+			_ogl->patternLib[msg.getArgAsInt32(0)].alphamap = msg.getArgAsInt32(4);	
+			_ogl->patternLib[msg.getArgAsInt32(0)].color.r = msg.getArgAsFloat(5);	
+			_ogl->patternLib[msg.getArgAsInt32(0)].color.g = msg.getArgAsFloat(6);	
+			_ogl->patternLib[msg.getArgAsInt32(0)].color.b = msg.getArgAsFloat(7);			
+		}
 		else if (addr.compare("/lambda/quit") == 0) {
 			_receivedQuit = true;
  		}

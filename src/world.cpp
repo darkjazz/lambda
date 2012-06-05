@@ -23,19 +23,6 @@
 
 #include "world.h"
 
-/* ****** CELL ****** */
-
-int Cell::countAliveNeighbors(int stateIndex) {
-	int count, i;
-	count = 0;
-	for (i = 0; i < 26; i++) {
-		if (neighbors[i]->istates[stateIndex] == 1) {
-			count++;
-		}
-	}
-	return count;
-}
-
 /* ****** WORLD ****** */
 
 World::World () {
@@ -46,10 +33,21 @@ World::World () {
 	
 	cells = NULL;
 	
+	_rule = NULL;
+	
+	_updateStates = false;
+	
+	_interpType = NONE;
+	
+	_interpPhase = 0;
+	
+	_interpCount = 1;
+	
+	_bQueryStates = false;
+	
 }
 
 World::World (int sizeX, int sizeY, int sizeZ) {
-	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ;
 	
 	_index = 0;
 	
@@ -57,6 +55,18 @@ World::World (int sizeX, int sizeY, int sizeZ) {
 	
 	cells = NULL;
 	
+	_rule = NULL;
+
+	_updateStates = false;
+
+	_interpType = NONE;
+	
+	_interpPhase = 0;
+	
+	_interpCount = 1;
+
+	_bQueryStates = false;
+
 	this->init(sizeX, sizeY, sizeZ);
 }
 
@@ -66,7 +76,6 @@ World::~World() {
 
 void World::init(int sizeX, int sizeY, int sizeZ) {
 	int x, y, z, i;
-	int xx, yy, zz, ind;
 	double state;
 
 	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ;
@@ -89,51 +98,13 @@ void World::init(int sizeX, int sizeY, int sizeZ) {
 				cells[x][y][z].z = z;			
 				state = 0;
 				for (i = 0; i < 3; i++) {
-					cells[x][y][z].istates[i] = 0;			
+					cells[x][y][z].states[i] = 0.0;
 				}
 			}
 						
 		}
 	}
-	
-	// set neighborhood
-
-	for (x = 0; x < _sizeX; x++) {
-		for (y = 0; y < _sizeY; y++) {
-			if (_sizeZ > 1) {
-				for (z = 0; z < _sizeZ; z++) {
-					delete [] cells[x][y][z].neighbors;
-					cells[x][y][z].neighbors = new Cell*[26];
-					ind = 0;
-					for(xx = -1; xx <= 1; xx++) {
-						for(yy = -1; yy <= 1; yy++) {
-							for (zz = -1; zz <= 1; zz++) {
-								if (!(xx==0 && yy==0 && zz==0)) {
-									cells[x][y][z].neighbors[ind] = &(cells[wrapi(x+xx, 0, _sizeX - 1)][wrapi(y+yy, 0, _sizeY - 1)][wrapi(z+zz, 0, _sizeZ - 1)]);
-									ind++;
-								}
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				delete [] cells[x][y][0].neighbors;
-				cells[x][y][0].neighbors = new Cell*[8];
-				ind = 0;
-				for(xx = -1; xx <= 1; xx++) {
-					for(yy = -1; yy <= 1; yy++) {
-						if (!(xx==0 && yy==0)) {
-							cells[x][y][0].neighbors[ind] = &(cells[wrapi(x+xx, 0, _sizeX - 1)][wrapi(y+yy, 0, _sizeY - 1)][0]);
-							ind++;
-						}
-					}
-				}
-
-			}
-		}
-	}
+		
 }
 
 void World::clear (void) {
@@ -157,13 +128,17 @@ void World::clear (void) {
 	}
 }
 
-double World::cellState(int x, int y, int z) { return cells[x][y][z].istates[_index]; }
+double World::cellState(int x, int y, int z) { return cells[x][y][z].states[_index]; }
 
-void World::nextIndex() { _index = wrapi(_index + 1, 0, 2); }
+void World::incrementIndex() { 
+	_index = wrapi(_index + 1, 0, 2); 
+	_interpPhase = 0;
+}
 
 void World::initRandInArea(int left, int bottom, int front, int width, int height, int depth, int maxState, float weight, bool includeAllStates) {
 	
-	int x, y, z, i, state;
+	int x, y, z, i;
+	double state;
 	float coin;
 	
 	for (x = left; x < (left + width); x++) {
@@ -172,16 +147,16 @@ void World::initRandInArea(int left, int bottom, int front, int width, int heigh
 				coin = randf();
 				if (coin >= weight) {
 					if ( includeAllStates && maxState > 2 )
-					{	state = (int)randfloat(1.0, (float)(maxState - 1)); }
+					{	state = (double)randfloat(1.0, (float)(maxState - 1)); }
 					else
-					{	state = 1; }
+					{	state = 1.0; }
 					_alive++;
 				}
 				else {
-					state = 0;
+					state = 0.0;
 				}
 				for (i = 0; i < 3; i++) {
-					cells[x][y][z].istates[i] = state;
+					cells[x][y][z].states[i] = state;
 				}
 			}
 		}
@@ -191,21 +166,22 @@ void World::initRandInArea(int left, int bottom, int front, int width, int heigh
 
 void World::initWireCube(int left, int bottom, int front, int width, int height, int depth) {
 	
-	int x, y, z, i, state;
+	int x, y, z, i;
+	double state;
 	
 	for (x = left; x <= (left + width); x++) {
 		for(y = bottom; y <= (bottom + height); y++) {
 			for(z = front; z <= (front + depth); z++) {
 				if (x == left || x == (left + width) || y == bottom || y == (bottom + height) || z == front || z == (front + depth)) {
-					state = 1;
+					state = 1.0;
 					_alive++;
 				}
 				else
 				{
-					state = 0;
+					state = 0.0;
 				}
 				for (i = 0; i < 3; i++) {
-					cells[x][y][z].istates[i] = state;
+					cells[x][y][z].states[i] = state;
 				}
 			}
 		}
@@ -218,15 +194,115 @@ void World::incrementAlive() { _alive++; }
 void World::resetAlive() { _alive = 0; }
 
 void World::initRule(R r) {
+	N dim;
+	
+	dim.x = _sizeX;
+	dim.y = _sizeY;
+	dim.z = _sizeZ;
+	
 	switch (r) {
 		case CONT:
-			_rule = new Continuous();
+			_rule = new Continuous(dim);
 			break;
 		case LIFE: 
-			_rule = new Life();
+			_rule = new Life(dim);
 			break;
 		default:
-			_rule = new Faders();
+			_rule = new Faders(dim);
 			break;
 	}
+	
+	_rule->world = cells;
 }
+
+void::World::prepareNext() {
+	
+	if (_interpPhase == _interpCount) {
+		incrementIndex();
+		_updateStates = true;
+	}
+	else {
+		_updateStates = false;
+	}
+	
+	_interpPhase++;
+	
+	_currentQueryIndex = 0;
+	
+}
+
+void World::next(int x, int y, int z) { 
+	
+	if (_updateStates) {
+		_rule->next(&cells[x][y][z], _index);		
+	}
+	
+	interpolate(x, y, z);
+	
+	if (_bQueryStates) {
+		if (_queryStates[_currentQueryIndex].include(x, y, z)) {
+			_queryStates[_currentQueryIndex].value = cells[x][y][z].states[_index];
+			_currentQueryIndex++;
+		}
+	}
+}
+
+void World::finalizeNext() {}
+
+void World::interpolate(int x, int y, int z) {
+	Cell * cell;
+	cell = &cells[x][y][z];
+	
+	if (_interpCount < 1) _interpCount = 1;
+	
+	switch (_interpType) {
+		case LINEAR:
+			cell->phase = linInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], _interpPhase / _interpCount);
+			break;
+		case COSINE:
+			cell->phase = cosInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], _interpPhase / _interpCount);
+			break;
+		default:
+			cell->phase = cell->states[_index];
+			break;
+	}
+	
+}
+
+void World::setInterpolation(Interpolation itype, int icount) {
+	_interpType = itype; 
+	_interpCount = icount; 
+	_interpPhase = 0;
+}
+
+void World::mapStates() {
+	
+	int x, y, z;
+	double state;
+	
+	for (x = 0; x < _sizeX; x++) {
+		for (y = 0; y < _sizeY; y++) {
+			for (z = 0; z < _sizeZ; z++) {
+				state = cells[x][y][z].states[_index];
+				state = _rule->mapState(state);
+				
+				cells[x][y][z].states[0] = state;
+				cells[x][y][z].states[1] = state;
+				cells[x][y][z].states[2] = state;
+			}
+		}
+	}
+	
+}
+
+void World::setQueryIndices(int * indices, int size) {
+	int i;
+	_queryStates.clear();
+	_queryStatesSize = size / 3;
+	for (i=0; i<size; i+=3) {
+		_queryStates.push_back( State(indices[i], indices[i+1], indices[i+2], i/3 ) );
+	}
+	_bQueryStates = true;
+	
+};
+

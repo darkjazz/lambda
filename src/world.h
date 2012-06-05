@@ -20,18 +20,40 @@
  *	along with lambda.  If not, see <http://www.gnu.org/licenses/>. 
  *
  */
+
 #ifndef WORLD_H
 #define WORLD_H
 
 #include <vector>
 #include <iostream>
+#include <typeinfo>
 #include <math.h>
 
 #include "util.h"
+#include "rule.h"
 
 using namespace std;
 
+class Rule;
+class Life;
+class Faders;
+class Continuous;
+struct N;
+
 enum R { CONT, LIFE, GEN };
+enum Interpolation { NONE, LINEAR, COSINE };
+
+struct State { 
+	int x, y, z, index;
+	double value;
+	State() {};
+	State(int ax, int ay, int az, int aindex) { 
+		x = ax; y = ay; z = az; index = aindex;
+	};
+	bool include(int argX, int argY, int argZ) {
+		return (argX == x && argY == y && argZ == z);
+	}
+};
 
 //	**** CELL **** 
 
@@ -40,86 +62,11 @@ public:
 	Cell() : x(0), y(0), z(0) {};
 	~Cell() {};
 	int x, y, z; 
-	int istates[3];
-	double dstates[3];
-	vector<double> weights;
-	Cell **neighbors;
+	double states[3];
+	double phase;
+	vector<double> weights;	
 	
-	int countAliveNeighbors(int);
 };
-
-
-
-//	**** RULE ****
-
-class Rule {
-public: 
-	Rule();
-	~Rule();
-	
-	int* states() { return _states; };
-	void setStates(int);
-	int numStates() { return _numStates; };
-	bool cellAlive(Cell*, int);
-	
-	virtual void next(Cell*, int) {};
-	virtual void setBirths(int*) {};
-	virtual void setSurvivals(int*) {};
-	virtual void setAdd(double) {};
-	virtual void setWeights(vector<double>) {};
-	
-private:
-	int *_states;
-	int _numStates;
-};
-
-class Faders : public Rule {
-public:
-	Faders() {};
-	Faders(int*, int*, int);
-	~Faders() {};
-	
-	void setBirths(int*);
-	void setSurvivals(int*);
-	
-	void next(Cell*, int);
-	
-private:
-	int _births[26]; 
-	int _survivals[26];
-};
-
-class Life : public Rule {
-public:
-	Life() {};
-	Life(int*, int*);
-	~Life() {};
-	
-	void setBirths(int*);
-	void setSurvivals(int*);
-	
-	void next(Cell*, int);
-	
-private:
-	int _births[26]; 
-	int _survivals[26];	
-};
-
-class Continuous : public Rule {
-public:
-	Continuous() {};
-	Continuous(double, vector<double>);
-	~Continuous() {};
-	
-	void next(Cell*, int);
-	void setAdd(double);
-	void setWeights(vector<double>);
-	
-private:
-	double _add;
-	vector<double> _weights;
-};
-
 
 //	**** WORLD ****
 
@@ -139,24 +86,49 @@ public:
 	int sizeY() { return _sizeY; };
 	int sizeZ() { return _sizeZ; };
 	int alive() { return _alive; };
-	Rule* rule() { return _rule; };
+	Rule* rule() { return _rule; }
 	double cellState(int, int, int);
 	
-	void nextIndex();
+	void incrementIndex();
 	void incrementAlive();
 	void resetAlive();
 	int vectorSize();
 	
 	void initRandInArea(int, int, int, int, int, int, int, float, bool);
 	void initWireCube(int, int, int, int, int, int);
+	void next(int, int, int);
+	void interpolate(int, int, int);
+	
 	void initRule(R);
+	
+	void prepareNext();
+	void finalizeNext();
+	
+	bool initialized() { return (cells != NULL && _rule != NULL); };
+	bool bQueryStates() { return _bQueryStates; }
+	
+	void setInterpolation(Interpolation, int);
+	void setQueryIndices(int*, int);
+	int getQueryStatesSize() { return _queryStatesSize; }
+	double getQueryStateAtIndex(int index) { return _queryStates[index].value; }
+	void stopQuery() { _bQueryStates = false; };
+	void mapStates();
 	
 private:
 	void clear();
 	int _sizeX, _sizeY, _sizeZ, _index, _alive;
-	int _vectorSize;
-	Rule* _rule;	
+	int _vectorSize, _nSize;
 	
+	Interpolation _interpType;
+	int _interpCount, _interpPhase;
+	
+	bool _updateStates; 
+	bool _bQueryStates;
+	vector<State> _queryStates;
+	
+	int _queryStatesSize, _currentQueryIndex;
+	
+	Rule* _rule;
 };
 
 

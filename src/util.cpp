@@ -23,14 +23,18 @@
 
 #include "util.h"
 
-//void initrand() 
-//{ 
+void initrand() 
+{ 
 //    srand((unsigned)(time(0))); 
-//} 
+} 
 
-float map(float val, float lo, float hi)
+float mapf(float val, float lo, float hi)
 {
 	return val * (hi - lo) + lo;
+}
+
+float unmapf(float val, float lo, float hi) {
+	return (val - lo) / (hi - lo);
 }
 
 int randint(int min, int max) 
@@ -143,4 +147,14 @@ int fold(int in, int lo, int hi) {
 	if (c>=range) c = range2 - c;
 	return c + lo;
 	
+}
+
+double linInterp(double p1, double p2, double mu) {
+	return (p1*(1-mu)+p2*mu);
+}
+
+double cosInterp(double p1, double p2, double mu) {
+	double mu2;
+	mu2 = (1-cos(mu*PI))/2;
+	return (p1*(1-mu2)+p2*mu2);
 }

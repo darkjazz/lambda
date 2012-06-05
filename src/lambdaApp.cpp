@@ -21,30 +21,25 @@
  *
  */
 
-#include "cinder/app/AppBasic.h"
-#include "cinder/gl/gl.h"
-
 #include "osc.h"
-
-using namespace ci;
-using namespace ci::app;
-using namespace std;
 
 class LambdaApp : public AppBasic {
 public:
-	void prepareSettings( Settings *settings );	
+	void prepareSettings(Settings*);	
 	void setup();
+	void resize(ResizeEvent);
 	void update();
 	void draw();
-	void clear();
+	void shutdown();
 
 	OSCMessenger *oscMessenger; 
 	World *world; 
 	GraphicsRenderer *ogl; 
+	Rule *rule;
 	
 private:
 	int _winSizeX, _winSizeY;
-	int _frameRate, _inport, _outport;
+	int _frameRate, _inport, _outport, _framesPerUpdate;
 	string _remoteHost;
 	
 };
@@ -57,10 +52,11 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	
 	_winSizeX = 800;
 	_winSizeY = 600;
-	_frameRate = 60;
+	_frameRate = 128;
 	_remoteHost	= "127.0.0.1";
 	_inport = 7000;
 	_outport = 57120;
+	_framesPerUpdate = 10;
 	
 	args = getArgs();
 	
@@ -83,6 +79,9 @@ void LambdaApp::prepareSettings(Settings *settings) {
 		else if (args[i].compare("-outport") == 0) {
 			_outport = atoi(args[i+1].c_str());		
 		}
+		else if (args[i].compare("-fpu") == 0) {
+			_framesPerUpdate = atoi(args[i+1].c_str());		
+		}
 	}	
 	
 	settings->setWindowSize( _winSizeX, _winSizeY );
@@ -92,33 +91,63 @@ void LambdaApp::prepareSettings(Settings *settings) {
 
 }
 
+void LambdaApp::resize(ResizeEvent event) {
+	ogl->reshape();
+}
+
 void LambdaApp::setup()
 {
-	ogl = new GraphicsRenderer(_winSizeX, _winSizeY);
 	world = new World();
+	ogl = new GraphicsRenderer(world);
 	oscMessenger->setOgl(ogl);
 	oscMessenger->setWorld(world);
-	gl::enableDepthRead();
-	gl::enableDepthWrite();		
-	gl::enableAlphaBlending();
+	
+	ogl->setupOgl();
+
 }
 
 void LambdaApp::update()
 {
 	if (oscMessenger->quit()) { quit(); }
 	
-	oscMessenger->sendMessage(world->alive());
-	oscMessenger->collectMessages();
+	ogl->update();
 	
+	oscMessenger->collectMessages();
+
+//	oscMessenger->sendAlive();
+
 }
 
 void LambdaApp::draw()
 {
-	// clear out the window with black
-	gl::clear( Color( 0, 0, 0 ) ); 
+	
+	ogl->startDraw();
+	
+	if (world->initialized()) {
+		
+		int x, y, z;
+		
+		world->prepareNext();
+		
+		for (x = 0; x < world->sizeX(); x++) {
+			for (y = 0; y < world->sizeY(); y++) {
+				for (z = 0; z < world->sizeZ(); z++) {
+					world->next(x,y,z);
+					ogl->drawFragment(&world->cells[x][y][z]);
+				}
+			}
+		}		
+	}
+	
+	ogl->endDraw();
+	
+	if (world->bQueryStates()) {
+		oscMessenger->sendStates();
+	}	
+	
 }
 
-void LambdaApp::clear() {
+void LambdaApp::shutdown() {
 	delete ogl;
 	delete world;
 	delete oscMessenger;
