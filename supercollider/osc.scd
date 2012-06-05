@@ -11,7 +11,7 @@ r.sendMsg("/lambda/world/rule/init", 0);
 r.sendMsg("/lambda/world/rule/weights", *(1.0 ! 26))
 
 // set add param for continuous
-r.sendMsg("/lambda/world/rule/add", 0.05)
+r.sendMsg("/lambda/world/rule/add", 0.07)
 
 // set initial condition wirecube formation left, bottom, front, width, height, depth
 r.sendMsg("/lambda/world/reset/wirecube", 9, 9, 9, 4, 4, 4)
@@ -32,11 +32,16 @@ r.sendMsg("/lambda/graphics/view", 0.0, 0.0, 100.0)
 
 // poll indices
 (
-r.sendMsg("/lambda/world/query/states", *~arr.flat);
+r.sendMsg("/lambda/world/query/states", *~arr);
 o = OSCFunc({|ms|
 	~states = ms.drop(1)
 }, "/lambda/world/states")
 )
+
+~states.clump(24).do(_.postln)
+~states.size
+
+~states.do(_.postln)
 
 o.disable
 o=nil

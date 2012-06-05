@@ -295,14 +295,18 @@ void World::mapStates() {
 	
 }
 
+
 void World::setQueryIndices(int * indices, int size) {
-	int i;
+	int i, x, y, z, enc;
 	_queryStates.clear();
-	_queryStatesSize = size / 3;
-	for (i=0; i<size; i+=3) {
-		_queryStates.push_back( State(indices[i], indices[i+1], indices[i+2], i/3 ) );
+	_queryStatesSize = size;
+	for (i=0; i<size; i++) {
+		enc = indices[i];
+		x = (int)floor((double)enc/(double)pow(_sizeX, 2));
+		y = (int)floor((double)enc/(double)_sizeY)%_sizeY;
+		z = enc%_sizeZ;
+		_queryStates.push_back( State(x, y, z, i ) );
 	}
 	_bQueryStates = true;
 	
 };
-

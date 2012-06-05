@@ -109,6 +109,8 @@ public:
 	
 	void setInterpolation(Interpolation, int);
 	void setQueryIndices(int*, int);
+	void setQueryIndices(int*, int, int);
+
 	int getQueryStatesSize() { return _queryStatesSize; }
 	double getQueryStateAtIndex(int index) { return _queryStates[index].value; }
 	void stopQuery() { _bQueryStates = false; };
