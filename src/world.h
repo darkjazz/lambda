@@ -60,10 +60,11 @@ struct State {
 class Cell {
 public:
 	Cell() : x(0), y(0), z(0) {};
-	~Cell() {};
+	~Cell() { history.clear(); };
 	int x, y, z; 
 	double states[3];
 	double phase;
+	vector<double> history;
 	vector<double> weights;	
 	
 };
@@ -79,8 +80,8 @@ public:
 	
 	Cell*** cells;
 	
-	void init(int, int, int);
-	
+	void init(int, int, int);	
+			
 	int index() { return _index; };
 	int sizeX() { return _sizeX; };
 	int sizeY() { return _sizeY; };
@@ -118,11 +119,13 @@ public:
 	
 private:
 	void clear();
+	void initVars();
+	
 	int _sizeX, _sizeY, _sizeZ, _index, _alive;
 	int _vectorSize, _nSize;
 	
 	Interpolation _interpType;
-	int _interpCount, _interpPhase;
+	int _interpCount, _interpPhase, _cellHistorySize;
 	
 	bool _updateStates; 
 	bool _bQueryStates;
@@ -130,6 +133,7 @@ private:
 	
 	int _queryStatesSize, _currentQueryIndex;
 	
+	R _ruleType;
 	Rule* _rule;
 };
 

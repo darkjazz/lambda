@@ -81,11 +81,7 @@ public:
 	void endDraw();
 	
 	void drawFragment(Cell*);
-	
-	void drawRow();
-	
-	void drawWorld();
-	
+		
 	void update();
 	
 	void setBackground(float r, float g, float b) {
@@ -116,35 +112,33 @@ private:
 	
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
 	
-	bool _drawRow, _drawWorld;
+	void pattern00(int, int, int);
 
-	void pattern00(int, int);
+	void pattern01(int, int, int);
+	
+	void pattern02(int, int, int);
+	
+	void pattern03(int, int, int);
 
-	void pattern01(int, int);
+	void pattern04(int, int, int);
 	
-	void pattern02(int, int);
+	void pattern05(int, int, int);
 	
-	void pattern03(int, int);
+	void pattern06(int, int, int);
+	
+	void pattern07(int, int, int);
+	
+	void pattern08(int, int, int);
+	
+	void pattern09(int, int, int);
 
-	void pattern04(int, int);
+	void pattern10(int, int, int);
 	
-	void pattern05(int, int);
+	void pattern11(int, int, int);
 	
-	void pattern06(int, int);
+	void pattern12(int, int, int);
 	
-	void pattern07(int, int);
-	
-	void pattern08(int, int);
-	
-	void pattern09(int, int);
-
-	void pattern10(int, int);
-	
-	void pattern11(int, int);
-	
-	void pattern12(int, int);
-	
-	void pattern13(int, int);
+	void pattern13(int, int, int);
 	
 	void pattern14(int, int, int);
 

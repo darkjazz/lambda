@@ -17,7 +17,7 @@ r.sendMsg("/lambda/world/rule/add", 0.07)
 r.sendMsg("/lambda/world/reset/wirecube", 9, 9, 9, 4, 4, 4)
 
 // activate pattern: index, active, alpha, colormap, alhpamap, r, g, b
-r.sendMsg("/lambda/graphics/pattern", 15, 1, 1.0, 1, 1, 0.6, 0.8, 1.0)
+r.sendMsg("/lambda/graphics/pattern", 15, 1, 1.0, 0, 0, 0.6, 0.8, 1.0)
 
 // interpolate
 
@@ -27,7 +27,7 @@ r.sendMsg("/lambda/world/interpl", 1, 3)
 r.sendMsg("/lambda/graphics/rotate", 1.0, 0.4, 0.3, 0.01)
 
 // viewpoint
-r.sendMsg("/lambda/graphics/view", 0.0, 0.0, 100.0)
+r.sendMsg("/lambda/graphics/view", 0.0, 0.0, 160.0)
 
 
 // poll indices

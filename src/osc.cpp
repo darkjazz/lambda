@@ -156,6 +156,11 @@ void OSCMessenger::collectMessages() {
 				msg.getArgAsFloat(1),
 				msg.getArgAsFloat(2)
 			);
+			_ogl->mCenter = Vec3f(
+				msg.getArgAsFloat(3),
+				msg.getArgAsFloat(4),
+				msg.getArgAsFloat(5)
+			);
 		}
 		else if (addr.compare("/lambda/graphics/background") == 0) {
 			_ogl->setBackground(

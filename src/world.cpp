@@ -26,52 +26,29 @@
 /* ****** WORLD ****** */
 
 World::World () {
-
-	_index = 0;
-	
-	_alive = 0;
-	
-	cells = NULL;
-	
-	_rule = NULL;
-	
-	_updateStates = false;
-	
-	_interpType = NONE;
-	
-	_interpPhase = 0;
-	
-	_interpCount = 1;
-	
-	_bQueryStates = false;
-	
+	this->initVars();	
 }
 
 World::World (int sizeX, int sizeY, int sizeZ) {
-	
-	_index = 0;
-	
-	_alive = 0;
-	
-	cells = NULL;
-	
-	_rule = NULL;
-
-	_updateStates = false;
-
-	_interpType = NONE;
-	
-	_interpPhase = 0;
-	
-	_interpCount = 1;
-
-	_bQueryStates = false;
-
+	this->initVars();
 	this->init(sizeX, sizeY, sizeZ);
 }
 
 World::~World() {
 	this->clear();
+}
+
+void World::initVars() {
+	_index = 0;
+	_alive = 0;
+	cells = NULL;
+	_rule = NULL;
+	_updateStates = false;
+	_interpType = NONE;
+	_interpPhase = 0;
+	_interpCount = 1;
+	_bQueryStates = false;
+	_cellHistorySize = 8;
 }
 
 void World::init(int sizeX, int sizeY, int sizeZ) {
@@ -100,8 +77,10 @@ void World::init(int sizeX, int sizeY, int sizeZ) {
 				for (i = 0; i < 3; i++) {
 					cells[x][y][z].states[i] = 0.0;
 				}
-			}
-						
+				for (i = 0; i < _cellHistorySize; i++) {
+					cells[x][y][z].history.push_back(state);
+				}
+			}						
 		}
 	}
 		
@@ -212,6 +191,8 @@ void World::initRule(R r) {
 			break;
 	}
 	
+	_ruleType = r;
+	
 	_rule->world = cells;
 }
 
@@ -222,23 +203,45 @@ void::World::prepareNext() {
 		_updateStates = true;
 	}
 	else {
-		_updateStates = false;
+		_interpPhase++;
 	}
-	
-	_interpPhase++;
-	
+		
 	_currentQueryIndex = 0;
 	
 }
 
 void World::next(int x, int y, int z) { 
-	
+		
 	if (_updateStates) {
-		_rule->next(&cells[x][y][z], _index);		
+//		double previousState;
+//		vector<double>::iterator it;
+//		previousState = cellState(x, y, z);
+		_rule->next(&cells[x][y][z], _index);
+		
+//		if (cells[x][y][z].history.size() >= _cellHistorySize) {
+//			cells[x][y][z].history.pop_back();			
+//		}
+//		
+//		it = cells[x][y][z].history.begin();
+//		cells[x][y][z].history.insert(it, previousState);
+	}
+	else {
+		double previousState;
+		vector<double>::iterator it;
+		previousState = cells[x][y][z].phase;
+		
+		interpolate(x, y, z);
+		
+		if (cells[x][y][z].history.size() >= _cellHistorySize) {
+			cells[x][y][z].history.pop_back();			
+		}
+		
+		it = cells[x][y][z].history.begin();
+		cells[x][y][z].history.insert(it, previousState);		
+		
 	}
 	
-	interpolate(x, y, z);
-	
+		
 	if (_bQueryStates) {
 		if (_queryStates[_currentQueryIndex].include(x, y, z)) {
 			_queryStates[_currentQueryIndex].value = cells[x][y][z].states[_index];
@@ -247,7 +250,9 @@ void World::next(int x, int y, int z) {
 	}
 }
 
-void World::finalizeNext() {}
+void World::finalizeNext() {
+	_updateStates = false;
+}
 
 void World::interpolate(int x, int y, int z) {
 	Cell * cell;
@@ -257,10 +262,10 @@ void World::interpolate(int x, int y, int z) {
 	
 	switch (_interpType) {
 		case LINEAR:
-			cell->phase = linInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], _interpPhase / _interpCount);
+			cell->phase = linInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], (double)_interpPhase / (double)_interpCount);
 			break;
 		case COSINE:
-			cell->phase = cosInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], _interpPhase / _interpCount);
+			cell->phase = cosInterp(cell->states[wrapi(_index - 1, 0, 2)], cell->states[_index], (double)_interpPhase / (double)_interpCount);
 			break;
 		default:
 			cell->phase = cell->states[_index];

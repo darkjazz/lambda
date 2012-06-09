@@ -23,6 +23,9 @@
 
 #include "osc.h"
 
+#define SCREENX		1440
+#define SCREENY		900
+
 class LambdaApp : public AppBasic {
 public:
 	void prepareSettings(Settings*);	
@@ -39,7 +42,7 @@ public:
 	
 private:
 	int _winSizeX, _winSizeY;
-	int _frameRate, _inport, _outport, _framesPerUpdate;
+	int _frameRate, _inport, _outport, _windowMode;
 	string _remoteHost;
 	
 };
@@ -56,7 +59,8 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	_remoteHost	= "127.0.0.1";
 	_inport = 7000;
 	_outport = 57120;
-	_framesPerUpdate = 10;
+	_windowMode = 0;
+	
 	
 	args = getArgs();
 	
@@ -79,14 +83,19 @@ void LambdaApp::prepareSettings(Settings *settings) {
 		else if (args[i].compare("-outport") == 0) {
 			_outport = atoi(args[i+1].c_str());		
 		}
-		else if (args[i].compare("-fpu") == 0) {
-			_framesPerUpdate = atoi(args[i+1].c_str());		
-		}
-	}	
+	}
+	
 	
 	settings->setWindowSize( _winSizeX, _winSizeY );
+
+	if (_windowMode == 0)
+		settings->setWindowPos( 0, SCREENY - _winSizeY );
+	else 
+		settings->setWindowPos( SCREENX, SCREENY - _winSizeY);
+
+	settings->setBorderless( true );
 	settings->setFrameRate( _frameRate );
-	
+		
 	oscMessenger = new OSCMessenger(_remoteHost, _outport, _inport);
 
 }
@@ -97,6 +106,7 @@ void LambdaApp::resize(ResizeEvent event) {
 
 void LambdaApp::setup()
 {
+		
 	world = new World();
 	ogl = new GraphicsRenderer(world);
 	oscMessenger->setOgl(ogl);
@@ -113,8 +123,6 @@ void LambdaApp::update()
 	ogl->update();
 	
 	oscMessenger->collectMessages();
-
-//	oscMessenger->sendAlive();
 
 }
 
@@ -136,15 +144,18 @@ void LambdaApp::draw()
 					ogl->drawFragment(&world->cells[x][y][z]);
 				}
 			}
-		}		
+		}
+
+		world->finalizeNext();
+		
+		if (world->bQueryStates()) {
+			oscMessenger->sendStates();
+		}	
+		
 	}
-	
+		
 	ogl->endDraw();
-	
-	if (world->bQueryStates()) {
-		oscMessenger->sendStates();
-	}	
-	
+		
 }
 
 void LambdaApp::shutdown() {
