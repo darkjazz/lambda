@@ -140,7 +140,7 @@ void LambdaApp::draw()
 		for (x = 0; x < world->sizeX(); x++) {
 			for (y = 0; y < world->sizeY(); y++) {
 				for (z = 0; z < world->sizeZ(); z++) {
-					world->next(x,y,z);
+					world->next(x, y, z);
 					ogl->drawFragment(&world->cells[x][y][z]);
 				}
 			}

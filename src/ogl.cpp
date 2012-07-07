@@ -599,11 +599,176 @@ void GraphicsRenderer::pattern05(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern06(int x, int y, int z) {
+	if (ptrWorld->currentBMU()) {
+		Cell* bmu;
+		double radius, dist, hx;
+		bmu = ptrWorld->currentBMU();
+		radius = ((double)ptrWorld->sizeX() / 3.0);		
+		dist = pow(bmu->x - x, 2.0) + pow(bmu->y - y, 2.0) + pow(bmu->z - z, 2.0);
+
+		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+
+		if (dist < radius) {			
 			
+			xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+			yB = (float)y * fragSizeX + (fragSizeY * 0.5);
+			zF = (float)z * fragSizeX + (fragSizeZ * 0.5);
+			
+			xL -= hx;
+			yB -= hx;
+			zF -= hx;
+			
+			if (dist == 0.0) {
+				xW = fragSizeX * mapf(state, 1.0, 2.0);
+				yH = fragSizeX * mapf(state, 1.0, 2.0);
+				zD = fragSizeX * mapf(state, 1.0, 2.0);								
+			}
+			else {
+				xW = fragSizeX * state * mapf(dist/radius, 1.0, 2.0);
+				yH = fragSizeX * state * mapf(dist/radius, 1.0, 2.0);
+				zD = fragSizeX * state * mapf(dist/radius, 1.0, 2.0);			
+			}
+			
+			red = patternLib[6].color.r * abs(patternLib[6].colormap - state) * currentCell->weights[0];
+			green = patternLib[6].color.g * abs(patternLib[6].colormap - state) * currentCell->weights[1];
+			blue = patternLib[6].color.b * abs(patternLib[6].colormap - state) * currentCell->weights[2];
+			alpha = patternLib[6].alpha * abs(patternLib[6].alphamap - state);	
+//			alpha *= ((2.0/dist) * currentCell->weights[3]);
+
+
+			if (x == bmu->x && y == bmu->y && z == bmu->z) {
+				gl::color(red, green, blue, alpha);
+				gl::drawSphere( Vec3f(xL, yB, zF), xW, 24 );
+				
+				gl::color(red*0.8, green*0.8, blue*0.8, alpha*0.8);
+				
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * 200.0, fragSizeX * 0.5, fragSizeX * 0.5) );
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * 0.5, fragSizeX * 200.0, fragSizeX * 0.5) );
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * 0.5, fragSizeX * 0.5, fragSizeX * 200.0) );
+				
+			}
+			else {
+				gl::color(red, green, blue, alpha*0.5);
+				gl::drawSphere( Vec3f(xL, yB, zF), xW, 16 );				
+			}
+
+			
+			
+		}
+		
+		for (int i = 0; i < ptrWorld->bestMatchHistorySize(); i++) {
+			
+			Index3D* coords;
+			coords = ptrWorld->bestMatchHistoryAt(i);
+			
+			if (coords->x == x && coords->y == y && coords->z == z) {
+			
+				xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+				yB = (float)y * fragSizeX + (fragSizeY * 0.5);
+				zF = (float)z * fragSizeX + (fragSizeZ * 0.5);
+				
+				xL -= hx;
+				yB -= hx;
+				zF -= hx;
+				
+				xW = fragSizeX;
+								
+				alpha = (10.0 - (i + 1) / 10.0);
+				
+				gl::color(0.7, 0.7, 0.7, alpha);
+				gl::drawSphere( Vec3f(xL, yB, zF), xW, 24 );
+
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * (10.0 - (i + 1) / 10.0), fragSizeX * 0.25, fragSizeX * 0.25) );
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * 0.25, fragSizeX * (10.0 - (i + 1) / 10.0), fragSizeX * 0.25) );
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(fragSizeX * 0.25, fragSizeX * 0.25, fragSizeX * (10.0 - (i + 1) / 10.0)) );				
+				
+			}		
+		}	
+	}
+
 }
 
 void GraphicsRenderer::pattern07(int x, int y, int z) {
 
+
+	if (ptrWorld->currentBMU()) {
+		Cell* bmu = ptrWorld->currentBMU();
+		if (bmu->x == x && bmu->y == y && bmu->z == z) {
+			
+			double hx, ex, ey, ez;
+			Index3D *prevCoords, *currCoords;
+			hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+
+			xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+			yB = (float)y * fragSizeX + (fragSizeY * 0.5);
+			zF = (float)z * fragSizeX + (fragSizeZ * 0.5);
+			
+			xL -= hx;
+			yB -= hx;
+			zF -= hx;
+			
+			xW = fragSizeX;
+			
+			red = patternLib[7].color.r * abs(patternLib[7].colormap - currentCell->weights[0]);
+			green = patternLib[7].color.g * abs(patternLib[7].colormap - currentCell->weights[1]);
+			blue = patternLib[7].color.b * abs(patternLib[7].colormap - currentCell->weights[2]);
+//			alpha = patternLib[7].alpha * abs(patternLib[7].alphamap - 1.0);	
+			
+			alpha = 1.0;
+			
+			gl::color(red, green, blue, alpha);
+			gl::drawSphere( Vec3f(xL, yB, zF), xW, 24 );
+			
+			if (ptrWorld->bestMatchHistorySize() > 0) {
+			
+				currCoords = ptrWorld->bestMatchHistoryAt(0);
+				
+				ex = (float)currCoords->x * fragSizeX + (fragSizeX * 0.5);
+				ey = (float)currCoords->y * fragSizeX + (fragSizeY * 0.5);
+				ez = (float)currCoords->z * fragSizeX + (fragSizeZ * 0.5);
+				
+				ex -= hx;
+				ey -= hx;
+				ez -= hx;			
+				
+				gl::drawLine( Vec3f(xL, yB, zF), Vec3f(ex, ey, ez));
+				gl::drawSphere( Vec3f(ex, ey, ez ), fragSizeX * 0.9, 20 );
+				
+				for (int i = 1; i < ptrWorld->bestMatchHistorySize(); i++) {
+					
+					prevCoords = currCoords;
+					currCoords = ptrWorld->bestMatchHistoryAt(i);
+					
+					xL = (float)prevCoords->x * fragSizeX + (fragSizeX * 0.5);
+					yB = (float)prevCoords->y * fragSizeX + (fragSizeY * 0.5);
+					zF = (float)prevCoords->z * fragSizeX + (fragSizeZ * 0.5);
+					
+					xL -= hx;
+					yB -= hx;
+					zF -= hx;
+					
+					ex = (float)currCoords->x * fragSizeX + (fragSizeX * 0.5);
+					ey = (float)currCoords->y * fragSizeX + (fragSizeY * 0.5);
+					ez = (float)currCoords->z * fragSizeX + (fragSizeZ * 0.5);
+					
+					ex -= hx;
+					ey -= hx;
+					ez -= hx;
+					
+					red *= 0.96;
+					green *= 0.9605;
+					blue *= 0.961;
+					alpha *= 0.98;
+					
+					gl::color(red, green, blue, alpha);				
+					
+					gl::drawLine( Vec3f(xL, yB, zF), Vec3f(ex, ey, ez));
+					gl::drawSphere( Vec3f(ex, ey, ez ), fragSizeX * (1.0-(i*0.02)), 16 );
+					
+				}
+			}			
+		}
+	}
 }
 
 void GraphicsRenderer::pattern08(int x, int y, int z) {

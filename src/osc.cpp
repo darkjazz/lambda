@@ -59,10 +59,19 @@ void OSCMessenger::collectMessages() {
 		addr = msg.getAddress();
 		
 		if (addr.compare("/lambda/world/init") == 0) {
-			_world->init(msg.getArgAsInt32(0), msg.getArgAsInt32(1), msg.getArgAsInt32(2));
+			_world->init(msg.getArgAsInt32(0), msg.getArgAsInt32(1), msg.getArgAsInt32(2), msg.getArgAsInt32(3));
 		}
 		else if (addr.compare("/lambda/world/interpl") == 0) {
 			_world->setInterpolation((Interpolation)msg.getArgAsInt32(0), msg.getArgAsInt32(1));
+ 		}
+		else if (addr.compare("/lambda/world/somvector") == 0) {
+			if (!_world->inputVectorUpdated() && !_world->newBMUFound()) {
+				vector<double> inputVector;
+				for (i = 0; i < _world->vectorSize(); i++) {
+					inputVector.push_back(msg.getArgAsFloat(i));
+				}
+				_world->setInputVector(inputVector);
+			}
  		}
 		else if (addr.compare("/lambda/world/rule/init") == 0) {
 			_world->initRule((R)msg.getArgAsInt32(0));

@@ -32,7 +32,7 @@
 
 class Cell;
 
-struct N { int x, y, z; N() : x(0), y(0), z(0) {}; };
+struct N { int x, y, z; N() : x(0), y(0), z(0) {} };
 
 //	**** RULE ****
 

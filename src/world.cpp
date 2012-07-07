@@ -29,9 +29,9 @@ World::World () {
 	this->initVars();	
 }
 
-World::World (int sizeX, int sizeY, int sizeZ) {
+World::World (int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	this->initVars();
-	this->init(sizeX, sizeY, sizeZ);
+	this->init(sizeX, sizeY, sizeZ, vectorSize);
 }
 
 World::~World() {
@@ -49,13 +49,25 @@ void World::initVars() {
 	_interpCount = 1;
 	_bQueryStates = false;
 	_cellHistorySize = 8;
+	_trainDur = 3000;
+	_trainCount = 0;
+	_learningRate = _initLearningRate = 0.1;	
+	_mapRadius = (double)max(max(_sizeX, _sizeY), _sizeZ) / 2.0;
+	_timeConst = (double)(_trainDur / logf(_mapRadius));
+	_inputVectorUpdated = false;
+	_newBMUFound = false;
+	_bmu = NULL;
+	_bestMatchCoords.x = 0;
+	_bestMatchCoords.y = 0;
+	_bestMatchCoords.z = 0;
+	_bestMatchHistorySize = 30;
 }
 
-void World::init(int sizeX, int sizeY, int sizeZ) {
+void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	int x, y, z, i;
 	double state;
 
-	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ;
+	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ; _vectorSize = vectorSize;
 
 	this->clear();
 		
@@ -80,10 +92,15 @@ void World::init(int sizeX, int sizeY, int sizeZ) {
 				for (i = 0; i < _cellHistorySize; i++) {
 					cells[x][y][z].history.push_back(state);
 				}
+				if (_vectorSize > 1) {
+					for (i = 0; i < _vectorSize; i++) {
+						cells[x][y][z].weights.push_back(randd());
+					}
+				}
 			}						
 		}
 	}
-		
+			
 }
 
 void World::clear (void) {
@@ -205,25 +222,23 @@ void::World::prepareNext() {
 	else {
 		_interpPhase++;
 	}
+	
+	if (_inputVectorUpdated) {
+		_bestMatch = 10.0;
+	}
 		
 	_currentQueryIndex = 0;
+	
+	if (_trainCount < _trainDur) {
+		_tRadius = _mapRadius * exp(_trainCount / (_timeConst*-1.0));
+	}
 	
 }
 
 void World::next(int x, int y, int z) { 
 		
 	if (_updateStates) {
-//		double previousState;
-//		vector<double>::iterator it;
-//		previousState = cellState(x, y, z);
-		_rule->next(&cells[x][y][z], _index);
-		
-//		if (cells[x][y][z].history.size() >= _cellHistorySize) {
-//			cells[x][y][z].history.pop_back();			
-//		}
-//		
-//		it = cells[x][y][z].history.begin();
-//		cells[x][y][z].history.insert(it, previousState);
+		_rule->next(&cells[x][y][z], _index);		
 	}
 	else {
 		double previousState;
@@ -248,10 +263,41 @@ void World::next(int x, int y, int z) {
 			_currentQueryIndex++;
 		}
 	}
+	
+	nextSOM(x, y, z);
 }
 
 void World::finalizeNext() {
 	_updateStates = false;
+	if (_newBMUFound) {
+		_newBMUFound = false;
+		if (_trainCount < _trainDur) {
+			_learningRate = _initLearningRate * exp(_trainCount / (_trainDur * -1.0));
+			_trainCount++;
+		}
+	}
+	
+	if (_inputVectorUpdated) {
+		_inputVectorUpdated = false;
+		if (_bmu) {
+			Index3D previousBestMatch;
+			vector<Index3D>::iterator it;
+			previousBestMatch.x = _bmu->x;
+			previousBestMatch.y = _bmu->y;
+			previousBestMatch.z = _bmu->z;			
+			
+			if (_bestMatchHistory.size() >= _bestMatchHistorySize) {
+				_bestMatchHistory.pop_back();
+			}
+			
+			it = _bestMatchHistory.begin();
+			_bestMatchHistory.insert(it, previousBestMatch);
+			
+		}
+		
+		_bmu = &(cells[_bestMatchCoords.x][_bestMatchCoords.y][_bestMatchCoords.z]);
+		_newBMUFound = true;
+	}
 }
 
 void World::interpolate(int x, int y, int z) {
@@ -314,4 +360,48 @@ void World::setQueryIndices(int * indices, int size) {
 	}
 	_bQueryStates = true;
 	
-};
+}
+
+void World::setInputVector(vector<double> inputVector) {
+	_inputVector = inputVector;
+	_inputVectorUpdated = true;
+}
+
+void World::compareBMU(int x, int y, int z) {
+	double diff;
+	
+	diff = cells[x][y][z].difference(_inputVector);
+	if (diff < _bestMatch) {
+		_bestMatch = diff;
+		_bestMatchCoords.x = x;
+		_bestMatchCoords.y = y;
+		_bestMatchCoords.z = z;
+	}
+}
+
+
+void World::trainSOM (int x, int y, int z) { 
+	double influence, dist;
+	
+	if (_trainCount < _trainDur) {
+		
+		dist = pow(_bmu->x - x, 2) + pow(_bmu->y - y, 2) + pow(_bmu->z - z, 2);
+		
+		if (dist < pow(_tRadius, 2)) {
+			influence = exp(dist / (pow(_tRadius, 2) * -2.0));
+			cells[x][y][z].update(_inputVector, _learningRate, influence);
+		}
+				
+	}
+	
+}
+
+void World::nextSOM(int x, int y, int z) {
+	
+	if (_inputVectorUpdated)
+		compareBMU(x, y, z);
+
+	if (_newBMUFound)
+		trainSOM(x, y, z);
+
+}
