@@ -39,7 +39,19 @@ void GraphicsRenderer::setupOgl () {
 	_bgr = _bgg = _bgb = 0.0;
 	
 	gl::clear( Color( _bgr, _bgg, _bgb ) );	
-			
+	
+//	_wallShader = gl::GlslProg(loadResource("wall_vert.glsl"), loadResource("wall_frag.glsl"));
+//	_img = Surface8u( loadImage(loadResource("fx_parallels.jpg")) );
+//	
+//	glGenTextures(1, &_textObj);
+//	glBindTexture(GL_TEXTURE_CUBE_MAP, _textObj);
+//	glTexImage2D(GL_TEXTURE_CUBE_MAP, 0, GL_RGBA, GLsizei(512), GLsizei(512), 0, GL_RGB, GL_UNSIGNED_BYTE, _img.getData());
+//	
+//	_walls = gl::DisplayList( GL_COMPILE );
+//	_walls.newList();	
+//	gl::drawCube( Vec3f(200.0, 200.0, 200.0), Vec3f(400.0, 400.0, 400.0) );
+//	_walls.endList();
+	
 }
 
 void GraphicsRenderer::reshape() {
@@ -68,7 +80,10 @@ void GraphicsRenderer::update() {
 
 }
 
-void GraphicsRenderer::startDraw() {	
+void GraphicsRenderer::startDraw() {
+	
+//	glEnable(GL_TEXTURE_2D);
+	
 	gl::pushMatrices();
 	gl::multModelView( mRotation );
 }
@@ -801,6 +816,56 @@ void GraphicsRenderer::pattern14(int x, int y, int z) {
 
 void GraphicsRenderer::pattern15(int x, int y, int z) {
 
+}
+
+void GraphicsRenderer::drawBoids(Boids* boids) {
+		
+	drawBoidWorldBorders(boids);
+	
+	mEye = boids->getBoidAtIndex(0)->pos;
+
+	mCenter = boids->centroid();
+
+	red = 0.1;
+	green = 0.8;
+	blue = 1.0;
+	alpha = 0.7;
+	
+	gl::color(red, green, blue, alpha);
+	
+	for (int i = 0; i < boids->numBoids(); i++) {
+		gl::drawSphere( boids->getBoidAtIndex(i)->pos, 2.0, 16 );	
+		if (i > 0) {
+			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos );
+		}
+	}
+	
+}
+
+void GraphicsRenderer::drawBoidWorldBorders(Boids* boids) {
+	
+	red = 0.6;
+	green = 0.7;
+	blue = 0.8;
+	alpha = 1.0;	
+	
+	gl::color(red, green, blue, alpha);
+	gl::drawStrokedCube( boids->dimensions() * 0.5, boids->dimensions() );
+
+//	glBindTexture(GL_TEXTURE_CUBE_MAP, _textObj);
+//	
+//	_wallShader.bind();
+//	_wallShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ));
+//	_wallShader.uniform( "MixRatio", 0.5f );
+//	_wallShader.uniform( "EnvMap", 4 );
+//	_wallShader.uniform( "BaseColor", Vec3f(0.2, 0.95, 0.8) );
+//	glPushMatrix();
+//	glTranslated(0.0f, 0.0f, 0.0f);
+//	_walls.draw();
+//	glPopMatrix();
+//	
+//	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+	
 }
 
 void GraphicsRenderer::strokeRectArray() {

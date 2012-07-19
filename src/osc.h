@@ -43,9 +43,10 @@ public:
 		_sender.setup(remoteHost, sendToPort);
 		_listener.setup(receivePort);
 		_receivedQuit = false;
+		_boids = NULL;
 	};
 	
-	~OSCMessenger() {};
+	~OSCMessenger() { if (_boids) delete _boids; };
 	
 	void sendAlive();
 	
@@ -58,6 +59,8 @@ public:
 	void setWorld(World *world) { _world = world; };
 	
 	bool quit() { return _receivedQuit; };
+	
+	Boids* boids() { return _boids; }
 			
 private:	
 	osc::Sender _sender;
@@ -67,6 +70,7 @@ private:
 	bool _receivedQuit;
 	GraphicsRenderer *_ogl;
 	World *_world;
+	Boids* _boids;
 	
 	Rule* selectRule(R);
 };

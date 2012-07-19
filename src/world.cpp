@@ -353,7 +353,7 @@ void World::setQueryIndices(int * indices, int size) {
 	_queryStatesSize = size;
 	for (i=0; i<size; i++) {
 		enc = indices[i];
-		x = (int)floor((double)enc/(double)pow(_sizeX, 2));
+		x = (int)floor((double)enc/pow((double)_sizeX, 2));
 		y = (int)floor((double)enc/(double)_sizeY)%_sizeY;
 		z = enc%_sizeZ;
 		_queryStates.push_back( State(x, y, z, i ) );
@@ -385,7 +385,7 @@ void World::trainSOM (int x, int y, int z) {
 	
 	if (_trainCount < _trainDur) {
 		
-		dist = pow(_bmu->x - x, 2) + pow(_bmu->y - y, 2) + pow(_bmu->z - z, 2);
+		dist = pow((double)_bmu->x - x, 2) + pow((double)_bmu->y - y, 2) + pow((double)_bmu->z - z, 2);
 		
 		if (dist < pow(_tRadius, 2)) {
 			influence = exp(dist / (pow(_tRadius, 2) * -2.0));

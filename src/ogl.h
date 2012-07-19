@@ -26,8 +26,15 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Camera.h"
+#include "cinder/Surface.h"
+#include "cinder/gl/Texture.h"
+#include "cinder/ImageIo.h"
+#include "cinder/gl/GlslProg.h"
+#include "cinder/gl/DisplayList.h"
+
 
 #include "world.h"
+#include "boids.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -88,6 +95,9 @@ public:
 		_bgr = r; _bgg = g; _bgb = b;
 	};
 	
+	void drawBoids(Boids*);
+	void drawBoidWorldBorders(Boids*);
+	
 	Vec3f rotateXYZ;
 	
 	float rotateAngle;
@@ -111,6 +121,11 @@ private:
 	float _bgr, _bgg, _bgb;
 	
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
+	
+//	Surface8u _img;
+//	gl::GlslProg _wallShader;
+//	gl::DisplayList _walls;
+//	unsigned int _textObj;
 	
 	void pattern00(int, int, int);
 

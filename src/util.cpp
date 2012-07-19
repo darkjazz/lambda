@@ -91,6 +91,10 @@ double wrapd(double val, double lo, double hi)
 	return xmodd(val - lo, hi - lo) + lo;
 }
 
+Vec3f wrapVec3f(Vec3f vec, Vec3f lo, Vec3f hi) {
+	return Vec3f( wrapf(vec.x, lo.x, hi.x), wrapf(vec.y, lo.y, hi.y), wrapf(vec.z, lo.z, hi.z) );
+}
+
 float xmodf(float value, float hi)
 {
 	return value - hi*floor(value/hi);

@@ -39,12 +39,13 @@ public:
 	World *world; 
 	GraphicsRenderer *ogl; 
 	Rule *rule;
+	Boids *boids;
 	
 private:
 	int _winSizeX, _winSizeY;
 	int _frameRate, _inport, _outport, _windowMode;
 	string _remoteHost;
-	
+		
 };
 
 void LambdaApp::prepareSettings(Settings *settings) {
@@ -55,7 +56,8 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	
 	_winSizeX = 800;
 	_winSizeY = 600;
-	_frameRate = 128;
+//	_frameRate = 128;
+	_frameRate = 10;
 	_remoteHost	= "127.0.0.1";
 	_inport = 7000;
 	_outport = 57120;
@@ -106,24 +108,26 @@ void LambdaApp::resize(ResizeEvent event) {
 
 void LambdaApp::setup()
 {
-		
+	boids = NULL;
 	world = new World();
 	ogl = new GraphicsRenderer(world);
 	oscMessenger->setOgl(ogl);
 	oscMessenger->setWorld(world);
 	
 	ogl->setupOgl();
-
+	
 }
 
 void LambdaApp::update()
 {
+	Vec3f mean;
+	
 	if (oscMessenger->quit()) { quit(); }
 	
 	ogl->update();
 	
 	oscMessenger->collectMessages();
-
+	
 }
 
 void LambdaApp::draw()
@@ -152,6 +156,13 @@ void LambdaApp::draw()
 			oscMessenger->sendStates();
 		}	
 		
+	}
+	
+	boids = oscMessenger->boids();
+	
+	if (boids) {
+		boids->update();
+		ogl->drawBoids(boids);
 	}
 		
 	ogl->endDraw();

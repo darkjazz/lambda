@@ -187,6 +187,31 @@ void OSCMessenger::collectMessages() {
 			_ogl->patternLib[msg.getArgAsInt32(0)].color.g = msg.getArgAsFloat(6);	
 			_ogl->patternLib[msg.getArgAsInt32(0)].color.b = msg.getArgAsFloat(7);			
 		}
+		else if (addr.compare("/lambda/boids/init") == 0) {
+			if (_boids) {
+				delete _boids;
+			}
+			_boids = new Boids(
+			   msg.getArgAsInt32(0),
+			   Vec3f(msg.getArgAsFloat(1), msg.getArgAsFloat(2), msg.getArgAsFloat(3)),
+			   msg.getArgAsFloat(4),
+			   msg.getArgAsFloat(5),
+			   msg.getArgAsFloat(6),
+			   msg.getArgAsFloat(7),
+			   msg.getArgAsFloat(8)
+			);
+		}		
+		else if (addr.compare("/lambda/boids/set") == 0) {
+			_boids->speed = msg.getArgAsFloat(0);
+			_boids->cohesion = msg.getArgAsFloat(1);
+			_boids->alignment = msg.getArgAsFloat(2);
+			_boids->separation = msg.getArgAsFloat(3);
+			_boids->center = msg.getArgAsFloat(4);
+		}
+		else if (addr.compare("/lambda/boids/kill") == 0) {
+			delete _boids;
+			_boids = NULL;
+		}
 		else if (addr.compare("/lambda/quit") == 0) {
 			_receivedQuit = true;
  		}

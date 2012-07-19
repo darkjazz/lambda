@@ -23,8 +23,11 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "cinder/Vector.h"
 #include "stdlib.h"
 #include "math.h"
+
+using namespace ci;
 
 const double PI = atan(1.0)*4;
 
@@ -48,5 +51,39 @@ double roundd(double, int);
 int fold(int, int, int);
 double linInterp(double, double, double);
 double cosInterp(double, double, double);
+
+Vec3f wrapVec3f(Vec3f, Vec3f, Vec3f);
+
+struct Vec3fRS{
+public:
+	Vec3fRS() { count = 0; };
+	~Vec3fRS() {};
+	
+	void push(Vec3f value) {
+		count++;
+		if (count == 1) {
+			oldM = Vec3f(value.x, value.y, value.z);
+			newM = Vec3f(value.x, value.y, value.z);
+			oldS = Vec3f::zero();
+		} else {
+			newM = (value - oldM) / (double)count + oldM;
+			newS = (value - oldM) * (value - newM) + oldS;
+			
+			oldM = newM;
+			oldS = newS;
+		}
+		
+	}
+	
+	void reset() { count = 0; }
+	Vec3f mean() { if (count > 0) { return newM; } else { return Vec3f::zero(); } }
+	Vec3f variance() { if (count > 1) { return (newS / (double)(count - 1)); } else { return Vec3f::zero(); } }
+	Vec3f stdDev() { Vec3f _var = variance(); return Vec3f(sqrt(_var.x), sqrt(_var.y), sqrt(_var.z)); }
+	
+private:
+	int count;
+	Vec3f oldM, newM, oldS, newS;
+	
+};
 
 #endif
