@@ -49,7 +49,7 @@ Routine({
 
 ~ciapp.setViewpoint(0.0, -160.0, 0.0, 0.0, 0.0, 0.0)
 
-~ciapp.setBackground(0.6, 0.6, 0.66)
+~ciapp.setBackground(0.3, 0.3, 0.33)
 ~ciapp.setBackground(0.0, 0.0, 0.0)
 
 

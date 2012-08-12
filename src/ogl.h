@@ -31,10 +31,12 @@
 #include "cinder/ImageIo.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/DisplayList.h"
-
+#include "cinder/Rand.h"
 
 #include "world.h"
 #include "boids.h"
+#include "cubemap.h"
+#include "codepanel.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -64,6 +66,12 @@ public:
 		rotateXYZ = Vec3f( 1.0f, 0.0f, 0.0f);
 		rotateAngle = 0.0f;
 		ptrWorld = world;
+		attachEyeToFirstBoid = false;
+		lookAtCentroid = false;
+		boids = NULL;
+		codePanelActive = true;
+		counter = 0;
+
 	};
 	
 	~GraphicsRenderer() {
@@ -75,14 +83,14 @@ public:
 	
 	pattern* patternLib;	
 	
-	// *** OpenGL global setup  *** //
-
 	void setupOgl();
 	
+	void setupBoidShader();
+	
+	void cleanupBoidShader();
+	
 	void reshape();
-	
-	// *** draw cells *** //
-	
+		
 	void startDraw();
 	
 	void endDraw();
@@ -95,8 +103,14 @@ public:
 		_bgr = r; _bgg = g; _bgb = b;
 	};
 	
-	void drawBoids(Boids*);
-	void drawBoidWorldBorders(Boids*);
+	void drawBoids00();
+	void drawBoids01();
+	void drawBoids02();
+	void drawBoids03();
+	void drawBoidWorldBorders();
+	void drawBoidWorldFrame();
+	
+	void drawCodePanel();
 	
 	Vec3f rotateXYZ;
 	
@@ -109,12 +123,25 @@ public:
 	
 	float mDirectional;
 	Vec2f mMousePos;	
-		
+	
+	vector<CubeMap> mMaps;
+	
+	gl::GlslProg boidShader;
+	gl::GlslProg boidShader01;
+	
+	bool attachEyeToFirstBoid;
+	bool lookAtCentroid;
+	bool codePanelActive; 
+	
+	Boids* boids;
+	
+	CodePanel codePanel;
+	
 private:
 	
 	double fragSizeX, fragSizeY, fragSizeZ, state;
 	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha;
-	int currentIndex, vectorSize;
+	int currentIndex, vectorSize, counter;
 	Cell* currentCell;
 	Cell* ptrBMU;
 	World* ptrWorld;
@@ -122,10 +149,6 @@ private:
 	
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
 	
-//	Surface8u _img;
-//	gl::GlslProg _wallShader;
-//	gl::DisplayList _walls;
-//	unsigned int _textObj;
 	
 	void pattern00(int, int, int);
 

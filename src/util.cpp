@@ -95,6 +95,10 @@ Vec3f wrapVec3f(Vec3f vec, Vec3f lo, Vec3f hi) {
 	return Vec3f( wrapf(vec.x, lo.x, hi.x), wrapf(vec.y, lo.y, hi.y), wrapf(vec.z, lo.z, hi.z) );
 }
 
+Vec3f foldVec3f(Vec3f vec, Vec3f lo, Vec3f hi) {
+	return Vec3f( foldf(vec.x, lo.x, hi.x), foldf(vec.y, lo.y, hi.y), foldf(vec.z, lo.z, hi.z) );
+}
+
 float xmodf(float value, float hi)
 {
 	return value - hi*floor(value/hi);
@@ -104,6 +108,28 @@ double xmodd(double value, double hi)
 {
 	return value - hi*floor(value/hi);
 }
+
+float foldf(float in, float lo, float hi)
+{
+	float x, c, range, range2;
+	x = in - lo;
+	
+	if (in >= hi) {
+		in = hi + hi - in;
+		if (in >= lo) return in;
+	} else if (in < lo) {
+		in = lo + lo - in;
+		if (in < hi) return in;
+	} else return in;
+	
+	if (hi == lo) return lo;
+	range = hi - lo;
+	range2 = range + range;
+	c = x - range2 * floor(x / range2);
+	if (c>=range) c = range2 - c;
+	return c + lo;
+}
+
 
 int isEven(int number)
 {
@@ -161,4 +187,48 @@ double cosInterp(double p1, double p2, double mu) {
 	double mu2;
 	mu2 = (1-cos(mu*PI))/2;
 	return (p1*(1-mu2)+p2*mu2);
+}
+
+float linlin(float val, float inmin, float inmax, float outmin, float outmax)
+{
+	if (val <= inmin) {
+		return	outmin;
+	}
+	else if (val >= inmax) {
+		return outmax;
+	}
+	return (val - inmin) / (inmax-inmin) * (outmax-outmin) + outmin;
+}
+
+float linexp(float val, float inmin, float inmax, float outmin, float outmax)
+{
+	if (val <= inmin) {
+		return	outmin;
+	}
+	else if (val >= inmax) {
+		return outmax;
+	}
+	return pow(outmax/outmin, (val - inmin) / (inmax-inmin)) * outmin;
+}
+
+float explin(float val, float inmin, float inmax, float outmin, float outmax)
+{
+	if (val <= inmin) {
+		return	outmin;
+	}
+	else if (val >= inmax) {
+		return outmax;
+	}
+	return (log(val/inmin)) / (log(inmax/inmin)) * (outmax-outmin) + outmin;
+}
+
+float expexp(float val, float inmin, float inmax, float outmin, float outmax)
+{
+	if (val <= inmin) {
+		return	outmin;
+	}
+	else if (val >= inmax) {
+		return outmax;
+	}
+	return pow(outmax/outmin, log(val/inmin) / log(inmax/inmin)) * outmin;
 }

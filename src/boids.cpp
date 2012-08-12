@@ -62,6 +62,7 @@ Boids::Boids(int numboids, Vec3f dimensions, double speed, double cohesion, doub
 	_maxLifeExpectancy = 1000;
 	
 	init();
+	
 }
 
 Boids::~Boids() { _boids.clear(); }
@@ -124,7 +125,7 @@ void Boids::calc(Boid* boid) {
 	boid->vec += ((centerpoint - boid->pos) / Vec3f(center, center, center));	
 	boid->pos += boid->vec;
 	
-	boid->pos = wrapVec3f(boid->pos, Vec3f::zero(), _dim);
+	boid->pos = foldVec3f(boid->pos, Vec3f::zero(), _dim);
 	
 	boid->reset();
 	

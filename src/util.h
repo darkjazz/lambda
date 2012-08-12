@@ -49,10 +49,17 @@ bool between(int, int, int);
 float clipf(float, float, float);
 double roundd(double, int);
 int fold(int, int, int);
+float foldf(float in, float lo, float hi);
 double linInterp(double, double, double);
 double cosInterp(double, double, double);
 
+float linlin(float, float, float, float, float);
+float linexp(float, float, float, float, float);
+float explin(float, float, float, float, float);
+float expexp(float, float, float, float, float);
+
 Vec3f wrapVec3f(Vec3f, Vec3f, Vec3f);
+Vec3f foldVec3f(Vec3f, Vec3f, Vec3f);
 
 struct Vec3fRS{
 public:

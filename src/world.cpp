@@ -49,11 +49,9 @@ void World::initVars() {
 	_interpCount = 1;
 	_bQueryStates = false;
 	_cellHistorySize = 8;
-	_trainDur = 3000;
+	_trainDur = 1000;
 	_trainCount = 0;
 	_learningRate = _initLearningRate = 0.1;	
-	_mapRadius = (double)max(max(_sizeX, _sizeY), _sizeZ) / 2.0;
-	_timeConst = (double)(_trainDur / logf(_mapRadius));
 	_inputVectorUpdated = false;
 	_newBMUFound = false;
 	_bmu = NULL;
@@ -61,6 +59,10 @@ void World::initVars() {
 	_bestMatchCoords.y = 0;
 	_bestMatchCoords.z = 0;
 	_bestMatchHistorySize = 30;
+	
+	cellsInitialized = false;
+	ruleInitialized = false;
+	somActivated = false;
 }
 
 void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
@@ -70,7 +72,10 @@ void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ; _vectorSize = vectorSize;
 
 	this->clear();
-		
+
+	_mapRadius = (double)max(max(_sizeX, _sizeY), _sizeZ) / 2.0;
+	_timeConst = ((double)_trainDur / logf(_mapRadius));
+
 	cells = new Cell**[_sizeX];
 	assert(cells);
 	for (x = 0; x < _sizeX; x++) {
@@ -100,11 +105,17 @@ void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 			}						
 		}
 	}
+	
+	cellsInitialized = true;
+	
 			
 }
 
 void World::clear (void) {
 	int x, y;
+	
+	cellsInitialized = false;
+
 	if (cells) {
 		for (x = 0; x < _sizeX; x++) {
 		
@@ -122,6 +133,7 @@ void World::clear (void) {
 		delete [] cells; 
 		cells = NULL;
 	}
+	
 }
 
 double World::cellState(int x, int y, int z) { return cells[x][y][z].states[_index]; }
@@ -211,6 +223,8 @@ void World::initRule(R r) {
 	_ruleType = r;
 	
 	_rule->world = cells;
+	
+	ruleInitialized = true;
 }
 
 void::World::prepareNext() {
@@ -229,10 +243,11 @@ void::World::prepareNext() {
 		
 	_currentQueryIndex = 0;
 	
-	if (_trainCount < _trainDur) {
-		_tRadius = _mapRadius * exp(_trainCount / (_timeConst*-1.0));
-	}
-	
+	if (somActivated) {
+		if (_trainCount < _trainDur) {
+			_tRadius = _mapRadius * exp(_trainCount / (_timeConst*-1.0));
+		}
+	}	
 }
 
 void World::next(int x, int y, int z) { 
@@ -264,7 +279,6 @@ void World::next(int x, int y, int z) {
 		}
 	}
 	
-	nextSOM(x, y, z);
 }
 
 void World::finalizeNext() {
@@ -365,6 +379,8 @@ void World::setQueryIndices(int * indices, int size) {
 void World::setInputVector(vector<double> inputVector) {
 	_inputVector = inputVector;
 	_inputVectorUpdated = true;
+	
+	somActivated = true;
 }
 
 void World::compareBMU(int x, int y, int z) {
@@ -382,13 +398,17 @@ void World::compareBMU(int x, int y, int z) {
 
 void World::trainSOM (int x, int y, int z) { 
 	double influence, dist;
+	Vec3f xpos, ypos;
 	
 	if (_trainCount < _trainDur) {
 		
-		dist = pow((double)_bmu->x - x, 2) + pow((double)_bmu->y - y, 2) + pow((double)_bmu->z - z, 2);
+		xpos = Vec3f((float)x, (float)y, (float)z);
+		ypos = Vec3f((float)_bmu->x, (float)_bmu->y, (float)_bmu->z);
 		
-		if (dist < pow(_tRadius, 2)) {
-			influence = exp(dist / (pow(_tRadius, 2) * -2.0));
+		dist = xpos.distance(ypos);
+		
+		if (dist < _tRadius) {
+			influence = exp(dist / (_tRadius * -2.0f));
 			cells[x][y][z].update(_inputVector, _learningRate, influence);
 		}
 				
@@ -404,4 +424,13 @@ void World::nextSOM(int x, int y, int z) {
 	if (_newBMUFound)
 		trainSOM(x, y, z);
 
+}
+
+Vec3f World::bmuVec3f(Vec3f dims) {
+	if (_bmu) {
+		return Vec3f((float)_bmu->x * dims.x / _sizeX, (float)_bmu->y * dims.y / _sizeY, (float)_bmu->z * dims.z / _sizeZ);
+	}
+	else {
+		return Vec3f::zero();
+	}
 }

@@ -57,14 +57,14 @@ void OSCMessenger::collectMessages() {
 		osc::Message msg;
 		_listener.getNextMessage(&msg);
 		addr = msg.getAddress();
-		
+				
 		if (addr.compare("/lambda/world/init") == 0) {
 			_world->init(msg.getArgAsInt32(0), msg.getArgAsInt32(1), msg.getArgAsInt32(2), msg.getArgAsInt32(3));
 		}
 		else if (addr.compare("/lambda/world/interpl") == 0) {
 			_world->setInterpolation((Interpolation)msg.getArgAsInt32(0), msg.getArgAsInt32(1));
  		}
-		else if (addr.compare("/lambda/world/somvector") == 0) {
+		else if (addr.compare("/lambda/world/somvector") == 0) {			
 			if (!_world->inputVectorUpdated() && !_world->newBMUFound()) {
 				vector<double> inputVector;
 				for (i = 0; i < _world->vectorSize(); i++) {
@@ -73,7 +73,7 @@ void OSCMessenger::collectMessages() {
 				_world->setInputVector(inputVector);
 			}
  		}
-		else if (addr.compare("/lambda/world/rule/init") == 0) {
+		else if (addr.compare("/lambda/world/rule/init") == 0) {			
 			_world->initRule((R)msg.getArgAsInt32(0));
 			_world->mapStates();
  		}
@@ -171,6 +171,18 @@ void OSCMessenger::collectMessages() {
 				msg.getArgAsFloat(5)
 			);
 		}
+		else if (addr.compare("/lambda/graphics/boidcam") == 0) {
+			if (msg.getArgAsInt32(0) == 0)
+				_ogl->attachEyeToFirstBoid = false;
+			else
+				_ogl->attachEyeToFirstBoid = true;
+			
+			if (msg.getArgAsInt32(1) == 0) 
+				_ogl->lookAtCentroid = false;
+			else
+				_ogl->lookAtCentroid = true;
+
+		}
 		else if (addr.compare("/lambda/graphics/background") == 0) {
 			_ogl->setBackground(
 				msg.getArgAsFloat(0),
@@ -200,6 +212,7 @@ void OSCMessenger::collectMessages() {
 			   msg.getArgAsFloat(7),
 			   msg.getArgAsFloat(8)
 			);
+			_ogl->boids = _boids;
 		}		
 		else if (addr.compare("/lambda/boids/set") == 0) {
 			_boids->speed = msg.getArgAsFloat(0);
@@ -211,6 +224,7 @@ void OSCMessenger::collectMessages() {
 		else if (addr.compare("/lambda/boids/kill") == 0) {
 			delete _boids;
 			_boids = NULL;
+			_ogl->boids = NULL;
 		}
 		else if (addr.compare("/lambda/quit") == 0) {
 			_receivedQuit = true;

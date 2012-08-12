@@ -25,6 +25,73 @@
 
 void GraphicsRenderer::setupOgl () {
 	
+	_bgr = _bgg = _bgb = 0.0;
+	
+	gl::clear( Color( _bgr, _bgg, _bgb ) );	
+	
+	boidShader = gl::GlslProg( loadResource( "boid_vert.glsl" ), loadResource( "boid_frag.glsl" ) );
+	boidShader01 = gl::GlslProg( loadResource( "glass_vert.glsl" ), loadResource( "glass_frag.glsl" ) );
+	
+	mMaps.push_back( CubeMap( GLsizei(128), GLsizei(128),
+							 Surface8u( loadImage( loadResource( "fxic_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxic_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxic_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxic_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxic_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxic_neg_z.png" ) ) ),
+							 GL_RGB
+							 ));
+	
+	mMaps.push_back( CubeMap( GLsizei(128), GLsizei(128),
+							 Surface8u( loadImage( loadResource( "fxd_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxd_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxd_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxd_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxd_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxd_neg_z.png" ) ) ),
+							 GL_RGBA
+							 ));
+	mMaps.push_back( CubeMap( GLsizei(512), GLsizei(512),
+							 Surface8u( loadImage( loadResource( "fxhl_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxhl_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxhl_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxhl_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxhl_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxhl_neg_z.png" ) ) ),
+							 GL_RGBA
+							 ));	
+
+	mMaps.push_back( CubeMap( GLsizei(99), GLsizei(99),
+							 Surface8u( loadImage( loadResource( "fx_8_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fx_8_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fx_8_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fx_8_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fx_8_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fx_8_neg_z.png" ) ) ),
+							 GL_RGBA
+							 ));	
+
+	mMaps.push_back( CubeMap( GLsizei(128), GLsizei(128),
+							 Surface8u( loadImage( loadResource( "fxp_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxp_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxp_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxp_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxp_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxp_neg_z.png" ) ) ),
+							 GL_RGBA
+							 ));	
+	
+	mMaps.push_back( CubeMap( GLsizei(221), GLsizei(221),
+							 Surface8u( loadImage( loadResource( "fxh8_pos_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxh8_pos_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxh8_pos_z.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxh8_neg_x.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxh8_neg_y.png" ) ) ),
+							 Surface8u( loadImage( loadResource( "fxh8_neg_z.png" ) ) ),
+							 GL_RGBA
+							 ));	
+	
+	
 	mEye = Vec3f(0.0f, 0.0f, -30.0f);
 	mCenter = Vec3f::zero();
 	mUp = Vec3f::yAxis();
@@ -32,31 +99,26 @@ void GraphicsRenderer::setupOgl () {
 	mCam.lookAt(mEye, mCenter, mUp);
 	mRotation.setToIdentity();	
 	
+	glEnable( GL_TEXTURE_2D );
+	codePanel.createTexture();	
+	glDisable( GL_TEXTURE_2D );
+	
 	gl::enableDepthRead();
 	gl::enableDepthWrite();		
 	gl::enableAlphaBlending();	
+		
+}
+
+void GraphicsRenderer::setupBoidShader() {
 	
-	_bgr = _bgg = _bgb = 0.0;
-	
-	gl::clear( Color( _bgr, _bgg, _bgb ) );	
-	
-//	_wallShader = gl::GlslProg(loadResource("wall_vert.glsl"), loadResource("wall_frag.glsl"));
-//	_img = Surface8u( loadImage(loadResource("fx_parallels.jpg")) );
-//	
-//	glGenTextures(1, &_textObj);
-//	glBindTexture(GL_TEXTURE_CUBE_MAP, _textObj);
-//	glTexImage2D(GL_TEXTURE_CUBE_MAP, 0, GL_RGBA, GLsizei(512), GLsizei(512), 0, GL_RGB, GL_UNSIGNED_BYTE, _img.getData());
-//	
-//	_walls = gl::DisplayList( GL_COMPILE );
-//	_walls.newList();	
-//	gl::drawCube( Vec3f(200.0, 200.0, 200.0), Vec3f(400.0, 400.0, 400.0) );
-//	_walls.endList();
-	
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+		
 }
 
 void GraphicsRenderer::reshape() {
 
-	mCam.setPerspective(45.0, getWindowAspectRatio(), 0.1f, 1000.0f);
+	mCam.setPerspective(45.0, getWindowAspectRatio(), 0.1f, 2000.0f);
 	gl::setMatrices( mCam );	
 
 }
@@ -77,7 +139,33 @@ void GraphicsRenderer::update() {
 	gl::setMatrices( mCam );
 	
 	gl::clear( Color( _bgr, _bgg, _bgb ) );
+	
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
+	glEnable( GL_MULTISAMPLE_ARB );
+	glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+	
+	if (boids) {
+	
+		if (attachEyeToFirstBoid)
+			mEye = boids->getBoidAtIndex(0)->pos;
+		
+		if (lookAtCentroid)
+			mCenter = boids->centroid();	
+		
+	}
+
+}
+
+void GraphicsRenderer::drawCodePanel() {
+	glDisable( GL_LIGHTING );
+	glEnable( GL_TEXTURE_2D );
+	glColor4f(1, 1, 1, 1);
+	gl::pushMatrices();
+	gl::setMatricesWindow( getWindowSize() );
+	codePanel.update( Vec2f( getWindowWidth(), getWindowHeight() ), counter );
+	gl::popMatrices();
+	glDisable( GL_TEXTURE_2D );
 }
 
 void GraphicsRenderer::startDraw() {
@@ -90,6 +178,9 @@ void GraphicsRenderer::startDraw() {
 
 void GraphicsRenderer::endDraw() {
 	gl::popMatrices();
+	if (codePanelActive) 
+		drawCodePanel();
+	counter++;
 }
 
 void GraphicsRenderer::drawFragment(Cell* cell) {
@@ -619,7 +710,7 @@ void GraphicsRenderer::pattern06(int x, int y, int z) {
 		double radius, dist, hx;
 		bmu = ptrWorld->currentBMU();
 		radius = ((double)ptrWorld->sizeX() / 3.0);		
-		dist = pow(bmu->x - x, 2.0) + pow(bmu->y - y, 2.0) + pow(bmu->z - z, 2.0);
+		dist = pow(ptrWorld->currentBMU()->x - x, 2.0) + pow(ptrWorld->currentBMU()->y - y, 2.0) + pow(ptrWorld->currentBMU()->z - z, 2.0);
 
 		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
 
@@ -651,7 +742,7 @@ void GraphicsRenderer::pattern06(int x, int y, int z) {
 //			alpha *= ((2.0/dist) * currentCell->weights[3]);
 
 
-			if (x == bmu->x && y == bmu->y && z == bmu->z) {
+			if (x == ptrWorld->currentBMU()->x && y == ptrWorld->currentBMU()->y && z == ptrWorld->currentBMU()->z) {
 				gl::color(red, green, blue, alpha);
 				gl::drawSphere( Vec3f(xL, yB, zF), xW, 24 );
 				
@@ -708,7 +799,7 @@ void GraphicsRenderer::pattern07(int x, int y, int z) {
 
 	if (ptrWorld->currentBMU()) {
 		Cell* bmu = ptrWorld->currentBMU();
-		if (bmu->x == x && bmu->y == y && bmu->z == z) {
+		if (ptrWorld->currentBMU()->x == x && ptrWorld->currentBMU()->y == y && ptrWorld->currentBMU()->z == z) {
 			
 			double hx, ex, ey, ez;
 			Index3D *prevCoords, *currCoords;
@@ -787,7 +878,33 @@ void GraphicsRenderer::pattern07(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern08(int x, int y, int z) {
-	
+	if (ptrWorld->currentBMU()) {
+		
+		double hx;
+		
+		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+		yB = (float)y * fragSizeX + (fragSizeY * 0.5);
+		zF = (float)z * fragSizeX + (fragSizeZ * 0.5);
+		
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+				
+		red = clipf(currentCell->weights[0], 0.0f, 1.0f);
+		green = clipf(currentCell->weights[1], 0.0f, 1.0f);
+		blue = clipf(currentCell->weights[2], 0.0f, 1.0f);
+		alpha = clipf(currentCell->weights[3], 0.2f, 0.8f);
+		
+		xW = fragSizeX * clipf(currentCell->weights[4], 0.1f, 0.8f);
+		yH = fragSizeY * clipf(currentCell->weights[5], 0.1f, 0.8f);
+		zD = fragSizeZ * clipf(currentCell->weights[6], 0.1f, 0.8f);
+		
+		gl::color(red, green, blue, alpha);
+		
+		gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+	}
 }
 
 void GraphicsRenderer::pattern09(int x, int y, int z) {
@@ -818,54 +935,330 @@ void GraphicsRenderer::pattern15(int x, int y, int z) {
 
 }
 
-void GraphicsRenderer::drawBoids(Boids* boids) {
+void GraphicsRenderer::drawBoids00() {
+	int i;
+
+	drawBoidWorldBorders();
+	
+	drawBoidWorldFrame();
 		
-	drawBoidWorldBorders(boids);
+	mMaps[5].bindMulti(4);
 	
-	mEye = boids->getBoidAtIndex(0)->pos;
-
-	mCenter = boids->centroid();
-
-	red = 0.1;
-	green = 0.8;
-	blue = 1.0;
-	alpha = 0.7;
+	boidShader.bind();
 	
-	gl::color(red, green, blue, alpha);
+	boidShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	boidShader.uniform( "EnvMap", 4 );
 	
-	for (int i = 0; i < boids->numBoids(); i++) {
-		gl::drawSphere( boids->getBoidAtIndex(i)->pos, 2.0, 16 );	
-		if (i > 0) {
-			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos );
+	boidShader.uniform( "BaseColor", Vec4f( 0.3f, 0.3f, 0.3f, 0.7f ) );
+	boidShader.uniform( "MixRatio", 0.5f );
+	glPushMatrix();	
+	
+	if (attachEyeToFirstBoid)
+		i = 1;
+	else
+		i = 0;
+	
+	
+	for (i; i < boids->numBoids(); i++) {
+		
+		gl::drawSphere( boids->getBoidAtIndex(i)->pos, linlin((i+1) * (1.0/(float)boids->numBoids()), 0.0, 1.0, 4.0, 10.0), 16 );
+		
+		if (i > 1) {
+			glLineWidth(2.0f);
+			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos);
+			glLineWidth(1.0f);
 		}
 	}
 	
+	glPopMatrix();
+
+	mMaps[5].unbind();
+			
 }
 
-void GraphicsRenderer::drawBoidWorldBorders(Boids* boids) {
-	
-	red = 0.6;
-	green = 0.7;
-	blue = 0.8;
-	alpha = 1.0;	
-	
-	gl::color(red, green, blue, alpha);
-	gl::drawStrokedCube( boids->dimensions() * 0.5, boids->dimensions() );
 
-//	glBindTexture(GL_TEXTURE_CUBE_MAP, _textObj);
-//	
-//	_wallShader.bind();
-//	_wallShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ));
-//	_wallShader.uniform( "MixRatio", 0.5f );
-//	_wallShader.uniform( "EnvMap", 4 );
-//	_wallShader.uniform( "BaseColor", Vec3f(0.2, 0.95, 0.8) );
-//	glPushMatrix();
-//	glTranslated(0.0f, 0.0f, 0.0f);
-//	_walls.draw();
-//	glPopMatrix();
-//	
-//	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+void GraphicsRenderer::drawBoids01() {
+	int i;
+	float line, maxdist;
 	
+	maxdist = boids->dimensions().distance(boids->dimensions() * 0.5f);
+	
+	drawBoidWorldBorders();
+	
+	if (attachEyeToFirstBoid)
+		mEye = boids->getBoidAtIndex(0)->pos;
+	
+	if (lookAtCentroid)
+		mCenter = boids->centroid();
+	
+	mMaps[0].bindMulti(0);
+	
+	boidShader01.bind();
+	
+	boidShader01.uniform( "LightPosition", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	
+	boidShader01.uniform( "GlassColor", Vec4f( 
+											  clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0),
+											  clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0),
+											  clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0),
+											  0.1f
+											  ));
+	boidShader01.uniform( "SpecularColor1", Vec4f( 0.2f, 0.6f, 0.7f, 0.1f) );
+	boidShader01.uniform( "SpecularColor2", Vec4f( 0.8f, 0.8f, 0.8f, 0.1f) );
+	boidShader01.uniform( "SpecularFactor1", 1.0f );
+	boidShader01.uniform( "SpecularFactor2", 1.0f );
+	glPushMatrix();	
+	
+	if (attachEyeToFirstBoid)
+		i = 1;
+	else
+		i = 0;
+	
+//	gl::drawSphere( boids->centroid(), 12.0f, 16 );	
+	
+	for (i; i < boids->numBoids(); i++) {
+		gl::drawSphere( boids->getBoidAtIndex(i)->pos, 4.0f, 16 );	
+		if (i > 1) {
+			//			glLineWidth(4.0f);
+			//			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos );
+			line = linexp(boids->getBoidAtIndex(i)->pos.distance(boids->dimensions() * 0.5f), 0.0f, maxdist, 8.0f, 2.0f);
+			gl::drawCube(
+				 Vec3f(boids->dimensions().x * 0.5f, boids->getBoidAtIndex(i)->pos.y, boids->getBoidAtIndex(i)->pos.z), 
+				 Vec3f(boids->dimensions().x * 4.0f, line, line)
+			);
+			gl::drawCube(
+				 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->getBoidAtIndex(i)->pos.y, boids->dimensions().z * 0.5f), 
+				 Vec3f(line, line, boids->dimensions().z * 4.0f)
+			);
+			gl::drawCube(
+				 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->dimensions().x * 0.5f, boids->getBoidAtIndex(i)->pos.z), 
+				 Vec3f(line, boids->dimensions().y * 4.0f, line)
+			);
+			glLineWidth(1.0f);
+		}
+	}
+	
+	glPopMatrix();
+	
+	mMaps[0].unbind();
+	
+}
+
+void GraphicsRenderer::drawBoids02() {
+	int i; float maxdist;
+	
+	maxdist = boids->dimensions().distance(boids->dimensions() * 0.5f);
+	
+	mMaps[0].bindMulti(0);
+	
+	boidShader01.bind();
+	
+	boidShader01.uniform( "LightPosition", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	
+	boidShader01.uniform( "GlassColor", Vec4f( 0.8f, 0.8f, 0.8f, 0.1f ));
+	boidShader01.uniform( "SpecularColor1", Vec4f( 0.8f, 0.8f, 0.8f, 0.1f) );
+	boidShader01.uniform( "SpecularColor2", Vec4f( 0.8f, 0.8f, 0.8f, 0.1f) );
+	boidShader01.uniform( "SpecularFactor1", 0.1f );
+	boidShader01.uniform( "SpecularFactor2", 0.1f );
+	glPushMatrix();	
+	
+	if (attachEyeToFirstBoid)
+		i = 1;
+	else
+		i = 0;
+
+	Vec3f d = boids->dimensions();
+
+	for (i; i < boids->numBoids(); i++) {
+		Boid* b;
+		b = boids->getBoidAtIndex(i);
+//		gl::drawSphere( b->pos, 4.0f, 16 );	
+//		line = linexp(boids->centroid().distance(boids->getBoidAtIndex(i)->pos), 0.0, maxdist, 5.0f, 1.0f);
+		glLineWidth(1.0f);
+		
+		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z), Vec3f(0.0, d.y, b->pos.z) );
+		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0), Vec3f(0.0, b->pos.y, d.z) );
+
+		gl::drawLine( Vec3f(d.x, 0.0, b->pos.z), Vec3f(d.x, d.y, b->pos.z) );
+		gl::drawLine( Vec3f(d.x, b->pos.y, 0.0), Vec3f(d.x, b->pos.y, d.z) );
+
+		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z), Vec3f(d.x, 0.0, b->pos.z) );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0), Vec3f(b->pos.x, 0.0, d.z) );
+
+		gl::drawLine( Vec3f(0.0, d.y, b->pos.z), Vec3f(d.x, d.y, b->pos.z) );
+		gl::drawLine( Vec3f(b->pos.x, d.y, 0.0), Vec3f(b->pos.x, d.y, d.z) );
+
+		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0), Vec3f(d.x, b->pos.y, 0.0) );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0), Vec3f(b->pos.x, d.y, 0.0) );
+
+		gl::drawLine( Vec3f(0.0, b->pos.y, d.z), Vec3f(d.x, b->pos.y, d.z) );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, d.z), Vec3f(b->pos.x, d.y, d.z) );
+
+		glLineWidth(1.0f);
+
+	}
+	
+	glPopMatrix();
+	
+	mMaps[0].unbind();
+	
+}
+
+
+void GraphicsRenderer::drawBoids03() {
+	int i;
+	float line, maxdist;
+	
+	maxdist = boids->dimensions().distance(boids->dimensions() * 0.5f);
+		
+	if (attachEyeToFirstBoid)
+		mEye = boids->getBoidAtIndex(0)->pos;
+	
+	if (lookAtCentroid)
+		mCenter = boids->centroid();
+	
+	mMaps[2].bindMulti(4);
+	
+	boidShader.bind();
+	
+	boidShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	boidShader.uniform( "EnvMap", 4 );
+	
+	boidShader.uniform( "BaseColor", Vec4f( 
+										   clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0),
+										   clipf(ptrWorld->currentBMU()->weights[1], 0.0, 1.0),
+										   clipf(ptrWorld->currentBMU()->weights[2], 0.0, 1.0),
+										   clipf(ptrWorld->currentBMU()->weights[3], 0.0, 1.0)
+										   ));
+	boidShader.uniform( "MixRatio", 0.2f );
+	glPushMatrix();	
+	
+	if (attachEyeToFirstBoid)
+		i = 1;
+	else
+		i = 0;
+		
+	for (i; i < boids->numBoids(); i++) {
+		if (i > 1) {
+			line = linexp(boids->centroid().distance(boids->getBoidAtIndex(i)->pos), 0.0, maxdist, 10.0f, 1.0f);
+			glLineWidth(line);
+			gl::drawLine(
+						 Vec3f(-1000.0, boids->getBoidAtIndex(i)->pos.y, boids->getBoidAtIndex(i)->pos.z), 
+						 Vec3f(1000.0, boids->getBoidAtIndex(i)->pos.y, boids->getBoidAtIndex(i)->pos.z)
+						 );
+			gl::drawLine(
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->getBoidAtIndex(i)->pos.y, -1000.0), 
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->getBoidAtIndex(i)->pos.y, 1000.0)
+						 );
+			gl::drawLine(
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x, -1000.0, boids->getBoidAtIndex(i)->pos.z), 
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x, 1000.0, boids->getBoidAtIndex(i)->pos.z)
+						 );
+			glLineWidth(1.0f);
+		}
+	}
+	
+	glPopMatrix();
+	
+	mMaps[2].unbind();
+	
+}
+
+void GraphicsRenderer::drawBoidWorldBorders() {
+	
+	Cell* bmu;
+	float basecol, basealpha, basemix;
+	float devx, devy, devz;
+	
+	bmu = ptrWorld->currentBMU();
+	
+	Vec3f m1, m2, m3, m4;
+	
+	if (bmu) {
+		
+		devx = linlin(clipf(abs(0.25 - bmu->weights[0]), 0.0, 1.0), 0.0, 1.0, 0.95, 1.05);
+		devy = linlin(clipf(abs(0.25 - bmu->weights[1]), 0.0, 1.0), 0.0, 1.0, 0.95, 1.05);
+		devz = linlin(clipf(abs(0.25 - bmu->weights[2]), 0.0, 1.0), 0.0, 1.0, 0.95, 1.05);
+
+		basecol = mapf(clipf(bmu->weights[0], 0.0, 1.0), 0.3, 0.7);
+		basealpha = mapf(clipf(bmu->weights[1], 0.0, 1.0), 0.3, 0.7);
+		basemix = mapf(clipf(bmu->weights[2], 0.0, 1.0), 0.3, 0.7 );		
+		
+		m1 = Vec3f(devx, devy, devz);
+		//		m2 = Vec3f(mapf(clipf(ptrWorld->currentBMU()->weights[1], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[2], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0), 0.9, 1.1));
+		//		m3 = Vec3f(mapf(clipf(ptrWorld->currentBMU()->weights[2], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[1], 0.0, 1.0), 0.9, 1.1));
+		//		m4 = Vec3f(mapf(clipf(ptrWorld->currentBMU()->weights[0], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[2], 0.0, 1.0), 0.9, 1.1), mapf(clipf(ptrWorld->currentBMU()->weights[1], 0.0, 1.0), 0.9, 1.1));
+	}
+	else 
+	{
+		basecol = 0.3;
+		basealpha = 0.5;
+		basemix = 0.5;
+		
+		m1 = Vec3f(1, 1, 1);	
+		//		m2 = Vec3f(1, 1, 1);	
+		//		m3 = Vec3f(1, 1, 1);	
+		//		m4 = Vec3f(1, 1, 1);	
+	}
+		
+	mMaps[4].bindMulti(4);
+	
+	boidShader.bind();
+	
+	boidShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	boidShader.uniform( "EnvMap", 4 );
+	
+	
+	boidShader.uniform( "BaseColor", Vec4f(basecol , basecol, basecol, basealpha ));
+	boidShader.uniform( "MixRatio", basemix);
+	glPushMatrix();	
+	
+	gl::drawSphere( boids->dimensions() * Vec3f(0.5, 0.5, 0.5) * m1, boids->dimensions().x + 100.0f, 48 );
+//	gl::drawSphere( boids->dimensions() * Vec3f(0.33, 0.66, 0.5) * m2, boids->dimensions().x + 100.0f, 48 );
+//	gl::drawSphere( boids->dimensions() * Vec3f(0.66, 0.33, 0.5) * m3, boids->dimensions().x + 100.0f, 48 );
+//	gl::drawSphere( boids->dimensions() * Vec3f(0.66, 0.66, 0.5) * m4, boids->dimensions().x + 100.0f, 48 );
+	
+	glPopMatrix();
+
+	mMaps[4].unbind();
+	
+}
+
+void GraphicsRenderer::drawBoidWorldFrame() {
+	
+	float csize;
+	
+	csize = 4.0f;
+	
+	boidShader01.bind();
+	
+	boidShader01.uniform( "LightPosition", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+	
+	boidShader01.uniform( "GlassColor", Vec4f(0.4f, 0.4f, 0.4f, 0.3f));
+	boidShader01.uniform( "SpecularColor1", Vec4f( 0.4f, 0.4f, 0.4f, 0.8f) );
+	boidShader01.uniform( "SpecularColor2", Vec4f( 1.0f, 1.0f, 1.0f, 0.7f) );
+	boidShader01.uniform( "SpecularFactor1", 0.2f );
+	boidShader01.uniform( "SpecularFactor2", 0.5f );
+
+	glPushMatrix();	
+	
+	gl::drawCube(Vec3f(0.0, boids->dimensions().y * 0.5, 0.0), Vec3f(csize, boids->dimensions().y, csize));
+	gl::drawCube(Vec3f(boids->dimensions().x, boids->dimensions().y * 0.5, 0.0), Vec3f(csize, boids->dimensions().y, csize));
+	gl::drawCube(Vec3f(0.0, boids->dimensions().y * 0.5, boids->dimensions().z), Vec3f(csize, boids->dimensions().y, csize));
+	gl::drawCube(Vec3f(boids->dimensions().x, boids->dimensions().y * 0.5, boids->dimensions().z), Vec3f(csize, boids->dimensions().y, csize));
+
+	gl::drawCube(Vec3f(boids->dimensions().x * 0.5, 0.0, 0.0), Vec3f(boids->dimensions().y, csize, csize));
+	gl::drawCube(Vec3f(boids->dimensions().x * 0.5, 0.0, boids->dimensions().z), Vec3f(boids->dimensions().y, csize, csize));
+	gl::drawCube(Vec3f(boids->dimensions().x * 0.5, boids->dimensions().y, 0.0), Vec3f(boids->dimensions().y, csize, csize));
+	gl::drawCube(Vec3f(boids->dimensions().x * 0.5, boids->dimensions().y, boids->dimensions().z), Vec3f(boids->dimensions().y, csize, csize));
+
+	gl::drawCube(Vec3f(0.0, 0.0, boids->dimensions().z * 0.5), Vec3f(csize, csize, boids->dimensions().z));
+	gl::drawCube(Vec3f(boids->dimensions().x, 0.0, boids->dimensions().z * 0.5), Vec3f(csize, csize, boids->dimensions().z));
+	gl::drawCube(Vec3f(0.0, boids->dimensions().y, boids->dimensions().z * 0.5), Vec3f(csize, csize, boids->dimensions().z));
+	gl::drawCube(Vec3f(boids->dimensions().x, boids->dimensions().y, boids->dimensions().z * 0.5), Vec3f(csize, csize, boids->dimensions().z));
+	
+	glPopMatrix();
+
 }
 
 void GraphicsRenderer::strokeRectArray() {

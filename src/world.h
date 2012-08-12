@@ -101,6 +101,10 @@ public:
 	
 	Cell*** cells;
 	
+	bool somActivated;
+	bool ruleInitialized;
+	bool cellsInitialized;
+	
 	void init(int, int, int, int);	
 			
 	int index() { return _index; };
@@ -125,8 +129,8 @@ public:
 	
 	void prepareNext();
 	void finalizeNext();
-	
-	bool initialized() { return (cells != NULL && _rule != NULL); };
+		
+	bool initialized() { return (cellsInitialized && ruleInitialized) || (cellsInitialized && somActivated); };
 	bool bQueryStates() { return _bQueryStates; }
 	
 	void setInterpolation(Interpolation, int);
@@ -148,6 +152,8 @@ public:
 	int bestMatchHistorySize() { return _bestMatchHistory.size(); }
 	bool inputVectorUpdated() { return _inputVectorUpdated; }
 	bool newBMUFound() { return _newBMUFound; }
+	
+	Vec3f bmuVec3f(Vec3f dims); 
 	
 private:
 	void clear();

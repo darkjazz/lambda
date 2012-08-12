@@ -108,6 +108,7 @@ void LambdaApp::resize(ResizeEvent event) {
 
 void LambdaApp::setup()
 {
+		
 	boids = NULL;
 	world = new World();
 	ogl = new GraphicsRenderer(world);
@@ -132,7 +133,7 @@ void LambdaApp::update()
 
 void LambdaApp::draw()
 {
-	
+		
 	ogl->startDraw();
 	
 	if (world->initialized()) {
@@ -144,7 +145,12 @@ void LambdaApp::draw()
 		for (x = 0; x < world->sizeX(); x++) {
 			for (y = 0; y < world->sizeY(); y++) {
 				for (z = 0; z < world->sizeZ(); z++) {
-					world->next(x, y, z);
+					
+					if (world->ruleInitialized)
+						world->next(x, y, z);
+					if (world->somActivated)
+						world->nextSOM(x, y, z);
+
 					ogl->drawFragment(&world->cells[x][y][z]);
 				}
 			}
@@ -161,12 +167,16 @@ void LambdaApp::draw()
 	boids = oscMessenger->boids();
 	
 	if (boids) {
+//		if (world->somActivated)
+//			boids->setCenter(world->bmuVec3f(boids->dimensions()));
 		boids->update();
-		ogl->drawBoids(boids);
+//		ogl->drawBoids03();
+		ogl->drawBoids00();
+		ogl->drawBoids02();
 	}
 		
 	ogl->endDraw();
-		
+
 }
 
 void LambdaApp::shutdown() {
