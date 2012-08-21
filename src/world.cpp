@@ -63,6 +63,8 @@ void World::initVars() {
 	cellsInitialized = false;
 	ruleInitialized = false;
 	somActivated = false;
+	
+	symmetry = ZERO;
 }
 
 void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
@@ -310,6 +312,7 @@ void World::finalizeNext() {
 		}
 		
 		_bmu = &(cells[_bestMatchCoords.x][_bestMatchCoords.y][_bestMatchCoords.z]);
+		setCells(_bmu->x, _bmu->y, _bmu->z);
 		_newBMUFound = true;
 	}
 }
@@ -423,6 +426,7 @@ void World::nextSOM(int x, int y, int z) {
 
 	if (_newBMUFound)
 		trainSOM(x, y, z);
+		
 
 }
 
@@ -433,4 +437,84 @@ Vec3f World::bmuVec3f(Vec3f dims) {
 	else {
 		return Vec3f::zero();
 	}
+}
+
+void World::setCells(int x, int y, int z) {
+	int i, xx, yy, zz, hlfx, hlfy, hlfz;
+	
+	hlfx = _sizeX / 2 - 1;
+	hlfy = _sizeY / 2 - 1;
+	hlfz = _sizeZ / 2 - 1;
+	
+	for (i = 0; i < 3; i++) {
+		cells[x][y][z].states[i] = 1.0;
+	}
+	
+	if (symmetry > 0) {
+		
+		if (x > hlfx) 
+		{ 
+			xx = hlfx - wrapi(x, 0, hlfx); 
+		}
+		else
+		{	
+			xx = (_sizeX - 1) - x;
+		}
+		
+		if (y > hlfy)
+		{	
+			yy = hlfy - wrapi(y, 0, hlfy); 
+		}
+		else
+		{	
+			yy = (_sizeY - 1) - y; 
+		}
+
+		if (z > hlfz)
+		{	
+			zz = hlfz - wrapi(z, 0, hlfz); 
+		}
+		else
+		{	
+			zz = (_sizeZ - 1) - z; 
+		}
+		
+		if (X || QX || TOTAL) {
+				for (i = 0; i < 3; i++) {
+					cells[xx][y][z].states[i] = 1.0;
+				}				
+		}
+		if (Y || QY || TOTAL) {
+				for (i = 0; i < 3; i++) {
+					cells[x][yy][z].states[i] = 1.0;
+				}
+		}
+		if (Z || QZ || TOTAL) {
+			for (i = 0; i < 3; i++) {
+				cells[x][y][zz].states[i] = 1.0;
+			}
+		}
+		if (XY || QX || QY || TOTAL) {
+			for (i = 0; i < 3; i++) {
+				cells[xx][yy][z].states[i] = 1.0;
+			}
+		}
+		if (YZ || QY || QZ || TOTAL) {
+			for (i = 0; i < 3; i++) {
+				cells[x][yy][zz].states[i] = 1.0;
+			}
+		}
+		if (ZX || QZ || QX || TOTAL) {
+			for (i = 0; i < 3; i++) {
+				cells[xx][y][zz].states[i] = 1.0;
+			}
+		}
+		if (XYZ || TOTAL) {
+			for (i = 0; i < 3; i++) {
+				cells[xx][yy][zz].states[i] = 1.0;
+			}
+		}
+	}
+	
+	
 }

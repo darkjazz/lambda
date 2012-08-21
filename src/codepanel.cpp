@@ -25,83 +25,80 @@
 
 #include "cinder/Text.h"
 #include "cinder/gl/Texture.h"
+#include "util.h"
 
 using namespace ci;
 
 CodePanel::CodePanel()
 {
-	state = true;
-	opacity	= 1.0f;
+	show = false;
+	opacity	= 0.0f;
 	fadeTime = 300;
 	maxLines = 10;
+	counter = 0;
 }
 
 void CodePanel::createTexture()
 {
 	TextLayout layout;
 	layout.setFont( Font("Inconsolata", 14) );
-	layout.setColor( Color(0.5f, 0.5f, 0.5f) );
+	layout.setColor( Color(0.7f, 0.7f, 0.7f) );
 	layout.addLine( "sc.sparsematrix" );
 	
-	layout.setFont(Font("Inconsolata", 10));
-	layout.setColor(Color(0.4f, 0.4f, 0.5f));
-	layout.addLine("-------------------------------------------------------------------------------------");	
-
-	lines.push_back("λ ~graphics.initWorld(32, 32, 8, 2000, 0.1)");
-	lines.push_back("λ ~graphics.sendPresetRule('faders')");
-	lines.push_back("λ ~graphics.changeSetting('rule', 1)");
-	lines.push_back("λ ~ctrls01.do({|ctr| ");
-	lines.push_back("	ctr.active = [0, 1].wchoose([0.3, 0.7]);");
-	lines.push_back("	ctr.amp = rrand(0.7, 1.5); ");
-	lines.push_back("	ctr['dur'] = rrand(0.01, 0.3);");
-	lines.push_back("});");	
-	
-	for (int i = 0; i < lines.size(); i++) {
+	layout.setFont(Font("Inconsolata", 11));
+	layout.setColor(Color(0.5f, 0.5f, 0.55f));
+	layout.addLine("------------------------------------------------------------------------------------------");	
+		
+	for (int i = lines.size() - 1; i >= 0; i--) {
 		layout.addLine(lines[i]);
 	}
-	
-//	layout.addLine("λ ~ciapp.setPattern(1, 0, 1.0, 1, 1)");
-//	layout.addLine("λ ['kpanilogo', 'yole', 'diansa', 'sorsornet'].do({|name|");
-//	layout.addLine("	~combined = ~combined ++ SparsePattern(~allPatterns[name]).makeSparse.patterns;");
-//	layout.addLine("});");
-//	layout.addLine("λ ~setBPM.(bpm);");
-//	layout.addLine("λ Pdef('player', Ppar([ Pdef('rhythm'), Pdef('efx') ]));");
-//	layout.addLine("λ ~groups.flat.do({|name|");
-//	layout.addLine("	~ctrls[name].active = [0, 1].wchoose([0.2, 0.8]);");
-//	layout.addLine("	~ctrls[name].dur = rrand(0.02, 0.3);");
-//	layout.addLine("	~ctrls[name].amp = rrand(0.06, 0.7);");		
-//	layout.addLine("});");
-		
+			
 	texture = gl::Texture( layout.render( true ) );
 }
 
-void CodePanel::update( Vec2f dim, float counter )
+void CodePanel::update( Vec2f dim )
 {
-	if( state ){
+	if( show ){
 		if( counter == fadeTime ){
-			toggleState();
+			show = false;
 		}
-		opacity -= ( opacity - 1.0f ) * 0.1f;
+		else {
+			opacity = clipf(opacity+0.2f, 0.0f, 1.0f);
+			counter++;
+		}
 	} else {
-		opacity -= ( opacity - 0.0f ) * 0.1f;	
+		opacity = clipf(opacity-0.05f, 0.0f, 1.0f);
 	}
 	
-	if( opacity > 0.01f ){
+	if( opacity > 0.05f ){
 		render( dim );
 	}
+
 }
 
 void CodePanel::render( Vec2f dim )
 {
+	createTexture();
 	float x = dim.x - texture.getWidth() - 40.0f;
 	float y = dim.y - texture.getHeight() - 25.0f;
 	glColor4f( 1, 1, 1, opacity );
 	gl::draw( texture, Vec2f( x, y ) );
 }
 
+void CodePanel::addLine(string line) {
+	
+	show = true;
+	counter = 0;
+	
+//	line[0] = 'λ';
 
-void CodePanel::toggleState()
-{
-	state = ! state;
+	vector<string>::iterator it;
+
+	if (lines.size() >= maxLines) {
+		lines.pop_back();
+	}
+	
+	it = lines.begin();
+	lines.insert(it, line);
+	
 }
-

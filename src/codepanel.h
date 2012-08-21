@@ -34,16 +34,15 @@ class CodePanel {
 public:
 	CodePanel();
 	void createTexture();
-	void update( ci::Vec2f dim, float counter );
-	void render( ci::Vec2f dim );
-	void toggleState();
+	void update( ci::Vec2f );
+	void render( ci::Vec2f );
+	void addLine( string );
 	
 	ci::Vec2f loc;
 	
 	float opacity;
-	float counter;
-	bool state;
-	int fadeTime, maxLines;			
+	bool show;
+	int fadeTime, maxLines, counter;			
 	ci::gl::Texture	texture; 
 	
 	vector<string> lines;

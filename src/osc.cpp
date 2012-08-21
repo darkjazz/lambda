@@ -147,9 +147,12 @@ void OSCMessenger::collectMessages() {
 			}
 			_world->setQueryIndices(ind, msg.getNumArgs());
 			delete [] ind;
- 		}		
+ 		}
 		else if (addr.compare("/lambda/world/query/stop") == 0) {
 			_world->stopQuery();
+ 		}
+		else if (addr.compare("/lambda/world/symmetry") == 0) {
+			_world->symmetry = (Sym)msg.getArgAsInt32(0);
  		}
 		else if (addr.compare("/lambda/graphics/rotate") == 0) {
 			_ogl->rotateXYZ = Vec3f(
@@ -225,6 +228,15 @@ void OSCMessenger::collectMessages() {
 			delete _boids;
 			_boids = NULL;
 			_ogl->boids = NULL;
+		}
+		else if (addr.compare("/lambda/livecode/activate") == 0) {
+			if (msg.getArgAsInt32(0) == 0)
+				_ogl->codePanelActive = false;
+			else
+				_ogl->codePanelActive = true;
+		}
+		else if (addr.compare("/lambda/livecode/codeline") == 0) {
+			_ogl->codePanel.addLine(msg.getArgAsString(0));
 		}
 		else if (addr.compare("/lambda/quit") == 0) {
 			_receivedQuit = true;

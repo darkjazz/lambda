@@ -43,6 +43,7 @@ struct Index3D { int x, y, z; Index3D() : x(0), y(0), z(0) {} };
 
 enum R { CONT, LIFE, GEN };
 enum Interpolation { NONE, LINEAR, COSINE };
+enum Sym { ZERO, X, Y, Z, XY, YZ, ZX, XYZ, QX, QY, QZ, TOTAL };
 
 struct State { 
 	int x, y, z, index;
@@ -104,6 +105,7 @@ public:
 	bool somActivated;
 	bool ruleInitialized;
 	bool cellsInitialized;
+	Sym symmetry; 
 	
 	void init(int, int, int, int);	
 			
@@ -154,6 +156,8 @@ public:
 	bool newBMUFound() { return _newBMUFound; }
 	
 	Vec3f bmuVec3f(Vec3f dims); 
+	
+	void setCells(int, int, int);
 	
 private:
 	void clear();

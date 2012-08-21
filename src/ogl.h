@@ -69,9 +69,9 @@ public:
 		attachEyeToFirstBoid = false;
 		lookAtCentroid = false;
 		boids = NULL;
-		codePanelActive = true;
 		counter = 0;
-
+		codePanelActive = true;
+		maxphase = 28;
 	};
 	
 	~GraphicsRenderer() {
@@ -131,16 +131,16 @@ public:
 	
 	bool attachEyeToFirstBoid;
 	bool lookAtCentroid;
-	bool codePanelActive; 
 	
 	Boids* boids;
 	
 	CodePanel codePanel;
+	bool codePanelActive;
 	
 private:
 	
 	double fragSizeX, fragSizeY, fragSizeZ, state;
-	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha;
+	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha, maxphase;
 	int currentIndex, vectorSize, counter;
 	Cell* currentCell;
 	Cell* ptrBMU;

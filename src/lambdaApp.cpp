@@ -56,8 +56,8 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	
 	_winSizeX = 800;
 	_winSizeY = 600;
-//	_frameRate = 128;
-	_frameRate = 10;
+	_frameRate = 32;
+//	_frameRate = 10;
 	_remoteHost	= "127.0.0.1";
 	_inport = 7000;
 	_outport = 57120;
