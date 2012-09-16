@@ -34,7 +34,7 @@ CodePanel::CodePanel()
 	show = false;
 	opacity	= 0.0f;
 	fadeTime = 300;
-	maxLines = 10;
+	maxLines = 16;
 	counter = 0;
 }
 

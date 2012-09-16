@@ -105,7 +105,13 @@ private:
 
 class Continuous : public Rule {
 public:
-	Continuous(N dim) : Rule(dim) {};
+	Continuous(N dim) : Rule(dim) {
+		_add = 0.005;
+		_weights = new double[ nSize() ];
+		for (int i=0; i < nSize(); i++)
+			_weights[i] = 1.0;
+		
+	};
 	Continuous(double, double*, N);
 	~Continuous() { delete [] _weights; };
 	

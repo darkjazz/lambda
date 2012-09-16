@@ -85,6 +85,9 @@ void LambdaApp::prepareSettings(Settings *settings) {
 		else if (args[i].compare("-outport") == 0) {
 			_outport = atoi(args[i+1].c_str());		
 		}
+		else if (args[i].compare("-wmode") == 0) {
+			_windowMode = atoi(args[i+1].c_str());
+		}
 	}
 	
 	
