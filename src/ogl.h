@@ -43,7 +43,8 @@ using namespace ci::app;
 
 //const double pi = 3.1415926535;
 
-const int numPatterns = 16;
+const int numPatterns = 26;
+const int numBoidPatterns = 6;
 
 struct pattern {
 
@@ -57,12 +58,19 @@ struct pattern {
 	~pattern() {};
 };
 
+struct boidPattern {
+	bool active;
+	int mapIndex;
+	boidPattern(): active(false), mapIndex(0) {};
+	~boidPattern() {};
+};
 
 class GraphicsRenderer {
 
 public:
 	GraphicsRenderer(World* world) {
 		patternLib = new pattern[numPatterns];
+		boidPatternLib = new boidPattern[numBoidPatterns];
 		rotateXYZ = Vec3f( 1.0f, 0.0f, 0.0f);
 		rotateAngle = 0.0f;
 		ptrWorld = world;
@@ -72,6 +80,14 @@ public:
 		counter = 0;
 		codePanelActive = true;
 		maxphase = 28;
+		ptrBMU = NULL;
+		mDirectional = 1.0f;
+		bSHADER = true;
+		bLIGHT = true;
+		mLightLoc = Vec3f::zero();
+		blocx = 0.0f;
+		blocy = 0.0f;
+		blocz = 0.0f;
 	};
 	
 	~GraphicsRenderer() {
@@ -82,6 +98,7 @@ public:
 	};
 	
 	pattern* patternLib;	
+	boidPattern* boidPatternLib; 
 	
 	void setupOgl();
 	
@@ -103,13 +120,8 @@ public:
 		_bgr = r; _bgg = g; _bgb = b;
 	};
 	
-	void drawBoids00();
-	void drawBoids01();
-	void drawBoids02();
-	void drawBoids03();
-	void drawBoidWorldBorders();
-	void drawBoidWorldFrame();
-	
+	void drawBoids();
+		
 	void drawCodePanel();
 	
 	Vec3f rotateXYZ;
@@ -136,6 +148,12 @@ public:
 	
 	CodePanel codePanel;
 	bool codePanelActive;
+
+	gl::GlslProg smShader;
+	bool bSHADER;
+	Vec3f mLightLoc;
+	bool bLIGHT;
+
 	
 private:
 	
@@ -146,7 +164,9 @@ private:
 	Cell* ptrBMU;
 	World* ptrWorld;
 	float _bgr, _bgg, _bgb;
-	
+	float hx, hy; 
+	float blocx, blocy, blocz;
+
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
 	
 	
@@ -181,6 +201,35 @@ private:
 	void pattern14(int, int, int);
 
 	void pattern15(int, int, int);
+
+	void pattern16(int, int, int);
+	
+	void pattern17(int, int, int);
+	
+	void pattern18(int, int, int);
+	
+	void pattern19(int, int, int);
+	
+	void pattern20(int, int, int);
+	
+	void pattern21(int, int, int);
+	
+	void pattern22(int, int, int);
+	
+	void pattern23(int, int, int);
+	
+	void pattern24(int, int, int);
+	
+	void pattern25(int, int, int);
+
+	void drawBoids00();
+	void drawBoids01();
+	void drawBoids02();
+	void drawBoids03();
+	void drawBoids04();
+	void drawBoids05();
+	void drawBoidWorldBorders();
+	void drawBoidWorldFrame();	
 	
 	// *** basic drawing functions *** //
 	

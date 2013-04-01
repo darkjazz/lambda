@@ -51,7 +51,7 @@ void World::initVars() {
 	_cellHistorySize = 8;
 	_trainDur = 1000;
 	_trainCount = 0;
-	_learningRate = _initLearningRate = 0.1;	
+	_learningRate = _initLearningRate = 0.1;
 	_inputVectorUpdated = false;
 	_newBMUFound = false;
 	_bmu = NULL;
@@ -70,6 +70,13 @@ void World::initVars() {
 void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	int x, y, z, i;
 	double state;
+
+	_trainCount = 0;
+	_inputVectorUpdated = false;
+	_newBMUFound = false;
+	cellsInitialized = false;
+	ruleInitialized = false;
+	somActivated = false;	
 
 	_sizeX = sizeX; _sizeY = sizeY; _sizeZ = sizeZ; _vectorSize = vectorSize;
 

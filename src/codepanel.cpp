@@ -34,19 +34,19 @@ CodePanel::CodePanel()
 	show = false;
 	opacity	= 0.0f;
 	fadeTime = 300;
-	maxLines = 16;
+	maxLines = 32;
 	counter = 0;
 }
 
 void CodePanel::createTexture()
 {
 	TextLayout layout;
-	layout.setFont( Font("Inconsolata", 14) );
-	layout.setColor( Color(0.7f, 0.7f, 0.7f) );
-	layout.addLine( "sc.sparsematrix" );
+	layout.setFont( Font("Arial Black", 14) );
+	layout.setColor( Color(0.5f, 0.5f, 0.5f) );
+	layout.addLine( "sc.mikrogeen" );
 	
-	layout.setFont(Font("Inconsolata", 11));
-	layout.setColor(Color(0.5f, 0.5f, 0.55f));
+	layout.setFont(Font("Inconsolata", 14));
+	layout.setColor(Color(0.8f, 0.8f, 0.8f));
 	layout.addLine("------------------------------------------------------------------------------------------");	
 		
 	for (int i = lines.size() - 1; i >= 0; i--) {

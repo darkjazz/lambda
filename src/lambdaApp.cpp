@@ -57,12 +57,10 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	_winSizeX = 800;
 	_winSizeY = 600;
 	_frameRate = 32;
-//	_frameRate = 10;
 	_remoteHost	= "127.0.0.1";
 	_inport = 7000;
 	_outport = 57120;
 	_windowMode = 0;
-	
 	
 	args = getArgs();
 	
@@ -90,7 +88,6 @@ void LambdaApp::prepareSettings(Settings *settings) {
 		}
 	}
 	
-	
 	settings->setWindowSize( _winSizeX, _winSizeY );
 
 	if (_windowMode == 0)
@@ -111,7 +108,6 @@ void LambdaApp::resize(ResizeEvent event) {
 
 void LambdaApp::setup()
 {
-		
 	boids = NULL;
 	world = new World();
 	ogl = new GraphicsRenderer(world);
@@ -138,7 +134,7 @@ void LambdaApp::draw()
 {
 		
 	ogl->startDraw();
-	
+		
 	if (world->initialized()) {
 		
 		int x, y, z;
@@ -173,9 +169,7 @@ void LambdaApp::draw()
 //		if (world->somActivated)
 //			boids->setCenter(world->bmuVec3f(boids->dimensions()));
 		boids->update();
-//		ogl->drawBoids03();
-		ogl->drawBoids00();
-		ogl->drawBoids02();
+		ogl->drawBoids();
 	}
 		
 	ogl->endDraw();

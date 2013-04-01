@@ -52,13 +52,28 @@ Routine({
 	~mikro.metadata[ind].defname
 })
 
+~names.size
+
 z=Pseq(~names, 1).asStream
 n=z.next
 ~synth = ~mikro.playGEPSynth(n)
 
+~mtrx = SparseMatrix(FoaDecoder())
+
+~mtrx.beatdur
+~args.takeThese({|item| item.isKindOf(Symbol) })
+
+~args.pairsDo {|a, b| [b, ~mikro.roundFreq(b, 1, ~mtrx.beatdur)].postln  }
+
+Event.newFrom(~args).collect({|value| ~mikro.roundFreq(value, 1, ~mtrx.beatdur) })
+
+Array.geom(16, ~mtrx.beatdur, 2)
+
 ~synth.free
-~mikro.getDefArgs[gep_gen000_023_120524_202530]
+~args = ~mikro.getDefArgs(\gep_gen000_023_120524_202530).copy
 ~names.do(_.postln)
+
+~mikro.metadata.select({|data| data.defname == \gep_gen000_023_120524_202530.asString })
 
 (
 [

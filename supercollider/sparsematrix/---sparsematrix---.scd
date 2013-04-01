@@ -1,4 +1,4 @@
-~graphics = CinderApp(mode: 1)
+~graphics = CinderApp(mode: 0)
 ~matrix = SparseMatrix(FoaDecoder(decoderType: 'stereo'), ~graphics).assignCodeWindow(Document.current);
 
 ~graphics.open
@@ -82,7 +82,7 @@ Pdef('matrixplayer', Ppar([ Pdef('r00'), Pdef('b01'), Pdef('b02'), Pdef('efx')])
 
 Pdef('matrixplayer', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'), Pdef('b02'), Pdef('b03')]))
 
-~graphics.setPattern(10, 0, 1.0, 0, 0, 0.5, 0.8, 1.0);
+~graphics.setPattern(10, 1, 1.0, 0, 0, 0.5, 0.8, 1.0);
 
 Pdef('matrixplayer').play
 
@@ -104,9 +104,9 @@ Pdef('matrixplayer').play
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.2, 0.8]) },
-	{ rrand(0.1, 0.5) },
-	{ rrand(0.01, 0.2) }
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.1, 0.8) },
+	{ rrand(0.001, 0.005) }
 )
 
 ~matrix.defsAt('r01').setControls(
@@ -116,17 +116,17 @@ Pdef('matrixplayer').play
 )
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.05, 0.4) },
-	{ rrand(0.005, 0.1) }
+	{ [0, 1].wchoose([0.3, 0.7]) },
+	{ exprand(0.05, 0.6) },
+	{ rrand(0.005, 0.2) }
 )
 
 ~matrix.defsAt('r00').recall(0)
 
 ~matrix.defsAt('r02').setControls(
-	{ [0, 1].wchoose([0.2, 0.8]) },
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.1, 0.8) },
-	{ exprand(0.05, 0.3) }
+	{ exprand(0.01, 0.1) }
 )
 
 
@@ -145,7 +145,7 @@ Pdef('matrixplayer').play
 ~matrix.defsAt('r03').setControls(
 	{ [0, 1].wchoose([0.5, 0.5]) },
 	{ exprand(0.2, 0.7) },
-	{ exprand(0.05, 0.4) }
+	{ exprand(0.05, 0.1) }
 )
 
 
@@ -158,7 +158,7 @@ Pdef('matrixplayer').play
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('neuralFilter', 0.4)
+~matrix.setSkismAmp('neuralFilter', 0.1)
 
 ~matrix.setSkismAmp('latchOnset', 0.5)
 
@@ -175,6 +175,8 @@ Pdef('matrixplayer').play
 ~matrix.defsAt('r00').setActives(0, 0.0, 0.01)
 
 ~matrix.defsAt('r02').setActives(0, 0.0, 0.01)
+
+~matrix.defsAt('r03').setActives(0, 0.0, 0.01)
 
 
 ~matrix.defsAt('r01').setControls(
@@ -237,11 +239,11 @@ Pdef('matrixplayer').play
 
 
 
-~graphics.setPattern(8, 1, 0.2, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(8, 0, 0.2, 1, 1, 0.6, 0.7, 0.9);
 
 ~graphics.setPattern(9, 0, 1.0, 1, 1, 0.3, 0.7, 0.9);
 
-~graphics.setPattern(10, 1, 1.0, 1, 0, 0.5, 0.8, 1.0);
+~graphics.setPattern(10, 0, 1.0, 1, 0, 0.5, 0.8, 1.0);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.3, 0.5);
 
@@ -251,7 +253,7 @@ Pdef('matrixplayer').play
 
 ~graphics.setPattern(14, 0, 1.0, 1, 1, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15,0, 1.0,0, 0, 0.0, 0.5, 0.7);
+~graphics.setPattern(15, 0, 1.0,0, 0, 0.0, 0.5, 0.7);
 
 
 ~graphics.setViewpoint(40.0, 40.0, 0.0, 0.0, 0.0, 0.0)

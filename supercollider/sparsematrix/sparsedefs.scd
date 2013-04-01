@@ -179,7 +179,7 @@ SynthDef(\del01, {|out, in, amp, del, grw, rmp, rt|
 SynthDef(\mfcc, {|in, th|
 	var fft, mfcc, onsets;
 	fft = FFT(LocalBuf(1024), In.ar(in));
-	mfcc = MFCC.kr(fft, 8);
+	mfcc = MFCC.kr(fft, ~ncoef ? 8);
 	onsets = Onsets.kr(fft, th);
 	SendReply.kr(onsets, '/mfcc', mfcc);
 }).add;	

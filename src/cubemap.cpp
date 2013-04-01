@@ -59,6 +59,7 @@ void CubeMap::bind()
 void CubeMap::unbind()
 {
 	glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, 0 );
+	glActiveTexture(GL_TEXTURE0);
 }
 
 

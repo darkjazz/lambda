@@ -1,234 +1,309 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
 {\fonttbl\f0\fnil\fcharset0 Inconsolata;}
-{\colortbl;\red255\green255\blue255;\red255\green102\blue0;\red0\green0\blue0;\red0\green0\blue191;
-\red0\green115\blue0;\red96\green96\blue96;\red0\green115\blue0;}
+{\colortbl;\red255\green255\blue255;\red255\green102\blue0;\red0\green0\blue191;\red0\green115\blue0;
+\red96\green96\blue96;}
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 
-\f0\fs24 \cf2 ~graphics\cf3  = \cf4 CinderApp\cf3 (1024, 768, mode: 1)\
-\cf2 ~matrix\cf3  = \cf4 SparseMatrix\cf3 (\cf4 FoaDecoder\cf3 (decoderType: \cf5 'stereo'\cf3 ), \cf2 ~graphics\cf3 ).assignCodeWindow(\cf4 Document\cf3 .current);\
+\f0\fs24 \cf2 ~graphics\cf0  = \cf3 CinderApp\cf0 (800, 600, mode: 0)\
+\cf2 ~matrix\cf0  = \cf3 SparseMatrix\cf0 (\cf3 FoaDecoder\cf0 (), \cf2 ~graphics\cf0 ).assignCodeWindow(\cf3 Document\cf0 .current);\
 \
-\cf2 ~graphics\cf3 .open\
-\cf2 ~matrix\cf3 .startDecoder\
+\cf2 ~graphics\cf0 .open\
+\cf2 ~matrix\cf0 .startDecoder\
 \
-\cf2 ~graphics\cf3 .initWorld(24, 24, 24, 8);\
+\cf2 ~matrix\cf0 .decoder.test\
 \
-\cf2 ~graphics\cf3 .initGenerations([4,6,8], [3,5,7,9], 16);\
+\cf2 ~matrix\cf0 .decoder.stopTest\
 \
-\cf2 ~graphics\cf3 .setSymmetry(11)\
+\cf2 ~graphics\cf0 .initWorld(24, 24, 24, 8);\
 \
-\cf2 ~matrix\cf3 .addPatternCycleDef(\cf5 'c00'\cf3 , 4, \cf2 ~matrix\cf3 .buffers.cycles[[1, 2, 7, 14]], \cf5 'frag05'\cf3 , \cf6 "c0"\cf3 )\
+\cf2 ~graphics\cf0 .initGenerations([4,6,8], [3,5,7,9], 16);\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r02'\cf3 , \
-	sourcenames: [\cf5 'raboday'\cf3 ], subpatterns: 3, prefix: \cf5 'r2'\cf3 );\
+\cf2 ~graphics\cf0 .setSymmetry(11)\
+\
+\cf2 ~matrix\cf0 .addPatternCycleDef(\cf4 'c00'\cf0 , 4, \cf2 ~matrix\cf0 .buffers.cycles[[1, 2, 7, 14]], \cf4 'frag05'\cf0 , \cf5 "c0"\cf0 )\
+\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r02'\cf0 , \
+	sourcenames: [\cf4 'raboday'\cf0 ], subpatterns: 3, prefix: \cf4 'r2'\cf0 );\
 \
 \
-\cf2 ~matrix\cf3 .addPatternBufferDef(\cf5 'b01'\cf3 ,\
+\cf2 ~matrix\cf0 .addPatternBufferDef(\cf4 'b01'\cf0 ,\
 	size: 32, groupsize: 4, div: 2,\
-	sourcenames: [\cf5 'kokou'\cf3 , \cf5 'soli'\cf3 , \cf5 'macrou'\cf3 ],\
-	prefix: \cf6 "b1"\cf3 , protoname: \cf5 'fragproto01'\cf3 ,\
-	buffers: \cf2 ~matrix\cf3 .buffers.frags, defname: \cf5 'frag01'\cf3 \
+	sourcenames: [\cf4 'kokou'\cf0 , \cf4 'soli'\cf0 , \cf4 'macrou'\cf0 ],\
+	prefix: \cf5 "b1"\cf0 , protoname: \cf4 'fragproto01'\cf0 ,\
+	buffers: \cf2 ~matrix\cf0 .buffers.frags, defname: \cf4 'frag01'\cf0 \
 );\
 \
-\cf2 ~matrix\cf3 .addPatternBufferDef(\cf5 'b02'\cf3 , \
+\cf2 ~matrix\cf0 .addPatternBufferDef(\cf4 'b02'\cf0 , \
 	size: 64, groupsize: 8,\
-	sourcenames: [\cf5 'kpanilogo'\cf3 , \cf5 'yole'\cf3 , \cf5 'diansa'\cf3 , \cf5 'kokou'\cf3 , \cf5 'kakilambe'\cf3 , \cf5 'soli'\cf3 , \cf5 'mandiani'\cf3 ], \
-	prefix: \cf6 "b2"\cf3 , protoname: \cf5 'argproto'\cf3 ,\
-	buffers: \cf2 ~matrix\cf3 .buffers.bits, defname: \cf5 'bit01'\cf3 \
+	sourcenames: [\cf4 'kpanilogo'\cf0 , \cf4 'yole'\cf0 , \cf4 'diansa'\cf0 , \cf4 'kokou'\cf0 , \cf4 'kakilambe'\cf0 , \cf4 'soli'\cf0 , \cf4 'mandiani'\cf0 ], \
+	prefix: \cf5 "b2"\cf0 , protoname: \cf4 'argproto'\cf0 ,\
+	buffers: \cf2 ~matrix\cf0 .buffers.bits, defname: \cf4 'bit01'\cf0 \
 );\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r00'\cf3 , \
-	sourcenames: [\cf5 'kpanilogo'\cf3 , \cf5 'yole'\cf3 , \cf5 'diansa'\cf3 , \cf5 'sorsornet'\cf3 ], prefix: \cf6 "r0"\cf3 );\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r00'\cf0 , \
+	sourcenames: [\cf4 'kpanilogo'\cf0 , \cf4 'yole'\cf0 , \cf4 'diansa'\cf0 , \cf4 'sorsornet'\cf0 ], prefix: \cf5 "r0"\cf0 );\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r01'\cf3 , div: 4, \
-	sourcenames: [\cf5 'diansa'\cf3 , \cf5 'liberte'\cf3 , \cf5 'macrou'\cf3 ], prefix: \cf6 "r1"\cf3 );\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r01'\cf0 , div: 4, \
+	sourcenames: [\cf4 'diansa'\cf0 , \cf4 'liberte'\cf0 , \cf4 'macrou'\cf0 ], prefix: \cf5 "r1"\cf0 );\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r02'\cf3 , \
-	sourcenames: [\cf5 'raboday'\cf3 ], subpatterns: 3, prefix: \cf5 'r2'\cf3 );\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r02'\cf0 , \
+	sourcenames: [\cf4 'raboday'\cf0 ], subpatterns: 3, prefix: \cf4 'r2'\cf0 );\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r03'\cf3 , 48, 8, 8, [\cf5 'kpanilogo'\cf3 , \cf5 'yole'\cf3 ], 2, \cf6 "r3"\cf3 );\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r03'\cf0 , 48, 8, 8, [\cf4 'kpanilogo'\cf0 , \cf4 'yole'\cf0 ], 2, \cf5 "r3"\cf0 );\
 \
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c000'\cf3 ].amp = 0.3\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c000'\cf0 ].amp = 0.3\
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c000'\cf3 ].active = 1\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c000'\cf0 ].active = 1\
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c001'\cf3 ].amp = 0.3\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c001'\cf0 ].amp = 0.3\
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c001'\cf3 ].active = 1\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c001'\cf0 ].active = 1\
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c003'\cf3 ].amp = 0.1\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c003'\cf0 ].amp = 0.1\
 \
-\cf2 ~matrix\cf3 .patterndefs[\cf5 'c00'\cf3 ].ctrls[\cf5 'c003'\cf3 ].active = 1\
+\cf2 ~matrix\cf0 .patterndefs[\cf4 'c00'\cf0 ].ctrls[\cf4 'c003'\cf0 ].active = 1\
 \
-\cf2 ~graphics\cf0 .setPattern(8, 0, 0.2, 1, 1, 0.6, 0.7, 0.9);\
-\cf3 \
+\cf2 ~graphics\cf0 .setPattern(8, 1, 0.2, 1, 1, 0.6, 0.7, 0.9);\
 \
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 , \cf4 Ppar\cf3 ([ \cf4 Pdef\cf3 (\cf5 'c00'\cf3 ), \cf4 Pdef\cf3 (\cf5 'r02'\cf3 ), \cf4 Pdef\cf3 (\cf5 'b01'\cf3 ), \cf4 Pdef\cf3 (\cf5 'b02'\cf3 )]))\
 \
-\cf2 ~matrix\cf3 .setBPM(132)\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 , \cf3 Ppar\cf0 ([ \cf3 Pdef\cf0 (\cf4 'r00'\cf0 ), \cf3 Pdef\cf0 (\cf4 'r03'\cf0 )]))\
 \
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 ).play\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .setBPM(132)\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'b01'\cf3 ).setControls(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 ).play\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .defsAt(\cf4 'b01'\cf0 ).setControls(\
 	\{ [0, 1].wchoose([0.7, 0.3]) \},\
 	\{ rrand(0.1, 0.4) \},\
 	\{ rrand(0.05, 0.2) \}\
 );\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'b02'\cf3 ).setControls(\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'b02'\cf0 ).setControls(\
 	\{ [0, 1].wchoose([0.7, 0.3]) \},\
 	\{ rrand(0.2, 0.6) \},\
 	\{ rrand(0.05, 0.2) \}\
 );\
 \
-\cf2 ~graphics\cf3 .setViewpoint(40.0, 40.0, 0.0, 0.0, 0.0, 0.0);\
+\cf2 ~graphics\cf0 .setViewpoint(40.0, 40.0, -30.0, 0.0, 0.0, 0.0);\
 \
-\cf2 ~graphics\cf3 .setPattern(9, 0, 1.0, 0, 0, 0.5, 0.8, 1.0);\
+\cf2 ~graphics\cf0 .setPattern(9, 0, 1.0, 1, 1, 0.5, 0.8, 1.0);\
+\cf2 ~graphics\cf0 .setPattern(10, 0, 0.2, 0, 0, 0.5, 0.8, 1.0);\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r02'\cf3 ).setControls(\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r02'\cf0 ).setControls(\
 	\{ [0, 1].wchoose([0.5, 0.5]) \},\
 	\{ exprand(0.1, 0.8) \},\
 	\{ exprand(0.05, 0.2) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r02'\cf3 ).recall(0)\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r02'\cf0 ).recall(0)\
 \
-\cf2 ~matrix\cf3 .addPatternBufferDef(\cf5 'b00'\cf3 ,\
+\cf2 ~matrix\cf0 .addPatternBufferDef(\cf4 'b00'\cf0 ,\
 	size: 32, groupsize: 4, \
-	sourcenames: [\cf5 'kokou'\cf3 , \cf5 'soli'\cf3 , \cf5 'macrou'\cf3 ],\
-	prefix: \cf6 "b0"\cf3 , protoname: \cf5 'fragproto'\cf3 ,\
-	buffers: \cf2 ~matrix\cf3 .buffers.frags, defname: \cf5 'frag02'\cf3 \
+	sourcenames: [\cf4 'kokou'\cf0 , \cf4 'soli'\cf0 , \cf4 'macrou'\cf0 ],\
+	prefix: \cf5 "b0"\cf0 , protoname: \cf4 'fragproto'\cf0 ,\
+	buffers: \cf2 ~matrix\cf0 .buffers.frags, defname: \cf4 'frag02'\cf0 \
 );\
 \
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 , \cf4 Ppar\cf3 ([ \cf4 Pdef\cf3 (\cf5 'r00'\cf3 ), \cf4 Pdef\cf3 (\cf5 'r01'\cf3 ), \cf4 Pdef\cf3 (\cf5 'r02'\cf3 ), \cf4 Pdef\cf3 (\cf5 'r03'\cf3 ), \cf4 Pdef\cf3 (\cf5 'efx'\cf3 )]))\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 , \cf3 Ppar\cf0 ([ \cf3 Pdef\cf0 (\cf4 'r00'\cf0 ), \cf3 Pdef\cf0 (\cf4 'r01'\cf0 ), \cf3 Pdef\cf0 (\cf4 'r02'\cf0 ), \cf3 Pdef\cf0 (\cf4 'r03'\cf0 ), \cf3 Pdef\cf0 (\cf4 'efx'\cf0 )]))\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).setControls(\
-	\{ [0, 1].wchoose([0.5, 0.5]) \},\
-	\{ rrand(0.1, 0.5) \},\
-	\{ rrand(0.01, 0.2) \}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.3, 0.7]) \},\
+	\{ rrand(0.1, 0.7) \},\
+	\{ rrand(0.01, 0.3) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).recall(0)\
-\cf2 ~matrix\cf0 .defsAt(\cf7 'r03'\cf0 ).recall(0)\
-\cf3 \
-\
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 , \cf4 Ppar\cf3 ([ \cf4 Pdef\cf3 (\cf5 'r00'\cf3 ), \cf4 Pdef\cf3 (\cf5 'r02'\cf3 ), \cf4 Pdef\cf3 (\cf5 'b01'\cf3 ), \cf4 Pdef\cf3 (\cf5 'b02'\cf3 )]))\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).recall(0)\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).recall(0)\
 \
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r01'\cf3 , div: 4, \
-	sourcenames: [\cf5 'diansa'\cf3 , \cf5 'liberte'\cf3 , \cf5 'macrou'\cf3 ], prefix: \cf6 "r1"\cf3 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 , \cf3 Ppar\cf0 ([ \cf3 Pdef\cf0 (\cf4 'r00'\cf0 ), \cf3 Pdef\cf0 (\cf4 'efx'\cf0 )]));\
 \
-\cf2 ~matrix\cf3 .addPatternSynthDef(\cf5 'r03'\cf3 , 48, 8, 8, [\cf5 'kpanilogo'\cf3 , \cf5 'yole'\cf3 ], 2, \cf6 "r3"\cf3 );\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .setBPM(144)\
 \
-\cf2 \
-~matrix\cf3 .setBPM(144)\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).setControls(\
-	\{ [0, 1].wchoose([0.5, 0.5]) \},\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r01'\cf0 , div: 4, \
+	sourcenames: [\cf4 'diansa'\cf0 , \cf4 'liberte'\cf0 , \cf4 'macrou'\cf0 ], prefix: \cf5 "r1"\cf0 );\
+\
+\cf2 ~matrix\cf0 .addPatternSynthDef(\cf4 'r03'\cf0 , 48, 8, 8, [\cf4 'kpanilogo'\cf0 , \cf4 'yole'\cf0 ], 2, \cf5 "r3"\cf0 );\
+\
+\
+\cf2 ~matrix\cf0 .setBPM(144)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.3, 0.7]) \},\
 	\{ exprand(0.05, 0.8) \},\
-	\{ rrand(0.05, 0.08) \}\
+	\{ rrand(0.1, 0.3) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r03'\cf3 ).setControls(\
-	\{ [0, 1].wchoose([0.5, 0.5]) \},\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.6, 0.4]) \},\
 	\{ exprand(0.1, 0.7) \},\
-	\{ exprand(0.005, 0.05) \}\
+	\{ exprand(0.1, 0.3) \}\
 )\
 \
 \
 \
-\cf2 ~rot\cf3  = \cf4 Rotation\cf3 (40.0, 0.01, 20.0, 60.0, 0.0, 0.02, 0.0, 0.02);\
-\cf2 ~graphics\cf3 .setCameraRotation(\cf2 ~rot\cf3 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);\
+\cf2 ~rot\cf0  = \cf3 Rotation\cf0 (40.0, 0.01, 20.0, 60.0, 0.0, 0.02, 0.0, 0.02);\
+\cf2 ~graphics\cf0 .setCameraRotation(\cf2 ~rot\cf0 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);\
 \
 \
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 , \cf4 Ppar\cf3 ([ \cf4 Pdef\cf3 (\cf5 'r00'\cf3 ), Pdef('r01')]));\
-\cf2 ~graphics\cf3 .setPattern(10, 0, 1.0, 1, 0, 0.5, 0.8, 1.0);\
-\cf2 ~graphics\cf3 .setPattern(9, 0, 1.0, 0, 0, 0.3, 0.7, 0.9);\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 , \cf3 Ppar\cf0 ([ \cf3 Pdef\cf0 (\cf4 'r00'\cf0 ), \cf3 Pdef\cf0 (\cf4 'r01'\cf0 )]));\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~graphics\cf0 .setPattern(10, 0, 1.0, 1, 0, 0.5, 0.8, 1.0);\
+\cf2 ~graphics\cf0 .setPattern(9, 0, 1.0, 0, 0, 0.3, 0.7, 0.9);\
 \
-\cf2 ~graphics\cf3 .rotateCamera;\
+\cf2 ~graphics\cf0 .rotateCamera;\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r01'\cf3 ).setControls(\
-	\{ [0, 1].wchoose([0.5, 0.5]) \},\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r01'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.4, 0.6]) \},\
 	\{ rrand(0.3, 0.8) \},\
-	\{ rrand(0.005, 0.01) \}\
+	\{ rrand(0.05, 0.1) \}\
 );\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).setActives(\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r02'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.6, 0.4]) \},\
+	\{ rrand(0.3, 0.8) \},\
+	\{ rrand(0.05, 0.3) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).setActives(\
 	\{ rrand(0.2, 0.7) \},\
-	\{ rrand(0.001, 0.03)	\}\
+	\{ rrand(0.1, 0.4)	\}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r02'\cf3 ).setActives(\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).setActives(\
+	\{ rrand(0.2, 0.7) \},\
+	\{ rrand(0.001, 0.3)	\}\
+)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r01'\cf0 ).setActives(\
 	\{ rrand(0.2, 0.8) \},\
 	\{ rrand(0.01, 0.3)	\}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r03'\cf3 ).setGroups( [0, 1], 1,\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r02'\cf0 ).setActives(\
+	\{ rrand(0.8, 0.2) \},\
+	\{ rrand(0.01, 0.3)	\}\
+)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).setGroups( [0, 1], 1,\
 	\{ rrand(0.1, 0.6) \}, \
 	\{ rrand(0.4, 2.0) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r03'\cf3 ).setGroups( [3, 4], 1,\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).setGroups( [3, 4], 1,\
 	\{ rrand(0.5, 1.0) \}, \
 	\{ rrand(0.4, 1.0) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r03'\cf3 ).setGroups( 3, 1,\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).setGroups( 3, 1,\
 	\{ rrand(0.5, 1.0) \}, \
 	\{ rrand(0.05, 0.3) \}\
 )\
 \
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).setControls(\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).setControls(\
 	\{ [0, 1].wchoose([0.5, 0.5]) \},\
 	\{ rrand(0.1, 0.5) \},\
 	\{ rrand(0.01, 0.2) \}\
 )\
 \
-\cf2 ~graphics\cf3 .setPattern(11, 1, 1.0, 0, 0, 0.0, 0.3, 0.5);\
+\cf2 ~graphics\cf0 .setPattern(11, 1, 1.0, 0, 0, 0.0, 0.3, 0.5);\
 \
-\cf2 ~graphics\cf3 .setPattern(11, 0, 1.0, 0, 0, 0.0, 0.3, 0.5);\
-\
-\
-\cf2 ~matrix\cf3 .efxamps[\cf5 'rev00'\cf3 ] = 0.0\
-\cf2 ~matrix\cf3 .efxamps[\cf5 'rev01'\cf3 ] = 0.0\
-\cf2 ~matrix\cf3 .efxamps[\cf5 'del00'\cf3 ] = 0.0\
-\cf2 ~matrix\cf3 .efxamps[\cf5 'del01'\cf3 ] = 0.0\
-\
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r00'\cf3 ).recall(0)\
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r01'\cf3 ).recall(0)\
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r02'\cf3 ).recall(0)\
-\cf2 ~matrix\cf3 .defsAt(\cf5 'r03'\cf3 ).recall(0)\
-\
-\cf2 ~matrix\cf3 .activateSkismSynth(\cf5 'neuralFilter'\cf3 )\
-\
-\cf2 ~matrix\cf3 .activateSkismSynth(\cf5 'latchOnset'\cf3 )\
-\
-\cf2 ~matrix\cf3 .setSkismAmp(\cf5 'neuralFilter'\cf3 , 0.05)\
-\
-\cf2 ~matrix\cf3 .setSkismAmp(\cf5 'latchOnset'\cf3 , 0.3)\
-\
-\cf2 ~matrix\cf3 .deactivateSkismSynth(\cf5 'neuralFilter'\cf3 )\
-\
-\cf2 ~matrix\cf3 .deactivateSkismSynth(\cf5 'latchOnset'\cf3 )\
-\
-\cf2 ~graphics\cf3 .setPattern(11, 0, 1.0, 1, 1, 0.44, 0.32, 0.66);\
+\cf2 ~graphics\cf0 .setPattern(11, 0, 1.0, 0, 0, 0.0, 0.3, 0.5);\
 \
 \
-\cf2 ~graphics\cf3 .setPattern(13, 0, 0.7, 0, 0, 0.6, 0.8, 1.0);\
+\cf2 ~matrix\cf0 .efxamps[\cf4 'rev00'\cf0 ] = 0.3\
+\cf2 ~matrix\cf0 .efxamps[\cf4 'rev01'\cf0 ] = 0.4\
+\cf2 ~matrix\cf0 .efxamps[\cf4 'del00'\cf0 ] = 0.2\
+\cf2 ~matrix\cf0 .efxamps[\cf4 'del01'\cf0 ] = 0.05\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r00'\cf0 ).recall(0)\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r01'\cf0 ).recall(0)\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r02'\cf0 ).recall(0)\
+\cf2 ~matrix\cf0 .defsAt(\cf4 'r03'\cf0 ).recall(0)\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'neuralFilter'\cf0 )\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'latchOnset'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'neuralFilter'\cf0 , 0.1)\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'latchOnset'\cf0 , 0.3)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'neuralFilter'\cf0 )\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'latchOnset'\cf0 )\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'granularReverb'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'granularReverb'\cf0 , 0.7)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'granularReverb'\cf0 )\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'flangingDecimator'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'flangingDecimator'\cf0 , 0.3)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'flangingDecimator'\cf0 )\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'feedbackSpectrum'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'feedbackSpectrum'\cf0 , 0.2)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'feedbackSpectrum'\cf0 )\
 \
 \
-\cf2 ~graphics\cf3 .setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'cyclicWarp'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'cyclicWarp'\cf0 , 0.1)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'cyclicWarp'\cf0 )\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'latchOnset'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'latchOnset'\cf0 , 1.0)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'latchOnset'\cf0 )\
 \
 \
-\cf2 ~graphics\cf3 .setPattern(15, 0, 1.0, 0, 0, 0.0, 0.5, 0.7);\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf4 'cliqSaw'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf4 'cliqSaw'\cf0 , 0.2)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf4 'cliqSaw'\cf0 )\
 \
 \
-\cf2 ~graphics\cf3 .stopRotation\
 \
-\cf2 ~graphics\cf3 .setViewpoint(40.0, 40.0, 0.0, 0.0, 0.0, 0.0)\
+\cf2 ~graphics\cf0 .setPattern(11, 0, 1.0, 1, 1, 0.44, 0.32, 0.66);\
 \
 \
-\cf4 Pdef\cf3 (\cf5 'matrixplayer'\cf3 ).stop\
+\cf2 ~graphics\cf0 .setPattern(13, 0, 0.7, 0, 0, 0.6, 0.8, 1.0);\
 \
-\cf2 ~matrix\cf3 .quit\
+\
+\cf2 ~graphics\cf0 .setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);\
+\
+\
+\cf2 ~graphics\cf0 .setPattern(15, 0, 1.0, 0, 0, 0.0, 0.5, 0.7);\
+\
+\
+\cf2 ~graphics\cf0 .stopRotation\
+\
+\cf2 ~graphics\cf0 .setViewpoint(40.0, 40.0, 0.0, 0.0, 0.0, 0.0)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Pdef\cf0 (\cf4 'matrixplayer'\cf0 ).stop\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .quit\
 }
