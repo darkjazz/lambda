@@ -7,7 +7,7 @@
 
 ~graphics.setFrameRate(16.0);
 ~graphics.initWorld(20, 20, 20, 20);
-~graphics.setViewpoint(300.0, 400.0, 200.0, 200.0, 200.0, 200.0);
+~graphics.setViewpoint(500.0, 500.0, 500.0, 0.0, 0.0, 0.0);
 ~graphics.activateSwarm(16, 400.0, 400.0, 400.0, 0.9, 50.0, 8.0, 5.0, 100.0);
 
 (
@@ -21,7 +21,7 @@ Routine({
 }).play;
 )
 
-~graphics.sendBoidPattern(5, 1, 4);
+~graphics.sendBoidPattern(2, 1, 0);
 
 
 ~graphics.sendBoidPattern(5, 1, 4);

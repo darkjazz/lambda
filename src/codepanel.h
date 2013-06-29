@@ -37,6 +37,8 @@ public:
 	void update( ci::Vec2f );
 	void render( ci::Vec2f );
 	void addLine( string );
+	void bind();
+	void unbind();
 	
 	ci::Vec2f loc;
 	
@@ -46,6 +48,8 @@ public:
 	ci::gl::Texture	texture; 
 	
 	vector<string> lines;
+	
+	string title;
 	
 private:
 	void makeHeader();

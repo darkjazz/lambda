@@ -79,6 +79,7 @@ public:
 		boids = NULL;
 		counter = 0;
 		codePanelActive = true;
+		codePanelMapped = false;
 		maxphase = 28;
 		ptrBMU = NULL;
 		mDirectional = 1.0f;
@@ -124,6 +125,8 @@ public:
 		
 	void drawCodePanel();
 	
+	void mapCodePanel();
+	
 	Vec3f rotateXYZ;
 	
 	float rotateAngle;
@@ -148,6 +151,7 @@ public:
 	
 	CodePanel codePanel;
 	bool codePanelActive;
+	bool codePanelMapped; 
 
 	gl::GlslProg smShader;
 	bool bSHADER;

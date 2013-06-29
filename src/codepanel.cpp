@@ -36,6 +36,7 @@ CodePanel::CodePanel()
 	fadeTime = 300;
 	maxLines = 32;
 	counter = 0;
+	title = "sc.code";
 }
 
 void CodePanel::createTexture()
@@ -43,7 +44,7 @@ void CodePanel::createTexture()
 	TextLayout layout;
 	layout.setFont( Font("Arial Black", 14) );
 	layout.setColor( Color(0.5f, 0.5f, 0.5f) );
-	layout.addLine( "sc.mikrogeen" );
+	layout.addLine( title );
 	
 	layout.setFont(Font("Inconsolata", 14));
 	layout.setColor(Color(0.8f, 0.8f, 0.8f));
@@ -85,13 +86,35 @@ void CodePanel::render( Vec2f dim )
 	gl::draw( texture, Vec2f( x, y ) );
 }
 
+void CodePanel::bind() 
+{
+	if( show ){
+		if( counter == fadeTime ){
+			show = false;
+		}
+		else {
+			opacity = clipf(opacity+0.2f, 0.0f, 1.0f);
+			counter++;
+		}
+	} else {
+		opacity = clipf(opacity-0.05f, 0.0f, 1.0f);
+	}
+	
+	createTexture();
+	
+	texture.bind();
+}
+
+void CodePanel::unbind() 
+{
+	texture.unbind();
+}
+
 void CodePanel::addLine(string line) {
 	
 	show = true;
 	counter = 0;
 	
-//	line[0] = 'λ';
-
 	vector<string>::iterator it;
 
 	if (lines.size() >= maxLines) {

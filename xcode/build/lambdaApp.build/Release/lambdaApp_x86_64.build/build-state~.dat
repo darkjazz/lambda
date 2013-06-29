@@ -1,0 +1,27 @@
+TlambdaApp_x86_64
+v7
+r1
+
+N/Users/alo/Development/lambda/xcode/build/Release/lambdaApp.app
+t1339010647
+s102
+
+N/Users/alo/Development/lambda/xcode/build/Release/lambdaApp.app/Contents/Info.plist
+t1339010647
+s1228
+
+N/Users/alo/Development/lambda/xcode/build/Release/lambdaApp.app/Contents/PkgInfo
+t1339010647
+s8
+
+N/Users/andrewfb/Code/cinder/samples/basicApp/xcode/Info copy.plist
+c00000000000000000000000000000000
+t2
+s0
+
+CProcessInfoPlistFile /Users/alo/Development/lambda/xcode/build/Release/lambdaApp.app/Contents/Info.plist "/Users/andrewfb/Code/cinder/samples/basicApp/xcode/Info copy.plist"
+r0
+
+CTouch /Users/alo/Development/lambda/xcode/build/Release/lambdaApp.app
+r0
+

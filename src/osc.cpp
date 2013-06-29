@@ -240,8 +240,17 @@ void OSCMessenger::collectMessages() {
 				else
 					_ogl->codePanelActive = true;
 			}
+			else if (addr.compare("/lambda/livecode/map") == 0) {
+				if (msg.getArgAsInt32(0) == 0)
+					_ogl->codePanelMapped = false;
+				else
+					_ogl->codePanelMapped = true;
+			}
 			else if (addr.compare("/lambda/livecode/codeline") == 0) {
 				_ogl->codePanel.addLine(msg.getArgAsString(0));
+			}
+			else if (addr.compare("/lambda/livecode/codetitle") == 0) {
+				_ogl->codePanel.title = msg.getArgAsString(0);
 			}
 			else if (addr.compare("/lambda/framerate") == 0) {
 				setFrameRate(msg.getArgAsFloat(0));

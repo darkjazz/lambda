@@ -1,32 +1,33 @@
-~ciapp = CinderApp(800, 600);
+~graphics = CinderApp(800, 600);
 
-~ciapp.quit
+~graphics.quit
 
-~ciapp.open
+~graphics.open
 
-~ciapp.initWorld(24, 24, 24, 20);
+~graphics.initWorld(20, 20, 20, 20);
 
-~ciapp.initContinuous;
+~graphics.initContinuous;
 
-~ciapp.setAdd(0.04);
+~graphics.setAdd(0.3);
 
-~ciapp.resetWorld(9, 9, 9, 4, 4, 4)
+~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
-~ciapp.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
-~ciapp.setPattern(1, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
+~graphics.setPattern(1, 0, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
-~ciapp.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
+~graphics.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
 
-~ciapp.setPattern(3, 0, 1.0, 1, 0, 0.6, 0.8, 0.8);
+~graphics.setPattern(3, 0, 1.0, 1, 0, 0.6, 0.8, 0.8);
 
-~ciapp.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
+~graphics.setPattern(4, 1, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
-~ciapp.setPattern(5, 0, 1.0, 0, 0, 0.7, 0.9, 1.0);
+~graphics.setPattern(5, 0, 1.0, 0, 0, 0.7, 0.9, 1.0);
 
-~ciapp.setPattern(6, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
+~graphics.setPattern(6, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
 
-~ciapp.setPattern(7, 1, 1.0, 0, 0, 1.0, 1.0, 0.3);
+~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
+
 
 (
 Routine({
@@ -34,31 +35,31 @@ Routine({
 	var streams = Array.fill(8, { Pbrown(0.0, 1.0, 0.1).asStream });
 	
 	100.do({
-		~ciapp.sendSOMVector( streams.collect(_.next) );
+		~graphics.sendSOMVector( streams.collect(_.next) );
 		0.1.wait;
 	});
 	"finished".postln
 }).play;
 )
 
-~ciapp.sendSOMVector(Array.rand(8, 0.0, 1.0));
+~graphics.sendSOMVector(Array.rand(8, 0.0, 1.0));
 
-~ciapp.setPattern(6, 0, 1.0, 0, 0, 0.1, 0.8, 1.0);
+~graphics.setPattern(6, 0, 1.0, 0, 0, 0.1, 0.8, 1.0);
 
-~ciapp.setPattern(8, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-
-~ciapp.setInterpolation(1, 8)
-
-~ciapp.rotate(1.0, 0.0, 0.0, 0.0)
-
-~ciapp.rotate(1.0.rand, 1.0.rand, 1.0.rand, rrand(0.005, 0.02))
+~graphics.setPattern(8, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
-~ciapp.setViewpoint(-80.0, 80.0, 40.0, 0.0, 0.0, 0.0)
+~graphics.setInterpolation(1, 8)
 
-~ciapp.setBackground(0.6, 0.6, 0.65)
-~ciapp.setBackground(0.0, 0.0, 0.05)
+~graphics.rotate(1.0, 0.0, 0.0, 0.0)
+
+~graphics.rotate(1.0.rand, 1.0.rand, 1.0.rand, rrand(0.005, 0.02))
+
+
+~graphics.setViewpoint(-80.0, 80.0, 40.0, 0.0, 0.0, 0.0)
+
+~graphics.setBackground(0.6, 0.6, 0.65)
+~graphics.setBackground(0.0, 0.0, 0.05)
 
 
 (
@@ -77,11 +78,11 @@ var size = 24;
 
 Fx3D
 
-~ciapp.queryStates(~arr, {|msg| msg.postln });
+~graphics.queryStates(~arr, {|msg| msg.postln });
 
-~ciapp.stopQuery
+~graphics.stopQuery
 
-~ciapp.quit
+~graphics.quit
 
 
 Array.geom(30, 1.0, 0.96)
@@ -89,44 +90,44 @@ Array.geom(30, 1.0, 0.96)
 1.0 - Array.series(30, 0, 0.02)
 
 
-~ciapp = CinderApp();
+~graphics = CinderApp();
 
-~ciapp.open
+~graphics.open
 
-~ciapp.initWorld(20, 20, 20, 8);
+~graphics.initWorld(20, 20, 20, 20);
 
-~ciapp.initGenerations([4,6,8], [3,5,7,9], 12);
+~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
 
-~ciapp.setSymmetry(11)
+~graphics.setSymmetry(11)
 
-~ciapp.setPattern(5, 0, 0.3, 0, 0, 0.9, 0.1, 0.4);
+~graphics.setPattern(5, 0, 1.0, 0, 0, 0.9, 1.0, 0.0);
 
-~ciapp.setPattern(6, 0, 0.5, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
-~ciapp.setPattern(7, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~ciapp.setPattern(8, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
-~ciapp.setPattern(9, 0, 0.5, 1, 1, 0.3, 0.7, 0.9);
+~graphics.setPattern(9, 1, 1.0, 1, 1, 0.3, 0.7, 0.9);
 
-~ciapp.setPattern(10, 0, 1.0, 0, 0, 0.5, 0.8, 1.0);
+~graphics.setPattern(10, 1, 1.0, 0, 0, 0.5, 0.8, 1.0);
 
-~ciapp.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.3, 0.5);
+~graphics.setPattern(11, 1, 1.0, 1, 1, 0.0, 0.3, 0.5);
 
-~ciapp.setPattern(12, 1, 0.5, 0, 0, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 	
-~ciapp.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
+~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
-~ciapp.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
-~ciapp.setPattern(15, 0, 0.2, 0, 0, 0.0, 0.5, 0.7);
+~graphics.setPattern(15, 0, 1.0, 0, 0, 0.0, 0.5, 0.7);
 
-~ciapp.setViewpoint(-80.0, 80.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, 100.0, 0.0, 0.0, 0.0, 0.0)
 
 
 Tdef(\sendVector, {
 	loop({
-		~ciapp.sendSOMVector( Array.rand(8, 0.0, 1.0) );
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		0.25.wait;
 	});	
 });
@@ -139,76 +140,202 @@ Tdef(\sendVector).stop
 Routine({
 		
 	100.do({
-		~ciapp.sendSOMVector( Array.rand(8, 0.0, 1.0) );
+		~graphics.sendSOMVector( Array.rand(8, 0.0, 1.0) );
 		0.1.wait;
 	});
 	"finished".postln
 }).play;
 )
 
+(
+[	
+	[5, 0, 0.2, 0, 0, 0.9, 0.1, 0.4],
+	[6, 0, 0.5, 1, 1, 0.5, 0.9, 0.8],
+	[7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0],
+	[8, 0, 0.2, 1, 1, 0.6, 0.7, 0.9],
+	[9, 0, 0.5, 1, 1, 0.3, 0.7, 0.9],
+	[10, 0, 1.0, 0, 0, 0.5, 0.8, 1.0],
+	[11, 0, 1.0, 1, 1, 0.0, 0.3, 0.5],
+	[12, 0, 0.3, 0, 0, 0.44, 0.32, 0.66],
+	[13, 0, 0.7, 0, 0, 0.6, 0.8, 1.0],
+	[14, 0, 1.0, 1, 1, 0.0, 0.5, 0.5],
+	[15, 0, 1.0,0, 0, 0.0, 0.5, 0.7]
+].do({|arglist|
+	~graphics.setPattern(*arglist)
+})
+)
 
-~ciapp.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0)
 
-~ciapp.setInterpolation(1, 2)
+Tdef(\autopilot, {
+	var active, max=15, min=5;
+	active = 6;
+	~graphics.fadeInPattern(6, 10, 1.0);
+	30.wait;
+	loop({
+		var newPattern, time, fade;
+		fade = rrand(5, 10);
+		time = rrand(20, 35);
+		newPattern = rrand(min, max);
+		~graphics.xfadePatterns(newPattern, 1.0, active, fade);
+		(fade + time).wait;
+		active = newPattern;
+		if (0.3.coin) {
+			~graphics.sendPredefined3DRule(
+				[\nova, \briansbrain, \brain6, \cooties, \faders].choose;
+			);
+		}
+	})
+}).play
 
-~ciapp.sendGenRule([4],[4],25)
 
-~ciapp.sendGenRule([3], [3,4,5], 12)
+~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0)
 
-~ciapp.assignCodeWindow(Document.current);
+~graphics.setInterpolation(1, 4)
 
+~graphics.sendGenRule([4],[4],25)
 
-~ciapp.sendPredefinedGenRule(\nova)
+~graphics.sendGenRule([3], [3,4,5], 12)
 
-~ciapp.sendPredefined3DRule(\brain6)
+~graphics.assignCodeWindow(Document.current);
 
-~ciapp.setBackground(0.8, 0.8, 0.9)
+~graphics.showCodePanel
+
+~graphics.sendCodeTitle("sc.live.code.fest")
+
+~graphics.sendPredefinedGenRule(\cooties)
+
+~graphics.sendPredefined3DRule(\brain6)
+
+~graphics.setBackground(0.8, 0.8, 0.9)
 
 ~rot = Rotation(140.0, 0.01, 100.0, 20.0, 0.0, 0.011, 0.0, 0.013);
-~ciapp.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-~ciapp.rotateCamera
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
 
-~ciapp.stopRotation
+~graphics.stopRotation
+
+~matrix.assignCodeWindow(Document.current);
 
 
-~ciapp.setFrameRate(64.0)
+~graphics.setFrameRate(8.0)
 
-~ciapp = CinderApp();
+~graphics = CinderApp();
 
-~ciapp.open
+~graphics.open
 
-~ciapp.hideCodePanel
+~graphics.hideCodePanel
 
-~ciapp.initWorld(20, 20, 20, 8);
+~graphics.initWorld(20, 20, 20, 8);
 
-~ciapp.initContinuous;
+~graphics.initContinuous;
 
-~ciapp.setAdd(0.2);
+~graphics.setAdd(0.2);
 
-~ciapp.resetWorld(9, 9, 9, 4, 4, 4)
+~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
-~ciapp.setViewpoint(0.0, 0.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, 0.0, 80.0, 0.0, 0.0, 0.0)
 
-~ciapp.setPattern(18, 1, 1.0, 0, 0, 0.0, 0.3, 0.5);
+~graphics.setPattern(18, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
 
-~ciapp.setPattern(21, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(19, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
 
-~ciapp.setPattern(22, 1, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(20, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
 
-~ciapp.setPattern(23, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(21, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
-~ciapp.setPattern(24, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(22, 1, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
-~ciapp.setPattern(25, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(23, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+
+~graphics.setPattern(24, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+
+~graphics.unmapCodePanel
+
+~graphics.mapCodePanel
+
+~graphics.sendPredefined3DRule(\faders)
+
+~rot = Rotation(50.0, 0.03, -10.0, 100.0, 0.0, 0.035, 0.0, 0.045);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
+
+~graphics.stopRotation
 
 
 (
 Routine({
 		
 	100.do({
-		~ciapp.sendSOMVector( Array.rand(8, 0.0, 1.0) );
+		~graphics.sendSOMVector( Array.rand(8, 0.0, 1.0) );
 		0.1.wait;
 	});
 	"finished".postln
 }).play;
 )
+
+~graphics.setFrameRate(24.0);
+
+
+~graphics.activateSwarm(16, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 5.0, 100.0);
+
+(
+Routine({
+		
+	100.do({
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		0.1.wait;
+	});
+	"finished".postln
+}).play;
+)
+
+~graphics.sendBoidPattern(0, 0, 1);
+
+
+~rot = Rotation(0.3, 0.133, -50.0, -100.0, 2pi.rand, 0.05, 2pi.rand, 0.033);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera;
+
+~graphics.stopRotation;
+
+
+~graphics.setViewpoint(0.0,130.0, 0.0, 0.0, 0.0, 0.0)
+
+~graphics.setSwarm(0.5, 50.0, 8.0, 5.0, 100.0)
+
+~graphics.killSwarm
+
+~graphics.setBoidCam(false, false)
+
+~graphics.mapCodePanel
+
+(
+// keyDownAction to send evaluated code to the window
+Document.current.keyDownAction = {|doc, char, mod, uni, key|
+	var sendarray;
+	if ((uni == 3) and: { key == 76 }) 
+	{
+		sendarray = doc.selectedString.split(Char.nl);
+		sendarray[0] = "@ " ++ sendarray[0];
+		sendarray.do({|str|  
+			~graphics.sendCodeLine(str) 
+		})
+	}
+}
+)
+
+~rot = Rotation(40.0, 0.05, 20.0, 100.0, 0.0, 0.055, 0.0, 0.06);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
+
+
+
+~matrix.defsAt('b01').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ rrand(0.1, 0.5) },
+	{ rrand(0.05, 0.2) }
+);
+
+Generations

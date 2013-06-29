@@ -228,6 +228,21 @@ void GraphicsRenderer::drawCodePanel() {
 	glDisable( GL_TEXTURE_2D );
 }
 
+void GraphicsRenderer::mapCodePanel() {
+	glDisable( GL_LIGHTING );
+	glEnable( GL_TEXTURE_2D );
+	codePanel.bind();
+	gl::pushMatrices();
+	//gl::setMatricesWindow( getWindowSize() );
+	//codePanel.update( Vec2f( getWindowWidth(), getWindowHeight() ) );
+	gl::color( 1.0, 1.0, 1.0, 0.8 );
+	gl::drawCube( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( hx * 2, hx * 2, hx * 2 ) );
+	gl::popMatrices();
+	codePanel.unbind();
+	glDisable( GL_TEXTURE_2D );
+}
+
+
 void GraphicsRenderer::startDraw() {
 	gl::pushMatrices();
 	gl::multModelView( mRotation );
@@ -235,8 +250,12 @@ void GraphicsRenderer::startDraw() {
 
 void GraphicsRenderer::endDraw() {
 	gl::popMatrices();
-	if (codePanelActive)
-		drawCodePanel();
+	if (codePanelActive) {
+		if (codePanelMapped)
+			mapCodePanel();		
+		else
+			drawCodePanel();
+	}
 	counter++;
 }
 
@@ -2017,7 +2036,13 @@ void GraphicsRenderer::pattern25(int x, int y, int z) {
 }
 
 void GraphicsRenderer::drawBoids() {
+
+	if (attachEyeToFirstBoid)
+		mEye = boids->getBoidAtIndex(0)->pos - (boids->dimensions() * 0.5f);
 	
+	if (lookAtCentroid)
+		mCenter = boids->centroid() - (boids->dimensions() * 0.5f);
+		
 	if (boidPatternLib[0].active) {
 		drawBoids00();
 	}
@@ -2061,7 +2086,7 @@ void GraphicsRenderer::drawBoids00() {
 	
 	
 	for (i; i < boids->numBoids(); i++) {
-		gl::drawSphere( boids->getBoidAtIndex(i)->pos, linlin((i+1) * (1.0/(float)boids->numBoids()), 0.0, 1.0, 4.0, 10.0), 16 );		
+		gl::drawSphere( boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f), linlin((i+1) * (1.0/(float)boids->numBoids()), 0.0, 1.0, 1.0, 2.0), 16 );		
 	}
 	
 	glPopMatrix();
@@ -2079,13 +2104,15 @@ void GraphicsRenderer::drawBoids01() {
 	
 	maxdist = boids->dimensions().distance(boids->dimensions() * 0.5f);
 	
+	Vec3f h = boids->dimensions() * 0.5f;
+	
 //	drawBoidWorldBorders();
 	
-	if (attachEyeToFirstBoid)
-		mEye = boids->getBoidAtIndex(0)->pos;
-	
-	if (lookAtCentroid)
-		mCenter = boids->centroid();
+//	if (attachEyeToFirstBoid)
+//		mEye = boids->getBoidAtIndex(0)->pos;
+//	
+//	if (lookAtCentroid)
+//		mCenter = boids->centroid();
 		
 	boidShader01.bind();
 	
@@ -2117,17 +2144,17 @@ void GraphicsRenderer::drawBoids01() {
 			//			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos );
 			line = linexp(boids->getBoidAtIndex(i)->pos.distance(boids->dimensions() * 0.5f), 0.0f, maxdist, 8.0f, 2.0f);
 			gl::drawCube(
-				 Vec3f(boids->dimensions().x * 0.5f, boids->getBoidAtIndex(i)->pos.y, boids->getBoidAtIndex(i)->pos.z), 
-				 Vec3f(boids->dimensions().x, line, line)
-			);
+						 Vec3f(boids->dimensions().x * 0.5f - h.x, boids->getBoidAtIndex(i)->pos.y - h.y, boids->getBoidAtIndex(i)->pos.z - h.z), 
+						 Vec3f(boids->dimensions().x, line, line)
+						 );
 			gl::drawCube(
-				 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->getBoidAtIndex(i)->pos.y, boids->dimensions().z * 0.5f), 
-				 Vec3f(line, line, boids->dimensions().z)
-			);
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x - h.x, boids->getBoidAtIndex(i)->pos.y - h.y, boids->dimensions().z * 0.5f - h.z), 
+						 Vec3f(line, line, boids->dimensions().z)
+						 );
 			gl::drawCube(
-				 Vec3f(boids->getBoidAtIndex(i)->pos.x, boids->dimensions().x * 0.5f, boids->getBoidAtIndex(i)->pos.z), 
-				 Vec3f(line, boids->dimensions().y, line)
-			);
+						 Vec3f(boids->getBoidAtIndex(i)->pos.x - h.x, boids->dimensions().y * 0.5f - h.y, boids->getBoidAtIndex(i)->pos.z - h.z), 
+						 Vec3f(line, boids->dimensions().y, line)
+						 );
 			glLineWidth(1.0f);
 		}
 	}
@@ -2160,6 +2187,7 @@ void GraphicsRenderer::drawBoids02() {
 		i = 0;
 
 	Vec3f d = boids->dimensions();
+	Vec3f h = boids->dimensions() * 0.5f;
 
 	for (i; i < boids->numBoids(); i++) {
 		Boid* b;
@@ -2168,23 +2196,23 @@ void GraphicsRenderer::drawBoids02() {
 //		line = linexp(boids->centroid().distance(boids->getBoidAtIndex(i)->pos), 0.0, maxdist, 5.0f, 1.0f);
 		glLineWidth(1.0f);
 		
-		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z), Vec3f(0.0, d.y, b->pos.z) );
-		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0), Vec3f(0.0, b->pos.y, d.z) );
+		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z) - h, Vec3f(0.0, d.y, b->pos.z) - h );
+		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0) - h, Vec3f(0.0, b->pos.y, d.z) - h );
 
-		gl::drawLine( Vec3f(d.x, 0.0, b->pos.z), Vec3f(d.x, d.y, b->pos.z) );
-		gl::drawLine( Vec3f(d.x, b->pos.y, 0.0), Vec3f(d.x, b->pos.y, d.z) );
+		gl::drawLine( Vec3f(d.x, 0.0, b->pos.z) - h, Vec3f(d.x, d.y, b->pos.z) - h );
+		gl::drawLine( Vec3f(d.x, b->pos.y, 0.0) - h, Vec3f(d.x, b->pos.y, d.z) - h );
 
-		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z), Vec3f(d.x, 0.0, b->pos.z) );
-		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0), Vec3f(b->pos.x, 0.0, d.z) );
+		gl::drawLine( Vec3f(0.0, 0.0, b->pos.z) - h, Vec3f(d.x, 0.0, b->pos.z) - h );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0) - h, Vec3f(b->pos.x, 0.0, d.z) - h);
 
-		gl::drawLine( Vec3f(0.0, d.y, b->pos.z), Vec3f(d.x, d.y, b->pos.z) );
-		gl::drawLine( Vec3f(b->pos.x, d.y, 0.0), Vec3f(b->pos.x, d.y, d.z) );
+		gl::drawLine( Vec3f(0.0, d.y, b->pos.z) - h, Vec3f(d.x, d.y, b->pos.z) - h );
+		gl::drawLine( Vec3f(b->pos.x, d.y, 0.0) - h, Vec3f(b->pos.x, d.y, d.z) - h );
 
-		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0), Vec3f(d.x, b->pos.y, 0.0) );
-		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0), Vec3f(b->pos.x, d.y, 0.0) );
+		gl::drawLine( Vec3f(0.0, b->pos.y, 0.0) - h, Vec3f(d.x, b->pos.y, 0.0) - h );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, 0.0) - h, Vec3f(b->pos.x, d.y, 0.0) - h );
 
-		gl::drawLine( Vec3f(0.0, b->pos.y, d.z), Vec3f(d.x, b->pos.y, d.z) );
-		gl::drawLine( Vec3f(b->pos.x, 0.0, d.z), Vec3f(b->pos.x, d.y, d.z) );
+		gl::drawLine( Vec3f(0.0, b->pos.y, d.z) - h, Vec3f(d.x, b->pos.y, d.z) - h );
+		gl::drawLine( Vec3f(b->pos.x, 0.0, d.z) - h, Vec3f(b->pos.x, d.y, d.z) - h );
 
 		glLineWidth(1.0f);
 
@@ -2205,13 +2233,7 @@ void GraphicsRenderer::drawBoids03() {
 	PolyLine<Vec3f> polyZ;
 	
 	maxdist = boids->dimensions().distance(boids->dimensions() * 0.5f);
-		
-	if (attachEyeToFirstBoid)
-		mEye = boids->getBoidAtIndex(0)->pos;
-	
-	if (lookAtCentroid)
-		mCenter = boids->centroid();
-	
+			
 	mMaps[boidPatternLib[3].mapIndex].bindMulti(4);
 	
 	boidShader.bind();
@@ -2235,7 +2257,7 @@ void GraphicsRenderer::drawBoids03() {
 		i = 0;
 	
 	for (i; i < boids->numBoids(); i++) {
-		points.push_back(boids->getBoidAtIndex(i)->pos);
+		points.push_back(boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f));
 	}
 	
 	BSpline3f splineX(points, 3, true, false);
@@ -2289,7 +2311,7 @@ void GraphicsRenderer::drawBoids04() {
 				
 		if (i > 1) {
 			glLineWidth(4.0f);
-			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos);
+			gl::drawLine( boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f), boids->getBoidAtIndex(i-1)->pos - (boids->dimensions() * 0.5f));
 			glLineWidth(1.0f);
 		}
 	}
@@ -2328,8 +2350,8 @@ void GraphicsRenderer::drawBoids05() {
 	for (i; i < boids->numBoids(); i++) {
 		
 		if (i > 1) {
-			gl::vertex(boids->getBoidAtIndex(i)->pos);
-			gl::vertex(boids->getBoidAtIndex(i-1)->pos);
+			gl::vertex(boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f));
+			gl::vertex(boids->getBoidAtIndex(i-1)->pos - (boids->dimensions() * 0.5f));
 		}
 	}
 	
