@@ -8,13 +8,13 @@
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.3);
+~graphics.setAdd(0.94);
 
 ~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
 ~graphics.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
-~graphics.setPattern(1, 0, 0.5, 1, 1, 0.9, 0.1, 0.4);
+~graphics.setPattern(1, 1, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
 
@@ -100,9 +100,9 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setSymmetry(11)
 
-~graphics.setPattern(5, 0, 1.0, 0, 0, 0.9, 1.0, 0.0);
+~graphics.setPattern(5, 1, 1.0, 0, 0, 0.9, 1.0, 0.0);
 
-~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
 ~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
@@ -112,7 +112,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(10, 1, 1.0, 0, 0, 0.5, 0.8, 1.0);
 
-~graphics.setPattern(11, 1, 1.0, 1, 1, 0.0, 0.3, 0.5);
+~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.3, 0.5);
 
 ~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 	
@@ -120,9 +120,9 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15, 0, 1.0, 0, 0, 0.0, 0.5, 0.7);
+~graphics.setPattern(15, 1, 1.0, 0, 0, 0.0, 0.5, 0.7);
 
-~graphics.setViewpoint(0.0, 100.0, 0.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(50.0, 100.0, 0.0, 0.0, 0.0, 0.0)
 
 
 Tdef(\sendVector, {
@@ -208,7 +208,7 @@ Tdef(\autopilot, {
 
 ~graphics.setBackground(0.8, 0.8, 0.9)
 
-~rot = Rotation(140.0, 0.01, 100.0, 20.0, 0.0, 0.011, 0.0, 0.013);
+~rot = Rotation(140.0, 0.03, 100.0, 20.0, 0.0, 0.0011, 0.0, 0.0013);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
@@ -243,7 +243,7 @@ Tdef(\autopilot, {
 
 ~graphics.setPattern(21, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(22, 1, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(22, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
 ~graphics.setPattern(23, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
@@ -257,7 +257,7 @@ Tdef(\autopilot, {
 
 ~graphics.sendPredefined3DRule(\faders)
 
-~rot = Rotation(50.0, 0.03, -10.0, 100.0, 0.0, 0.035, 0.0, 0.045);
+~rot = Rotation(50.0, 0.03, -60.0, 60.0, 0.0, 0.035, 0.0, 0.045);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
@@ -291,7 +291,9 @@ Routine({
 }).play;
 )
 
-~graphics.sendBoidPattern(0, 0, 1);
+~graphics.sendBoidPattern(0, 0, 0);
+
+~graphics.sendBoidPattern(4, 1, 1);
 
 
 ~rot = Rotation(0.3, 0.133, -50.0, -100.0, 2pi.rand, 0.05, 2pi.rand, 0.033);
@@ -303,13 +305,17 @@ Routine({
 
 ~graphics.setViewpoint(0.0,130.0, 0.0, 0.0, 0.0, 0.0)
 
-~graphics.setSwarm(0.5, 50.0, 8.0, 5.0, 100.0)
+~graphics.setSwarm(0.5, 50.0, 8.0, 15.0, 100.0)
 
 ~graphics.killSwarm
 
 ~graphics.setBoidCam(false, false)
 
 ~graphics.mapCodePanel
+
+~graphics.unmapCodePanel
+
+~graphics.hideCodePanel
 
 (
 // keyDownAction to send evaluated code to the window

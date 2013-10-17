@@ -1,9 +1,12 @@
-Ndef(\hit, {|rate=50,size=20,rule=30,del=0.0625,amp=0.3,dur=0.2|
+Ndef(\hit, {|rate=50,size=20,rule=30,del=0.0625,amp=0.3,dur=0.2,freq=1760|
 	var trig;
 	trig = Impulse.kr(2);
-	Mix(GVerb.ar(HPF.ar(Impulse.ar(1),500,20),5)).dup * EnvGen.kr(Env.perc, trig, timeScale: dur)
+	Nagumo.ar(0.01, 0.001, LFPulse.ar(110).range(0, 1)).dup * EnvGen.kr(Env.perc, trig, timeScale: dur)
 })
 
+rrand(16, 32).round()
+
+Array.geom(5, 16.0, 2**(1/5))
 
 Ndef(\hit).play
 

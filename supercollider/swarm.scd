@@ -5,10 +5,10 @@
 
 ~graphics.open
 
-~graphics.setFrameRate(16.0);
+~graphics.setFrameRate(4.0);
 ~graphics.initWorld(20, 20, 20, 20);
-~graphics.setViewpoint(500.0, 500.0, 500.0, 0.0, 0.0, 0.0);
-~graphics.activateSwarm(16, 400.0, 400.0, 400.0, 0.9, 50.0, 8.0, 5.0, 100.0);
+~graphics.setViewpoint(30.0, 30.0, 30.0, 0.0, 0.0, 0.0);
+~graphics.activateSwarm(32, 400.0, 400.0, 400.0, 0.9, 50.0, 8.0, 5.0, 100.0);
 
 (
 Routine({
@@ -21,8 +21,10 @@ Routine({
 }).play;
 )
 
-~graphics.sendBoidPattern(2, 1, 0);
+~graphics.sendBoidPattern(0, 1, 0);
 
+
+~graphics.sendBoidPattern(4, 1, 3);
 
 ~graphics.sendBoidPattern(5, 1, 4);
 
@@ -41,7 +43,7 @@ Routine({
 ~ciapp.activateSwarm(20, 400.0, 400.0, 400.0, 0.9, 50.0, 8.0, 10.0, 100.0);
 
 
-~graphics.setSwarm(0.9, 50.0, 8.0, 20.0, 100.0)
+~graphics.setSwarm(0.9, 50.0, 8.0, 30.0, 100.0)
 
 ~ciapp.killSwarm
 

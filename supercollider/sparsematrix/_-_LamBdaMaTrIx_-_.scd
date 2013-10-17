@@ -6,10 +6,26 @@
 
 ~matrix.preparePatternDefs;
 
+
 ~matrix.prepareAudio
 
+~graphics.sendCodeTitle("shiny.toys.space")
 
-Pdef('matrix', Ppar([ Pdef('r03'), Pdef('r04'), Pdef('r05'), Pdef('r06')]))
+SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
+	var sig, swp, env, bf;
+	swp = SinOsc.ar(wbl).exprange(40, 500);
+	sig = LFSaw.ar(freq*[0.99,1,1.01]).sum;
+	sig = LPF.ar(sig, swp);
+	sig = Normalizer.ar(sig);
+	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
+	sig = (sig.distort + tanh(sig**0.8)) * 
+		EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
+	Out.ar(out,bf)
+}).add
+
+
+Pdef('matrix', Ppar([  Pdef('r03'), Pdef('r00'), Pdef('r01'), Pdef('r04')])).quant(128)
 
 Pdef('matrix').play
 
@@ -18,10 +34,46 @@ Pdef('matrix').play
 
 ~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ rrand(0.1, 0.3) },
+	{ exprand(0.1, 0.5) },
+	{ rrand(0.05, 0.3) }
+);
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.3, 1.0) },
+	{ rrand(0.05, 0.3) }
+);
+
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.3, 1.0) },
+	{ rrand(0.05, 0.1) }
+);
+
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(0.3, 1.0) },
 	{ rrand(0.05, 0.2) }
 );
 
+
+~matrix.defsAt('r01').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ rrand(0.1, 0.3) },
+	{ rrand(0.01, 0.2) }
+);
+
+~matrix.defsAt('r03').setControls(
+	{ [0, 1].wchoose([0.6, 0.4]) },
+	{ rrand(0.3, 1.0) },
+	{ rrand(0.01, 0.1) }
+);
+
+~matrix.defsAt('r04').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.3, 1.0) },
+	{ rrand(0.01, 0.2) }
+);
 
 
 
@@ -34,8 +86,9 @@ Pdef('matrix').play
 
 ~graphics.setSymmetry(11)
 
+~graphics.showCodePanel
 
-~graphics.setViewpoint(40.0, 40.0, 40.0, 0.0, 0.0, 0.0);
+~graphics.setViewpoint(70.0, 65.0, 60.0, 0.0, 0.0, 0.0);
 
 
 ~graphics.sendPredefined3DRule(\brain6)
@@ -46,13 +99,16 @@ Pdef('matrix').play
 
 ~graphics.sendPredefined3DRule(\faders)
 
+~patterns.collect({|patnum|
+	[patnum, 0, 1.0, 1.rand, 1.rand, 1.0.rand, 1.0.rand, 1.0.rand] 
+})
+
 (
 [	
 	[5, 0, 0.2, 0, 0, 0.9, 0.1, 0.4],
 	[6, 0, 0.5, 1, 1, 0.5, 0.9, 0.8],
 	[7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0],
 	[8, 0, 0.2, 1, 1, 0.6, 0.7, 0.9],
-	[9, 0, 0.5, 1, 1, 0.3, 0.7, 0.9],
 	[10, 0, 1.0, 0, 0, 0.5, 0.8, 1.0],
 	[11, 0, 1.0, 1, 1, 0.0, 0.3, 0.5],
 	[12, 0, 0.3, 0, 0, 0.44, 0.32, 0.66],
@@ -64,7 +120,19 @@ Pdef('matrix').play
 })
 )
 
-~graphics.fadeInPattern(6, 10, 1.0)
+Tdef(\background, {
+	loop({
+//		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		if (0.66.coin) {
+			~graphics.setBackground(*[0.0, 0.1, 0.2].choose.dup(3).round(0.1));
+		};
+		0.125.wait;
+	});	
+});
+
+Tdef(\background).play
+
+~graphics.fadeInPattern(11, 10, 1.0)
 
 ~graphics.xfadePatterns(12, 1.0, 6, 20)
 
@@ -78,34 +146,87 @@ Pdef('matrix').play
 
 ~graphics.mapCodePanel
 
+~graphics.unmapCodePanel
+
+
+(5..15).remove(9)
 
 (
 Tdef(\autopilot, {
-	var active, max=15, min=5;
-	active = 6;
-	~graphics.fadeInPattern(8, 10, 1.0);
-	30.wait;
+	var actives, max=10, min=5, patterns;
+	~graphics.patternLib.select({|pat| pat.active == 1 }).do({|pat|
+		pat.active = 0;
+		~graphics.sendPattern(pat.index)
+	});
+	~patterns = (5..15);
+	actives = [~patterns.choose];
+	~graphics.fadeInPattern(actives.first, 10, 1.0);
+	rrand(8.0, 12.0).wait;	
+	actives = actives ++ ~patterns.choose;
+	~graphics.fadeInPattern(actives.last, 5, 1.0);
+	rrand(6.0, 12.0).wait;
 	loop({
-		var newPattern, time, fade;
-		fade = rrand(5, 10);
-		time = rrand(20, 35);
-		newPattern = rrand(min, max);
-		~graphics.xfadePatterns(newPattern, 1.0, active, fade);
+		var newPattern, remove, time, fade;
+		~patterns.collect({|patnum|
+			[patnum, 0, 1.0, 2.rand, 2.rand, 1.0.rand, 1.0.rand, 1.0.rand] 
+		}).do({|arglist|
+			~graphics.setPattern(*arglist)
+		});
+		fade = rrand(2, 5);
+		time = rrand(5, 15);
+		newPattern = ~patterns.reject({|pnum| actives.includes(pnum) }).choose;
+		remove = actives.remove(actives.choose);
+		~graphics.xfadePatterns(newPattern, 1.0, remove, fade);
 		(fade + time).wait;
-		active = newPattern;
+		actives = actives ++ newPattern;
+		~graphics.sendPredefined3DRule(
+			[
+			\flamingstarbow, \chenille, \belzhab, \glissergy,
+			\cooties, \faders, \frozenspirals, \glisserati,
+			\nova, \orthogo, \rainzha, \rake, \sedimental, 
+			\snake, \starwars, \sticks, \thrillgrill, 
+			\transers, \wanderers, \worms, \xtasy
+			].choose;
+		);
 		if (0.3.coin) {
-			~graphics.sendPredefined3DRule(
-				[\nova, \briansbrain, \brain6, \cooties, \faders].choose;
+			~graphics.stopRotation;
+			~graphics.setViewpoint(
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
+				0.0, 0.0, 0.0
 			);
-		}
+			~graphics.unmapCodePanel;
+		}{
+			~rot = Rotation(rrand(-60.0, 60.0), rrand(0.01, 0.1), rrand(-20.0, 20.0), 
+				rrand(-120.0, 120.0), 
+				rrand(-pi, pi), rrand(0.01, 0.1), rrand(-pi, pi), rrand(0.01, 0.1));
+			~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+			~graphics.rotateCamera;	
+			~graphics.mapCodePanel;		
+		};
 	})
 }).play
 )
 Tdef(\autopilot).clear
 
+~graphics.patternLib
+
 ~rot = Rotation(140.0, 0.09, 60.0, 60.0, 0.0, 0.081, 0.0, 0.073);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
+
+~graphics.mapCodePanel
+
+"THANK YOU!!! :)"
+
+"THIS IS SHINY TOYS SPACE"
+
+~graphics.unmapCodePanel
+
+~graphics.hideCodePanel
+
+~graphics.showCodePanel
 
 
 Pdef('matrix', Ppar([Pdef('r00'), Pdef('r03'), Pdef('efx')]))
@@ -136,6 +257,64 @@ Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'),Pdef('b03'), Pdef('b
 	{ rrand(0.05, 0.2) }
 );
 
+
+~matrix.patterndefs['r00'].groups[0].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[2].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[3].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[5].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[6].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[7].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+
 ~matrix.defsAt('c00').ctrls['c000'].amp = 0.2;
 ~matrix.defsAt('c00').ctrls['c000'].active = 1
 
@@ -148,24 +327,37 @@ Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'),Pdef('b03'), Pdef('b
 ~matrix.defsAt('c00').ctrls['c003'].amp = 0.4;
 ~matrix.defsAt('c00').ctrls['c003'].active = 1
 
+Pdef('matrix', Ppar([ Pdef('r03'), Pdef('r04') ])).quant(128)
 
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+
+
+Pdef('matrix', Ppar([ Pdef('r04'), Pdef('r03')])).quant(128)
+
+
+
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([0.3, 0.7]) },
 	{ rrand(0.1, 0.7) },
-	{ rrand(0.05, 0.3) }
+	{ rrand(0.1, 0.3) }
 );
 
-~matrix.defsAt('b04').setControls(
+~matrix.defsAt('r04').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ rrand(0.1, 0.7) },
+	{ rrand(0.05, 0.1) }
+);
+
+~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ rrand(0.1, 0.7) },
-	{ rrand(0.05, 0.2) }
+	{ rrand(0.05, 0.3) }
 );
 
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.1, 0.7) },
-	{ rrand(0.05, 0.3) }
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ rrand(0.4, 1.0) },
+	{ exprand(0.05, 0.3) }
 );
 
 ~matrix.defsAt('r01').setControls(
@@ -174,37 +366,294 @@ Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'),Pdef('b03'), Pdef('b
 	{ exprand(0.01, 0.1) }
 );
 
-~matrix.defsAt('r02').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ rrand(0.2, 1.0) },
-	{ exprand(0.01, 0.2) }
+~matrix.defsAt('r03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ rrand(0.4, 1.0) },
+	{ exprand(0.05, 0.1) }
 );
+
+SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
+	var sig, swp, env, bf;
+	swp = SinOsc.ar(wbl).exprange(40, 1000);
+	sig = LFSaw.ar(freq*[0.99,1,1.01]).sum;
+	sig = LPF.ar(sig, swp);
+	sig = Normalizer.ar(sig);
+	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
+	sig = (sig.distort + tanh(sig**0.8)) 
+		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
+	Out.ar(out,bf)
+}).add
+
+~freqs = Array.geom(12, 22.midicps, 2**(1/12))[Scale.minor.degrees].scramble
+
+Pdef(\bass, 
+	Pbind(
+		\instrument, \mtrxbass,
+		\target, ~decoder.synth,
+		\addAction, \addBefore,
+		\out, ~decoder.bus,
+		\freq, Pseq([Pshuf(~freqs, 7)], inf),
+		\dur, ~matrix.beatdur, 
+		\amp, Pseq([0.4, 0.2, 0.3], inf),
+		\wbl, Pseq([Pshuf(7.fib, 4)], inf),
+		\env, Env([0.001, 0.2, 1.0, 0.001],[0.1, 0.8, 0.1], \exp).bubble
+	)
+)
+
+Pdef('matrix', Ppar([ Pdef('r03'), Pdef('r05'), Pdef('r06') ]))
+
+Pdef('matrix', Ppar([ Pdef('bass'), Pdef('r03'), Pdef('r06'), Pdef('r04') ])).quant(128)
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.4, 0.6]) },
+	{ exprand(0.1, 0.5) },
+	{ rrand(0.05, 0.3) }
+);
+
+
+~matrix.patterndefs['r00'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[2].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.2, 0.7);
+	ctr.dur = rrand(0.1, 0.2)
+});
+
+
+
+~matrix.patterndefs['r00'].groups[2].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.2, 0.7);
+	ctr.dur = rrand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[3].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = rrand(0.01, 0.1)
+});
+
+~matrix.patterndefs['r00'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = rrand(0.01, 0.3)
+});
+
+
+~matrix.patterndefs['r00'].groups[5].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.3)
+});
+
+
+~matrix.patterndefs['r00'].groups[6].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+
+~matrix.patterndefs['r00'].groups[7].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r01'].groups[0].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r01'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r01'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+
+~matrix.patterndefs['r02'].groups[0].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r02'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r02'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+
+~matrix.patterndefs['r02'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r02'].groups[5].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.4, 1.0);
+	ctr.dur = exprand(0.01, 0.2)
+});
+
+
+
+
+
+~matrix.patterndefs['r00'].groups[2].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[3].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[4].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 0;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[5].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r00'].groups[6].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+
+~matrix.patterndefs['r00'].groups[5].do({|name|
+	var ctr = ~matrix.patterndefs['r00'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+
+~matrix.patterndefs['r01'].groups[0].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r01'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r01'].groups[2].do({|name|
+	var ctr = ~matrix.patterndefs['r01'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r02'].groups[0].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.2)
+});
+
+~matrix.patterndefs['r02'].groups[1].do({|name|
+	var ctr = ~matrix.patterndefs['r02'].ctrls[name];
+	ctr.active = 1;
+	ctr.amp = rrand(0.3, 1.0);
+	ctr.dur = rrand(0.01, 0.3)
+});
+
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.4, 1.0) },
+	{ exprand(0.05, 0.3) }
+);
+
+Pdef('matrix', Ppar([ Pdef('r06'), Pdef('r05') ])).quant(128)
 
 /// ---> start here
 
+~matrix.defsAt('r05').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.2, 1.0) },
+	{ exprand(0.01, 0.1) }
+);
+
 
 ~matrix.defsAt('r04').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ rrand(0.1, 0.9) },
-	{ exprand(0.001, 0.1) }
+	{ exprand(0.05, 0.2) }
 );
 
 ~matrix.defsAt('r05').setControls(
 	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ rrand(0.2, 1.0) },
-	{ exprand(0.05, 0.1) }
+	{ exprand(0.001, 0.1) }
 );
 
 ~matrix.defsAt('r06').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ rrand(0.2, 1.0) },
 	{ exprand(0.001, 0.1) }
 );
 
 ~matrix.defsAt('r03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ rrand(0.4, 1.0) },
-	{ rrand(0.01, 0.2) }
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ rrand(0.5, 1.0) },
+	{ exprand(0.005, 0.1) }
 )
 
 
@@ -261,11 +710,11 @@ Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'),Pdef('b03'), Pdef('b
 (
 // 019 (cool drive), 018 (bass), 017 (like 018, not as cool), 016 (drive, nice), 015 & 014(dry)
 // 013 (dry+drive+a bit lo), 012 (low undulation), 011 (high noise), 010 (async tremble)
-~gep00 = '019';
+~gep00 = '018';
 ~matrix.playGepSynth(~gep00, ~defnames[~gep00], 0.0, 2, 3, 4)
 )
 
-~matrix.gepsynths[~gep00].set('amp', 0.2)
+~matrix.gepsynths[~gep00].set('amp', 0.8)
 
 ~matrix.gepsynths[~gep00].set('amp', 0.0)
 
@@ -275,11 +724,11 @@ Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02'), Pdef('r03'),Pdef('b03'), Pdef('b
 s.queryAllNodes
 
 (
-~gep01 = '018';
+~gep01 = '019';
 ~matrix.playGepSynth(~gep01, ~defnames[~gep01], 0.0, 2, 3, 4)
 )
 
-~matrix.gepsynths[~gep01].set('amp', 0.2)
+~matrix.gepsynths[~gep01].set('amp', 0.4)
 
 ~matrix.freeGepSynth(~gep01)
 
@@ -289,9 +738,13 @@ s.queryAllNodes
 ~graphics.hideCodePanel
 
 
+
+~matrix.addGepPatternDef('gep00', 'kakilambe', ~defnames[~gep00]);
+
+
 //////////////// GRAPHICS //////////////////////
 
-~graphics.setPattern(5, 0, 1.0, 0, 0, 0.9, 0.1, 0.4);
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(6, 0, 1.0, 0, 0, 0.5, 0.9, 0.8);
 
@@ -301,13 +754,13 @@ s.queryAllNodes
 
 ~graphics.setPattern(8, 0, 0.2, 1, 1, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(9, 0, 1.0, 1, 1, 0.3, 0.7, 0.9);
+~graphics.setPattern(9, 1, 1.0, 1, 1, 0.3, 0.7, 0.9);
 
 ~graphics.setPattern(10, 0, 1.0, 0, 0, 0.5, 0.8, 1.0);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.3, 0.5);
 
-~graphics.setPattern(12, 0, 1.0, 1, 1, 0.44, 0.32, 0.66);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.44, 0.32, 0.66);
 
 ~graphics.setPattern(13, 0, 0.7, 0, 0, 0.6, 0.8, 1.0);
 
@@ -329,14 +782,14 @@ Server.killAll
 
 ~matrix.activateSkismSynth('granularReverb')
 
-~matrix.setSkismAmp('granularReverb', 0.3)
+~matrix.setSkismAmp('granularReverb', 0.2)
 
 ~matrix.deactivateSkismSynth('granularReverb')
 
 
 ~matrix.activateSkismSynth('flangingDecimator')
 
-~matrix.setSkismAmp('flangingDecimator', 0.4)
+~matrix.setSkismAmp('flangingDecimator', 0.2)
 
 ~matrix.deactivateSkismSynth('flangingDecimator')
 
@@ -350,28 +803,28 @@ Server.killAll
 
 ~matrix.activateSkismSynth('feedbackSpectrum')
 
-~matrix.setSkismAmp('feedbackSpectrum', 0.2)
+~matrix.setSkismAmp('feedbackSpectrum', 0.1)
 
 ~matrix.deactivateSkismSynth('feedbackSpectrum')
 
 
 ~matrix.activateSkismSynth('cyclicWarp')
 
-~matrix.setSkismAmp('cyclicWarp', 0.0)
+~matrix.setSkismAmp('cyclicWarp', 0.1)
 
 ~matrix.deactivateSkismSynth('cyclicWarp')
 
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('latchOnset',0.6)
+~matrix.setSkismAmp('latchOnset',0.0)
 
 ~matrix.deactivateSkismSynth('latchOnset')
 
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 0.2)
+~matrix.setSkismAmp('cliqSaw', 0.5)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
@@ -405,6 +858,7 @@ Pdef('matrix').stop
 
 ~matrix.quit(false)
 
+~graphics.hideCodePanel
 
 s.queryAllNodes
 
