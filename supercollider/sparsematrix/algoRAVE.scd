@@ -1,13 +1,13 @@
 ~ncoef = 20;
-~mode = 0;
+~mode = 1;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(800, 600, mode: ~mode);
+~graphics = CinderApp(1024, 768, mode: ~mode);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 
 MasterEQ(2)
 
-Document.open("/Users/alo/Development/lambda/supercollider/sparsematrix/_-_LamBdaMaTrIx_-_.scd")
+Document.open("/Users/alo/Development/lambda/supercollider/sparsematrix/a_l_g_0_r_a_v_e_B_C_N.scd")
 
 
 (

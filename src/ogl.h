@@ -43,7 +43,7 @@ using namespace ci::app;
 
 //const double pi = 3.1415926535;
 
-const int numPatterns = 26;
+const int numPatterns = 36;
 const int numBoidPatterns = 6;
 
 struct pattern {
@@ -226,6 +226,26 @@ private:
 	
 	void pattern25(int, int, int);
 
+	void pattern26(int, int, int);
+
+	void pattern27(int, int, int);
+
+	void pattern28(int, int, int);
+
+	void pattern29(int, int, int);
+
+	void pattern30(int, int, int);
+
+	void pattern31(int, int, int);
+	
+	void pattern32(int, int, int);
+
+	void pattern33(int, int, int);
+
+	void pattern34(int, int, int);
+	
+	void pattern35(int, int, int);
+
 	void drawBoids00();
 	void drawBoids01();
 	void drawBoids02();
@@ -248,6 +268,8 @@ private:
 	void drawCircle (int, float, int, bool);
 	
 	void strokeRectArray();
+	
+	void createTriMesh();
 	
 };
 

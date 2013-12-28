@@ -159,6 +159,9 @@ public:
 	
 	void setCells(int, int, int);
 	
+	int interpPhase();
+	int interpCount();
+	
 private:
 	void clear();
 	void initVars();

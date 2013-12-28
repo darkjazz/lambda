@@ -101,4 +101,8 @@ s.queryAllNodes
 
 ~fx = FxLambda(~decoder, ~graphics, ~geenLambda.geen, ~nano)
 
+
 IPhoneConnect()
+
+
+s.queryAllNodes

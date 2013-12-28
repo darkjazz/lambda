@@ -183,3 +183,17 @@ SynthDef(\mfcc, {|in, th|
 	onsets = Onsets.kr(fft, th);
 	SendReply.kr(onsets, '/mfcc', mfcc);
 }).add;	
+
+SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
+	var sig, swp, env, bf;
+	swp = SinOsc.ar(wbl).exprange(40, 500);
+	sig = LFSaw.ar(freq*[0.99,1,1.01]).sum;
+	sig = LPF.ar(sig, swp);
+	sig = Normalizer.ar(sig);
+	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
+	sig = (sig.distort + tanh(sig**0.8)) * 
+		EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
+	Out.ar(out,bf)
+}).add;
+

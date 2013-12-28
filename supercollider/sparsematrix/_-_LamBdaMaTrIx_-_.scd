@@ -2,64 +2,53 @@
 
 ~matrix.assignCodeWindow(Document.current);
 
-~matrix.setBPM(138)
+~matrix.setBPM(142)
 
 ~matrix.preparePatternDefs;
 
-
 ~matrix.prepareAudio
 
-~graphics.sendCodeTitle("shiny.toys.space")
-
-SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
-	var sig, swp, env, bf;
-	swp = SinOsc.ar(wbl).exprange(40, 500);
-	sig = LFSaw.ar(freq*[0.99,1,1.01]).sum;
-	sig = LPF.ar(sig, swp);
-	sig = Normalizer.ar(sig);
-	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
-	sig = (sig.distort + tanh(sig**0.8)) * 
-		EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
-	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
-	Out.ar(out,bf)
-}).add
+~graphics.sendCodeTitle("algorave.barcelona")
 
 
-Pdef('matrix', Ppar([  Pdef('r03'), Pdef('r00'), Pdef('r01'), Pdef('r04')])).quant(128)
+
+Pdef('matrix', Ppar([ Pdef('b02'), Pdef('r01'), Pdef('r02'), Pdef('efx')])).quant(128)
 
 Pdef('matrix').play
+
+Pdef('matrix').clear
 
 ~seconds = SystemClock.seconds;
 
 
 ~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 0.5) },
 	{ rrand(0.05, 0.3) }
 );
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.3) }
+	{ rrand(0.01, 0.15) }
 );
 
 ~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.1) }
+	{ rrand(0.05, 0.2) }
 );
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.2) }
+	{ rrand(0.1, 0.2) }
 );
 
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ rrand(0.1, 0.3) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ rrand(0.1, 1.0) },
 	{ rrand(0.01, 0.2) }
 );
 
@@ -149,6 +138,11 @@ Tdef(\background).play
 ~graphics.unmapCodePanel
 
 
+~matrix.onsetFunc = {|mfcc|
+	mfcc[0]
+}
+
+
 (5..15).remove(9)
 
 (
@@ -168,7 +162,10 @@ Tdef(\autopilot, {
 	loop({
 		var newPattern, remove, time, fade;
 		~patterns.collect({|patnum|
-			[patnum, 0, 1.0, 2.rand, 2.rand, 1.0.rand, 1.0.rand, 1.0.rand] 
+			var pole, active;
+			pole = 2.rand;
+			active = actives.includes(patnum).asInt;
+			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand] 
 		}).do({|arglist|
 			~graphics.setPattern(*arglist)
 		});
@@ -198,9 +195,9 @@ Tdef(\autopilot, {
 			);
 			~graphics.unmapCodePanel;
 		}{
-			~rot = Rotation(rrand(-60.0, 60.0), rrand(0.01, 0.1), rrand(-20.0, 20.0), 
+			~rot = Rotation(rrand(-60.0, 60.0), rrand(0.005, 0.05), rrand(-20.0, 20.0), 
 				rrand(-120.0, 120.0), 
-				rrand(-pi, pi), rrand(0.01, 0.1), rrand(-pi, pi), rrand(0.01, 0.1));
+				rrand(-pi, pi), rrand(0.01, 0.08), rrand(-pi, pi), rrand(0.01, 0.07));
 			~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			~graphics.rotateCamera;	
 			~graphics.mapCodePanel;		
@@ -707,17 +704,28 @@ Pdef('matrix', Ppar([ Pdef('r06'), Pdef('r05') ])).quant(128)
 	{ rrand(0.05, 0.01) }
 );
 
-(
 // 019 (cool drive), 018 (bass), 017 (like 018, not as cool), 016 (drive, nice), 015 & 014(dry)
 // 013 (dry+drive+a bit lo), 012 (low undulation), 011 (high noise), 010 (async tremble)
-~gep00 = '018';
+
+(
+~gep00 = '010';
 ~matrix.playGepSynth(~gep00, ~defnames[~gep00], 0.0, 2, 3, 4)
 )
 
-~matrix.gepsynths[~gep00].set('amp', 0.8)
+~matrix.gepsynths[~gep00].set('amp', 0.3)
 
 ~matrix.gepsynths[~gep00].set('amp', 0.0)
 
+~matrix.setWithPattern(~gep00, Pseq(Array.rand(16, 0.001, 0.2), inf), 
+	Pfunc({ ~matrix.beatdur / 4 })
+)
+
+~matrix.setWithPattern(~gep00, Pseq([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, inf), 
+	Pfunc({ ~matrix.beatdur / 8 })
+)
+
+
+~matrix.stopPattern(~gep00)
 
 ~matrix.freeGepSynth(~gep00)
 
@@ -817,7 +825,7 @@ Server.killAll
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('latchOnset',0.0)
+~matrix.setSkismAmp('latchOnset',0.5)
 
 ~matrix.deactivateSkismSynth('latchOnset')
 
@@ -846,7 +854,7 @@ Server.killAll
 ////////// EFX ///////////////
 
 
-~matrix.efxamps['rev00'] = 0.2
+~matrix.efxamps['rev00'] = 0.1
 ~matrix.efxamps['rev01'] = 0.1
 ~matrix.efxamps['del00'] = 0.1
 ~matrix.efxamps['del01'] = 0.1

@@ -1,4 +1,4 @@
-~graphics = CinderApp(800, 600);
+~graphics = CinderApp();
 
 ~graphics.quit
 
@@ -8,25 +8,35 @@
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.94);
+~graphics.setAdd(0.06);
 
 ~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(0, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(1, 1, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
 
-~graphics.setPattern(3, 0, 1.0, 1, 0, 0.6, 0.8, 0.8);
+~graphics.setPattern(3, 1, 1.0, 1, 0, 0.6, 0.8, 0.8);
 
 ~graphics.setPattern(4, 1, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
-~graphics.setPattern(5, 0, 1.0, 0, 0, 0.7, 0.9, 1.0);
+~graphics.setPattern(5, 1, 1.0, 1, 0, 0.7, 0.9, 1.0);
 
 ~graphics.setPattern(6, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
 
 ~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 0.3);
+
+
+
+~graphics.setPattern(32, 0, 1.0, 1, 0, 0.5, 0.75, 0.9);
+
+~graphics.setPattern(33, 0, 1.0, 1, 1, 0.6, 0.8, 0.8);
+
+~graphics.setPattern(34, 1, 1.0, 0, 0, 1.0, 1.0, 0.3);
+
+~graphics.setPattern(35, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 
 (
@@ -49,14 +59,14 @@ Routine({
 ~graphics.setPattern(8, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
-~graphics.setInterpolation(1, 8)
+~graphics.setInterpolation(1, 2)
 
 ~graphics.rotate(1.0, 0.0, 0.0, 0.0)
 
 ~graphics.rotate(1.0.rand, 1.0.rand, 1.0.rand, rrand(0.005, 0.02))
 
 
-~graphics.setViewpoint(-80.0, 80.0, 40.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(50.0, 80.0, 80.0, 0.0, 0.0, 0.0)
 
 ~graphics.setBackground(0.6, 0.6, 0.65)
 ~graphics.setBackground(0.0, 0.0, 0.05)
@@ -90,39 +100,88 @@ Array.geom(30, 1.0, 0.96)
 1.0 - Array.series(30, 0, 0.02)
 
 
+~graphics = CinderApp(1024, 768);
+
 ~graphics = CinderApp();
 
 ~graphics.open
 
-~graphics.initWorld(20, 20, 20, 20);
+
+
+~graphics.initWorld(24, 24, 24, 20);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
 
+~graphics.initGenerations([4,6], [3,5], 12);
+
 ~graphics.setSymmetry(11)
 
-~graphics.setPattern(5, 1, 1.0, 0, 0, 0.9, 1.0, 0.0);
+~graphics.setViewpoint(85.0, 80.0, 90.0, 0.0, 0.0, 0.0)
 
-~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setViewpoint(0.0, 80.0, 90.0, 0.0, 0.0, 0.0)
 
-~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setInterpolation(1, 4)
 
-~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.9, 1.0, 0.0);
 
-~graphics.setPattern(9, 1, 1.0, 1, 1, 0.3, 0.7, 0.9);
+~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
-~graphics.setPattern(10, 1, 1.0, 0, 0, 0.5, 0.8, 1.0);
+~graphics.setPattern(7, 1, 1.0, 0, 1, 1.0, 0.3, 0.5);
+
+~graphics.setPattern(8, 0, 1.0, 1, 0, 0.6, 0.7, 0.9);
+
+~graphics.setPattern(9, 0, 1.0, 0, 0, 0.5, 0.3, 0.9);
+
+~graphics.setPattern(10, 0, 1.0, 1, 1, 0.5, 0.8, 1.0);
 
 ~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.3, 0.5);
 
-~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 0, 1.0, 0, 0, 0.6, 0.8, 1.0);
 	
-~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
+~graphics.setPattern(13, 0, 1.0, 0, 0, 0.0, 0.6, 1.0);
 
-~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 0, 1.0, 1, 1, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15, 1, 1.0, 0, 0, 0.0, 0.5, 0.7);
+~graphics.setPattern(15, 1, 1.0, 0, 0, 0.7, 0.7, 0.7);
+
+~graphics.setPattern(26, 0, 0.5, 1, 1, 0.6, 0.9, 1.0);
+
+~graphics.setPattern(27, 0, 1.0, 0, 0, 0.3, 0.8, 0.9);
+
+~graphics.setPattern(28, 1, 1.0, 1, 1, 0.0, 1.0, 0.8);
+
+~graphics.setPattern(29, 1, 1.0, 0, 0, 0.0, 0.8, 1.0);
+
+~graphics.setPattern(30, 1, 1.0, 0, 0, 0.7, 0.8, 1.0);
+
+~graphics.setPattern(31, 1, 0.2, 1, 1, 0.3, 0.9, 0.9);
+
+
+~rot = Rotation(140.0, 0.004, 100.0, 60.0, 0.0, 0.0034, 0.0, 0.0038);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
+
+~graphics.stopRotation
+
 
 ~graphics.setViewpoint(50.0, 100.0, 0.0, 0.0, 0.0, 0.0)
+
+~graphics.sendPredefined3DRule(\faders)
+
+~graphics.sendPredefined3DRule(\cooties)
+
+~graphics.sendPredefined3DRule(\nova)
+
+~graphics.sendPredefined3DRule(\xtasy)
+
+~graphics.sendPredefined3DRule(\flamingstarbow)
+
+~graphics.sendGenRule([2],[3,4,5],6);
+
+
+~graphics.sendPredefined3DRule(\briansbrain)
+
+Generations
 
 
 Tdef(\sendVector, {
@@ -190,7 +249,7 @@ Tdef(\autopilot, {
 
 ~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0)
 
-~graphics.setInterpolation(1, 4)
+~graphics.setInterpolation(1, 2)
 
 ~graphics.sendGenRule([4],[4],25)
 
@@ -206,9 +265,9 @@ Tdef(\autopilot, {
 
 ~graphics.sendPredefined3DRule(\brain6)
 
-~graphics.setBackground(0.8, 0.8, 0.9)
+~graphics.setBackground(0.0, 0.0, 0.0)
 
-~rot = Rotation(140.0, 0.03, 100.0, 20.0, 0.0, 0.0011, 0.0, 0.0013);
+~rot = Rotation(140.0, 0.03, 100.0, 20.0, 0.0, 0.0034, 0.0, 0.0038);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
@@ -217,7 +276,7 @@ Tdef(\autopilot, {
 ~matrix.assignCodeWindow(Document.current);
 
 
-~graphics.setFrameRate(8.0)
+~graphics.setFrameRate(32.0)
 
 ~graphics = CinderApp();
 
@@ -249,7 +308,7 @@ Tdef(\autopilot, {
 
 ~graphics.setPattern(24, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(25, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.unmapCodePanel
 
@@ -293,7 +352,11 @@ Routine({
 
 ~graphics.sendBoidPattern(0, 0, 0);
 
-~graphics.sendBoidPattern(4, 1, 1);
+~graphics.sendBoidPattern(5, 0, 4);
+
+~graphics.sendBoidPattern(3, 0, 0);
+
+~graphics.sendBoidPattern(1, 0, 0);
 
 
 ~rot = Rotation(0.3, 0.133, -50.0, -100.0, 2pi.rand, 0.05, 2pi.rand, 0.033);
@@ -309,7 +372,7 @@ Routine({
 
 ~graphics.killSwarm
 
-~graphics.setBoidCam(false, false)
+~graphics.setBoidCam(true, false)
 
 ~graphics.mapCodePanel
 
@@ -332,7 +395,7 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 }
 )
 
-~rot = Rotation(40.0, 0.05, 20.0, 100.0, 0.0, 0.055, 0.0, 0.06);
+~rot = Rotation(40.0, 0.1, 20.0, 100.0, 0.0, 0.055, 0.0, 0.06);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 

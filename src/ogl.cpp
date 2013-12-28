@@ -242,6 +242,9 @@ void GraphicsRenderer::mapCodePanel() {
 	glDisable( GL_TEXTURE_2D );
 }
 
+void GraphicsRenderer::createTriMesh() {
+	//TriMesh mesh;
+}
 
 void GraphicsRenderer::startDraw() {
 	gl::pushMatrices();
@@ -348,6 +351,36 @@ void GraphicsRenderer::drawFragment(Cell* cell) {
 	}
 	if (patternLib[25].active) {
 		pattern25(x, y, z);	
+	}
+	if (patternLib[26].active) {
+		pattern26(x, y, z);	
+	}
+	if (patternLib[27].active) {
+		pattern27(x, y, z);	
+	}
+	if (patternLib[28].active) {
+		pattern28(x, y, z);	
+	}
+	if (patternLib[29].active) {
+		pattern29(x, y, z);	
+	}
+	if (patternLib[30].active) {
+		pattern30(x, y, z);	
+	}
+	if (patternLib[31].active) {
+		pattern31(x, y, z);	
+	}
+	if (patternLib[32].active) {
+		pattern32(x, y, z);	
+	}
+	if (patternLib[33].active) {
+		pattern33(x, y, z);	
+	}
+	if (patternLib[34].active) {
+		pattern34(x, y, z);	
+	}
+	if (patternLib[35].active) {
+		pattern35(x, y, z);	
 	}
 	
 }
@@ -1607,12 +1640,7 @@ void GraphicsRenderer::pattern14(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern15(int x, int y, int z) {
-//	if (
-//		between(x, ptrWorld->sizeX() / 4 - 1, ptrWorld->sizeX() * 3 / 4 ) &&
-//		between(y, ptrWorld->sizeY() / 4 - 1, ptrWorld->sizeY() * 3 / 4 ) &&
-//		between(z, ptrWorld->sizeZ() / 4 - 1, ptrWorld->sizeZ() * 3 / 4 ) && 
-//		state > 0
-//		)
+
 	if ((x % 4 == 0 || y % 4 == 0 || z % 4 == 0) && state > 0.0)
 	{
 		float mapState, maxState;
@@ -2147,6 +2175,711 @@ void GraphicsRenderer::pattern25(int x, int y, int z) {
 	}
 }
 
+void GraphicsRenderer::pattern26(int x, int y, int z) {
+	
+	if (state > 0.0 )
+	{
+		float mapState, maxState;
+		
+		maxState = ptrWorld->rule()->numStates() - 1;
+		mapState = (maxState - currentCell->states[ptrWorld->index()]) * (1 / maxState);
+		
+		red = patternLib[26].color.r * abs(patternLib[26].colormap - mapState);
+		green = patternLib[26].color.g * abs(patternLib[26].colormap - mapState);
+		blue = patternLib[26].color.b * abs(patternLib[26].colormap - mapState);
+		alpha = patternLib[26].alpha * abs(patternLib[26].alphamap - mapState);
+		
+		xL = ((float)x * fragSizeX + (fragSizeX * 0.5)) - ( fragSizeX * 0.25 * mapState );
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * cos(mapState * 2.0 * pi ));
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ));
+		
+		xW = ((float)x * fragSizeX + (fragSizeX * 0.5)) + ( fragSizeX * 0.25 * mapState );
+		yH = (float)y * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * cos(mapState * 2.0 * pi ));
+		zD = (float)z * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ));
+		
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+		
+		xW -= hx;
+		yH -= hx;
+		zD -= hx;
+		
+		gl::color(red*state, green, blue, alpha);
+		
+		gl::drawLine( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+		
+		yB = ((float)y * fragSizeX + (fragSizeX * 0.5)) - (fragSizeX * 0.25 * mapState);
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * cos(mapState * 2.0 * pi ));
+		
+		yH = ((float)y * fragSizeX + (fragSizeX * 0.5)) + (fragSizeX * 0.25 * mapState);
+		xW = (float)x * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * cos(mapState * 2.0 * pi ));
+		
+		xL -= hx;
+		yB -= hx;
+		
+		xW -= hx;
+		yH -= hx;
+		
+		gl::color(red, green*state, blue, alpha);
+		
+		gl::drawLine( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+		
+		zF = ((float)z * fragSizeX + (fragSizeX * 0.5)) - (fragSizeX * 0.25 * mapState);
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ));
+		
+		zD = ((float)z * fragSizeX + (fragSizeX * 0.5)) + (fragSizeX * 0.25 * mapState);
+		yH = (float)y * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ));
+		
+		zF -= hx;
+		yB -= hx;
+		
+		zD -= hx;
+		yH -= hx;
+		
+		gl::color(red, green, blue*state, alpha);
+		
+		gl::drawLine( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+		
+	}		
+}
+
+void GraphicsRenderer::pattern27(int x, int y, int z) {
+
+	if (state > 0.0 )
+	{
+		float ex, ey, ez, mapState, maxState;
+		Cell *neighbor;
+		
+		maxState = ptrWorld->rule()->numStates() - 1;
+		mapState = (maxState - currentCell->states[ptrWorld->index()]) * (1 / maxState);
+		
+		red = patternLib[27].color.r * abs(patternLib[27].colormap - mapState);
+		green = patternLib[27].color.g * abs(patternLib[27].colormap - mapState);
+		blue = patternLib[27].color.b * abs(patternLib[27].colormap - mapState);
+		alpha = patternLib[27].alpha * abs(patternLib[27].alphamap - mapState);
+		
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * cos(mapState * 2.0 * pi ) * cos(1.0-mapState * 2.0 * pi) );
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ) * cos(1.0-mapState * 2.0 * pi) );
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5) + ( fragSizeX * sin(mapState * 2.0 * pi ));
+		
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+				
+		gl::color(red, green, blue, alpha);
+		
+		gl::drawSphere(Vec3f(xL, yB, zF), mapState*3.0, 8.0);
+		//drawPoint(xL, yB, zF, mapState*3.0);
+
+		for (int i = 0; i < 26; i++) {
+			neighbor = ptrWorld->rule()->getNeighbor(currentCell, i);
+			if (neighbor->phase > 0.0 && neighbor->phase < 10.0)
+			{
+				ex = neighbor->x * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * pi)));
+				ey = neighbor->y * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * pi)));
+				ez = neighbor->z * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * pi)));
+				
+				ex -= hx;
+				ey -= hx;
+				ez -= hx;
+				
+				red = patternLib[13].color.r * abs(patternLib[13].colormap - mapState);
+				green = patternLib[13].color.g * abs(patternLib[13].colormap - mapState);
+				blue = patternLib[13].color.b * abs(patternLib[13].colormap - mapState) * (1.0 - linlin(neighbor->phase, 1, 12, 0.0, 0.7));
+				alpha = patternLib[13].alpha * abs(patternLib[13].alphamap - mapState) * (1.0 - linlin(neighbor->phase, 1, 12, 0.2, 0.8));
+				
+				gl::color(red, green, blue, alpha);				
+				gl::drawLine( Vec3f(xL, yB, zF), Vec3f(ex, ey, ez) );
+			}
+		}
+		
+		
+
+	}
+}
+
+void GraphicsRenderer::pattern28(int x, int y, int z) {
+	
+	if (state > 0.0) {
+		
+		float unmap, cstate;
+		int sects, p;
+		
+		unmap = 1.0-unmapf(state, 0, ptrWorld->rule()->numStates()-1);
+		cstate = currentCell->states[ptrWorld->index()];
+		
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5);
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5);
+		
+		xW = fragSizeX * unmap * 2.0;
+		yH = fragSizeX * unmap * 2.0;
+		zD = fragSizeZ * unmap * 2.0;
+
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+		
+		red = patternLib[28].color.r * abs(patternLib[28].colormap - unmap);
+		green = patternLib[28].color.g * abs(patternLib[28].colormap - unmap);
+		blue = patternLib[28].color.b * abs(patternLib[28].colormap - unmap);
+		alpha = patternLib[28].alpha * abs(patternLib[28].alphamap - unmap);
+		
+		sects = 8;
+		
+		glEnable(GL_POLYGON_SMOOTH);
+		glBegin(GL_POLYGON);
+
+		for (p = 1; p <= sects; p++) {
+			
+			float xs, ys, xe, ye, zs, ze;
+			
+			glColor4f(red, green, blue, alpha*(1.0/abs(p-(counter%sects)+1)));
+			
+			if (x == ptrWorld->sizeX() / 2 || x == ptrWorld->sizeX() / 2 - 1 ) {
+				
+				xs = xL + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((p/(float)sects) * 2.0 * pi ));
+				xe = xL + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				ys = yB + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((p/(float)sects) * 2.0 * pi ));
+				ye = yB + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				gl::vertex(Vec3f( xs, ys, zF ));
+				gl::vertex(Vec3f( xe, ye, zF ));
+
+//				glColor4f(1.0-red, 1.0-green, 1.0-blue, alpha);
+
+//				gl::drawLine(Vec3f( xs, ys, zF ), Vec3f( xe, ye, zF ));
+//				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xe, ye, zF ));
+				
+			}
+			
+			if (y == ptrWorld->sizeY() / 2 || y == ptrWorld->sizeY() / 2 - 1 ) {
+				
+				ys = yB + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((p/(float)sects) * 2.0 * pi ));
+				ye = yB + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				zs = zF + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((p/(float)sects) * 2.0 * pi ));
+				ze = zF + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+//				glColor4f(red, green, blue, alpha*(1.0/abs(p-(counter%sects)+1)));
+
+				gl::vertex(Vec3f( xL, ys, zs ));
+				gl::vertex(Vec3f( xL, ye, ze ));
+
+//				glColor4f(1.0-red, 1.0-green, 1.0-blue, alpha);
+
+//				gl::drawLine(Vec3f( xL, ys, zs ), Vec3f( xL, ye, ze ));
+//				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xL, ye, ze ));
+			}
+			
+			if (z == ptrWorld->sizeZ() / 2 || z == ptrWorld->sizeZ() / 2 - 1 ) {
+				
+				zs = zF + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((p/(float)sects) * 2.0 * pi ));
+				ze = zF + (fragSizeX * mapf(unmap, 0.25, 0.95) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				xs = xL + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((p/(float)sects) * 2.0 * pi ));
+				xe = xL + (fragSizeX * mapf(unmap, 0.25, 0.95) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				gl::vertex(Vec3f( xs, yB, zs ));
+				gl::vertex(Vec3f( xe, yB, ze ));
+
+//				glColor4f(1.0-red, 1.0-green, 1.0-blue, alpha);
+
+//				gl::drawLine(Vec3f( xs, yB, zs ), Vec3f( xe, yB, ze ));
+//				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xe, yB, ze ));
+			}
+		}
+		
+		glEnd();
+		glDisable(GL_POLYGON_SMOOTH);
+		
+	}
+}
+
+void GraphicsRenderer::pattern29(int x, int y, int z) {
+	
+	if (state > 0.0) {
+	
+		float unmap, cstate;
+		int sects, p;
+		
+		unmap = 1.0-unmapf(state, 0, ptrWorld->rule()->numStates()-1);
+		cstate = currentCell->states[ptrWorld->index()];
+		
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5);
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5);
+		
+		xW = fragSizeX * unmap * 2.0;
+		yH = fragSizeX * unmap * 2.0;
+		zD = fragSizeZ * unmap * 2.0;
+		
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+		
+		red = patternLib[29].color.r * abs(patternLib[29].colormap - unmap);
+		green = patternLib[29].color.g * abs(patternLib[29].colormap - unmap);
+		blue = patternLib[29].color.b * abs(patternLib[29].colormap - unmap);
+		alpha = patternLib[29].alpha * abs(patternLib[29].alphamap - unmap);
+		
+		sects = 8;
+		
+		glColor4f(red, green, blue, alpha);
+
+		for (p = 1; p <= sects; p++) {
+			
+			float xs, ys, xe, ye, zs, ze;
+			
+			if (x == ptrWorld->sizeX() / 2 || x == ptrWorld->sizeX() / 2 - 1 ) {
+				
+				xs = xL + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((p/(float)sects) * 2.0 * pi ));
+				xe = xL + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				ys = yB + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((p/(float)sects) * 2.0 * pi ));
+				ye = yB + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+								
+				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xe, ye, zF ));
+				
+			}
+			
+			if (y == ptrWorld->sizeY() / 2 || y == ptrWorld->sizeY() / 2 - 1 ) {
+				
+				ys = yB + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((p/(float)sects) * 2.0 * pi ));
+				ye = yB + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				zs = zF + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((p/(float)sects) * 2.0 * pi ));
+				ze = zF + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+								
+				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xL, ye, ze ));
+			}
+			
+			if (z == ptrWorld->sizeZ() / 2 || z == ptrWorld->sizeZ() / 2 - 1 ) {
+				
+				zs = zF + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((p/(float)sects) * 2.0 * pi ));
+				ze = zF + (fragSizeX * mapf(unmap, 0.25, 2.75) * sin((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				xs = xL + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((p/(float)sects) * 2.0 * pi ));
+				xe = xL + (fragSizeX * mapf(unmap, 0.25, 2.75) * cos((wrapi(p + 1, 1, 8)/(float)sects) * 2.0 * pi ));
+				
+				gl::vertex(Vec3f( xs, yB, zs ));
+				gl::vertex(Vec3f( xe, yB, ze ));
+				
+				gl::drawLine(Vec3f( xL, yB, zF ), Vec3f( xe, yB, ze ));
+			}
+		}
+
+	}
+	
+}
+
+void GraphicsRenderer::pattern30(int x, int y, int z) {
+	
+	if (
+		(x < ptrWorld->sizeX() / 2 && isEven(x) || x > ptrWorld->sizeX() / 2 && !isEven(x) ) &&
+		(y < ptrWorld->sizeY() / 2 && isEven(y) || y > ptrWorld->sizeY() / 2 && !isEven(y) ) &&		
+		(z < ptrWorld->sizeZ() / 2 && isEven(z) || z > ptrWorld->sizeZ() / 2 && !isEven(z) )
+	) {
+	
+		float unmap, cstate;
+		
+		unmap = unmapf(state, 0, ptrWorld->rule()->numStates()-1);
+		cstate = currentCell->states[ptrWorld->index()];
+		
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5);
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5);
+				
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;
+		
+		red = patternLib[30].color.r * abs(patternLib[30].colormap - unmap);
+		green = patternLib[30].color.g * abs(patternLib[30].colormap - unmap);
+		blue = patternLib[30].color.b * abs(patternLib[30].colormap - unmap);
+		alpha = patternLib[30].alpha * abs(patternLib[30].alphamap - unmap);		
+		
+		red *= clipf(currentCell->weights[1], 0.0, 1.0);
+		green *= clipf(currentCell->weights[wrapi(2, 0, ptrWorld->rule()->numStates()-1)], 0.0, 1.0);
+		blue *= clipf(currentCell->weights[wrapi(3, 0, ptrWorld->rule()->numStates()-1)], 0.0, 1.0);
+		
+		red = linexp(red, 0.0, 1.0, 0.1, 1.0);
+		green = linexp(green, 0.0, 1.0, 0.1, 1.0);
+		blue = linexp(blue, 0.0, 1.0, 0.1, 1.0);
+				
+		xW = fragSizeX * clipf(currentCell->weights[0], 0.2, 1.0) * clipf(currentCell->weights[wrapi(4, 0, ptrWorld->rule()->numStates()-1)], 0.0, 1.0);
+		yH = fragSizeY * clipf(currentCell->weights[0], 0.2, 1.0) * clipf(currentCell->weights[wrapi(5, 0, ptrWorld->rule()->numStates()-1)], 0.0, 1.0);
+		zD = fragSizeZ * clipf(currentCell->weights[0], 0.2, 1.0) * clipf(currentCell->weights[wrapi(6, 0, ptrWorld->rule()->numStates()-1)], 0.0, 1.0);
+		
+		xW *= 3.0 * clipf(unmap, 0.2, 1.0);
+		yH *= 3.0 * clipf(unmap, 0.2, 1.0);
+		zD *= 3.0 * clipf(unmap, 0.2, 1.0);
+		
+		if (state > 0.0) {
+			alpha = linexp(alpha, 0.0, 1.0, 0.2, 0.8);
+			gl::color(red, green, blue, alpha);
+			
+		}
+		else 
+		{
+			alpha = 0.1;
+			gl::color(red, green, blue, alpha);
+		}
+
+
+		gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+	
+	}
+			
+//	red = patternLib[29].color.r * abs(patternLib[29].colormap - unmap);
+//	green = patternLib[29].color.g * abs(patternLib[29].colormap - unmap);
+//	blue = patternLib[29].color.b * abs(patternLib[29].colormap - unmap);
+//	alpha = patternLib[29].alpha * abs(patternLib[29].alphamap - unmap);
+		
+}
+
+void GraphicsRenderer::pattern31(int x, int y, int z) {
+	
+	if (state > 0.0) {
+		
+		float unmap, cstate;
+		int mod;
+		
+		unmap = 1.0-unmapf(state, 0, ptrWorld->rule()->numStates()-1);
+		cstate = currentCell->states[ptrWorld->index()];		
+
+		xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+		yB = (float)y * fragSizeX + (fragSizeX * 0.5);
+		zF = (float)z * fragSizeX + (fragSizeX * 0.5);
+		
+		unmap = linexp(unmap, 0.0, 1.0, 0.2, 0.7);
+		
+		xW = fragSizeX * unmap;
+		yH = fragSizeX * unmap;
+		zD = fragSizeX * unmap;
+		
+		xL -= hx;
+		yB -= hx;
+		zF -= hx;		
+	
+		red = patternLib[31].color.r * abs(patternLib[31].colormap - unmap);
+		green = patternLib[31].color.g * abs(patternLib[31].colormap - unmap);
+		blue = patternLib[31].color.b * abs(patternLib[31].colormap - unmap);
+		alpha = patternLib[31].alpha * abs(patternLib[31].alphamap - unmap);
+		
+		mod = ((int)state)%4;
+		
+		gl::color(red, green, blue, alpha);
+		
+		switch (mod) {
+			case 1:
+				gl::drawCube( Vec3f(xL - fragSizeX, yB, zF), Vec3f(xW, yH, zD) );
+				gl::drawStrokedCube( Vec3f(xL + fragSizeX, yB, zF), Vec3f(xW, yH, zD) );
+				break;
+			case 2:
+				gl::drawCube( Vec3f(xL, yB - fragSizeX, zF), Vec3f(xW, yH, zD) );
+				gl::drawStrokedCube( Vec3f(xL, yB + fragSizeX, zF), Vec3f(xW, yH, zD) );
+				break;
+			case 3:
+				gl::drawCube( Vec3f(xL, yB, zF - fragSizeX), Vec3f(xW, yH, zD) );
+				gl::drawStrokedCube( Vec3f(xL, yB, zF + fragSizeX), Vec3f(xW, yH, zD) );				
+				break;
+			default:
+				gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+				break;
+		}
+		
+	}
+	
+}
+
+void GraphicsRenderer::pattern32(int x, int y, int z) {
+	float cstate;
+	
+	cstate = linexp(state, 0.0, 1.0, 0.1, 1.0);
+	
+	xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * cstate;
+	yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * cstate; 
+	zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * cstate;
+	
+	xL += ((fragSizeX * 0.5) - (fragSizeX * 2.0 * state));
+	yH += ((fragSizeY * 0.5) - (fragSizeY * 2.0 * state));
+	zF += ((fragSizeZ * 0.5) - (fragSizeZ * 2.0 * state));
+	
+	xW = fragSizeX * state * 4.0;
+	yH = fragSizeX * state * 4.0;
+	zD = fragSizeZ * state * 4.0;
+	
+	//	xL -= hx;
+	//	yB -= hx;
+	//	zF -= hx;
+	
+	red = patternLib[32].color.r * abs(patternLib[32].colormap - cstate);
+	green = patternLib[32].color.g * abs(patternLib[32].colormap - cstate);
+	blue = patternLib[32].color.b * abs(patternLib[32].colormap - cstate);
+	alpha = patternLib[32].alpha * abs(patternLib[32].alphamap - cstate);
+	
+	if (x == 0) { 
+		strokeRect(1, 1.0);
+	}
+	
+	if (y == 0) {
+		strokeRect(2, 1.0);
+	}
+	
+	if (z == 0) {
+		strokeRect(0, 1.0);
+	}
+	
+	if (x == ptrWorld->sizeX()-1 && y < ptrWorld->sizeY()-1 && z < ptrWorld->sizeZ()-1) {
+		xL += (xW * state);
+		strokeRect(1, 1.0);
+	}
+	if (y == ptrWorld->sizeY()-1 && z < ptrWorld->sizeZ()-1 && x < ptrWorld->sizeX()-1) {
+		yB += (yH * state);
+		strokeRect(2, 1.0);
+	}	
+	if (z == ptrWorld->sizeZ()-1 && x < ptrWorld->sizeX()-1 && y < ptrWorld->sizeY()-1) {
+		zF += (zD * state);
+		strokeRect(0, 1.0);	
+	}
+	
+}
+
+void GraphicsRenderer::pattern33(int x, int y, int z) {
+	float ex, ey, ez, lineWidth, scale;
+	
+	if ( x%5==0 && y%6==0 && z%7==0 ) {
+		
+		lineWidth = mapf(state, 1.0, 4.0);
+		
+		scale = 2.0;
+		
+		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state * 2.0 + (fragSizeX * 0.5); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state * 2.0 + (fragSizeY * 0.5); 
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state * 2.0 + (fragSizeZ * 0.5);
+				
+		xW = fragSizeX * state * 2.0;
+		yH = fragSizeX * state;
+		zD = fragSizeX * state;
+		
+		ex = fragSizeX * 4.0 * sinf( (state * 2.0 * PI) );
+		ey = fragSizeX * 2.0 * cosf( (state * 2.0 * PI) );
+		ez = fragSizeX * 2.0 * sinf( (state * 2.0 * PI) );
+		
+		red = patternLib[33].color.r * abs(patternLib[33].colormap - state);
+		green = patternLib[33].color.g * abs(patternLib[33].colormap - state);
+		blue = patternLib[33].color.b * abs(patternLib[33].colormap - state);
+		alpha = patternLib[33].alpha * abs(patternLib[33].alphamap - state);
+		
+		gl::color(red, green, blue, alpha);	
+		
+		gl::drawCube( Vec3f(xL, yB, zF), Vec3f( ex, ey, ez ) );
+		
+	}
+	
+	if ( (x-2)%6==0 && (z-2)%7==0 && (y-2)%5==0 ) {
+		
+		lineWidth = mapf(state, 1.0, 4.0);
+		
+		scale = 2.0;
+		
+		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state * 2.0 + (fragSizeX * 0.5); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state * 2.0 + (fragSizeY * 0.5); 
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state * 2.0 + (fragSizeZ * 0.5);
+				
+		xW = fragSizeX * state;
+		yH = fragSizeX * state * 2.0;
+		zD = fragSizeX * state;
+		
+		ex = fragSizeX * 2.0 * sinf( (state * 2.0 * PI) );
+		ey = fragSizeX * 4.0 * sinf( (state * 2.0 * PI) );
+		ez = fragSizeX * 2.0 * cosf( (state * 2.0 * PI) );
+		
+		red = patternLib[33].color.r * abs(patternLib[33].colormap - state);
+		green = patternLib[33].color.g * abs(patternLib[33].colormap - state);
+		blue = patternLib[33].color.b * abs(patternLib[33].colormap - state);
+		alpha = patternLib[33].alpha * abs(patternLib[33].alphamap - state);
+		
+		gl::color(red, green, blue, alpha);	
+		
+		gl::drawCube( Vec3f(xL, yB, zF), Vec3f( ex, ey, ez ) );
+		
+	}
+	
+	if ( y%7==0 && z%5==0 && z%6==0 ) {
+		
+		lineWidth = mapf(state, 1.0, 4.0);
+		
+		scale = 2.0;
+		
+		hx = fragSizeX * ptrWorld->sizeX() * 0.5;
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state * 2.0 + (fragSizeX * 0.5); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state * 2.0 + (fragSizeY * 0.5); 
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state * 2.0 + (fragSizeZ * 0.5);
+				
+		xW = fragSizeX * state;
+		yH = fragSizeX * state;
+		zD = fragSizeX * state * 2.0;
+		
+		ex = fragSizeX * 2.0 * cosf( (state * 2.0 * PI) );
+		ey = fragSizeX * 2.0 * sinf( (state * 2.0 * PI) );
+		ez = fragSizeX * 4.0 * sinf( (state * 2.0 * PI) );
+		
+		red = patternLib[33].color.r * abs(patternLib[33].colormap - state);
+		green = patternLib[33].color.g * abs(patternLib[33].colormap - state);
+		blue = patternLib[33].color.b * abs(patternLib[33].colormap - state);
+		alpha = patternLib[33].alpha * abs(patternLib[33].alphamap - state);
+		
+		gl::color(red, green, blue, alpha);	
+		
+		gl::drawCube( Vec3f(xL, yB, zF), Vec3f( ex, ey, ez ) );
+		
+	}	
+	
+}
+
+void GraphicsRenderer::pattern34(int x, int y, int z) {
+	if (x%7==0 && y%5==0 && z%7==0) {
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 2.0 * sinf(state * 4.0 * PI)); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 2.0 * cosf(state * 4.0 * PI)); 
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 0.5);
+				
+		red = patternLib[34].color.r * abs(patternLib[34].colormap - state);
+		green = patternLib[34].color.g * abs(patternLib[34].colormap - state);
+		blue = patternLib[34].color.b * abs(patternLib[34].colormap - state);
+		alpha = patternLib[34].alpha * abs(patternLib[34].alphamap - state);
+		
+		drawPoint(xL, yB, zF, 5.0);
+		
+		for (int i=0; i < currentCell->history.size(); i++) {
+			double oldState;
+			oldState = currentCell->history[i];
+			red *= 0.8;
+			green *= 0.9;
+			blue *= 0.9;
+			alpha *= 0.95;
+			
+			xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 2.0 * sinf(oldState * 4.0 * PI)); 
+			yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 2.0 * cosf(oldState * 4.0 * PI)); 
+			zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 0.5);
+						
+			drawPoint(xL, yB, zF, 2.0);
+			
+		}
+	}
+	
+	if (x%5==0 && y%7==0 && z%7==0) {
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 0.5); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 2.0 * sinf(state * 4.0 * PI));
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 2.0 * cosf(state * 4.0 * PI));
+				
+		red = patternLib[34].color.r * abs(patternLib[34].colormap - state);
+		green = patternLib[34].color.g * abs(patternLib[34].colormap - state);
+		blue = patternLib[34].color.b * abs(patternLib[34].colormap - state);
+		alpha = patternLib[34].alpha * abs(patternLib[34].alphamap - state);
+		
+		drawPoint(xL, yB, zF, 5.0);
+		
+		for (int i=0; i < currentCell->history.size(); i++) {
+			double oldState;
+			oldState = currentCell->history[i];
+			red *= 0.8;
+			green *= 0.9;
+			blue *= 0.9;
+			alpha *= 0.95;
+			
+			xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 0.5); 
+			yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 2.0 * sinf(oldState * 4.0 * PI));
+			zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 2.0 * cosf(oldState * 4.0 * PI));
+						
+			drawPoint(xL, yB, zF, 2.0);
+			
+		}
+	}
+	
+	if (x%7==0 && y%7==0 && z%5==0) {
+		
+		xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 2.0 * cosf(state * 4.0 * PI)); 
+		yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 0.5);
+		zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 2.0 * sinf(state * 4.0 * PI));
+				
+		red = patternLib[34].color.r * abs(patternLib[34].colormap - state);
+		green = patternLib[34].color.g * abs(patternLib[34].colormap - state);
+		blue = patternLib[34].color.b * abs(patternLib[34].colormap - state);
+		alpha = patternLib[34].alpha * abs(patternLib[34].alphamap - state);
+		
+		drawPoint(xL, yB, zF, 5.0);
+		
+		for (int i=0; i < currentCell->history.size(); i++) {
+			double oldState;
+			oldState = currentCell->history[i];
+			red *= 0.8;
+			green *= 0.9;
+			blue *= 0.9;
+			alpha *= 0.95;
+			
+			xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 2.0 * cosf(oldState * 4.0 * PI)); 
+			yB = ((ptrWorld->sizeY()*fragSizeY/2) - ((float)y * fragSizeY)) * state + (fragSizeX * 0.5);
+			zF = ((ptrWorld->sizeZ()*fragSizeZ/2) - ((float)z * fragSizeZ)) * state + (fragSizeX * 2.0 * sinf(oldState * 4.0 * PI));
+						
+			drawPoint(xL, yB, zF, 2.0);
+			
+		}
+	}
+	
+}
+
+void GraphicsRenderer::pattern35(int x, int y, int z) {
+	xL = ((ptrWorld->sizeX()*fragSizeX/2) - ((float)x * fragSizeX)) * state + (fragSizeX * 0.5) - (fragSizeX * 2.0 * state);
+	yB = ((ptrWorld->sizeY()*fragSizeX/2) - ((float)y * fragSizeY)) * state + (fragSizeY * 0.5) - (fragSizeY * 2.0 * state);
+	zF = ((ptrWorld->sizeZ()*fragSizeX/2) - ((float)z * fragSizeZ)) * state + (fragSizeZ * 0.5) - (fragSizeZ * 2.0 * state);
+	
+	xW = mapf(fragSizeX * state, 0.5, 2.0);
+	yH = mapf(fragSizeX * state, 0.5, 2.0);
+	zD = mapf(fragSizeX * state, 0.5, 2.0);
+	
+	red = patternLib[35].color.r * abs(patternLib[35].colormap - state);
+	green = patternLib[35].color.g * abs(patternLib[35].colormap - state);
+	blue = patternLib[35].color.b * abs(patternLib[35].colormap - state);
+	alpha = patternLib[35].alpha * abs(patternLib[35].alphamap - state);
+	
+	if (x == 0) { 
+		fillRect(1);
+	}
+	
+	if (y == 0) {
+		fillRect(2);
+	}
+	
+	if (z == 0) {
+		fillRect(0);
+	}
+	
+	if (x == ptrWorld->sizeX()-1 && y < ptrWorld->sizeY()-1 && z < ptrWorld->sizeZ()-1) {
+		xL += (xW * state);
+		fillRect(1);
+	}
+	if (y == ptrWorld->sizeY()-1 && z < ptrWorld->sizeZ()-1 && x < ptrWorld->sizeX()-1) {
+		yB += (yH * state);
+		fillRect(2);
+	}	
+	if (z == ptrWorld->sizeZ()-1 && x < ptrWorld->sizeX()-1 && y < ptrWorld->sizeY()-1) {
+		zF += (zD * state);
+		fillRect(0);	
+	}
+	
+}
+
 void GraphicsRenderer::drawBoids() {
 
 	if (attachEyeToFirstBoid)
@@ -2338,7 +3071,7 @@ void GraphicsRenderer::drawBoids02() {
 
 void GraphicsRenderer::drawBoids03() {
 	int i;
-	float line, maxdist;
+	float maxdist;
 	vector<Vec3f> points;
 	PolyLine<Vec3f> polyX;
 	PolyLine<Vec3f> polyY;

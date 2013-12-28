@@ -115,6 +115,8 @@ void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 		}
 	}
 	
+	_bmu = &cells[_sizeX/2][_sizeY/2][_sizeZ/2];
+	
 	cellsInitialized = true;
 	
 			
@@ -209,6 +211,10 @@ void World::initWireCube(int left, int bottom, int front, int width, int height,
 void World::incrementAlive() { _alive++; }
 
 void World::resetAlive() { _alive = 0; }
+
+int World::interpPhase() { return _interpPhase; }
+
+int World::interpCount() { return _interpCount; }
 
 void World::initRule(R r) {
 	N dim;

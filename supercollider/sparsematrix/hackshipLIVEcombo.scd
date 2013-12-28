@@ -5,8 +5,8 @@
 ~mode = 0; // CHANGE TO 1 FOR LIVE
 
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(1024, 768, mode: ~mode);
-//~graphics = CinderApp(800, 600);
+//~graphics = CinderApp(1024, 768, mode: ~mode);
+~graphics = CinderApp(800, 600);
 
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
