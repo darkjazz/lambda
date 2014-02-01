@@ -1,7 +1,7 @@
 ~ncoef = 20;
 ~mode = 1;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(1024, 768, mode: ~mode);
+~graphics = CinderApp(800, 600, mode: ~mode);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 

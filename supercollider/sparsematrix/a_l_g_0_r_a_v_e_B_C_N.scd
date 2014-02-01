@@ -2,7 +2,9 @@
 
 ~matrix.assignCodeWindow(Document.current);
 
-~matrix.setBPM(138)
+~matrix.setBPM(160)
+
+~matrix.makeEfxProto;
 
 ~matrix.preparePatternDefs;
 
@@ -10,19 +12,43 @@
 
 ~graphics.sendCodeTitle("algorave.barcelona")
 
+s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('b02'), Pdef('r02'), Pdef('efx')])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r07'), Pdef('efx') ])).quant(128)
 
 Pdef('matrix').play
 
+
 ~seconds = SystemClock.seconds;
+
+
+
+~matrix.defsAt('r02').assignEfx(
+	(efx0: [10, 11, 12], efx1: [13, 14, 15], efx3: [16, 17, 18])
+)
+
+~matrix.defsAt('r07').assignEfx(
+	(efx0: [3, 13, 23, 33], efx1: [4, 14, 24, 44], efx3: [6, 16, 26, 56], efx4: [8, 18, 28, 60], efx5: [10, 20, 30, 40])
+)
+
+
+~matrix.efxamps['efx0'] = 0.2
+
+~matrix.efxamps['efx1'] = 0.2
+
+~matrix.efxamps['efx3'] = 0.2
+
+~matrix.efxamps['efx4'] = 0.2
+
+~matrix.efxamps['efx5'] = 0.2
 
 
 ~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.1, 0.3) },
-	{ rrand(0.05, 0.3) }
+	{ rrand(0.05, 0.3) },
+	0.1
 );
 
 ~matrix.defsAt('b02').setControls(
@@ -34,7 +60,8 @@ Pdef('matrix').play
 ~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.1) }
+	{ rrand(0.05, 0.1) },
+	{ rrand(0.1, 0.5) }
 );
 
 ~matrix.defsAt('r01').setControls(
@@ -53,10 +80,19 @@ Pdef('matrix').play
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ rrand(0.1, 1.0) },
-	{ rrand(0.05, 0.2) }
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ rrand(0.3, 1.0) },
+	{ exprand(0.05, 0.3) },
+	{ rrand(0.3, 0.5) }
 );
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ rrand(0.5, 1.0) },
+	{ exprand(0.05, 0.1) },
+	{ rrand(0.1, 0.4) }
+);
+
 
 ~matrix.defsAt('r03').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
@@ -87,7 +123,7 @@ Pdef('matrix').play
 Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
 
 
-~matrix.defsAt('r06').recall(0);
+~matrix.defsAt('r00').recall(1);
 
 
 ~graphics.initWorld(20, 20, 20, ~ncoef);
