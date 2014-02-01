@@ -1,3 +1,74 @@
+~ncoef = 20;
+~mode = 1;
+~decoder = FoaDecoder(decoderType:'stereo');
+~graphics = CinderApp(1024, 768, mode: ~mode);
+
+~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
+
+MasterEQ(2)
+
+(
+~defnames = ();
+[
+	\gep_gen000_005_130501_180743,
+	\gep_gen000_007_130501_180759,
+	\gep_gen000_058_130502_145351,
+	\gep_gen001_020_130503_003936,
+	\gep_gen001_036_130501_181549,
+	\gep_gen002_003_130501_182402,
+	\gep_gen002_019_130501_182433,
+	\gep_gen002_054_130501_182539,
+	\gep_gen002_086_130503_105839,
+	\gep_gen002_089_130503_105844,
+	\gep_gen003_059_130503_113248,
+	\gep_gen003_060_130501_183556,
+	\gep_gen003_099_130503_113253,
+	\gep_gen004_066_130503_121740,
+	\gep_gen005_033_130501_202804,
+	\gep_gen005_051_130501_202839,
+	\gep_gen005_054_130503_124142,
+	\gep_gen005_120_130503_124232,
+	\gep_gen006_010_130503_131939,
+	\gep_gen006_026_130503_131949,
+	\gep_gen006_046_130501_205504,
+	\gep_gen006_064_130503_132019,
+	\gep_gen006_076_130503_132030,
+	\gep_gen006_114_130503_132050,
+	\gep_gen007_014_130503_142546,
+	\gep_gen007_018_130503_142556,
+	\gep_gen007_094_130503_142636,
+	\gep_gen007_100_130503_142642,
+	\gep_gen008_007_130501_211737,
+	\gep_gen008_010_130501_211747,
+	\gep_gen008_010_130503_144321,
+	\gep_gen008_016_130501_211757,
+	\gep_gen008_024_130501_211817,
+	\gep_gen008_055_130501_211832,
+	\gep_gen009_021_130503_145825,
+	\gep_gen009_022_130503_145830,
+	\gep_gen009_051_130503_145851,
+	\gep_gen009_095_130503_145906,
+	\gep_gen010_022_130501_215138,
+	\gep_gen010_029_130503_151002,
+	\gep_gen010_033_130503_151012,
+	\gep_gen010_061_130501_215239,
+	\gep_gen010_111_130503_151052,
+	\gep_gen011_001_130501_220738,
+	\gep_gen011_001_130503_153102,
+	\gep_gen011_004_130503_153108,
+	\gep_gen011_023_130501_220834,
+	\gep_gen011_036_130501_220849,
+	\gep_gen011_114_130503_153149
+].do({|defname, i|
+	~defnames[i.asString.padLeft(3, "0").asSymbol] = defname
+});
+
+~defnames
+)
+
+
+
+
 ~graphics.open
 
 ~matrix.assignCodeWindow(Document.current);
@@ -114,7 +185,7 @@ Tdef(\background, {
 			~graphics.setBackground(*[0.0, 0.1, 0.2].choose.dup(3).round(0.1));
 		};
 		0.125.wait;
-	});	
+	});
 });
 
 Tdef(\background).play
@@ -130,7 +201,7 @@ Tdef(\autopilot, {
 	~patterns = (5..15);
 	actives = [~patterns.choose];
 	~graphics.fadeInPattern(actives.first, 10, 1.0);
-	rrand(8.0, 12.0).wait;	
+	rrand(8.0, 12.0).wait;
 	actives = actives ++ ~patterns.choose;
 	~graphics.fadeInPattern(actives.last, 5, 1.0);
 	rrand(6.0, 12.0).wait;
@@ -140,7 +211,7 @@ Tdef(\autopilot, {
 			var pole, active;
 			pole = 2.rand;
 			active = actives.includes(patnum).asInt;
-			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand] 
+			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand]
 		}).do({|arglist|
 			~graphics.setPattern(*arglist)
 		});
@@ -155,27 +226,27 @@ Tdef(\autopilot, {
 			[
 			\flamingstarbow, \chenille, \belzhab, \glissergy,
 			\cooties, \faders, \frozenspirals, \glisserati,
-			\nova, \orthogo, \rainzha, \rake, \sedimental, 
-			\snake, \starwars, \sticks, \thrillgrill, 
+			\nova, \orthogo, \rainzha, \rake, \sedimental,
+			\snake, \starwars, \sticks, \thrillgrill,
 			\transers, \wanderers, \worms, \xtasy
 			].choose;
 		);
 		if (0.3.coin) {
 			~graphics.stopRotation;
 			~graphics.setViewpoint(
-				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
-				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
-				rrand(30.0, 60.0)*[1.0,-1.0].choose, 
+				rrand(30.0, 60.0)*[1.0,-1.0].choose,
+				rrand(30.0, 60.0)*[1.0,-1.0].choose,
+				rrand(30.0, 60.0)*[1.0,-1.0].choose,
 				0.0, 0.0, 0.0
 			);
 			~graphics.unmapCodePanel;
 		}{
-			~rot = Rotation(rrand(-60.0, 60.0), rrand(0.005, 0.05), rrand(-20.0, 20.0), 
-				rrand(-120.0, 120.0), 
+			~rot = Rotation(rrand(-60.0, 60.0), rrand(0.005, 0.05), rrand(-20.0, 20.0),
+				rrand(-120.0, 120.0),
 				rrand(-pi, pi), rrand(0.01, 0.08), rrand(-pi, pi), rrand(0.01, 0.07));
 			~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-			~graphics.rotateCamera;	
-			~graphics.mapCodePanel;		
+			~graphics.rotateCamera;
+			~graphics.mapCodePanel;
 		};
 	})
 }).play
@@ -199,19 +270,19 @@ Tdef(\autopilot).stop
 
 
 (
-~gep00 = '016';
+~gep00 = '019';
 ~matrix.playGepSynth(~gep00, ~defnames[~gep00], 0.0, 2, 3, 4)
 )
 
-~matrix.gepsynths[~gep00].set('amp', 1.0)
+~matrix.gepsynths[~gep00].set('amp', 0.4)
 
 ~matrix.gepsynths[~gep00].set('amp', 0.0)
 
-~matrix.setWithPattern(~gep00, Pseq(Array.rand(16, 0.001, 0.2), inf), 
+~matrix.setWithPattern(~gep00, Pseq(Array.rand(16, 0.001, 0.2), inf),
 	Pfunc({ ~matrix.beatdur / 4 })
 )
 
-~matrix.setWithPattern(~gep00, Pseq([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, inf), 
+~matrix.setWithPattern(~gep00, Pseq([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, inf),
 	Pfunc({ ~matrix.beatdur / 8 })
 )
 
@@ -232,11 +303,11 @@ s.queryAllNodes
 
 ~matrix.gepsynths[~gep01].set('amp', 0.0)
 
-~matrix.setWithPattern(~gep01, Pseq(Array.rand(16, 0.001, 0.1), inf), 
+~matrix.setWithPattern(~gep01, Pseq(Array.rand(16, 0.001, 0.1), inf),
 	Pfunc({ ~matrix.beatdur / 4 })
 )
 
-~matrix.setWithPattern(~gep01, Pseq([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, inf), 
+~matrix.setWithPattern(~gep01, Pseq([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, inf),
 	Pfunc({ ~matrix.beatdur / 4 })
 )
 

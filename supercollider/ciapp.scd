@@ -39,11 +39,28 @@
 ~graphics.setPattern(35, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 
+
+(
+// keyDownAction to send evaluated code to the window
+Document.current.keyDownAction = {|doc, char, mod, uni, key|
+	var sendarray;
+	Post << uni << " " << key << Char.nl;
+	if ((uni == 13) and: { key == 37 })
+	{
+		Post << "Sending: " << doc.selectedString << Char.nl;
+		sendarray = doc.selectedString.split(Char.nl);
+		sendarray[0] = "alo@ " ++ sendarray[0];
+		sendarray.do({|str|
+			~graphics.sendCodeLine(str)
+		})
+	}
+}
+)
 (
 Routine({
-	
+
 	var streams = Array.fill(8, { Pbrown(0.0, 1.0, 0.1).asStream });
-	
+
 	100.do({
 		~graphics.sendSOMVector( streams.collect(_.next) );
 		0.1.wait;
@@ -137,7 +154,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.3, 0.5);
 
 ~graphics.setPattern(12, 0, 1.0, 0, 0, 0.6, 0.8, 1.0);
-	
+
 ~graphics.setPattern(13, 0, 1.0, 0, 0, 0.0, 0.6, 1.0);
 
 ~graphics.setPattern(14, 0, 1.0, 1, 1, 0.0, 0.5, 0.5);
@@ -188,7 +205,7 @@ Tdef(\sendVector, {
 	loop({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		0.25.wait;
-	});	
+	});
 });
 
 Tdef(\sendVector).play
@@ -197,7 +214,7 @@ Tdef(\sendVector).stop
 
 (
 Routine({
-		
+
 	100.do({
 		~graphics.sendSOMVector( Array.rand(8, 0.0, 1.0) );
 		0.1.wait;
@@ -207,7 +224,7 @@ Routine({
 )
 
 (
-[	
+[
 	[5, 0, 0.2, 0, 0, 0.9, 0.1, 0.4],
 	[6, 0, 0.5, 1, 1, 0.5, 0.9, 0.8],
 	[7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0],
@@ -325,7 +342,7 @@ Tdef(\autopilot, {
 
 (
 Routine({
-		
+
 	100.do({
 		~graphics.sendSOMVector( Array.rand(8, 0.0, 1.0) );
 		0.1.wait;
@@ -341,7 +358,7 @@ Routine({
 
 (
 Routine({
-		
+
 	100.do({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		0.1.wait;
@@ -384,16 +401,24 @@ Routine({
 // keyDownAction to send evaluated code to the window
 Document.current.keyDownAction = {|doc, char, mod, uni, key|
 	var sendarray;
-	if ((uni == 3) and: { key == 76 }) 
+	Post << uni << " " << key << Char.nl;
+	if ((uni == 13) and: { key == 37 })
 	{
+		Post << "Sending: " << doc.selectedString << Char.nl;
 		sendarray = doc.selectedString.split(Char.nl);
-		sendarray[0] = "@ " ++ sendarray[0];
-		sendarray.do({|str|  
-			~graphics.sendCodeLine(str) 
+		sendarray[0] = "alo@ " ++ sendarray[0];
+		sendarray.do({|str|
+			~graphics.sendCodeLine(str)
 		})
 	}
 }
 )
+
+
+
+
+
+
 
 ~rot = Rotation(40.0, 0.1, 20.0, 100.0, 0.0, 0.055, 0.0, 0.06);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);

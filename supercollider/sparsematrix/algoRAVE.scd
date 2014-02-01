@@ -1,3 +1,5 @@
+s.boot
+
 ~ncoef = 20;
 ~mode = 1;
 ~decoder = FoaDecoder(decoderType:'stereo');
@@ -12,7 +14,7 @@ Document.open("/Users/alo/Development/lambda/supercollider/sparsematrix/a_l_g_0_
 
 (
 ~defnames = ();
-[	
+[
 	\gep_gen000_005_130501_180743,
 	\gep_gen000_007_130501_180759,
 	\gep_gen000_058_130502_145351,
@@ -62,7 +64,7 @@ Document.open("/Users/alo/Development/lambda/supercollider/sparsematrix/a_l_g_0_
 	\gep_gen011_023_130501_220834,
 	\gep_gen011_036_130501_220849,
 	\gep_gen011_114_130503_153149
-].do({|defname, i| 
+].do({|defname, i|
 	~defnames[i.asString.padLeft(3, "0").asSymbol] = defname
 });
 
