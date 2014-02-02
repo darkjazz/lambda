@@ -30,7 +30,7 @@
 
 
 
-~graphics.setPattern(32, 0, 1.0, 1, 0, 0.5, 0.75, 0.9);
+~graphics.setPattern(32, 1, 1.0, 1, 1, 0.75, 0.4, 0.9);
 
 ~graphics.setPattern(33, 0, 1.0, 1, 1, 0.6, 0.8, 0.8);
 
@@ -161,17 +161,17 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(15, 1, 1.0, 0, 0, 0.7, 0.7, 0.7);
 
-~graphics.setPattern(26, 0, 0.5, 1, 1, 0.6, 0.9, 1.0);
+~graphics.setPattern(26, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
 
-~graphics.setPattern(27, 0, 1.0, 0, 0, 0.3, 0.8, 0.9);
+~graphics.setPattern(27, 0, 1.0, 1, 1, 0.3, 0.8, 0.9);
 
-~graphics.setPattern(28, 1, 1.0, 1, 1, 0.0, 1.0, 0.8);
+~graphics.setPattern(28, 0, 1.0, 1, 1, 0.0, 1.0, 0.8);
 
 ~graphics.setPattern(29, 1, 1.0, 0, 0, 0.0, 0.8, 1.0);
 
 ~graphics.setPattern(30, 1, 1.0, 0, 0, 0.7, 0.8, 1.0);
 
-~graphics.setPattern(31, 1, 0.2, 1, 1, 0.3, 0.9, 0.9);
+~graphics.setPattern(31, 1, 1.0, 1, 1, 0.3, 0.9, 0.9);
 
 
 ~rot = Rotation(140.0, 0.004, 100.0, 60.0, 0.0, 0.0034, 0.0, 0.0038);

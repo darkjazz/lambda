@@ -1,8 +1,22 @@
 Ndef(\hit, {|rate=50,size=20,rule=30,del=0.0625,amp=0.3,dur=0.2,freq=1760|
 	var trig;
-	trig = Impulse.kr(2);
-	Nagumo.ar(0.01, 0.001, LFPulse.ar(110).range(0, 1)).dup * EnvGen.kr(Env.perc, trig, timeScale: dur)
+	trig = Impulse.kr(1);
+	FIS.ar(LFSaw.ar(4).range(1,4),LFNoise0.ar(10).abs,SinOsc.ar(2**11).range(1,10).round(1))
+		* EnvGen.kr(Env.perc, trig, timeScale: dur)
 })
+
+Ndef(\efx, {|amp=0.1, del=0.25, rmp=0.1, rt=4.0|
+	var input, sig, n = 5;
+	input = Ndef.ar(\hit) * amp;
+	sig = Decimator.ar(DelayL.ar(input, del, del), 8800, 8);
+	sig = Decimator.ar(Reverb.ar(sig * rmp, rt), 44100, 24);
+	input.dup + sig.dup
+}).ar(2)
+
+Ndef(\efx).play
+
+Ndef(\efx).set(\amp, 1.0, \del, 0.25, \rmp, 0.1, \rt, 2.0)
+
 
 rrand(16, 32).round()
 
@@ -10,9 +24,11 @@ Array.geom(5, 16.0, 2**(1/5))
 
 Ndef(\hit).play
 
+Ndef(\hit).set(\dur, 0.1)
+
 Ndef(\hit).set(\rate,440,\size,200,\rule,165,\del,0.01,\amp,0.6)
 
-Ndef(\hit).clear
+Ndef(\efx).clear
 165.asCA
 
 { Logist0.ar(1000 * IRand(1, 5), 1.8) }
