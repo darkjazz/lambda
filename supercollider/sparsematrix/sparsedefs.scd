@@ -21,13 +21,9 @@ SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz
 
 SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	var input, sig;
-<<<<<<< HEAD
-	input = In.ar(in);
-	sig = FreeVerb1.ar(input, rtime, hf) * amp;
-=======
 	input = In.ar(in) * amp;
 	sig = Reverb.ar(input, rtime, hf);
->>>>>>> e28fd8f6d30fa066e9457eaf31cb6c2211811fa7
+	
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
@@ -48,30 +44,17 @@ SynthDef(\rev02, {|out, in, amp, room, damp, wsz, pch, pds, tds|
 
 SynthDef(\del00, {|out, in, amp, del, dec, pch, wsz, pds, tds|
 	var input, sig;
-<<<<<<< HEAD
-	input = In.ar(in);
-	sig = CombC.ar(input, del, del, dec) * amp;
-	sig = (FreeVerb1.ar(sig * rmp, rt) + sig) * LFPulse.kr(1/del*2).range(0.2, 1.0);
-=======
 	input = In.ar(in) * amp;
 	sig = CombL.ar(CombL.ar(input,del,del,dec),del*0.33,del*0.33,dec);
 	sig = PitchShift.ar(sig, wsz, pch, pds, tds);
->>>>>>> e28fd8f6d30fa066e9457eaf31cb6c2211811fa7
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
 SynthDef(\del01, {|out, in, amp, del, rmp, rt|
 	var input, sig, n = 5;
 	input = In.ar(in) * amp;
-<<<<<<< HEAD
-	sig = Mix.fill(n, {|i|
-		DelayC.ar(input, del*(grw**n-1), del*(grw**i))
-	});
-	sig = FreeVerb1.ar(sig * rmp, rt) + sig;
-=======
 	sig = Decimator.ar(DelayL.ar(input, del, del), 8800, 8);
 	sig = Decimator.ar(Reverb.ar(sig * rmp, rt), 44100, 24);
->>>>>>> e28fd8f6d30fa066e9457eaf31cb6c2211811fa7
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
@@ -101,7 +84,7 @@ SynthDef(\frag01, {|out, buf, grate, gdlo, gdhi, rate, ffrq, fwid, fflo, ffhi, r
 SynthDef(\frag02, {|out, buf, rate, warp, wisz, genv, wrnd, dens, intr, ffrq, fwid, fflo, ffhi, amp=1, dur, rotx, roty, rotz, done=2|
 	var env, sig, fft, enc;
 	env = EnvGen.kr(EnvControl.kr, timeScale: dur, levelScale: amp, doneAction: 2);
-	sig = Disintegrator.ar(
+	sig = Disintegrator.ar( 
 		Warp1.ar(1, buf, LFSaw.kr(warp, 1).range(0, 1), rate, wisz, genv, dens, wrnd, intr),
 		0.5, -1
 	) * LFPulse.kr(ffrq, 0, fwid).range(fflo, ffhi) * env;
@@ -145,49 +128,13 @@ SynthDef(\frag05, {|out, amp, dur, rate, buf, rmp, rtm, early, tail, rotx, roty,
 	Out.ar(out, (bfr + rvb.dup.flat) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2))
 }).add;
 
-<<<<<<< HEAD
-SynthDef(\rev00, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail|
-	var input, sig;
-	input = In.ar(in);
-	sig = GVerb.ar(input, room, rtime, damp, bw, spr, dry, early, tail, room) * amp;
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
-}).add;
-
-SynthDef(\rev01, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail, wsz, pch, pds, tds|
-	var input, sig;
-	input = In.ar(in);
-	sig = GVerb.ar(input, room, rtime, damp, bw, spr, dry, early, tail, room) * amp;
-	sig = PitchShift.ar(sig, wsz, pch, pds, tds) + sig;
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
-}).add;
-
-SynthDef(\del00, {|out, in, amp, del, dec, rmp, rt|
-	var input, sig;
-	input = In.ar(in);
-	sig = CombC.ar(input, del, del, dec) * amp;
-	sig = (FreeVerb1.ar(sig * rmp, rt) + sig) * LFPulse.kr(1/del*2).range(0.2, 1.0);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
-}).add;
-
-SynthDef(\del01, {|out, in, amp, del, grw, rmp, rt|
-	var input, sig, n = 5;
-	input = In.ar(in) * amp;
-	sig = Mix.fill(n, {|i|
-		DelayC.ar(Normalizer.ar(input, amp).distort, del*(grw**n-1), del*(grw**i))
-	});
-	sig = FreeVerb1.ar(sig * rmp, rt) + sig;
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
-}).add;
-
-=======
->>>>>>> e28fd8f6d30fa066e9457eaf31cb6c2211811fa7
 SynthDef(\mfcc, {|in, th|
 	var fft, mfcc, onsets;
 	fft = FFT(LocalBuf(1024), In.ar(in));
 	mfcc = MFCC.kr(fft, ~ncoef ? 8);
 	onsets = Onsets.kr(fft, th);
 	SendReply.kr(onsets, '/mfcc', mfcc);
-}).add;
+}).add;	
 
 SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
 	var sig, swp, env, bf;
@@ -196,7 +143,7 @@ SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
 	sig = LPF.ar(sig, swp);
 	sig = Normalizer.ar(sig);
 	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
-	sig = (sig.distort + tanh(sig**0.8)) *
+	sig = (sig.distort + tanh(sig**0.8)) * 
 		EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
 	Out.ar(out,bf)
