@@ -75,6 +75,9 @@ MasterEQ(2)
 
 ~matrix.setBPM(138)
 
+~matrix.makeEfxProto;
+
+
 ~matrix.preparePatternDefs;
 
 ~matrix.prepareAudio

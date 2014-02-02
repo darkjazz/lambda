@@ -21,13 +21,8 @@ SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz
 
 SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	var input, sig;
-<<<<<<< HEAD
 	input = In.ar(in);
 	sig = FreeVerb1.ar(input, rtime, hf) * amp;
-=======
-	input = In.ar(in) * amp;
-	sig = Reverb.ar(input, rtime, hf);
->>>>>>> e28fd8f6d30fa066e9457eaf31cb6c2211811fa7
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
