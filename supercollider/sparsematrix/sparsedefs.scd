@@ -23,6 +23,7 @@ SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	var input, sig;
 	input = In.ar(in) * amp;
 	sig = Reverb.ar(input, rtime, hf);
+	
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
