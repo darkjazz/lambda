@@ -1,3 +1,42 @@
+(
+~ncoef = 20;
+~mode = 1;
+~decoder = FoaDecoder(decoderType:'stereo');
+~graphics = CinderApp(800, 600, mode: ~mode);
+
+~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
+)
+
+MasterEQ(2)
+
+~sparsedata = UGepLoader(headsize: 12, numgenes: 2).load;
+
+(
+~ncoef = 20;
+~rate = 20;
+~headsize = 16;
+~numgenes = 4;
+
+~dfile = File.open(Document.current.dir +/+ "defnames.scd", "r");
+~defarray = ~dfile.readAllString.split(Char.nl).collect(_.asSymbol);
+~dfile.close;
+~dfile = nil;
+
+~data = ~defarray.collect({|defname|
+	var path, meta, data;
+	path = UGEP.archDir +/+ defname.asString ++ "." ++ UGEP.fileExt;
+	if (File.exists(path)) { data = UGEP.loadData(path) };
+	meta = UGenExpressionTree.loadMetadata(defname);
+	data['defname'] = defname;
+	data['args'] = meta.args.args;
+	data['stats'] = meta.stats;
+	data
+});
+~foa = #[zoom,focus,push,press];
+~player = GepPlayer(~data, ~decoder, ~graphics);
+
+)
+
 ~graphics.open
 
 ~matrix.assignCodeWindow(Document.current);
@@ -6,7 +45,7 @@
 
 ~matrix.makeEfxProto;
 
-~matrix.preparePatternDefs;
+~matrix.preparePatternDefs(~sparsedata);
 
 ~matrix.prepareAudio
 
@@ -15,7 +54,7 @@
 s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r01') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('r01'), Pdef('r02'), Pdef('g02') ])).quant(128)
 
 Pdef('matrix').play
 
@@ -24,11 +63,11 @@ Pdef('matrix').play
 
 
 
-~matrix.defsAt('r02').assignEfx(
-	(efx0: [10, 11, 12], efx1: [13, 14, 15], efx3: [16, 17, 18])
+~matrix.defsAt('g00').assignEfx(
+	(efx0: [0, 1, 2], efx1: [3, 4, 5], efx3: [6, 7, 8])
 )
 
-~matrix.defsAt('r07').assignEfx(
+~matrix.defsAt('r01').assignEfx(
 	(efx0: [3, 13, 23, 33], efx1: [4, 14, 24, 44], efx3: [6, 16, 26, 56], efx4: [8, 18, 28, 60], efx5: [10, 20, 30, 40])
 )
 
@@ -43,32 +82,119 @@ Pdef('matrix').play
 
 ~matrix.efxamps['efx5'] = 0.2
 
+~matrix.defsAt('b00').groups[0].do({|name|
+	~matrix.defsAt('b00').ctrls[name].active = 0;
+	~matrix.defsAt('b00').ctrls[name].amp = 0.7;
+	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur);
+})
+
+
+~matrix.defsAt('b00').buffers['b000']
+
+~matrix.defsAt('b00').groups[1].do({|name|
+	~matrix.defsAt('b00').ctrls[name].active = 0;
+	~matrix.defsAt('b00').ctrls[name].amp = 1;
+	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur);
+})
+
+
+~matrix.defsAt('b00').groups[2].do({|name|
+	~matrix.defsAt('b00').ctrls[name].active = 1;
+	~matrix.defsAt('b00').ctrls[name].amp = 1;
+	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
+})
+
+~matrix.defsAt('b00').groups[3].do({|name|
+	~matrix.defsAt('b00').ctrls[name].active = 1;
+	~matrix.defsAt('b00').ctrls[name].amp = 1;
+	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
+})
+
+
+~matrix.defsAt('b00').groups[3].do({|name|
+	~matrix.defsAt('b00').ctrls[name].active = 1;
+	~matrix.defsAt('b00').ctrls[name].amp = 1;
+	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
+})
+
+
+~matrix.defsAt('g00').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.3, 1.0) },
+	{ rrand(0.001, 0.1) },
+	0.1
+);
+
+~matrix.defsAt('g01').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.1, 1.0) },
+	{ rrand(0.1, 0.5) },
+	0.1
+);
+
+~matrix.defsAt('g02').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.1, 1.0) },
+	{ rrand(0.05, 0.1) },
+	0.1
+);
+
+~matrix.defsAt('g03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.1, 1.0) },
+	{ exprand(0.04, 0.2) },
+	0.1
+);
+
+~matrix.defsAt('g02').recall(0);
+
+~matrix.defsAt('r02').recall(0);
+
+~matrix.defsAt('b02').recall(0);
+
 
 ~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 0.3) },
 	{ rrand(0.05, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.2) }
+	{ rrand(0.05, 0.3) },
+	0.1
 );
 
 ~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.1) },
+	{ rrand(0.05, 0.2) },
 	{ rrand(0.1, 0.5) }
 );
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.04, 0.1) }
+	{ rrand(0.04, 0.2) },
+	{ rrand(0.1, 0.3) }
 );
+
+
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.3, 1.0) },
+	{ rrand(0.05, 0.2) },
+	{ rrand(0.1, 0.3) }
+);
+
 
 
 

@@ -226,7 +226,7 @@ s.queryAllNodes
 ~sectionActive = ~sectionAssignments.collect({()})
 )
 
-~graphics = CinderApp(1024, 768, ciAddr: NetAddr("192.168.0.6", 7000), mode: 1);
+~graphics = CinderApp(800, 600, ciAddr: NetAddr("192.168.0.6", 7000), mode: 0);
 
 ~graphics.open
 

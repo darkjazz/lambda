@@ -107,7 +107,7 @@ SynthDef(\frag03, {|out, buf, ffrq=1, fwid=0.5, fflo=0.5, ffhi=1, beatdur=0.5, a
 	Out.ar(out, enc * env)
 }).add;
 
-SynthDef(\frag04, {|out, in, efx, amp, dur, rate, emp, buf, rotx, roty, rotz|
+SynthDef(\frag04, {|out, in, efx, amp, dur, rate=1, emp, buf, rotx, roty, rotz|
 	var sig;
 	sig = PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate)
 		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);

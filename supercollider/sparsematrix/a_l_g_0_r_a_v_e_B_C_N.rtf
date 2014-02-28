@@ -1,0 +1,295 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf360
+{\fonttbl\f0\fnil\fcharset0 Inconsolata;}
+{\colortbl;\red255\green255\blue255;\red255\green102\blue0;\red0\green0\blue191;\red96\green96\blue96;
+\red0\green115\blue0;\red191\green0\blue0;\red0\green0\blue255;\red51\green51\blue191;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf2 ~graphics\cf0 .open\
+\
+\cf2 ~matrix\cf0 .assignCodeWindow(\cf3 Document\cf0 .current);\
+\
+\cf2 ~matrix\cf0 .setBPM(142)\
+\
+\cf2 ~matrix\cf0 .preparePatternDefs;\
+\
+\cf2 ~matrix\cf0 .prepareAudio\
+\
+\cf2 ~graphics\cf0 .sendCodeTitle(\cf4 "algorave.barcelona"\cf0 )\
+\
+\
+\
+\cf3 Pdef\cf0 (\cf5 'matrix'\cf0 , \cf3 Ppar\cf0 ([ \cf3 Pdef\cf0 (\cf5 'b02'\cf0 ), \cf3 Pdef\cf0 (\cf5 'r01'\cf0 ), \cf3 Pdef\cf0 (\cf5 'r02'\cf0 ), \cf3 Pdef\cf0 (\cf5 'efx'\cf0 )])).quant(128)\
+\
+\cf3 Pdef\cf0 (\cf5 'matrix'\cf0 ).play\
+\
+\cf2 ~seconds\cf0  = \cf3 SystemClock\cf0 .seconds;\
+\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'b01'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.8, 0.2]) \},\
+	\{ exprand(0.1, 0.5) \},\
+	\{ rrand(0.05, 0.3) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'b02'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.6, 0.4]) \},\
+	\{ exprand(0.3, 1.0) \},\
+	\{ rrand(0.01, 0.15) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r02'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.7, 0.3]) \},\
+	\{ exprand(0.3, 1.0) \},\
+	\{ rrand(0.05, 0.2) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r00'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.6, 0.4]) \},\
+	\{ exprand(0.3, 1.0) \},\
+	\{ rrand(0.1, 0.2) \}\
+);\
+\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r01'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.8, 0.2]) \},\
+	\{ rrand(0.1, 1.0) \},\
+	\{ rrand(0.01, 0.2) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r03'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.6, 0.4]) \},\
+	\{ rrand(0.3, 1.0) \},\
+	\{ rrand(0.01, 0.1) \}\
+);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r04'\cf0 ).setControls(\
+	\{ [0, 1].wchoose([0.7, 0.3]) \},\
+	\{ rrand(0.3, 1.0) \},\
+	\{ rrand(0.01, 0.2) \}\
+);\
+\
+\
+\cf2 ~graphics\cf0 .initWorld(20, 20, 20, \cf2 ~ncoef\cf0 );\
+\
+\cf2 ~graphics\cf0 .initGenerations([4,6,8], [3,5,7,9], 16);\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf6 //~graphics.resetWorld(5, 5, 5, 8, 8, 8)\cf0 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~graphics\cf0 .setSymmetry(11)\
+\
+\cf2 ~graphics\cf0 .showCodePanel\
+\
+\cf2 ~graphics\cf0 .setViewpoint(70.0, 65.0, 60.0, 0.0, 0.0, 0.0);\
+\
+\
+\cf2 ~graphics\cf0 .sendPredefined3DRule(\cf5 \\brain6\cf0 )\
+\
+\cf2 ~graphics\cf0 .sendPredefined3DRule(\cf5 \\cooties\cf0 )\
+\
+\cf2 ~graphics\cf0 .sendPredefined3DRule(\cf5 \\nova\cf0 )\
+\
+\cf2 ~graphics\cf0 .sendPredefined3DRule(\cf5 \\faders\cf0 )\
+\
+\
+\cf3 Tdef\cf0 (\cf5 \\background\cf0 , \{\
+	loop(\{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf6 //		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );\cf0 \
+		if (0.66.coin) \{\
+			\cf2 ~graphics\cf0 .setBackground(*[0.0, 0.1, 0.2].choose.dup(3).round(0.1));\
+		\};\
+		0.125.wait;\
+	\});	\
+\});\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf3 Tdef\cf0 (\cf5 \\background\cf0 ).play\
+\
+\
+(\
+\cf3 Tdef\cf0 (\cf5 \\autopilot\cf0 , \{\
+	\cf7 var\cf0  actives, max=10, min=5, patterns;\
+	\cf2 ~graphics\cf0 .patternLib.select(\{\cf7 |pat|\cf0  pat.active == 1 \}).do(\{\cf7 |pat|\cf0 \
+		pat.active = 0;\
+		\cf2 ~graphics\cf0 .sendPattern(pat.index)\
+	\});\
+	\cf2 ~patterns\cf0  = (5..15);\
+	actives = [\cf2 ~patterns\cf0 .choose];\
+	\cf2 ~graphics\cf0 .fadeInPattern(actives.first, 10, 1.0);\
+	rrand(8.0, 12.0).wait;	\
+	actives = actives ++ \cf2 ~patterns\cf0 .choose;\
+	\cf2 ~graphics\cf0 .fadeInPattern(actives.last, 5, 1.0);\
+	rrand(6.0, 12.0).wait;\
+	loop(\{\
+		\cf7 var\cf0  newPattern, remove, time, fade;\
+		\cf2 ~patterns\cf0 .collect(\{\cf7 |patnum|\cf0 \
+			\cf7 var\cf0  pole, active;\
+			pole = 2.rand;\
+			active = actives.includes(patnum).asInt;\
+			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand] \
+		\}).do(\{\cf7 |arglist|\cf0 \
+			\cf2 ~graphics\cf0 .setPattern(*arglist)\
+		\});\
+		fade = rrand(2, 5);\
+		time = rrand(5, 15);\
+		newPattern = \cf2 ~patterns\cf0 .reject(\{\cf7 |pnum|\cf0  actives.includes(pnum) \}).choose;\
+		remove = actives.remove(actives.choose);\
+		\cf2 ~graphics\cf0 .xfadePatterns(newPattern, 1.0, remove, fade);\
+		(fade + time).wait;\
+		actives = actives ++ newPattern;\
+		\cf2 ~graphics\cf0 .sendPredefined3DRule(\
+			[\
+			\cf5 \\flamingstarbow\cf0 , \cf5 \\chenille\cf0 , \cf5 \\belzhab\cf0 , \cf5 \\glissergy\cf0 ,\
+			\cf5 \\cooties\cf0 , \cf5 \\faders\cf0 , \cf5 \\frozenspirals\cf0 , \cf5 \\glisserati\cf0 ,\
+			\cf5 \\nova\cf0 , \cf5 \\orthogo\cf0 , \cf5 \\rainzha\cf0 , \cf5 \\rake\cf0 , \cf5 \\sedimental\cf0 , \
+			\cf5 \\snake\cf0 , \cf5 \\starwars\cf0 , \cf5 \\sticks\cf0 , \cf5 \\thrillgrill\cf0 , \
+			\cf5 \\transers\cf0 , \cf5 \\wanderers\cf0 , \cf5 \\worms\cf0 , \cf5 \\xtasy\cf0 \
+			].choose;\
+		);\
+		if (0.3.coin) \{\
+			\cf2 ~graphics\cf0 .stopRotation;\
+			\cf2 ~graphics\cf0 .setViewpoint(\
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, \
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, \
+				rrand(30.0, 60.0)*[1.0,-1.0].choose, \
+				0.0, 0.0, 0.0\
+			);\
+			\cf2 ~graphics\cf0 .unmapCodePanel;\
+		\}\{\
+			\cf2 ~rot\cf0  = \cf3 Rotation\cf0 (rrand(-60.0, 60.0), rrand(0.005, 0.05), rrand(-20.0, 20.0), \
+				rrand(-120.0, 120.0), \
+				rrand(-pi, pi), rrand(0.01, 0.08), rrand(-pi, pi), rrand(0.01, 0.07));\
+			\cf2 ~graphics\cf0 .setCameraRotation(\cf2 ~rot\cf0 , 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);\
+			\cf2 ~graphics\cf0 .rotateCamera;	\
+			\cf2 ~graphics\cf0 .mapCodePanel;		\
+		\};\
+	\})\
+\}).play\
+)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r06'\cf0 ).recall(0);\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r05'\cf0 ).recall(0)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r04'\cf0 ).recall(0)\
+\
+\cf2 ~matrix\cf0 .defsAt(\cf5 'r03'\cf0 ).recall(0)\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf6 // 019 (cool drive), 018 (bass), 017 (like 018, not as cool), 016 (drive, nice), 015 & 014(dry)\cf0 \
+\cf6 // 013 (dry+drive+a bit lo), 012 (low undulation), 011 (high noise), 010 (async tremble)\cf0 \
+\
+\
+(\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~gep00\cf0  = \cf5 '010'\cf0 ;\
+\cf2 ~matrix\cf0 .playGepSynth(\cf2 ~gep00\cf0 , \cf2 ~defnames\cf0 [\cf2 ~gep00\cf0 ], 0.0, 2, 3, 4)\
+)\
+\
+\cf2 ~matrix\cf0 .gepsynths[\cf2 ~gep00\cf0 ].set(\cf5 'amp'\cf0 , 0.3)\
+\
+\cf2 ~matrix\cf0 .gepsynths[\cf2 ~gep00\cf0 ].set(\cf5 'amp'\cf0 , 0.0)\
+\
+\cf2 ~matrix\cf0 .setWithPattern(\cf2 ~gep00\cf0 , \cf3 Pseq\cf0 (\cf3 Array\cf0 .rand(16, 0.001, 0.2), \cf8 inf\cf0 ), \
+	\cf3 Pfunc\cf0 (\{ \cf2 ~matrix\cf0 .beatdur / 4 \})\
+)\
+\
+\cf2 ~matrix\cf0 .setWithPattern(\cf2 ~gep00\cf0 , \cf3 Pseq\cf0 ([0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0]*0.2, \cf8 inf\cf0 ), \
+	\cf3 Pfunc\cf0 (\{ \cf2 ~matrix\cf0 .beatdur / 8 \})\
+)\
+\
+\
+\cf2 ~matrix\cf0 .stopPattern(\cf2 ~gep00\cf0 )\
+\
+\cf2 ~matrix\cf0 .freeGepSynth(\cf2 ~gep00\cf0 )\
+\
+s.queryAllNodes\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf6 ////////// SKISM PATCHES /////////////////\cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'granularReverb'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'granularReverb'\cf0 , 0.2)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'granularReverb'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'flangingDecimator'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'flangingDecimator'\cf0 , 0.2)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'flangingDecimator'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'neuralFilter'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'neuralFilter'\cf0 , 0.1)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'neuralFilter'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'feedbackSpectrum'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'feedbackSpectrum'\cf0 , 0.1)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'feedbackSpectrum'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'cyclicWarp'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'cyclicWarp'\cf0 , 0.1)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'cyclicWarp'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'latchOnset'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'latchOnset'\cf0 ,0.5)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'latchOnset'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'cliqSaw'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'cliqSaw'\cf0 , 0.5)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'cliqSaw'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'fxGrain'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'fxGrain'\cf0 , 0.4)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'fxGrain'\cf0 )\
+\
+\
+\cf2 ~matrix\cf0 .activateSkismSynth(\cf5 'arhythmicGendy'\cf0 )\
+\
+\cf2 ~matrix\cf0 .setSkismAmp(\cf5 'arhythmicGendy'\cf0 , 0.2)\
+\
+\cf2 ~matrix\cf0 .deactivateSkismSynth(\cf5 'arhythmicGendy'\cf0 )\
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf6 ////////// EFX ///////////////\cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf2 ~matrix\cf0 .efxamps[\cf5 'rev00'\cf0 ] = 0.1\
+\cf2 ~matrix\cf0 .efxamps[\cf5 'rev01'\cf0 ] = 0.1\
+\cf2 ~matrix\cf0 .efxamps[\cf5 'del00'\cf0 ] = 0.1\
+\cf2 ~matrix\cf0 .efxamps[\cf5 'del01'\cf0 ] = 0.1\
+\
+\cf3 SystemClock\cf0 .seconds - \cf2 ~seconds\cf0  / 60\
+\
+\
+\cf3 Pdef\cf0 (\cf5 'matrix'\cf0 ).stop\
+\
+}
