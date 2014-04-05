@@ -2931,7 +2931,7 @@ void GraphicsRenderer::drawBoids00() {
 	
 	
 	for (i; i < boids->numBoids(); i++) {
-		gl::drawSphere( boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f), linlin((i+1) * (1.0/(float)boids->numBoids()), 0.0, 1.0, 1.0, 2.0), 16 );		
+		gl::drawSphere( boids->getBoidAtIndex(i)->pos - (boids->dimensions() * 0.5f), linlin((i+1) * (1.0/(float)boids->numBoids()), 0.0, 1.0, 1.6, 3.2), 16 );		
 	}
 	
 	glPopMatrix();
@@ -2987,7 +2987,7 @@ void GraphicsRenderer::drawBoids01() {
 		if (i > 1) {
 			//			glLineWidth(4.0f);
 			//			gl::drawLine( boids->getBoidAtIndex(i)->pos, boids->getBoidAtIndex(i-1)->pos );
-			line = linexp(boids->getBoidAtIndex(i)->pos.distance(boids->dimensions() * 0.5f), 0.0f, maxdist, 8.0f, 2.0f);
+			line = linexp(boids->getBoidAtIndex(i)->pos.distance(boids->dimensions() * 0.5f), 0.0f, maxdist, 4.0f, 1.0f);
 			gl::drawCube(
 						 Vec3f(boids->dimensions().x * 0.5f - h.x, boids->getBoidAtIndex(i)->pos.y - h.y, boids->getBoidAtIndex(i)->pos.z - h.z), 
 						 Vec3f(boids->dimensions().x, line, line)

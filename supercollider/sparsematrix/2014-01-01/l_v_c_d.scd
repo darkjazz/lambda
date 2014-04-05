@@ -1,6 +1,6 @@
 (
 ~ncoef = 20;
-~mode = 1;
+~mode = 0;
 ~decoder = FoaDecoder(decoderType:'stereo');
 ~graphics = CinderApp(800, 600, mode: ~mode);
 
@@ -54,14 +54,17 @@ MasterEQ(2)
 s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('c00'), Pdef('r01'), Pdef('r02'), Pdef('g02') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('efx') ])).quant(128)
+
+Pdef('matrix', Ppar([ Pdef('bass') ])).quant(128)
+
 
 Pdef('matrix').play
 
 
 ~seconds = SystemClock.seconds;
 
-
+~graphics.showCodePanel
 
 ~matrix.defsAt('g00').assignEfx(
 	(efx0: [0, 1, 2], efx1: [3, 4, 5], efx3: [6, 7, 8])
@@ -276,7 +279,7 @@ Tdef(\background, {
 			~graphics.setBackground(*[0.0, 0.1, 0.2].choose.dup(3).round(0.1));
 		};
 		0.125.wait;
-	});
+	});	
 });
 
 Tdef(\background).play
@@ -292,7 +295,7 @@ Tdef(\autopilot, {
 	~patterns = (5..15);
 	actives = [~patterns.choose];
 	~graphics.fadeInPattern(actives.first, 10, 1.0);
-	rrand(8.0, 12.0).wait;
+	rrand(8.0, 12.0).wait;	
 	actives = actives ++ ~patterns.choose;
 	~graphics.fadeInPattern(actives.last, 5, 1.0);
 	rrand(6.0, 12.0).wait;
@@ -302,7 +305,7 @@ Tdef(\autopilot, {
 			var pole, active;
 			pole = 2.rand;
 			active = actives.includes(patnum).asInt;
-			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand]
+			[patnum, active, 1.0, pole, pole, 1.0.rand, 1.0.rand, 1.0.rand] 
 		}).do({|arglist|
 			~graphics.setPattern(*arglist)
 		});
@@ -414,7 +417,7 @@ Tdef(\autopilot).stop
 
 ~player.set(~ind2, 0.7)
 
-~player.setWithPattern(~ind2,
+~player.setWithPattern(~ind2, 
 	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.7, 0.2, 0.1, 0.1, 0.8], inf), 0.125)
 
 ~player.setWithPattern(~ind2, Pwhite(0.05, 0.4, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
@@ -433,7 +436,7 @@ Tdef(\autopilot).stop
 
 ~player.set(~ind3, 1.0)
 
-~player.setWithPattern(~ind3,
+~player.setWithPattern(~ind3, 
 	Pseq([0.1, 0, 0.1, 1.0, 1.0, 0.4, 0.1, 0, 1.0, 0, 1.0, 0.2, 0.1, 0.6], inf), 0.125)
 
 ~player.setWithPattern(~ind3, Pwhite(0.01, 0.4, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
