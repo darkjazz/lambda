@@ -1,5 +1,5 @@
 ~geen = MikroGeen();
 ~nano = NanoKONTROL();
-~graphics = CinderApp(1024, 768, mode: 1);
+~graphics = CinderApp(1024, 768, mode: 0);
 ~decoder = FoaDecoder(decoderType: 'stereo', normalize: false);
 ~fx = FxLambda(~decoder, ~graphics, ~geen, ~nano)

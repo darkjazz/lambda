@@ -1,6 +1,6 @@
 (
 ~ncoef = 20;
-~mode = 1;
+~mode = 0;
 ~decoder = FoaDecoder(decoderType:'stereo');
 ~graphics = CinderApp(800, 600, mode: ~mode);
 
@@ -41,7 +41,7 @@ MasterEQ(2)
 
 ~matrix.assignCodeWindow(Document.current);
 
-~matrix.setBPM(140)
+~matrix.setBPM(132)
 
 ~matrix.makeEfxProto;
 
@@ -54,14 +54,17 @@ MasterEQ(2)
 s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('r01'), Pdef('r02'), Pdef('g02') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('efx') ])).quant(128)
+
+Pdef('matrix', Ppar([ Pdef('bass') ])).quant(128)
+
 
 Pdef('matrix').play
 
 
 ~seconds = SystemClock.seconds;
 
-
+~graphics.showCodePanel
 
 ~matrix.defsAt('g00').assignEfx(
 	(efx0: [0, 1, 2], efx1: [3, 4, 5], efx3: [6, 7, 8])
@@ -131,14 +134,14 @@ Pdef('matrix').play
 );
 
 ~matrix.defsAt('g01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.1, 0.7]) },
 	{ exprand(0.1, 1.0) },
 	{ rrand(0.1, 0.5) },
 	0.1
 );
 
 ~matrix.defsAt('g02').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.1, 1.0) },
 	{ rrand(0.05, 0.1) },
 	0.1
@@ -151,7 +154,7 @@ Pdef('matrix').play
 	0.1
 );
 
-~matrix.defsAt('g02').recall(0);
+~matrix.defsAt('g01').recall(0);
 
 ~matrix.defsAt('r02').recall(0);
 
@@ -161,21 +164,21 @@ Pdef('matrix').play
 ~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 0.3) },
-	{ rrand(0.05, 0.3) },
+	{ rrand(0.05, 0.1) },
 	0.1
 );
 
 ~matrix.defsAt('b02').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.3) },
+	{ rrand(0.05, 0.1) },
 	0.1
 );
 
 ~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.2) },
+	{ rrand(0.05, 0.1) },
 	{ rrand(0.1, 0.5) }
 );
 
@@ -200,15 +203,16 @@ Pdef('matrix').play
 
 ~matrix.defsAt('r01').setControls(
 	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ rrand(0.1, 1.0) },
-	{ rrand(0.1, 0.3) }
+	{ rrand(0.1, 0.8) },
+	{ rrand(0.1, 0.2) },
+	0
 );
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.4, 0.6]) },
 	{ rrand(0.3, 1.0) },
-	{ exprand(0.05, 0.3) },
+	{ exprand(0.01, 0.1) },
 	{ rrand(0.3, 0.5) }
 );
 
@@ -246,7 +250,25 @@ Pdef('matrix').play
 );
 
 
-Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r01'), Pdef('bass')])).quant(128)
+
+~freqs = Array.geom(12, 22.midicps, 2**(1/12))[Scale.minor.degrees].scramble
+
+Pdef('matrix', Pdef('bass'))
+
+Pdef(\bass, 
+	Pbind(
+		\instrument, \mtrxbass,
+		\target, ~decoder.synth,
+		\addAction, \addBefore,
+		\out, ~decoder.bus,
+		\freq, Pseq([Pshuf(~freqs, 7)], inf),
+		\dur, Pseq([0.5, 0.25, 1.0, 1.0, 0.5, 0.5, 1.0, 0.5, 0.25, 0.5, 0.25, 2.0] * ~matrix.beatdur, inf), 
+		\amp, Pseq([0.4, 0.2, 0.3], inf),
+		\wbl, Pseq([Pshuf(7.fib, 4)], inf),
+		\env, Env([0.001, 0.2, 1.0, 0.001],[0.1, 0.8, 0.1], \exp).bubble
+	)
+)
 
 
 ~matrix.defsAt('r00').recall(1);

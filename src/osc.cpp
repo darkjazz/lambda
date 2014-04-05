@@ -252,6 +252,9 @@ void OSCMessenger::collectMessages() {
 			else if (addr.compare("/lambda/livecode/codetitle") == 0) {
 				_ogl->codePanel.title = msg.getArgAsString(0);
 			}
+			else if (addr.compare("/lambda/livecode/fadeTime") == 0) {
+				_ogl->codePanel.fadeTime = msg.getArgAsInt32(0);
+			}
 			else if (addr.compare("/lambda/framerate") == 0) {
 				setFrameRate(msg.getArgAsFloat(0));
 			}
