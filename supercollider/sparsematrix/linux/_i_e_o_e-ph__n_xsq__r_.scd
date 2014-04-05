@@ -1,8 +1,8 @@
 (
 ~ncoef = 20;
-~mode = 1;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(800, 600, mode: ~mode);
+//~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+~graphics = CinderApp(ciAddr: NetAddr("192.168.0.6", 7000));
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -17,7 +17,7 @@ MasterEQ(2)
 ~headsize = 16;
 ~numgenes = 4;
 
-~dfile = File.open("/home/alo/development/lambda/supercollider/sparsematrix/2014-01-01/defnames.scd", "r");
+~dfile = File.open("/home/alo/development/lambda/supercollider/sparsematrix/linux/defnames.scd", "r");
 ~defarray = ~dfile.readAllString.split(Char.nl).collect(_.asSymbol);
 ~dfile.close;
 ~dfile = nil;
@@ -37,11 +37,11 @@ MasterEQ(2)
 
 )
 
-~graphics.open
+//~graphics.open
 
-~matrix.assignCodeWindow(Document.current);
+//~matrix.assignCodeWindow(Document.current);
 
-~matrix.setBPM(140)
+~matrix.setBPM(135)
 
 ~matrix.makeEfxProto;
 
@@ -49,12 +49,12 @@ MasterEQ(2)
 
 ~matrix.prepareAudio
 
-~graphics.sendCodeTitle("live.code")
+//~graphics.sendCodeTitle("live.code")
 
-s.queryAllNodes
+//s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('c00'), Pdef('r01'), Pdef('r02'), Pdef('g02') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02'), Pdef('c00') ])).quant(128)
 
 Pdef('matrix').play
 
@@ -82,65 +82,78 @@ Pdef('matrix').play
 
 ~matrix.efxamps['efx5'] = 0.2
 
-~matrix.defsAt('b00').groups[0].do({|name|
-	~matrix.defsAt('b00').ctrls[name].active = 0;
-	~matrix.defsAt('b00').ctrls[name].amp = 0.7;
-	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur);
-})
+
+Routine({
+	var amp = 2.0;
+	20.do({
+		amp = amp - 0.1;
+		~matrix.defsAt('c00').setControls(1, amp, ~matrix.beatdur, 0.0);
+		(~matrix.beatdur * 4).wait;
+	})
+}).play
 
 
-~matrix.defsAt('b00').buffers['b000']
-
-~matrix.defsAt('b00').groups[1].do({|name|
-	~matrix.defsAt('b00').ctrls[name].active = 0;
-	~matrix.defsAt('b00').ctrls[name].amp = 1;
-	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur);
-})
 
 
-~matrix.defsAt('b00').groups[2].do({|name|
-	~matrix.defsAt('b00').ctrls[name].active = 1;
-	~matrix.defsAt('b00').ctrls[name].amp = 1;
-	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
-})
+~graphics.initWorld(24, 20, 16, ~ncoef);
 
-~matrix.defsAt('b00').groups[3].do({|name|
-	~matrix.defsAt('b00').ctrls[name].active = 1;
-	~matrix.defsAt('b00').ctrls[name].amp = 1;
-	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
-})
+~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
+
+//~graphics.resetWorld(5, 5, 5, 8, 8, 8)
+
+~graphics.setSymmetry(11)
+
+//~graphics.showCodePanel
+
+~graphics.setViewpoint(70.0, 80.0, 60.0, 0.0, 0.0, 0.0);
 
 
-~matrix.defsAt('b00').groups[3].do({|name|
-	~matrix.defsAt('b00').ctrls[name].active = 1;
-	~matrix.defsAt('b00').ctrls[name].amp = 1;
-	~matrix.defsAt('b00').ctrls[name].dur = ~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur);
-})
+~graphics.sendPredefined3DRule(\nova)
+
+~graphics.setPattern(30, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
 
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 1.0) },
-	{ rrand(0.001, 0.1) },
+
+~matrix.defsAt('b01').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.1, 1.0) },
+	{ rrand(0.05, 0.1) },
 	0.1
 );
+
+
+~graphics.setPattern(26, 1, 1.0, 1, 1, 0.6, 0.9, 1.0);
+
+
+~matrix.defsAt('b00').setGroups((0..7), 1, 1.0, {arg name;
+	~matrix.defsAt('b00').buffers[name]
+		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur) * 4;
+}, 0.0)
+
+
+~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
+
+
+
+
+
+
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('c00') ])).quant(128)
+
+
+
 
 ~matrix.defsAt('g01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.1, 1.0) },
-	{ rrand(0.1, 0.5) },
+	{ exprand(0.01, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('g02').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.1, 1.0) },
-	{ rrand(0.05, 0.1) },
+	{ rrand(0.05, 0.2 },
 	0.1
 );
 
@@ -151,47 +164,43 @@ Pdef('matrix').play
 	0.1
 );
 
-~matrix.defsAt('g02').recall(0);
+~matrix.defsAt('g01').recall(2);
 
 ~matrix.defsAt('r02').recall(0);
 
 ~matrix.defsAt('b02').recall(0);
 
 
-~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.1, 0.3) },
-	{ rrand(0.05, 0.3) },
-	0.1
-);
 
 ~matrix.defsAt('b02').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.3) },
+	{ exprand(0.3, 1.6) },
+	{ rrand(0.05, 0.2) },
 	0.1
 );
 
-~matrix.defsAt('r02').setControls(
+~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 1.0) },
+	{ exprand(0.3, 2.0) },
 	{ rrand(0.05, 0.2) },
-	{ rrand(0.1, 0.5) }
+	0.1
 );
 
+
+
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.3, 1.0) },
-	{ rrand(0.04, 0.2) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.3, 2.0) },
+	{ rrand(0.04, 0.1) },
 	{ rrand(0.1, 0.3) }
 );
 
 
 
 ~matrix.defsAt('r07').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.2) },
+	{ rrand(0.05, 0.3) },
 	{ rrand(0.1, 0.3) }
 );
 
@@ -199,16 +208,25 @@ Pdef('matrix').play
 
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ rrand(0.1, 1.0) },
-	{ rrand(0.1, 0.3) }
+	{ rrand(0.1, 0.2) },
+	0
+);
+
+
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.1, 1.0) },
+	{ rrand(0.1, 0.2) },
+	0
 );
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ rrand(0.3, 1.0) },
-	{ exprand(0.05, 0.3) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ rrand(0.3, 2.0) },
+	{ exprand(0.01, 0.2) },
 	{ rrand(0.3, 0.5) }
 );
 
@@ -223,20 +241,23 @@ Pdef('matrix').play
 ~matrix.defsAt('r03').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ rrand(0.3, 1.0) },
-	{ rrand(0.04, 0.1) }
+	{ rrand(0.04, 0.15) },
+	0
 );
 
 ~matrix.defsAt('r04').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ rrand(0.3, 1.0) },
-	{ rrand(0.001, 0.01) }
+	{ rrand(0.01, 0.2) },
+	0
 );
 
 
 ~matrix.defsAt('r05').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ rrand(0.3, 1.0) },
-	{ rrand(0.005, 0.01) }
+	{ rrand(0.05, 0.2) },
+	0
 );
 
 ~matrix.defsAt('r06').setControls(
@@ -252,20 +273,6 @@ Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
 ~matrix.defsAt('r00').recall(1);
 
 
-~graphics.initWorld(20, 20, 20, ~ncoef);
-
-~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
-
-//~graphics.resetWorld(5, 5, 5, 8, 8, 8)
-
-~graphics.setSymmetry(11)
-
-~graphics.showCodePanel
-
-~graphics.setViewpoint(70.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-
-~graphics.sendPredefined3DRule(\nova)
 
 
 
@@ -283,6 +290,7 @@ Tdef(\background).play
 
 
 (
+
 Tdef(\autopilot, {
 	var actives, max=10, min=5, patterns;
 	~graphics.patternLib.select({|pat| pat.active == 1 }).do({|pat|
@@ -367,33 +375,35 @@ Tdef(\autopilot).stop
 ~player.setFoa('focus', 1.0)
 
 
-// zoom 0 //
-~ind0 = 5
+// zoom 0 // 7, 9, 10, 11, 13, 14, 15, 19, 22, 25, 26, 35, 36, 38, 39
+// **** 10, 26, 29, 33, 34, 37
+~ind0 = 88
 
 ~player.play(~ind0, 0, 'zoom', 0)
 
-
-~player.set(~ind0, 0.3)
+~player.set(~ind0, 1.0)
 
 ~player.setWithPattern(~ind0,
-	Pseq([0.1, 0, 0.1, 0.05, 0.15, 1.0, 0.1, 0, 0.2, 0, 0.6, 0.2], inf), ~matrix.beatdur/2)
+	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.5, 0.1, 0, 0.2, 0, 0.6, 0.2].mirror2, inf), ~matrix.beatdur/2)
+
+~player.setWithPattern(~ind0,
+	Pseq([0, 0, 0, 0, 0, 0, 0, 0, 0.6, 0.1, 0.6, 0, 0.6, 0.0, 0.6, 0], inf), ~matrix.beatdur/2)
+
 
 ~player.setWithPattern(~ind0, Pwhite(0.05, 0.2, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
 
-~player.setWithPattern(~ind0, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
-
+~player.setWithPattern(~ind0, Pseq(Array.rand(16, 0.0, 0.3).round(0.1).mirror2, inf), ~matrix.beatdur/2)
 
 ~player.free(~ind0)
 
 
 
 // push 1 //
-~ind1 = 7
+~ind1 = 75
 
 ~player.play(~ind1, 0, 'push', 0)
 
-
-~player.set(~ind1, 0.5)
+~player.set(~ind1, 1.0)
 
 ~player.setWithPattern(~ind1,
 	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.5, 0.2], inf), ~matrix.beatdur/4)
@@ -407,12 +417,12 @@ Tdef(\autopilot).stop
 
 
 // press 2 //
-~ind2 = 84
+~ind2 = 26
 
 ~player.play(~ind2, 0, 'press', 0)
 
 
-~player.set(~ind2, 0.7)
+~player.set(~ind2, 1.0)
 
 ~player.setWithPattern(~ind2,
 	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.7, 0.2, 0.1, 0.1, 0.8], inf), 0.125)
@@ -426,10 +436,9 @@ Tdef(\autopilot).stop
 
 
 // focus 3 //
-~ind3 = 75
+~ind3 = 35
 
 ~player.play(~ind3, 0, 'focus', 0)
-
 
 ~player.set(~ind3, 1.0)
 
@@ -454,9 +463,40 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('granularReverb')
 
-~matrix.setSkismAmp('granularReverb', 0.2)
+~matrix.setSkismAmp('granularReverb', 0.4)
 
 ~matrix.deactivateSkismSynth('granularReverb')
+
+
+
+~matrix.activateSkismSynth('neuralFilter')
+
+~matrix.setSkismAmp('neuralFilter', 0.2)
+
+~matrix.deactivateSkismSynth('neuralFilter')
+
+
+
+~matrix.activateSkismSynth('latchOnset')
+
+~matrix.setSkismAmp('latchOnset',0.8)
+
+~matrix.deactivateSkismSynth('latchOnset')
+
+
+
+~matrix.activateSkismSynth('cliqSaw')
+
+~matrix.setSkismAmp('cliqSaw', 0.5)
+
+~matrix.deactivateSkismSynth('cliqSaw')
+
+
+
+
+
+
+
 
 
 ~matrix.activateSkismSynth('flangingDecimator')
@@ -466,11 +506,6 @@ s.sendMsg("/n_free", 1021)
 ~matrix.deactivateSkismSynth('flangingDecimator')
 
 
-~matrix.activateSkismSynth('neuralFilter')
-
-~matrix.setSkismAmp('neuralFilter', 0.1)
-
-~matrix.deactivateSkismSynth('neuralFilter')
 
 
 ~matrix.activateSkismSynth('feedbackSpectrum')
@@ -482,23 +517,11 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('cyclicWarp')
 
-~matrix.setSkismAmp('cyclicWarp', 0.1)
+~matrix.setSkismAmp('cyclicWarp', 0.05)
 
 ~matrix.deactivateSkismSynth('cyclicWarp')
 
 
-~matrix.activateSkismSynth('latchOnset')
-
-~matrix.setSkismAmp('latchOnset',0.7)
-
-~matrix.deactivateSkismSynth('latchOnset')
-
-
-~matrix.activateSkismSynth('cliqSaw')
-
-~matrix.setSkismAmp('cliqSaw', 0.5)
-
-~matrix.deactivateSkismSynth('cliqSaw')
 
 
 ~matrix.activateSkismSynth('fxGrain')
@@ -533,7 +556,7 @@ Pdef('matrix').stop
 
 ~graphics.setPattern(5, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
-~graphics.setPattern(6, 0, 1.0, 0, 0, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
 ~graphics.setPattern(7, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
