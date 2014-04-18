@@ -28,6 +28,11 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	val.first.size > 1
 })
 
+~data.datalib['140402_220352'].events.collect({|ev| ev.frqs.collect(_.at(1)) })
+	.collect(_.size).do(_.postln)
+	
+~data = datalib['140402_220352'].events.collect({|ev| ev.frqs.collect(_.at(1)) })
+	.collect(_.size).do(_.postln)
 
 ~key = ~freqSet.dict.keys(Array).choose;
 
@@ -56,17 +61,3 @@ SynthDef('fr', {|out, amp, freq, dur, rms, rtm|
 	Line.kr(dur: dur + rtm, doneAction: 2);
 	Out.ar(out, sig)
 }).add
-
-
-~plyr = Pbind(\instrument, \fr,
-	\out, 0, \amp, 10, \dur, 1, \rms, 300, \rtm, 2, \freq, freq*2
-)
-
-Routine({
-	~freqs.do({|freq|
-
-		Synth('fr', [\out, 0, \amp, 10, \dur, 1, \rms, 300, \rtm, 2, \freq, freq*[1, 2, 4].choose]).setn('env', Env.perc)
-		.setn('freqs', (1..4)).setn('bw', (1 ! 4)).setn('amps', Array.geom(4, 1.0, 0.9) * 10);
-		1.wait;
-	})
-}).play
