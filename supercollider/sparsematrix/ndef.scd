@@ -1,7 +1,7 @@
-Ndef(\hit, {|rate=50,size=20,rule=30,del=0.0625,amp=0.3,dur=0.2,freq=1760|
+Ndef(\hit, {|rate=60,size=20,rule=30,del=0.0625,amp=0.3,dur=0.3,freq=1760|
 	var trig;
 	trig = Impulse.kr(1);
-	FIS.ar(LFSaw.ar(4).range(1,4),LFNoise0.ar(10).abs,SinOsc.ar(2**11).range(1,10).round(1))
+	(HCM3.ar(Select.kr(IRand(0, 4), Scale.jiao.ratios * freq), 1.99, 0.8)).dup 
 		* EnvGen.kr(Env.perc, trig, timeScale: dur)
 })
 
@@ -13,6 +13,16 @@ Ndef(\efx, {|amp=0.1, del=0.25, rmp=0.1, rt=4.0|
 	input.dup + sig.dup
 }).ar(2)
 
+
+
+Ndef(\hit).play
+
+Ndef(\hit).stop
+
+Ndef(\hit).clear
+
+Ndef('efx').stop
+
 Ndef(\efx).play
 
 Ndef(\efx).set(\amp, 1.0, \del, 0.25, \rmp, 0.1, \rt, 2.0)
@@ -22,7 +32,7 @@ rrand(16, 32).round()
 
 Array.geom(5, 16.0, 2**(1/5))
 
-Ndef(\hit).play
+
 
 Ndef(\hit).set(\dur, 0.1)
 

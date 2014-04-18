@@ -5,7 +5,9 @@ MikroData.loadPath = "/Users/alo/Data/mikro/lib003/";
 ~durSet = MarkovSetN(order: 3);
 ~deltaSet = MarkovSetN(order: 3);
 
-ShannonFinger
+
+
+
 
 ~data.datalib.collect({|set|
 	set.events.collect(_.frqs).collect(_.at(1))
