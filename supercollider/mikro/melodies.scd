@@ -3,7 +3,7 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 ~order = 2;
 
 ~freqSet = MarkovSetN(order: ~order);
-~durSet = MarkovSetN(order: ~order);
+~durSet = MarkovSetN(order: 1);
 
 ~data.datalib.collect({arg set;
 	set.events.collect(_.frqs).collect(_.at(1))
@@ -11,13 +11,16 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	~freqSet.read(freqs.keep(~freqSet.order).collect(_.roundFreq).round(0.01), freqs.last.roundFreq.round(0.01))
 });
 
+~min = 0.125;
+~max = ~data.datalib.collect({arg set;
+	set.events.collect(_.duration)
+}).values.asArray.flat.maxItem;
+
 ~data.datalib.collect({arg set;
 	set.events.collect(_.duration)
-}).values.asArray.flat.slide(~durSet.order+1, 1).clump(~durSet.order+1).do({arg durs;
-	~durSet.read(durs.keep(~durSet.order+1).round(0.1), durs.last.round(0.1))
+}).values.asArray.flat.linlin(~min, ~max, 0.125, 2.0).round(0.125).doAdjacentPairs({arg durA, durB;
+	~durSet.read(durA, durB)
 });
-
-
 
 
 ~freqSet.dict.select({arg val, key;
@@ -28,12 +31,6 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	val.first.size > 1
 })
 
-~data.datalib['140402_220352'].events.collect({|ev| ev.frqs.collect(_.at(1)) })
-	.collect(_.size).do(_.postln)
-	
-~data = datalib['140402_220352'].events.collect({|ev| ev.frqs.collect(_.at(1)) })
-	.collect(_.size).do(_.postln)
-
 ~key = ~freqSet.dict.keys(Array).choose;
 
 ~freqs = Array.fill(64, {
@@ -43,6 +40,14 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	arr = arr.add(frq);
 	~key = arr.asSymbol;
 	frq
+})
+
+~key = ~durSet.dict.keys(Array).choose;
+
+~durSet.next(~key)
+
+~durs = Array.fill(64, {
+	~key = ~durSet.next(~key);
 })
 
 
@@ -61,3 +66,16 @@ SynthDef('fr', {|out, amp, freq, dur, rms, rtm|
 	Line.kr(dur: dur + rtm, doneAction: 2);
 	Out.ar(out, sig)
 }).add
+
+
+
+Routine({
+	~freqs.do({|freq|
+
+		Synth('fr', [\out, 0, \amp, rrand(4, 8), \dur, 0.25, \rms, 300, \rtm, 2, \freq, freq*[1, 2, 4].choose]).setn('env', Env.perc)
+		.setn('freqs', (1..4)).setn('bw', (1 ! 4)).setn('amps', Array.geom(4, 1.0, 0.9) * 10);
+		0.125.wait;
+	})
+}).play
+
+
