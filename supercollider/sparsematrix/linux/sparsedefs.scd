@@ -148,3 +148,20 @@ SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
 	Out.ar(out,bf)
 }).add;
 
+SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rotx, roty, rotz|
+	var sig, n=4, freqs, ugenargs, amps, ugens, bw;
+	ugens = [Dust, Crackle, Logist0, Nagumo];
+	freqs = ArrayControl.kr('freqs', 4, 1);
+	bw = ArrayControl.kr('bw', 4, 1);
+	amps = ArrayControl.kr('amps', 4, 1);
+	ugenargs = [[freq], [1.995], [freq, freq.explin(20, 2000, 1.0, 2.0), 0.1],
+		[0.1, 0.005, LFPulse.ar(freq*4,0,0.5,0.5,0.1), 0.1]];
+	sig = Mix.fill(n, {|i|
+		var frq = freq * freqs[i];
+		BPF.ar(ugens[i].ar(*ugenargs[i]), frq, bw[i]/frq, 20-bw ) * amps[i];
+	}) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, FoaTransform.ar(
+		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
+	)
+}).add;

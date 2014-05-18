@@ -38,27 +38,27 @@
 
 ~matrix.prepareAudio;
 
-~longbufs = "/Users/alo/sounds/wfsfx/*".pathMatch.collect({|path| 
+~longbufs = "/Users/alo/sounds/wfsfx/*".pathMatch.collect({|path|
 	Buffer.read(s, path)
 })
 )
 
 Routine({
-	
+
 	var pdefs, pnames, quant = 128;
-	
+
 	~intr = ();
-	
+
 	[1,2,4,8,16,32,64,128].do({|sclr|
 		~intr[("m"++sclr).asSymbol] = { ~matrix.beatdur * sclr };
 		~intr[("d"++sclr).asSymbol] = { ~matrix.beatdur / sclr };
 	});
-	
-	pnames = ['r00', 'r01', 'b02', 'r02', 'r03', 'g00', 'r04', 
+
+	pnames = ['r00', 'r01', 'b02', 'r02', 'r03', 'g00', 'r04',
 		'g01', 'r05', 'g02', 'b03', 'r06', 'g03', 'r07'];
-	
+
 	pdefs = [ Pdef('c00') ];
-	
+
 	Pdef('matrix', Ppar(pdefs)).quant(quant);
 	Pdef('matrix').play;
 	~seconds = SystemClock.seconds;
@@ -69,19 +69,19 @@ Routine({
 		time = ~intr['m64'].();
 		incr = (target-amp) / (time/delta);
 		(time/delta).do({
-			amp = amp + incr; 
+			amp = amp + incr;
 			~matrix.defs.at('c00').setControls(1, amp.dbamp);
 			delta.wait;
 		});
 		~matrix.defs.at('c00').setControls(1, target.dbamp);
 	}).play;
-	
+
 	(~intr['m64'] * 2).wait;
-	
+
 	Post << (SystemClock.seconds - ~seconds).round(2) << " s: "
-	
+
 	pdefs = pdefs.add(Pdef('b01'));
-	
+
 	Pdef('matrix', Ppar(pdefs)).quant(quant);
 
 	~matrix.defsAt('b01').setControls(
@@ -90,7 +90,7 @@ Routine({
 		{ rrand(0.03, 0.08) },
 		0.1
 	);
-	
+
 	Routine({
 		var minamp=0.3, amprng=0.4, mindur=0.03, durrng=0.1;
 		16.do({|i|
@@ -100,11 +100,11 @@ Routine({
 				{ rrand(0.03, 0.08) },
 				0.1
 			);
-			
+
 		})
 	}).play;
-	
-	
+
+
 }).play
 
 
