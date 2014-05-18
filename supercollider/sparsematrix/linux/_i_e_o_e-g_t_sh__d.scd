@@ -2,7 +2,7 @@
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
 //~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-~graphics = CinderApp(ciAddr: NetAddr("192.168.0.6", 7000));
+~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -57,7 +57,7 @@ MasterEQ(2)
 //s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('g00'), Pdef('g01'), Pdef('b02'), Pdef('c00') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02') ])).quant(128)
 
 Pdef('matrix').play
 
@@ -111,7 +111,8 @@ Routine({
 ~graphics.setViewpoint(70.0, 80.0, 60.0, 0.0, 0.0, 0.0);
 
 
-~graphics.sendPredefined3DRule(\nova)
+~graphics.sendPredefined3DRule(\xtasy)
+
 
 ~graphics.setPattern(30, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
@@ -119,7 +120,7 @@ Routine({
 
 ~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.1, 1.0) },
+	{ exprand(0.1, 1.5) },
 	{ rrand(0.05, 0.1) },
 	0.1
 );
@@ -134,38 +135,40 @@ Routine({
 }, 0.0)
 
 
-~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(8, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
 
 
 
 
 
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('c00') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('g01'), Pdef('g00'), Pdef('g05'), Pdef('b03') ])).quant(128)
 
-Pdef('matrix', Ppar([ Pdef('r02'), Pdef('g01'), Pdef('b01'), Pdef('g02') ])).quant(128)
-
-
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+
+
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.4, 2.0) },
-	{ exprand(0.07, 0.3) },
+	{ exprand(0.001, 0.1) },
 	0.1
 );
+
+
 
 ~matrix.defsAt('g01').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.5, 2.0) },
-	{ rrand(0.05, 0.3) },
+	{ rrand(0.05, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('g03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.0) },
-	{ exprand(0.04, 0.2) },
+~matrix.defsAt('g05').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.1, 1.5) },
+	{ exprand(0.001, 0.1) },
 	0.1
 );
 
@@ -181,12 +184,12 @@ Pdef('matrix', Ppar([ Pdef('r02'), Pdef('g01'), Pdef('b01'), Pdef('g02') ])).qua
 
 ~matrix.defsAt('r02').recall(0);
 
-~matrix.defsAt('b02').recall(0);
+~matrix.defsAt('b03').recall(0);
 
 
 
-~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.6) },
 	{ rrand(0.2, 0.5) },
 	0.1
@@ -194,17 +197,23 @@ Pdef('matrix', Ppar([ Pdef('r02'), Pdef('g01'), Pdef('b01'), Pdef('g02') ])).qua
 
 ~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 2.0) },
+	{ exprand(0.6, 1.0) },
 	{ rrand(0.05, 0.2) },
 	0.1
 );
 
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.1, 2.0) },
+	{ rrand(0.05, 0.1) },
+	0.1
+);
 
 
-~matrix.defsAt('r02').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.3, 2.0) },
-	{ rrand(0.04, 0.1) },
+	{ rrand(0.01, 0.2) },
 	{ rrand(0.1, 0.3) }
 );
 
@@ -283,7 +292,7 @@ Pdef('matrix', Ppar([ Pdef('r02'), Pdef('g01'), Pdef('b01'), Pdef('g02') ])).qua
 Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
 
 
-~matrix.defsAt('r00').recall(1);
+~matrix.defsAt('r02').recall(1);
 
 
 
