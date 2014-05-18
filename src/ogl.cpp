@@ -242,6 +242,26 @@ void GraphicsRenderer::mapCodePanel() {
 	glDisable( GL_TEXTURE_2D );
 }
 
+void GraphicsRenderer::drawMultiCodePanel()
+{
+	glDisable( GL_LIGHTING );
+	
+	
+	for (int i = 0; i < multiCodePanel.panels.size(); i++)
+	{
+		glEnable( GL_TEXTURE_2D );
+		multiCodePanel.panels[i].bind();
+		gl::pushMatrices();
+		gl::color( 0.8, 0.8, 0.8, multiCodePanel.panels[i].opacity );
+//		gl::drawBillboard();
+		//gl::drawCube( Vec3f( 0.0f, 0.0f, 0.0f ), Vec3f( hx * 2, hx * 2, hx * 2 ) );
+		gl::popMatrices();
+		multiCodePanel.panels[i].unbind();
+		glDisable( GL_TEXTURE_2D );		
+	}
+		
+}
+
 void GraphicsRenderer::createTriMesh() {
 	//TriMesh mesh;
 }
