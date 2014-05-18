@@ -158,11 +158,11 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(11, 0, 1.0, 0, 1, 0.0, 0.3, 0.5);
 
-~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
-~graphics.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
 ~graphics.setPattern(15, 0, 1.0, 1, 1, 0.1, 0.7, 0.3);
 
@@ -172,14 +172,14 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(28, 0, 1.0, 1, 1, 0.0, 1.0, 0.8);
 
-~graphics.setPattern(29, 0, 1.0, 0, 0, 0.0, 0.8, 1.0);
+~graphics.setPattern(29, 1, 1.0, 0, 0, 0.0, 0.8, 1.0);
 
 ~graphics.setPattern(30, 0, 1.0, 0, 0, 0.7, 0.8, 1.0);
 
 ~graphics.setPattern(31, 0, 1.0, 1, 1, 0.3, 0.9, 0.9);
 
 
-~rot = Rotation(140.0, 2.0, 100.0, 60.0, 0.0, 0.034, 0.0, 0.0038);
+~rot = Rotation(140.0, 0.05, 100.0, 60.0, 0.0, 0.034, 0.0, 0.0038);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 

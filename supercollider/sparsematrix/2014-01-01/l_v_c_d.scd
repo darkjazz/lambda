@@ -11,6 +11,8 @@ MasterEQ(2)
 
 ~sparsedata = UGepLoader(headsize: 12, numgenes: 2).load;
 
+~sparsedata.size
+
 (
 ~ncoef = 20;
 ~rate = 20;

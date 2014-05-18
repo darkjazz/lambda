@@ -37,6 +37,7 @@
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
+#include "multicodepanel.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -79,6 +80,7 @@ public:
 		boids = NULL;
 		counter = 0;
 		codePanelActive = true;
+		multiCodePanelActive = false;
 		codePanelMapped = false;
 		maxphase = 28;
 		ptrBMU = NULL;
@@ -150,8 +152,10 @@ public:
 	Boids* boids;
 	
 	CodePanel codePanel;
+	MultiCodePanel multiCodePanel;
 	bool codePanelActive;
 	bool codePanelMapped; 
+	bool multiCodePanelActive;
 
 	gl::GlslProg smShader;
 	bool bSHADER;

@@ -216,10 +216,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC118EC86C4005D53A4</string>
+						<string>59E150EF19228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>59879C9518EC8213005D53A4</string>
+							<string>59D6C2E0190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -256,10 +256,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC218EC86C4005D53A4</string>
+						<string>59E150F019228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>597C7AE218EBF2CC00D5129E</string>
+							<string>59D6C2E1190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -296,10 +296,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC318EC86C4005D53A4</string>
+						<string>59E150F119228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>597C7AE518EBF2CC00D5129E</string>
+							<string>59D6C2E2190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -336,10 +336,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC418EC86C4005D53A4</string>
+						<string>59E150F219228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>597C7AE718EBF2CC00D5129E</string>
+							<string>59D6C2E3190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -376,10 +376,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC518EC86C4005D53A4</string>
+						<string>59E150F319228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>597C7AE918EBF2CC00D5129E</string>
+							<string>59D6C2E4190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -416,10 +416,10 @@
 						<key>_historyCapacity</key>
 						<integer>0</integer>
 						<key>bookmark</key>
-						<string>59879CC618EC86C4005D53A4</string>
+						<string>59E150F419228E680053E05A</string>
 						<key>history</key>
 						<array>
-							<string>597C7AE618EBF2CC00D5129E</string>
+							<string>59D6C2E5190837A8009E5A1F</string>
 						</array>
 					</dict>
 					<key>SplitCount</key>
@@ -567,7 +567,7 @@
 										<key>_historyCapacity</key>
 										<integer>0</integer>
 										<key>bookmark</key>
-										<string>59879CC018EC86C4005D53A4</string>
+										<string>59E150EC19228E680053E05A</string>
 										<key>history</key>
 										<array>
 											<string>59CC3902157D55110059D872</string>
@@ -583,7 +583,7 @@
 											<string>590889A115C4724500F556EF</string>
 											<string>5990441B15E772BA0078E3A5</string>
 											<string>593A0DE015FE7CDB00B2E57C</string>
-											<string>597C7ADE18EBF2CC00D5129E</string>
+											<string>59D6C2DD190837A8009E5A1F</string>
 										</array>
 									</dict>
 									<key>SplitCount</key>
@@ -641,9 +641,9 @@
 			</array>
 			<key>TableOfContents</key>
 			<array>
-				<string>59879C9A18EC8258005D53A4</string>
+				<string>59E150ED19228E680053E05A</string>
 				<string>1CE0B1FE06471DED0097A5F4</string>
-				<string>59879C9B18EC8258005D53A4</string>
+				<string>59E150EE19228E680053E05A</string>
 				<string>1CE0B20306471E060097A5F4</string>
 				<string>1CE0B20506471E060097A5F4</string>
 			</array>
@@ -779,15 +779,14 @@
 	<integer>5</integer>
 	<key>WindowOrderList</key>
 	<array>
-		<string>1CD10A99069EF8BA00B06720</string>
+		<string>59590A7514B34B2B00EF570A</string>
 		<string>59F7E9FB18E0B98500F6D0B9</string>
 		<string>5965B8B51823BAD8003A758F</string>
 		<string>59BB501E180600BC00A8A2D3</string>
 		<string>59BB501B180600BC00A8A2D3</string>
-		<string>/Users/alo/Development/lambda/xcode/lambdaApp.xcodeproj</string>
 		<string>597E0DBD157FEB0700C019F3</string>
-		<string>59590A7514B34B2B00EF570A</string>
 		<string>598E06DA18CC807B002D252B</string>
+		<string>/Users/alo/Development/lambda/xcode/lambdaApp.xcodeproj</string>
 	</array>
 	<key>WindowString</key>
 	<string>72 164 788 691 0 0 1440 878 </string>
@@ -811,7 +810,7 @@
 								<key>PBXProjectModuleGUID</key>
 								<string>1CD0528F0623707200166675</string>
 								<key>PBXProjectModuleLabel</key>
-								<string>lambdaApp.cpp</string>
+								<string></string>
 								<key>StatusBarVisibility</key>
 								<true/>
 							</dict>
@@ -828,8 +827,6 @@
 							<string>291pt</string>
 						</dict>
 						<dict>
-							<key>BecomeActive</key>
-							<true/>
 							<key>ContentConfiguration</key>
 							<dict>
 								<key>PBXProjectModuleGUID</key>
@@ -869,7 +866,7 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>59590A7514B34B2B00EF570A</string>
-				<string>59879CA418EC8258005D53A4</string>
+				<string>59E150F519228E680053E05A</string>
 				<string>1CD0528F0623707200166675</string>
 				<string>XCMainBuildResultsModuleGUID</string>
 			</array>
@@ -880,7 +877,7 @@
 			<key>WindowToolGUID</key>
 			<string>59590A7514B34B2B00EF570A</string>
 			<key>WindowToolIsVisible</key>
-			<true/>
+			<false/>
 		</dict>
 		<dict>
 			<key>FirstTimeWindowDisplayed</key>
@@ -989,13 +986,13 @@
 			<key>TableOfContents</key>
 			<array>
 				<string>1CD10A99069EF8BA00B06720</string>
-				<string>59879CA518EC8258005D53A4</string>
+				<string>59D6C2E7190837A8009E5A1F</string>
 				<string>1C162984064C10D400B95A72</string>
-				<string>59879CA618EC8258005D53A4</string>
-				<string>59879CA718EC8258005D53A4</string>
-				<string>59879CA818EC8258005D53A4</string>
-				<string>59879CA918EC8258005D53A4</string>
-				<string>59879CAA18EC8258005D53A4</string>
+				<string>59D6C2E8190837A8009E5A1F</string>
+				<string>59D6C2E9190837A8009E5A1F</string>
+				<string>59D6C2EA190837A8009E5A1F</string>
+				<string>59D6C2EB190837A8009E5A1F</string>
+				<string>59D6C2EC190837A8009E5A1F</string>
 			</array>
 			<key>ToolbarConfiguration</key>
 			<string>xcode.toolbar.config.debugV3</string>
