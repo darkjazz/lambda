@@ -37,7 +37,7 @@
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
-#include "multicodepanel.h"
+//#include "multicodepanel.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -152,7 +152,7 @@ public:
 	Boids* boids;
 	
 	CodePanel codePanel;
-	MultiCodePanel multiCodePanel;
+	//MultiCodePanel multiCodePanel;
 	bool codePanelActive;
 	bool codePanelMapped; 
 	bool multiCodePanelActive;
@@ -249,6 +249,14 @@ private:
 	void pattern34(int, int, int);
 	
 	void pattern35(int, int, int);
+
+	void pattern36(int, int, int);
+
+	void pattern37(int, int, int);
+
+	void pattern38(int, int, int);
+
+	void pattern39(int, int, int);
 
 	void drawBoids00();
 	void drawBoids01();

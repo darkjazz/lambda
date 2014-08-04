@@ -198,7 +198,7 @@ Tdef(\autopilot, {
 		pat.active = 0;
 		~graphics.sendPattern(pat.index)
 	});
-	~patterns = (5..15);
+	~patterns = (5..15) ++ (26..31);
 	actives = [~patterns.choose];
 	~graphics.fadeInPattern(actives.first, 10, 1.0);
 	rrand(8.0, 12.0).wait;

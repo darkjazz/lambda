@@ -1,4 +1,7 @@
-~graphics = CinderApp();
+~graphics = CinderApp(1024, 768, mode: 0);
+
+
+~graphics = CinderApp(1024, 768, path: "~/Development/lambda/xcode/build/Debug/lambda.app");
 
 ~graphics.makeArgumentString
 
@@ -16,15 +19,15 @@
 
 ~graphics.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
-~graphics.setPattern(1, 0, 0.5, 1, 1, 0.9, 0.1, 0.4);
+~graphics.setPattern(1, 1, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
 
-~graphics.setPattern(3, 1, 1.0, 1, 0, 0.6, 0.8, 0.8);
+~graphics.setPattern(3, 0, 1.0, 1, 0, 0.6, 0.8, 0.8);
 
-~graphics.setPattern(4, 1, 1.0, 1, 1, 1.0, 1.0, 0.3);
+~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
-~graphics.setPattern(5, 1, 1.0, 1, 0, 0.7, 0.9, 1.0);
+~graphics.setPattern(5, 0, 1.0, 1, 0, 0.7, 0.9, 1.0);
 
 ~graphics.setPattern(6, 1, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
@@ -34,7 +37,7 @@
 
 ~graphics.setPattern(32, 0, 1.0, 1, 1, 1.0, 1.0, 0.5);
 
-~graphics.setPattern(33, 1, 1.0, 1, 1, 0.6, 0.8, 0.8);
+~graphics.setPattern(33, 0, 1.0, 1, 1, 0.6, 0.8, 0.8);
 
 ~graphics.setPattern(34, 1, 1.0, 0, 0, 1.0, 1.0, 0.3);
 
@@ -81,16 +84,16 @@ Routine({
 ~graphics.setPattern(8, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
-~graphics.setInterpolation(1, 2)
+~graphics.setInterpolation(1, 4)
 
 ~graphics.rotate(1.0, 0.0, 0.0, 0.0)
 
 ~graphics.rotate(1.0.rand, 1.0.rand, 1.0.rand, rrand(0.005, 0.02))
 
 
-~graphics.setViewpoint(50.0, 80.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(50.0, 50.0, 50.0, 0.0, 0.0, 0.0)
 
-~graphics.setBackground(0.6, 0.6, 0.65)
+~graphics.setBackground(0.1, 0.15, 0.15)
 ~graphics.setBackground(0.0, 0.0, 0.05)
 
 
@@ -124,35 +127,39 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics = CinderApp(1024, 768);
 
-~graphics = CinderApp();
+~graphics = CinderApp(1024, 768)
 
 ~graphics.open
 
 
 
-~graphics.initWorld(24, 24, 24, 20);
+24**3
+
+40*40*10
+
+~graphics.initWorld(10, 10, 50, 20);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
 
 ~graphics.initGenerations([4,6], [3,5], 12);
 
-~graphics.setSymmetry(7)
+~graphics.setSymmetry(11)
 
-~graphics.setViewpoint(85.0, 80.0, 90.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(90.0, -80.0, 85.0, 0.0, 0.0, 0.0)
 
-~graphics.setViewpoint(0.0, 80.0, 90.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, -15.0, -180.0, 0.0, -15.0, 0.0)
 
-~graphics.setInterpolation(1, 4)
+~graphics.setInterpolation(1, 2)
 
-~graphics.setPattern(5, 1, 1.0, 1, 1, 0.9, 1.0, 0.0);
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
 
-~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 1, 1.0, 0, 0, 0.5, 0.9, 0.8);
 
-~graphics.setPattern(7, 1, 1.0, 1, 1, 1.0, 0.3, 0.5);
+~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
 
-~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(8, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(9, 1, 1.0, 1, 1, 0.5, 0.3, 0.9);
+~graphics.setPattern(9, 0, 1.0, 1, 1, 0.5, 0.8, 0.9);
 
 ~graphics.setPattern(10, 0, 1.0, 1, 1, 0.5, 0.8, 1.0);
 
@@ -162,31 +169,40 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
-~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 0, 1.0, 1, 0, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15, 0, 1.0, 1, 1, 0.1, 0.7, 0.3);
+~graphics.setPattern(15, 0, 0.4, 0, 0, 0.1, 0.7, 0.3);
 
-~graphics.setPattern(26, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
+~graphics.setPattern(26, 1, 0.3, 1, 1, 0.5, 0.6, 0.7);
 
-~graphics.setPattern(27, 0, 1.0, 1, 1, 0.3, 0.8, 0.9);
+~graphics.setPattern(27, 0, 1.0, 1, 1, 0.1, 0.6, 0.5);
 
-~graphics.setPattern(28, 0, 1.0, 1, 1, 0.0, 1.0, 0.8);
+~graphics.setPattern(28, 0, 1.0, 1, 1, 0.8, 1.0, 0.8);
 
-~graphics.setPattern(29, 1, 1.0, 0, 0, 0.0, 0.8, 1.0);
+~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
 
 ~graphics.setPattern(30, 0, 1.0, 0, 0, 0.7, 0.8, 1.0);
 
-~graphics.setPattern(31, 0, 1.0, 1, 1, 0.3, 0.9, 0.9);
+~graphics.setPattern(31, 0, 1.0, 0, 0, 0.5, 0.3, 1.0);
 
+~graphics.setPattern(32, 0, 1.0, 1, 1, 0.9, 0.9, 0.3);
 
-~rot = Rotation(140.0, 0.05, 100.0, 60.0, 0.0, 0.034, 0.0, 0.0038);
+~graphics.setPattern(33, 0, 0.5, 1, 1, 0.3, 0.6, 0.8);
+
+~graphics.setPattern(34, 0, 1.0, 1, 1, 1.0, 0.2, 0.5);
+
+~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
+
+24.do({|i| (i%4).postln })
+
+~rot = Rotation(140.0, 0.007, 100.0, 60.0, 0.0, 0.0094, 0.0, 0.0088);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
 ~graphics.stopRotation
 
 
-~graphics.setViewpoint(50.0, 100.0, 0.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(100.0, 100.0, 100.0, 0.0, 0.0, 0.0)
 
 ~graphics.sendPredefined3DRule(\faders)
 
@@ -202,6 +218,18 @@ Array.geom(30, 1.0, 0.96)
 
 
 ~graphics.sendPredefined3DRule(\briansbrain)
+
+
+~graphics.sendPredefined3DRule(\belzhab)
+
+~graphics.sendPredefined3DRule(\belzhabsedi)
+
+~graphics.sendPredefined3DRule(\bombers)
+
+~graphics.sendPredefined3DRule(\brain6)
+
+~graphics.sendPredefined3DRule(\chenille)
+
 
 Generations
 
@@ -280,6 +308,8 @@ Tdef(\autopilot, {
 ~graphics.assignCodeWindow(Document.current);
 
 ~graphics.showCodePanel
+
+~graphics.mapCodePanel
 
 ~graphics.sendCodeTitle("sc.live.code.fest")
 
