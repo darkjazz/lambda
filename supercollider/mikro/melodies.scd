@@ -1,10 +1,12 @@
-MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
+MikroData.loadPath = "/Users/alo/data/mikro/lib004/";
 ~data = MikroData().loadPathMatch;
-~order = 2;
+~order = 3;
 
 ~freqSet = MarkovSetN(order: ~order);
-~durSet = MarkovSetN(order: 1);
+~durSet = MarkovSetN(order: ~order);
 ~ampSet = MarkovSetN(order: ~order);
+
+
 
 ~data.datalib.collect({arg set;
 	set.events.collect(_.frqs).collect(_.at(1))
@@ -12,15 +14,23 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	~freqSet.read(freqs.keep(~freqSet.order).collect(_.roundFreq).round(0.01), freqs.last.roundFreq.round(0.01))
 });
 
-~collectdurs = ~data.datalib.collect({arg set;
-	set.events.collect(_.duration)
-}).values.asArray.flat.select({|dur| dur < 10  });
-~min = 0.0625;
-~max = ~collectdurs.maxItem;
 
-~collectdurs.linlin(~min, ~max, ~min, 4.0).round(0.0625).doAdjacentPairs({arg durA, durB;
-	~durSet.read(durA, durB)
+~data.datalib.collect({arg set;
+	set.events.collect(_.duration)
+}).values.asArray.flat.slide(~durSet.order+1, 1).clump(~durSet.order+1).do({arg durs;
+	~durSet.read(durs.keep(~durSet.order).collect(_.round(1/32)), durs.last.round(1/32))
 });
+
+//~collectdurs = ~data.datalib.collect({arg set;
+//	set.events.collect(_.duration)
+//}).values.asArray.flat.select({|dur| dur < 10  });
+//~min = ~collectdurs.minItem;
+//~max = ~collectdurs.maxItem;
+//~round = 1/32;
+
+//~collectdurs.round(~round).doAdjacentPairs({arg durA, durB;
+//	~durSet.read(durA, durB)
+//});
 
 ~data.datalib.collect({arg set;
 	set.events.collect(_.peakAmp)
@@ -38,13 +48,17 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 
 ~ampSet.dict.select({arg val, key;
 	val.first.size > 1
-}).size
+})
+
+~freqSet.dict.keys.do({|key| ~freqSet.dict[key].size.postln })
 
 
 (
+var length = 32;
+
 ~key = ~freqSet.dict.keys(Array).choose;
 
-~freqs = Array.fill(64, {
+~freqs = Array.fill(length, {
 	var arr, frq = ~freqSet.next(~key);
 	arr = ~key.asString.interpret;
 	arr.removeAt(0);
@@ -55,15 +69,18 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 
 ~key = ~durSet.dict.keys(Array).choose;
 
-
-~durs = Array.fill(64, {
-	~key = ~durSet.next(~key);
+~durs = Array.fill(length, {
+	var arr, dur = ~durSet.next(~key);
+	arr = ~key.asString.interpret;
+	arr.removeAt(0);
+	arr = arr.add(dur);
+	~key = arr.asSymbol;
+	dur
 });
 
 ~key = ~ampSet.dict.keys(Array).choose;
 
-
-~amps = Array.fill(64, {
+~amps = Array.fill(length, {
 	var arr, amp = ~ampSet.next(~key);
 	arr = ~key.asString.interpret;
 	arr.removeAt(0);
@@ -72,6 +89,33 @@ MikroData.loadPath = "/home/alo/data/mikro/data/lib003/";
 	amp
 })
 )
+
+
+~freqs.collect(_.cpsmidi).collect(_.midinote)
+
+
+
+
+
+SynthDef('pluck', {|freq, amp, dur|
+	var sig;
+	sig = tanh(CrossoverDistortion.ar(
+		GVerb.ar(StkPluck.ar(freq, 0.5), 3, 1), amp, 0.7)
+	) * 0.5 * EnvGen.kr(Env.perc(curve: -2.0), timeScale: dur, doneAction: 2);
+	Out.ar(0, sig)
+}).add
+
+~pat = Pbind(
+	\instrument, 'pluck',
+	\freq, Pseq(~freqs, inf) * Prand([1, 1, 1, 1, 2, 2, 3, 4], inf), 
+	\amp, Pseq(~amps, inf), \delta, Pseq(~durs, inf), \dur, Pkey(\delta) * Pwhite(1.0, 2.0, inf)
+)
+
+Pdef('pixies', ~pat)
+
+~player = Pdef('pixies', ~pat).play
+
+~player.stop
 
 SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rms, rtm|
 	var sig, n=4, freqs, ugenargs, amps, ugens, bw;
