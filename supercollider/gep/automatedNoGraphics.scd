@@ -6,6 +6,8 @@
 
 ~data = UGepLoader(~headsize, ~numgenes).load;
 
+~foa = #[zoom,focus,push,press];
+
 )
 
 
@@ -22,7 +24,6 @@
 ~means.update;
 ~dmeans.update;
 
-~foa = #[zoom,focus,push,press];
 
 ~assignments = ();
 
@@ -54,8 +55,8 @@
 
 ~sectionActive = ~sectionAssignments.collect({()});
 
-~minSectionDur = 320;
-~maxSectionDur = 600;
+~minSectionDur = 1000;
+~maxSectionDur = 1200;
 ~minItems = ~sectionAssignments.collect(_.size).values.minItem;
 ~maxItems = ~sectionAssignments.collect(_.size).values.maxItem;
 
@@ -67,110 +68,27 @@
 	assignments.size.linlin(~minItems, ~maxItems, ~minSectionDur, ~maxSectionDur) / assignments.size
 });
 
+~meanFragmentDurations = ~meanFragmentDurations.collect({|frag| rrand(20.0, 30.0) })
+
 )
 
 
+(
 
-~graphics = CinderApp(800, 600, mode: 0);
-
-~graphics.open
-
-~graphics.sendCodeTitle("ges.automaton")
-
-
-~analyzer = MikroAnalyzer(numcoef:~ncoef,recordInput:false,isMono:false);
+~graphics = CinderApp();
 
 ~decoder = FoaDecoder(decoderType:'stereo');
 
-
-~player = GepPlayer(~data, ~decoder, ~graphics)
-
-~player.sendEnabled = true
-
-
-~player.assignCodeWindow(Document.current, "alo$ ")
-
-~graphics.showCodePanel
-
-
-~decoder.start
-
-~graphics.initWorld(20, 20, 20, ~ncoef);
-
-~graphics.initContinuous;
-
-~graphics.setAdd(0.05);
-
-
-~analyzer.start(~decoder.bus, ~decoder.synth, \addBefore, 0.01)
-
-(
-~amparray = Array.fill(30, 0.0);
-~peakarray = Array.fill(30, 0.0);
-
-~analyzer.addMFCCResponderFunction({|ti, re, ms, an|
-	~graphics.sendSOMVector(ms[3..~ncoef+2])
-});
-
-~libPatterns = (0..7) ++ (18..25);
+~player = GepPlayer(~data, ~decoder, ~graphics);
 
 ~currentSection = ~sectionAssignments.keys(Array).first;
 
-~sectionPatterns = [
-	(0..7),
-	~libPatterns.scramble.clump(4) ++ ~libPatterns.scramble.clump(4)
-].lace(16).asArgsDict;
-
-~analyzer.runningOnsetAction = {
-	var indx, ampdev, xspeed;
-	if (~amparray.mean.coin) {
-		ampdev = ~amparray.stdDev(~amparray.mean);
-		xspeed = ampdev.expexp(0.001, 1.0, 0.00001, 0.8);
-		~rot = Rotation(rrand(20.0, 80.0), xspeed, rrand(5.0, 30.0),
-			rrand(30.0, 60.0), pi.rand, rrand(0.005, 0.1), pi.rand, rrand(0.005, 0.1));
-		~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-		~graphics.rotateCamera
-	};
-	if (~graphics.patternLib.select({|pat| ~libPatterns.includes(pat.index) }).collect(_.active).sum > 1) {
-		indx = ~graphics.patternLib.select({|pat|
-			~libPatterns.includes(pat.index).and(pat.active.booleanValue)
-		}).choose.index;
-		~graphics.setPattern(indx, 0, 0.0, 2.rand, 2.rand,
-			rrand(0.0, 1.0), rrand(0.0, 1.0), rrand(0.0, 1.0))
-	};
-	if (~amparray.mean.coin) {
-		~graphics.setPattern(~sectionPatterns[~currentSection].choose, 1, 1.0, 2.rand, 2.rand,
-			rrand(0.0, 1.0), rrand(0.0, 1.0), rrand(0.0, 1.0));
-		~graphics.setAdd([~amparray.mean, 1.0 - ~amparray.mean].choose);
-	}
-};
-
-
-~analyzer.putEventResponderFunction(\grphx, {|ti, re, ms, an|
-	if (ms[2] == 2) {
-		if (ms[3].isNaN.not) {
-			~amparray.pop;
-			~amparray.insert(0, ms[3])
-		}
-		{
-			~amparray.pop;
-			~amparray.insert(0, 1.0.rand)
-		}
-	}
-});
-
-
-
-~analyzer.addEventFunc = {|events|
-	~peakarray = events.reverse.keep(30).collect(_.amps).collect(_.at(1));
-	if (~peakarray.isNil) {
-		~peakarray = [0];
-	}
-}
-
 )
 
+
 (
+~decoder.start;
+
 ~player.start(~foa);
 
 ~player.playFunc = {|ind, section, synth|
@@ -200,10 +118,6 @@
 
 )
 
-~graphics.unmapCodePanel
-
-~graphics.showCodePanel
-
 (
 ~player.setFoa('zoom', 1.0);
 ~player.setFoa('focus', 1.0);
@@ -213,7 +127,18 @@
 )
 
 
+~data[63]
+
+~player.play(63, 1.0, 'zoom', 0)
+
+~player.free(63)
+
+~player.play(105, 1.0, 'zoom', 0)
+
+~player.free(105)
+
 (
+
 Routine({
 	~sectionAssignments.keys(Array).do({|section|
 		Post << "BEGINNING SECTION " << section << Char.nl;
@@ -238,7 +163,7 @@ Routine({
 				rel.wait;
 				~player.free(index)
 			}).play;
-			(~meanFragmentDurations[section] * rrand(0.33, 0.67)).wait;
+			(~meanFragmentDurations[section] * rrand(0.25, 0.5)).wait;
 		});
 		Post << "FINISHED SECTION " << section << Char.nl;
 		rrand(5.0, 10.0).wait;
@@ -248,6 +173,12 @@ Routine({
 	~player.free
 
 }).play
+
 )
 
+~sectionAssignments
+
 s.queryAllNodes
+
+s.boot
+

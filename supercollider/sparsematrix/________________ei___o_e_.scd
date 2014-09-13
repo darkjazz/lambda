@@ -1,11 +1,13 @@
 (
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
-//~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+//~graphics = CinderApp(ciAddr: NetAddr("192.168.1.111", 7000));
+~graphics = CinderApp();
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
+
+
 
 MasterEQ(2)
 
@@ -17,49 +19,46 @@ MasterEQ(2)
 ~headsize = 16;
 ~numgenes = 4;
 
-~dfile = File.open("/home/alo/development/lambda/supercollider/sparsematrix/2014-01-01/defnames00.scd", "r");
-~defarray = ~dfile.readAllString.split(Char.nl).reject(_.isEmpty).collect(_.asSymbol);
-~dfile.close;
-~dfile = nil;
+~data = UGepLoader(~headsize, ~numgenes).load;
 
-~data = ~defarray.collect({|defname|
-	var path, meta, data;
-	path = Paths.gepArchDir +/+ defname.asString ++ "." ++ UGEP.fileExt;
-	if (File.exists(path)) { data = UGEP.loadData(path) };
-	meta = UGenExpressionTree.loadMetadata(defname);
-	data['defname'] = defname;
-	data['args'] = meta.args.args;
-	data['stats'] = meta.stats;
-	data
-});
- ~foa = #[zoom,focus,push,press];
- ~player = GepPlayer(~data, ~decoder, ~graphics);
+~sparsedata = UGepLoader().loadFromFile(Paths.devdir +/+ "lambda/supercollider/sparsematrix/2014-01-01/defnames00.scd");
+
+~foa = #[zoom,push];
+~player = GepPlayer(~data, ~decoder, ~graphics);
 
 )
 
+FoaZoom
 //~graphics.open
 
 //~matrix.assignCodeWindow(Document.current);
 
-~matrix.setBPM(135)
+~matrix.setBPM(140)
 
 ~matrix.makeEfxProto;
 
-~matrix.preparePatternDefs;
-
-~matrix.prepareGepDefs(~data);
+~matrix.preparePatternDefs(~sparsedata);
 
 
 /// WAAAIIIIIITTTT !!!!!
 
+~matrix.loadEventAnalysis
+
+
 ~matrix.prepareAudio
+
+s.queryAllNodes
+
+
 
 //~graphics.sendCodeTitle("live.code")
 
 //s.queryAllNodes
 
+Pdef('matrix', Ppar([ Pdef('r01'), Pdef('r02'), Pdef('b01'), Pdef('b02') ])).quant(128)
 
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02') ])).quant(128)
+
+Pdef('matrix', Ppar([ Pdef('g02'), Pdef('g00'), Pdef('g01') ])).quant(128)
 
 Pdef('matrix').play
 
@@ -89,12 +88,13 @@ Pdef('matrix').play
 
 
 Routine({
-	var amp = 2.0;
-	20.do({
+	var amp = 1.0;
+	10.do({
 		amp = amp - 0.1;
 		~matrix.defsAt('c00').setControls(1, amp, ~matrix.beatdur, 0.0);
 		(~matrix.beatdur * 4).wait;
-	})
+	});
+	"finished fade routine ...".postln;
 }).play
 
 
@@ -120,15 +120,23 @@ Routine({
 
 
 
-~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.1, 1.5) },
-	{ rrand(0.05, 0.1) },
+~matrix.defsAt('b00').setControls(
+	{ [0, 1].wchoose([0.2, 0.8]) },
+	{ exprand(0.7, 1.5) },
+	{ rrand(0.5, 2.0) },
 	0.1
 );
 
 
-~graphics.setPattern(26, 1, 1.0, 1, 1, 0.6, 0.9, 1.0);
+~matrix.defsAt('b01').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.7, 1.5) },
+	{ rrand(0.3, 1.0) },
+	0.1
+);
+
+
+~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.9, 1.0);
 
 
 ~matrix.defsAt('b00').setGroups((0..7), 1, 1.0, {arg name;
@@ -141,10 +149,23 @@ Routine({
 
 
 
+~matrix.makeMelody('m00', 'fsyn00', 24, 'efx1');
+
+Pdef('m00').play
+
+~matrix.efxamps['efx1'] = 0.1
 
 
+Pdef('matrix', Ppar([ Pdef('r03') ])).quant(128)
 
-Pdef('matrix', Ppar([ Pdef('g01'), Pdef('g00'), Pdef('g05'), Pdef('b03') ])).quant(128)
+Pdef('matrix').play
+
+~matrix.ampctrls['m00'] = 0.5
+
+
+s.queryAllNodes
+
+Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r03'), Pdef('r04') ])).quant(128)
 
 Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
@@ -152,39 +173,61 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.4, 2.0) },
-	{ exprand(0.001, 0.1) },
+	{ exprand(0.05, 0.1) },
+	0.1
+);
+
+
+~matrix.defsAt('r01').setActives(
+	{ exprand(0.4, 2.0) },
+	{ exprand(0.01, 0.2) },
 	0.1
 );
 
 
 
-~matrix.defsAt('g01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('r03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.4, 2.0) },
+	{ exprand(0.02, 0.1) },
+	0.1
+);
+
+
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 2.0) },
 	{ rrand(0.05, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('g05').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('g00').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.5, 1.5) },
+	{ exprand(0.05, 0.1) },
+	0.1
+);
+
+~matrix.defsAt('r04').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 1.5) },
-	{ exprand(0.001, 0.1) },
+	{ exprand(0.01, 0.09) },
 	0.1
 );
 
 
-~matrix.defsAt('g02').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.5, 2.0) },
 	{ exprand(0.04, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('g01').recall(2);
+~matrix.defsAt('g00').recall(2);
 
-~matrix.defsAt('r02').recall(0);
+~matrix.defsAt('r03').recall(0);
 
 ~matrix.defsAt('b03').recall(0);
 
@@ -297,7 +340,7 @@ Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
 ~matrix.defsAt('r02').recall(1);
 
 
-
+s.queryAllNodes
 
 
 Tdef(\background, {
@@ -321,7 +364,7 @@ Tdef(\autopilot, {
 		pat.active = 0;
 		~graphics.sendPattern(pat.index)
 	});
-	~patterns = (5..15);
+	~patterns = (5..15) ++ (26..31);
 	actives = [~patterns.choose];
 	~graphics.fadeInPattern(actives.first, 10, 1.0);
 	rrand(8.0, 12.0).wait;
@@ -398,10 +441,11 @@ Tdef(\autopilot).stop
 ~player.setFoa('press', 1.0)
 ~player.setFoa('focus', 1.0)
 
+~player.stop
 
 // zoom 0 // 7, 9, 10, 11, 13, 14, 15, 19, 22, 25, 26, 35, 36, 38, 39
 // **** 10, 26, 29, 33, 34, 37
-~ind0 = 88
+~ind0 = 10
 
 ~player.play(~ind0, 0, 'zoom', 0)
 
@@ -417,6 +461,7 @@ Tdef(\autopilot).stop
 ~player.setWithPattern(~ind0, Pwhite(0.05, 0.2, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
 
 ~player.setWithPattern(~ind0, Pseq(Array.rand(16, 0.0, 0.3).round(0.1).mirror2, inf), ~matrix.beatdur/2)
+
 
 ~player.free(~ind0)
 
@@ -487,7 +532,7 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('granularReverb')
 
-~matrix.setSkismAmp('granularReverb', 0.4)
+~matrix.setSkismAmp('granularReverb', 0.1)
 
 ~matrix.deactivateSkismSynth('granularReverb')
 
@@ -495,7 +540,7 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('neuralFilter')
 
-~matrix.setSkismAmp('neuralFilter', 0.2)
+~matrix.setSkismAmp('neuralFilter', 0.1)
 
 ~matrix.deactivateSkismSynth('neuralFilter')
 
@@ -503,7 +548,7 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('latchOnset',0.8)
+~matrix.setSkismAmp('latchOnset',0.4)
 
 ~matrix.deactivateSkismSynth('latchOnset')
 
@@ -512,6 +557,8 @@ s.sendMsg("/n_free", 1021)
 ~matrix.activateSkismSynth('cliqSaw')
 
 ~matrix.setSkismAmp('cliqSaw', 0.5)
+
+~matrix.setSkismAmp('cliqSaw', 0.0)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
