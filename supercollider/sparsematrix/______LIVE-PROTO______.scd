@@ -2,7 +2,7 @@
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
 //~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+~graphics = CinderApp();
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -17,25 +17,15 @@ MasterEQ(2)
 ~headsize = 16;
 ~numgenes = 4;
 
-~dfile = File.open("/home/alo/development/lambda/supercollider/sparsematrix/2014-01-01/defnames00.scd", "r");
-~defarray = ~dfile.readAllString.split(Char.nl).reject(_.isEmpty).collect(_.asSymbol);
-~dfile.close;
-~dfile = nil;
+~data = UGepLoader(~headsize, ~numgenes).load;
 
-~data = ~defarray.collect({|defname|
-	var path, meta, data;
-	path = Paths.gepArchDir +/+ defname.asString ++ "." ++ UGEP.fileExt;
-	if (File.exists(path)) { data = UGEP.loadData(path) };
-	meta = UGenExpressionTree.loadMetadata(defname);
-	data['defname'] = defname;
-	data['args'] = meta.args.args;
-	data['stats'] = meta.stats;
-	data
-});
- ~foa = #[zoom,focus,push,press];
- ~player = GepPlayer(~data, ~decoder, ~graphics);
+~sparsedata = UGepLoader().loadFromFile(Paths.devdir +/+ "lambda/supercollider/sparsematrix/2014-01-01/defnames00.scd");
+
+~foa = #[zoom,focus,push,press];
+~player = GepPlayer(~data, ~decoder, ~graphics);
 
 )
+
 
 //~graphics.open
 
@@ -45,24 +35,54 @@ MasterEQ(2)
 
 ~matrix.makeEfxProto;
 
-~matrix.preparePatternDefs;
-
-~matrix.prepareGepDefs(~data);
+~matrix.preparePatternDefs(~sparsedata);
 
 
 /// WAAAIIIIIITTTT !!!!!
 
+~matrix.loadEventAnalysis
+
+~matrix.makeMelody('m00', 'fsyn00', 64, 'efx0');
+
 ~matrix.prepareAudio
+
+s.queryAllNodes
+
+Pdef('m00').clear
+Pdef('m00').play
+
+Pdef('efx').play
+
+Pdef('m00',
+	Pbind(\instrument, \fsyn00, \out, ~decoder.bus, \target, ~decoder.synth, \addAction, \addBefore,
+		\efx, ~matrix.efx['efx1'].in,
+		\amp, Pseq(~matrix.makeAmpSeq(64), 4), \dur, Pseq(~matrix.makeDurSeq(64)*4, 4),
+		\freq, Pseq(~matrix.makeFreqSeq(64), 4),
+		\freqs, (1..4).bubble, \bw, (1 ! 4).bubble, \amps, (Array.geom(4, 1.0, 0.9)).bubble,
+		\envindex, Pseq((0..4).stutter(4), inf),
+		\env, Pfunc({|ev|
+			[Env.perc, Env.sine, Env.triangle, Env([0.001, 1.0], [1], 4)].at(ev['envindex']).asArray.bubble
+		})
+	)
+)
+
+.play
+
+
+
 
 //~graphics.sendCodeTitle("live.code")
 
 //s.queryAllNodes
 
+Pdef('matrix', Ppar([ Pdef('m00'), Pdef('r00') ])).quant(128)
 
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02') ])).quant(128)
+
+Pdef('matrix', Ppar([ Pdef('g02'), Pdef('g00'), Pdef('g01') ])).quant(128)
 
 Pdef('matrix').play
 
+Pdef('m00').play
 
 ~seconds = SystemClock.seconds;
 
@@ -152,7 +172,7 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.4, 2.0) },
 	{ exprand(0.001, 0.1) },
 	0.1
@@ -160,22 +180,29 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
 
-~matrix.defsAt('g01').setControls(
+~matrix.defsAt('g00').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.5, 2.0) },
-	{ rrand(0.05, 0.1) },
+	{ rrand(0.1, 0.4) },
 	0.1
 );
 
-~matrix.defsAt('g05').setControls(
+~matrix.defsAt('g01').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.1, 1.5) },
-	{ exprand(0.001, 0.1) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('g02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.1, 1.5) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
 
-~matrix.defsAt('g02').setControls(
+~matrix.defsAt('b02').setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.5, 2.0) },
 	{ exprand(0.04, 0.1) },
@@ -321,7 +348,7 @@ Tdef(\autopilot, {
 		pat.active = 0;
 		~graphics.sendPattern(pat.index)
 	});
-	~patterns = (5..15);
+	~patterns = (5..15) ++ (26..31);
 	actives = [~patterns.choose];
 	~graphics.fadeInPattern(actives.first, 10, 1.0);
 	rrand(8.0, 12.0).wait;

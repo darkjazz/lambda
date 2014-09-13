@@ -128,6 +128,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics = CinderApp(1024, 768);
 
 ~graphics = CinderApp(1024, 768)
+~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
 
 ~graphics.open
 
@@ -152,6 +153,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setInterpolation(1, 2)
 
 ~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.9, 1.0, 0.0);
 
 ~graphics.setPattern(6, 1, 1.0, 0, 0, 0.5, 0.9, 0.8);
 
@@ -161,15 +163,16 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(9, 0, 1.0, 1, 1, 0.5, 0.8, 0.9);
 
-~graphics.setPattern(10, 0, 1.0, 1, 1, 0.5, 0.8, 1.0);
+~graphics.setPattern(10, 1, 1.0, 1, 1, 0.5, 0.8, 1.0);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 1, 0.0, 0.3, 0.5);
 
-~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
 ~graphics.setPattern(14, 0, 1.0, 1, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
 ~graphics.setPattern(15, 0, 0.4, 0, 0, 0.1, 0.7, 0.3);
 
@@ -180,10 +183,12 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(28, 0, 1.0, 1, 1, 0.8, 1.0, 0.8);
 
 ~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
+~graphics.setPattern(29, 0, 1.0, 0, 0, 0.0, 0.8, 1.0);
 
 ~graphics.setPattern(30, 0, 1.0, 0, 0, 0.7, 0.8, 1.0);
 
 ~graphics.setPattern(31, 0, 1.0, 0, 0, 0.5, 0.3, 1.0);
+~graphics.setPattern(31, 1, 1.0, 1, 1, 0.3, 0.9, 0.9);
 
 ~graphics.setPattern(32, 0, 1.0, 0, 0, 0.9, 0.9, 0.3);
 

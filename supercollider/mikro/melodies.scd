@@ -118,6 +118,7 @@ Pdef('pixies', ~pat)
 ~player.stop
 
 SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rms, rtm|
+SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rotx, roty, rotz|
 	var sig, n=4, freqs, ugenargs, amps, ugens, bw;
 	ugens = [Dust, Crackle, Logist0, Nagumo];
 	freqs = ArrayControl.kr('freqs', 4, 1);
@@ -127,7 +128,7 @@ SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rms, rtm|
 		[0.1, 0.005, LFPulse.ar(freq*4,0,0.5,0.5,0.1), 0.1]];
 	sig = Mix.fill(n, {|i|
 		var frq = freq * freqs[i];
-		BPF.ar(ugens[i].ar(*ugenargs[i]), frq, bw[i]/frq, 20-bw ) * amps[i];
+		BPF.ar(ugens[i].ar(*ugenargs[i]) + Dust.ar(freq), frq, bw[i]/frq, 20-bw ) * amps[i];
 	}) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
@@ -143,15 +144,82 @@ SynthDef('reverb', {|in, rms, rtm|
 	Out.ar(0, sig)
 }).add;
 
+
+~decoder = FoaDecoder(decoderType: 'stereo')
+
+~decoder.start
+
 ~bus = Bus.audio(s);
 ~rev = Synth('reverb', [\in, ~bus, \rms, 100, \rtm, 3]);
-~rev.set(\rtm, 1, \rms, 100)
+~rev.set(\rtm, 1, \rms, 40)
 
 ~rev.free
 
-Pdef('ml00',
-	Pbind(\instrument, \fsyn00, \out, ~bus,
-		\amp, Pseq(~amps, 4), \dur, Pseq(~durs* 2, 4), \freq, Pseq(~freqs, 4),
+Pstutter()
+
+Pdef('fsyn00').stop
+
+Pdef('fsyn00',
+	Pbind(\instrument, \fsyn00, \out, ~decoder.bus, \target, ~rev, \addAction, \addBefore,
+		\amp, Pseq((~amps ** 0.5)*2, 4), \dur, Pseq(~durs * 2, 4),
+		\freq, Pseq(~freqs.clump(8).collect({|freqs| Pseq(freqs, 4) }), 4), \rotx, Pwhite(-pi, pi), \roty, Pwhite(-pi, pi),
+		\rotz, Pwhite(-pi, pi), \freqs, (1..4).bubble, \bw, (1 ! 4).bubble, \amps, (Array.geom(4, 1.0, 0.9)).bubble,
+		\envindex, Pseq((0..4).stutter(4), inf), \efx, ~bus, \emp, Pkey(\amp),
+		\env, Pfunc({|ev|
+			[Env.perc, Env.sine, Env.triangle, Env([0.001, 1.0, 0.1], [0.9, 0.1], 4)].at(ev['envindex']).asArray.bubble
+		})
+	)
+).play
+
+Pdef('m00',
+	Pbind(\instrument, 'fsyn00', \out, ~decoder.bus, \efx, ~matrix.efx['efx0'].args.in, \target, ~matrix.group,
+		\addAction, \addToHead, \amp, Pseq((~matrix.makeAmpSeq(64) ** 0.5) * 2, inf), \emp, Pkey(\amp),
+		\dur, Pseq(~matrix.makeDurSeq(64), inf),
+		\freq, Pseq(~matrix.makeFreqSeq(64).clump(8).collect({|freqs| Pseq(freqs, 4) }), inf),
+		\freqs, (1..4).bubble, \bw, (1 ! 4).bubble, \amps, (Array.geom(4, 1.0, 0.9)).bubble,
+		\rotx, ~matrix.rDB[~matrix.rDB.keys(Array).choose].(), \roty, ~matrix.rDB[~matrix.rDB.keys(Array).choose].(),
+		\rotz, ~matrix.rDB[~matrix.rDB.keys(Array).choose].(),
+		\envindex, Pstutter(Pseq([2, 4], inf), Pseq(['perc00', 'perc04', 'sine00', 'lin00'], inf)),
+		\env, Pfunc({|ev| ~matrix.envs.at(ev['envindex']) })
+	).trace
+)
+
+
+Pdef('m00').play
+Pdef('m00').clear
+
+(
+~ncoef = 20;
+~decoder = FoaDecoder(decoderType:'stereo');
+//~graphics = CinderApp(ciAddr: NetAddr("192.168.1.111", 7000));
+~graphics = CinderApp();
+
+~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
+)
+
+~matrix.makeEfxProto
+
+~matrix.preparePatternDefs;
+
+~matrix.loadEventAnalysis
+
+~matrix.prepareAudio
+
+~matrix.makeMelody('m00', 'fsyn00', 64, 'efx0');
+
+
+Pdef('matrix', Ppar([Pdef('m00'), Pdef('efx')])).quant(128)
+
+
+Pdef('matrix').play
+
+
+
+
+Pdef('m00',
+	Pbind(\instrument, \fsyn00, \out, ~decoder.bus, \target, ~decoder.synth, \addAction, \addBefore,
+		\amp, Pseq(~matrix.makeAmpSet(64), 4), \dur, Pseq(~matrix.makeDurSet(64)* 2, 4),
+		\freq, Pseq(~matrix.makeFreqSet(64), 4),
 		\freqs, (1..4).bubble, \bw, (1 ! 4).bubble, \amps, (Array.geom(4, 1.0, 0.9)).bubble,
 		\envindex, Pseq((0..4).stutter(4), inf),
 		\env, Pfunc({|ev|
@@ -178,4 +246,54 @@ SynthDef('fsyn01', {|out, amp, freq, dur, bw|
 	\env, Env.perc.asArray.bubble
 ).play
 
-~player.stop
+~player.stop~player.stop
+
+
+
+
+
+
+
+
+
+(
+~ncoef = 20;
+~decoder = FoaDecoder(decoderType:'stereo');
+~graphics = CinderApp();
+~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
+)
+
+~matrix.setBPM(135)
+
+~matrix.makeEfxProto;
+
+~matrix.loadEventAnalysis
+
+~matrix.makeMelody('m00', 'fsyn00', 64, 'efx0');
+
+
+~matrix.prepareAudio
+
+
+s.queryAllNodes
+
+Pdef('m00').clear
+Pdef('m00').play
+
+Pdef('efx').play
+
+~matrix.efx['efx0'].amp = 1.0
+
+Pdef('m00',
+	Pbind(\instrument, \fsyn00, \out, ~decoder.bus, \target, ~matrix.group, \addAction, \addToHead,
+		\efx, ~matrix.efx['efx0'].args.in,
+		\amp, Pseq(~matrix.makeAmpSeq(64) ** 0.5 * 4, 4), \dur, Pseq(~matrix.makeDurSeq(64)*4, 4),
+		\fmul, Pseq([1, 1, 1, 2, 2, 4, 1, 1, 2], inf), \emp, 1.0,
+		\freq, Pseq(~matrix.makeFreqSeq(64), 4) * Pkey(\fmul),
+		\freqs, (1..4).bubble, \bw, (1 ! 4).bubble, \amps, (Array.geom(4, 1.0, 0.9)).bubble,
+		\envindex, Pseq((0..4).stutter(4), inf),
+		\env, Pfunc({|ev|
+			[Env.perc, Env.sine, Env.triangle, Env([0.001, 1.0], [1], 4)].at(ev['envindex']).asArray.bubble
+		})
+	)
+)

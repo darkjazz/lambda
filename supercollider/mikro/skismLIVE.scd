@@ -113,7 +113,7 @@
 
 ~graphics.initContinuous;
 
-~graphics.setViewpoint(0.0, 0.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(40.0, 20.0, 20.0, 0.0, 0.0, 0.0)
 
 ~mikro.start(-60.dbamp, 0.05, 20)
 
