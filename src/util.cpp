@@ -99,6 +99,10 @@ Vec3f foldVec3f(Vec3f vec, Vec3f lo, Vec3f hi) {
 	return Vec3f( foldf(vec.x, lo.x, hi.x), foldf(vec.y, lo.y, hi.y), foldf(vec.z, lo.z, hi.z) );
 }
 
+Vec2f unmapVec2f(Vec2f vec, float lo, float hi) {
+	return Vec2f( unmapf(vec.x, lo, hi), unmapf(vec.y, lo, hi) );
+}
+
 float xmodf(float value, float hi)
 {
 	return value - hi*floor(value/hi);

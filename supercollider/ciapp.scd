@@ -137,7 +137,7 @@ Array.geom(30, 1.0, 0.96)
 
 40*40*10
 
-~graphics.initWorld(10, 10, 50, 20);
+~graphics.initWorld(20, 20, 20, 20);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
 
@@ -185,11 +185,11 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(31, 0, 1.0, 0, 0, 0.5, 0.3, 1.0);
 
-~graphics.setPattern(32, 0, 1.0, 1, 1, 0.9, 0.9, 0.3);
+~graphics.setPattern(32, 0, 1.0, 0, 0, 0.9, 0.9, 0.3);
 
 ~graphics.setPattern(33, 0, 0.5, 1, 1, 0.3, 0.6, 0.8);
 
-~graphics.setPattern(34, 0, 1.0, 1, 1, 1.0, 0.2, 0.5);
+~graphics.setPattern(34, 1, 1.0, 1, 1, 1.0, 0.2, 0.5);
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
 

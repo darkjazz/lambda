@@ -88,6 +88,11 @@
 		59C70A2614B5ECB70058A03B /* osc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C70A2414B5ECB70058A03B /* osc.a */; };
 		59EB70E815BF46D9002D2586 /* glass_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 59EB70E615BF46D9002D2586 /* glass_frag.glsl */; };
 		59EB70E915BF46D9002D2586 /* glass_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 59EB70E715BF46D9002D2586 /* glass_vert.glsl */; };
+		59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */; };
+		59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */; };
+		59EF1F0C19B0F3B5005CA9B2 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */; };
+		59EF1F1319B0F451005CA9B2 /* ciMsaFluidDrawerGl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F1119B0F451005CA9B2 /* ciMsaFluidDrawerGl.cpp */; };
+		59EF1F1419B0F451005CA9B2 /* ciMsaFluidSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F1219B0F451005CA9B2 /* ciMsaFluidSolver.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -195,6 +200,18 @@
 		59C70A2414B5ECB70058A03B /* osc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = osc.a; path = ../../../../../cinder_master/blocks/osc/lib/macosx/osc.a; sourceTree = "<group>"; };
 		59EB70E615BF46D9002D2586 /* glass_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glass_frag.glsl; sourceTree = "<group>"; };
 		59EB70E715BF46D9002D2586 /* glass_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = glass_vert.glsl; sourceTree = "<group>"; };
+		59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fluidParticles.h; sourceTree = "<group>"; };
+		59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fluidParticles.cpp; sourceTree = "<group>"; };
+		59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
+		59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
+		59EF1F0D19B0F436005CA9B2 /* ciMsaFluid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ciMsaFluid.h; path = ../../cinder_master/blocks/msaFluid/include/ciMsaFluid.h; sourceTree = SOURCE_ROOT; };
+		59EF1F0E19B0F436005CA9B2 /* ciMsaFluidDrawerGl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ciMsaFluidDrawerGl.h; path = ../../cinder_master/blocks/msaFluid/include/ciMsaFluidDrawerGl.h; sourceTree = SOURCE_ROOT; };
+		59EF1F0F19B0F436005CA9B2 /* ciMsaFluidParticleUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ciMsaFluidParticleUpdater.h; path = ../../cinder_master/blocks/msaFluid/include/ciMsaFluidParticleUpdater.h; sourceTree = SOURCE_ROOT; };
+		59EF1F1019B0F436005CA9B2 /* ciMsaFluidSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ciMsaFluidSolver.h; path = ../../cinder_master/blocks/msaFluid/include/ciMsaFluidSolver.h; sourceTree = SOURCE_ROOT; };
+		59EF1F1119B0F451005CA9B2 /* ciMsaFluidDrawerGl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ciMsaFluidDrawerGl.cpp; path = ../../cinder_master/blocks/msaFluid/src/ciMsaFluidDrawerGl.cpp; sourceTree = SOURCE_ROOT; };
+		59EF1F1219B0F451005CA9B2 /* ciMsaFluidSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ciMsaFluidSolver.cpp; path = ../../cinder_master/blocks/msaFluid/src/ciMsaFluidSolver.cpp; sourceTree = SOURCE_ROOT; };
+		59EF1F1919B0F496005CA9B2 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
+		59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* xcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = xcode; path = ../xcode; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -242,6 +259,10 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				59EF1F1919B0F496005CA9B2 /* Particle.h */,
+				59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */,
+				59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */,
+				59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */,
 				5990B62615AC5CE000210DBD /* swarm.cpp */,
 				5990B62715AC5CE000210DBD /* swarm.h */,
 				59590BA314B4F4D200EF570A /* rule.cpp */,
@@ -261,6 +282,8 @@
 				5928B62715B8223200792C66 /* cubemap.cpp */,
 				5990345D15D5B16A0078E3A5 /* codepanel.h */,
 				5990345E15D5B16A0078E3A5 /* codepanel.cpp */,
+				59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */,
+				59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */,
 			);
 			name = src;
 			path = ../src;
@@ -389,6 +412,12 @@
 		59590AB914B49B9D00EF570A /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
+				59EF1F1119B0F451005CA9B2 /* ciMsaFluidDrawerGl.cpp */,
+				59EF1F1219B0F451005CA9B2 /* ciMsaFluidSolver.cpp */,
+				59EF1F0D19B0F436005CA9B2 /* ciMsaFluid.h */,
+				59EF1F0E19B0F436005CA9B2 /* ciMsaFluidDrawerGl.h */,
+				59EF1F0F19B0F436005CA9B2 /* ciMsaFluidParticleUpdater.h */,
+				59EF1F1019B0F436005CA9B2 /* ciMsaFluidSolver.h */,
 				59C70A2014B5ECB70058A03B /* lib */,
 				59590AC214B49CB000EF570A /* include */,
 				59590AD714B49CB000EF570A /* src */,
@@ -619,6 +648,11 @@
 				592ADB1315B05CD1001FBC4F /* boids.cpp in Sources */,
 				5928B62815B8223200792C66 /* cubemap.cpp in Sources */,
 				5990345F15D5B16A0078E3A5 /* codepanel.cpp in Sources */,
+				59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */,
+				59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */,
+				59EF1F0C19B0F3B5005CA9B2 /* ParticleSystem.cpp in Sources */,
+				59EF1F1319B0F451005CA9B2 /* ciMsaFluidDrawerGl.cpp in Sources */,
+				59EF1F1419B0F451005CA9B2 /* ciMsaFluidSolver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

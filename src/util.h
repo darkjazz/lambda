@@ -60,6 +60,7 @@ float expexp(float, float, float, float, float);
 
 Vec3f wrapVec3f(Vec3f, Vec3f, Vec3f);
 Vec3f foldVec3f(Vec3f, Vec3f, Vec3f);
+Vec2f unmapVec2f(Vec2f, float, float);
 
 struct Vec3fRS{
 public:

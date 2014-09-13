@@ -114,7 +114,7 @@ SynthDef('pluck', {|freq, amp, dur|
 Pdef('pixies', ~pat)
 
 ~player = Pdef('pixies', ~pat).play
-
+ 
 ~player.stop
 
 SynthDef('fsyn00', {|out, efx, amp, emp, freq, dur, rms, rtm|
