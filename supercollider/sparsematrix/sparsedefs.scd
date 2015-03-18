@@ -22,8 +22,7 @@ SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz
 SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	var input, sig;
 	input = In.ar(in) * amp;
-	sig = Reverb.ar(input, rtime, hf);
-	
+	sig = LPF.ar(Reverb.ar(input, rtime, hf), 800.0);
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
 }).add;
 
@@ -31,31 +30,43 @@ SynthDef(\rev01, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail|
 	var input, sig;
 	input = In.ar(in) * amp;
 	sig = GVerb.ar(input, room, rtime, damp, bw, spr, dry, early, tail);
+	sig = RLPF.ar(sig, 1000.0, 1.0);
 	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
 }).add;
 
-SynthDef(\rev02, {|out, in, amp, room, damp, wsz, pch, pds, tds|
+SynthDef(\rev02, {|out, in, amp, room, rtime, wsz, pch, pds, tds|
 	var input, sig;
 	input = In.ar(in) * amp;
-	sig = FreeVerb.ar(input, 1.0, room, damp);
-	sig = PitchShift.ar(sig, wsz, pch, pds, tds);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
+	sig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.3, taillevel: 1.0);
+	sig = sig + PitchShift.ar(sig, wsz, pch, pds, tds);
+	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
 }).add;
 
-SynthDef(\del00, {|out, in, amp, del, dec, pch, wsz, pds, tds|
+SynthDef(\del00, {|out, in, amp, del, dec, room, rtime, ramp|
 	var input, sig;
 	input = In.ar(in) * amp;
-	sig = CombL.ar(CombL.ar(input,del,del,dec),del*0.33,del*0.33,dec);
-	sig = PitchShift.ar(sig, wsz, pch, pds, tds);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
+	sig = CombL.ar(input,del,del,dec*4.0);
+	sig = LPF.ar(GVerb.ar(sig, room, rtime, drylevel: 0)) * ramp + sig;
+	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
 }).add;
 
-SynthDef(\del01, {|out, in, amp, del, rmp, rt|
+SynthDef(\del01, {|out, in, amp, del, dec|
 	var input, sig, n = 5;
 	input = In.ar(in) * amp;
-	sig = Decimator.ar(DelayL.ar(input, del, del), 8800, 8);
-	sig = Decimator.ar(Reverb.ar(sig * rmp, rt), 44100, 24);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
+	sig = CombL.ar(input,del, [del,del*0.5,del*0.33,del],
+		[dec,dec*Rand(0.8, 1.2), dec*Rand(0.8,1.2),dec*Rand(0.8,1.2)]
+	);
+	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newQuad))
+}).add;
+
+SynthDef(\del02, {|out, in, amp, rtime, del, dec|
+	var input, sig, n = 5;
+	input = In.ar(in) * amp;
+	sig = LPF.ar(Reverb.ar(input, rtime), 800.0);
+	sig = CombL.ar(input,del, [del,del*0.5,del*0.33,del],
+		[dec,dec*Rand(0.8, 1.2), dec*Rand(0.8,1.2),dec*Rand(0.8,1.2)]
+	);
+	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newQuad))
 }).add;
 
 /** END EFX **/

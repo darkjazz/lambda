@@ -97,7 +97,7 @@ Routine({
 	
 	~recognizer = PatchRecognizer(~mikroLambda).load("/Users/alo/Data/mikro/120330_153533.plib");
 	
-	~composer = SkismLambda(~mikroLambda, ~recognizer, ~defs, ~sections, 60).cleanup_({
+	~composer = SkismLambda(~mikroLambda, nil, ~defs, ~sections, 60).cleanup_({
 		~skismAnalyzer.free;
 		~composer.free;
 		SystemClock.sched(1, { 

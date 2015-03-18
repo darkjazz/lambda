@@ -50,6 +50,10 @@ MikroData.loadPath = "/Users/alo/data/mikro/lib004/";
 	val.first.size > 1
 })
 
+
+~freqSet.dict.select({|val| val.size > 8  }).keys
+
+
 ~freqSet.dict.keys.do({|key| ~freqSet.dict[key].size.postln })
 
 
@@ -94,22 +98,23 @@ var length = 32;
 ~freqs.collect(_.cpsmidi).collect(_.midinote)
 
 
+~freqs
 
 
 
 SynthDef('pluck', {|freq, amp, dur|
 	var sig;
-	sig = tanh(CrossoverDistortion.ar(
-		GVerb.ar(StkPluck.ar(freq, 0.5), 3, 1), amp, 0.7)
-	) * 0.5 * EnvGen.kr(Env.perc(curve: -2.0), timeScale: dur, doneAction: 2);
+	sig = tanh(GVerb.ar(StkPluck.ar(freq, 0.5), 3, 1) + SinOsc.ar(freq) * amp) * 0.5 
+		* EnvGen.kr(Env.perc(curve: 4.0), timeScale: dur, doneAction: 2);
 	Out.ar(0, sig)
 }).add
 
 ~pat = Pbind(
 	\instrument, 'pluck',
-	\freq, Pseq(~freqs, inf) * Prand([1, 1, 1, 1, 2, 2, 3, 4], inf), 
+	\freq, Pstutter(Prand([4, 8, 2, 6, 1], inf), Pseq(~freqs, inf) * Prand([2, 2, 3, 4, 5, 6], inf)), 
 	\amp, Pseq(~amps, inf), \delta, Pseq(~durs, inf), \dur, Pkey(\delta) * Pwhite(1.0, 2.0, inf)
 )
+
 
 Pdef('pixies', ~pat)
 

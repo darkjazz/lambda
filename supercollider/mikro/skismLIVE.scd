@@ -1,5 +1,5 @@
 (
-~decoder = FoaDecoder(decoderType: 'quad', normalize: true);
+~decoder = FoaDecoder(decoderType: 'stereo', normalize: true);
 
 //// LIVE INPUT
 //~input = MikroFoaInput(~decoder);
@@ -113,7 +113,7 @@
 
 ~graphics.initContinuous;
 
-~graphics.setViewpoint(40.0, 20.0, 20.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0)
 
 ~mikro.start(-60.dbamp, 0.05, 20)
 

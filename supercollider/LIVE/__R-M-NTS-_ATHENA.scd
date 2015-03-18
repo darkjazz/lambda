@@ -1,7 +1,7 @@
 (
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+~graphics = CinderApp(ciAddr: NetAddr("169.254.184.218", 7000));
 //~graphics = CinderApp();
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
@@ -28,9 +28,10 @@ MasterEQ(2)
 
 )
 
-//~graphics.open
+~graphics.open
 
-//~matrix.assignCodeWindow(Document.current);
+~matrix.assignCodeWindow(Document.current);
+~player.assignCodeWindow(Document.current)
 
 ~matrix.setBPM(140);
 ~player.setBPM(140)
@@ -44,20 +45,126 @@ MasterEQ(2)
 
 /// WAAAIIIIIITTTT !!!!!
 
-~matrix.loadEventAnalysis
-
 
 ~matrix.prepareAudio
 
+
+~graphics.showCodePanel
+
+~graphics.sendCodeTitle("romantso.live")
+
 s.queryAllNodes
 
+///// GEP PLAYER /////
 
 
-//~graphics.sendCodeTitle("live.code")
+~player.start(~foa)
 
-//s.queryAllNodes
+~player.setFoa('zoom', 1.0);
+~player.setFoa('push', 1.0)
 
-Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r01'), Pdef('b00') ])).quant(128)
+
+// zoom 0 // 7, 9, 10, 11, 13, 14, 15, 19, 22, 25, 26, 35, 36, 38, 39
+// **** 10, 26, 29, 33, 34, 37, 91
+~ind0 = 91
+
+
+~player.play(~ind0, 0, 'zoom', 0)
+
+~player.set(~ind0, 0.0)
+
+~player.setWithPattern(~ind0,
+	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.5, 0.1, 0, 0.2, 0, 0.6, 0.2].mirror2, inf), ~matrix.beatdur/2)
+
+~player.setWithPattern(~ind0,
+	Pseq([0, 0, 0, 0, 0, 0, 0, 0, 0.6, 0.1, 0.6, 0, 0.6, 0.0, 0.6, 0], inf), ~matrix.beatdur/2)
+
+
+~player.setWithPattern(~ind0, Pwhite(0.001, 0.01, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
+
+~player.setWithPattern(~ind0, Pseq(Array.rand(16, 0.0, 0.3).round(0.1).mirror2, inf), ~matrix.beatdur/2)
+
+
+~player.free(~ind0)
+
+
+
+// push 1 //
+~ind1 = 49
+
+~player.play(~ind1, 0, 'push', 0)
+
+~player.set(~ind1, 0.89)
+
+~player.setWithPattern(~ind1,
+	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.5, 0.2], inf), ~matrix.beatdur/4)
+
+~player.setWithPattern(~ind1, Pwhite(0.001, 0.2, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
+
+~player.setWithPattern(~ind1, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
+
+~player.free(~ind1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////// GEP ROUTINE /////////////
+
+
+
+// 56-60, 61-62
+
+~indZoom00 = 61;
+~indPush00 = 62;
+
+
+~player.playRoutine(~indZoom00, Pseq([0.5, 0, 0.5, 0, 0, 0.5] * 2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
+~player.playRoutine(~indPush00, Pseq([0, 0.5, 0, 0.5, 0.5, 0] * 2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
+
+~player.stopRoutine(~indZoom00);
+~player.stopRoutine(~indPush00);
+
+
+// 38-40, 42-43, 44-45, 50-49
+
+~indZoom = 42;
+~indPush = 43;
+
+~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
+~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
+
+
+~player.playRoutine(~indZoom, Pseq([1.0, 0, 1.0, 0, 0, 1]*0.3, inf), Pseq([1, 2, 2, 1, 2, 1], inf), 'zoom');
+~player.playRoutine(~indPush, Pseq([0, 1.0, 0, 1.0, 0.5,1]*0.3, inf), Pseq([2, 1, 1, 2, 1, 2], inf), 'push');
+
+~player.stopRoutine(~indZoom);
+~player.stopRoutine(~indPush);
+
+
+s.queryAllNodes
+
+s.sendMsg("/n_free", 1018)
+
+
+
+
+
+
+
+
+// MATRIX //
+
+
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r02') ])).quant(128)
 
 
 Pdef('matrix', Ppar([ Pdef('g00'), Pdef('g01') ])).quant(128)
@@ -111,7 +218,7 @@ Routine({
 ~graphics.setSymmetry(11)
 
 //~graphics.showCodePanel
-gt
+
 ~graphics.setViewpoint(70.0, 80.0, 60.0, 0.0, 0.0, 0.0);
 
 
@@ -121,26 +228,31 @@ gt
 ~graphics.setPattern(30, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
 
+Tdef(\sendVector, {
+	loop({
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		0.25.wait;
+	});
+});
 
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.7, 1.0) },
-	{ rrand(0.2, 0.8) },
+Tdef(\sendVector).play
+
+Tdef(\sendVector).stop
+
+
+
+~matrix.defsAt('b00').setControls(
+	{ [0, 1].wchoose([0.2, 0.8]) },
+	{ exprand(0.3, 1.0) },
+	{ rrand(0.5, 2.0) },
 	0.1
 );
 
 
-~matrix.defsAt('g01').setControls(
+~matrix.defsAt('b01').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.7, 1.5) },
-	{ rrand(0.1, 0.5) },
-	0.1
-);
-
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.7, 1.5) },
-	{ rrand(0.04, 0.2) },
+	{ rrand(0.3, 1.0) },
 	0.1
 );
 
@@ -157,12 +269,6 @@ gt
 ~graphics.setPattern(8, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
 
-
-~matrix.makeMelody('m00', 'fsyn00', 32, 'efx1');
-
-Pdef('m00').play
-
-~matrix.efxamps['efx1'] = 0.1
 
 
 Pdef('matrix', Ppar([ Pdef('r04'), Pdef('r05') ])).quant(128)
@@ -181,7 +287,14 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
 
-~matrix.defsAt('r05').setControls(
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.4, 2.0) },
+	{ exprand(0.005, 0.08) },
+	0.1
+);
+
+~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.4, 2.0) },
 	{ exprand(0.05, 0.1) },
@@ -189,16 +302,8 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 );
 
 
-
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.4, 2.0) },
-	{ exprand(0.2, 0.6) },
-	0.1
-);
-
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.4, 2.0) },
 	{ exprand(0.05, 0.2) },
 	0.1
@@ -236,7 +341,7 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 	0.1
 );
 
-~matrix.defsAt('g00').setControls(
+~matrix.defsAt('r06').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.5, 1.5) },
 	{ exprand(0.05, 0.1) },
@@ -269,7 +374,7 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 ~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.6) },
-	{ rrand(0.01, 0.05) },
+	{ rrand(0.2, 0.5) },
 	0.1
 );
 
@@ -288,8 +393,8 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 );
 
 
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('r01').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 2.0) },
 	{ rrand(0.01, 0.2) },
 	{ rrand(0.1, 0.3) }
@@ -297,11 +402,11 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
 
-~matrix.defsAt('r07').setControls(
+~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.3) },
-	{ rrand(0.1, 0.3) }
+	{ exprand(0.3, 2.0) },
+	{ rrand(0.05, 0.1) },
+	{ 0 }
 );
 
 
@@ -345,8 +450,8 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 	0
 );
 
-~matrix.defsAt('r06').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('r04').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ rrand(0.3, 1.0) },
 	{ rrand(0.01, 0.2) },
 	0
@@ -360,15 +465,14 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 	0
 );
 
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ rrand(0.3, 1.5) },
-	{ rrand(0.2, 0.6) },
-	0.1
+~matrix.defsAt('r06').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ rrand(0.3, 1.0) },
+	{ rrand(0.005, 0.01) }
 );
 
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r05'), Pdef('g00'), Pdef('r06')])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r04'), Pdef('r06')])).quant(128)
 
 
 ~matrix.defsAt('r02').recall(1);
@@ -465,137 +569,6 @@ Tdef(\autopilot).stop
 ~matrix.defsAt('r03').recall(0)
 
 
-/////////// GEP ROUTINE /////////////
-
-~player.start(~foa)
-
-~player.setFoa('zoom', 1.0)
-~player.setFoa('push', 1.0)
-
-
-// 56-60, 61-62
-
-~indZoom = 56;
-~indPush = 60;
-
-~indZoom = 61;
-~indPush = 62;
-
-
-~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5]*2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0]*2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
-
-~player.stopRoutine(~indZoom);
-~player.stopRoutine(~indPush);
-
-
-// 38-40, 42-43, 44-45, 50-49
-
-~indZoom = 44;
-~indPush = 45;
-
-~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
-
-
-~player.playRoutine(~indZoom, Pseq([1.0, 0, 1.0, 0, 0, 1]*0.3, inf), Pseq([1, 2, 2, 1, 2, 1], inf), 'zoom');
-~player.playRoutine(~indPush, Pseq([0, 1.0, 0, 1.0, 0.5,1]*0.3, inf), Pseq([2, 1, 1, 2, 1, 2], inf), 'push');
-
-~player.stopRoutine(~indZoom);
-~player.stopRoutine(~indPush);
-
-
-////////// GEP PLAYER /////////////
-
-~player.start(~foa)
-
-~player.setFoa('zoom', 1.0)
-~player.setFoa('push', 1.0)
-
-~player.stop
-
-// zoom 0 // 7, 9, 10, 11, 13, 14, 15, 19, 22, 25, 26, 35, 36, 38, 39
-// **** 10, 26, 29, 33, 34, 37
-~ind0 = 7
-
-
-~player.play(~ind0, 0, 'zoom', 0)
-
-~player.set(~ind0, 1.0)
-
-~player.setWithPattern(~ind0,
-	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.5, 0.1, 0, 0.2, 0, 0.6, 0.2].mirror2, inf), ~matrix.beatdur/2)
-
-~player.setWithPattern(~ind0,
-	Pseq([0, 0, 0, 0, 0, 0, 0, 0, 0.6, 0.1, 0.6, 0, 0.6, 0.0, 0.6, 0], inf), ~matrix.beatdur/2)
-
-
-~player.setWithPattern(~ind0, Pwhite(0.05, 0.2, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
-
-~player.setWithPattern(~ind0, Pseq(Array.rand(16, 0.0, 0.3).round(0.1).mirror2, inf), ~matrix.beatdur/2)
-
-
-~player.free(~ind0)
-
-
-
-// push 1 //
-~ind1 = 25
-
-~player.play(~ind1, 0, 'push', 0)
-
-~player.set(~ind1, 0.7)
-
-~player.setWithPattern(~ind1,
-	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.5, 0.2], inf), ~matrix.beatdur/4)
-
-~player.setWithPattern(~ind1, Pwhite(0.001, 0.01, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
-
-~player.setWithPattern(~ind1, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
-
-~player.free(~ind1)
-
-
-
-// press 2 //
-~ind2 = 26
-
-~player.play(~ind2, 0, 'press', 0)
-
-
-~player.set(~ind2, 1.0)
-
-~player.setWithPattern(~ind2,
-	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.4, 0.1, 0, 0.2, 0, 0.7, 0.2, 0.1, 0.1, 0.8], inf), 0.125)
-
-~player.setWithPattern(~ind2, Pwhite(0.05, 0.4, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
-
-~player.setWithPattern(~ind2, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
-
-~player.free(~ind2)
-
-
-
-// focus 3 //
-~ind3 = 35
-
-~player.play(~ind3, 0, 'focus', 0)
-
-~player.set(~ind3, 1.0)
-
-~player.setWithPattern(~ind3,
-	Pseq([0.1, 0, 0.1, 1.0, 1.0, 0.4, 0.1, 0, 1.0, 0, 1.0, 0.2, 0.1, 0.6], inf), 0.125)
-
-~player.setWithPattern(~ind3, Pwhite(0.01, 0.4, inf), Pbrown(0.03125, 0.25, 0.03125, inf))
-
-~player.setWithPattern(~ind3, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
-
-~player.free(~ind3)
-
-
-s.queryAllNodes
-
-s.sendMsg("/n_free", 1021)
 
 
 
@@ -611,8 +584,8 @@ s.sendMsg("/n_free", 1021)
 
 
 ~matrix.activateSkismSynth('neuralFilter')
-#
-~matrix.setSkismAmp('neuralFilter', 0.2)
+
+~matrix.setSkismAmp('neuralFilter', 0.1)
 
 ~matrix.deactivateSkismSynth('neuralFilter')
 

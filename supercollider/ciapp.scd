@@ -1,6 +1,10 @@
 ~graphics = CinderApp(1024, 768, mode: 0);
 
 
+[1920,1080]*0.5
+16:9
+
+
 ~graphics = CinderApp(1024, 768, path: "~/Development/lambda/xcode/build/Debug/lambda.app");
 
 ~graphics.makeArgumentString
@@ -21,7 +25,7 @@
 
 ~graphics.setPattern(1, 1, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
-~graphics.setPattern(2, 0, 1.0, 1, 1, 0.5, 0.75, 0.9);
+~graphics.setPattern(2, 1, 1.0, 1, 1, 0.5, 0.75, 0.9);
 
 ~graphics.setPattern(3, 0, 1.0, 1, 0, 0.6, 0.8, 0.8);
 
@@ -125,89 +129,156 @@ Array.geom(30, 1.0, 0.96)
 1.0 - Array.series(30, 0, 0.02)
 
 
-~graphics = CinderApp(1024, 768);
+~graphics.patternLib.select({|ev| ev.active == 1}).collect(_.index)
+
+~graphics = CinderApp();
 
 ~graphics = CinderApp(1024, 768)
 ~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
 
+~graphics = CinderApp(ciAddr: NetAddr("169.254.184.218", 7000));
+
+
+~graphics = CinderApp(1280, 720)
+
+
 ~graphics.open
 
-
+~graphics.quit
 
 24**3
 
 40*40*10
 
-~graphics.initWorld(20, 20, 20, 20);
+~graphics.open
+
+~graphics.initWorld(128, 80, 10, 20);
+
+~graphics.initWorld(24, 24, 24, 20);
+
+~graphics.initWorld(16, 16, 16, 20);
+
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
 
-~graphics.initGenerations([4,6], [3,5], 12);
+~graphics.initGenerations([4,6], [3,5], 8);
 
 ~graphics.setSymmetry(11)
 
 ~graphics.setViewpoint(90.0, -80.0, 85.0, 0.0, 0.0, 0.0)
 
-~graphics.setViewpoint(0.0, -15.0, -180.0, 0.0, -15.0, 0.0)
+~graphics.setViewpoint(80.0, 90.0, -70.0, 0.0, 0.0, 0.0)
 
-~graphics.setInterpolation(1, 2)
+~graphics.setViewpoint(0.0, 0.0, -90.0, 0.0, 0.0, 0.0)
 
-~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
+~graphics.setInterpolation(1, 1)
+
+
+~graphics.setPattern(0, 1, 0.8, 0, 0, 0.0, 1.0, 1.0);
+
+~graphics.setPattern(1, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
+
+~graphics.setPattern(2, 0, 1.0, 1, 1, 0.3, 0.7, 0.3);
+
+
+~graphics.setPattern(3, 0, 0.4, 1, 1, 0.6, 0.8, 0.8);
+
+~graphics.setPattern(4, 0, 1.0, 1, 0, 0.0, 1.0, 1.0);
+
+
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
 ~graphics.setPattern(5, 0, 1.0, 1, 1, 0.9, 1.0, 0.0);
 
-~graphics.setPattern(6, 1, 1.0, 0, 0, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
-~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
+~graphics.setPattern(7, 0, 1.0, 1, 0, 1.0, 0.3, 0.5);
 
 ~graphics.setPattern(8, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(9, 0, 1.0, 1, 1, 0.5, 0.8, 0.9);
+~graphics.setPattern(9, 1, 0.5, 0, 0, 0.5, 0.8, 0.9);
 
-~graphics.setPattern(10, 1, 1.0, 1, 1, 0.5, 0.8, 1.0);
+~graphics.setPattern(10, 0, 1.0, 0, 0, 0.0, 0.2, 0.2);
 
-~graphics.setPattern(11, 0, 1.0, 0, 1, 0.0, 0.3, 0.5);
+~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.5, 0.0);
 
-~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
-~graphics.setPattern(14, 0, 1.0, 1, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 1, 1.0, 1, 1, 0.0, 0.5, 0.5);
 ~graphics.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15, 0, 0.4, 0, 0, 0.1, 0.7, 0.3);
+~graphics.setPattern(15, 0, 1.0, 1, 1, 0.4, 0.4, 0.4);
 
-~graphics.setPattern(26, 1, 0.3, 1, 1, 0.5, 0.6, 0.7);
 
-~graphics.setPattern(27, 0, 1.0, 1, 1, 0.1, 0.6, 0.5);
+~graphics.setPattern(16, 0, 1.0, 1, 1, 0.1, 0.7, 0.3);
+~graphics.setPattern(17, 0, 1.0, 0, 0, 0.1, 0.3, 0.7);
+~graphics.setPattern(18, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(28, 0, 1.0, 1, 1, 0.8, 1.0, 0.8);
+
+~graphics.setPattern(19, 0, 0.6, 1, 1, 0.8, 0.6, 0.7);
+
+~graphics.setPattern(20, 0, 1.0, 0, 0, 1.0, 0.6, 0.2);
+
+~graphics.setPattern(21, 0, 0.6, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(22, 0, 1.0, 0, 0, 1.0, 0.9, 1.0);
+
+~graphics.setPattern(23, 0, 0.6, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(24, 1, 0.6, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(25, 1, 1.0, 0, 0, 0.5, 0.6, 0.7);
+
+
+~graphics.setPattern(26, 1, 0.2, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(27, 0, 0.3, 1, 1, 0.1, 0.6, 0.5);
+
+~graphics.setPattern(28, 0, 1.0, 0, 0, 0.8, 1.0, 0.8);
 
 ~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
-~graphics.setPattern(29, 0, 1.0, 0, 0, 0.0, 0.8, 1.0);
+~graphics.setPattern(29, 1, 0.3, 0, 0, 0.0, 0.8, 1.0);
 
-~graphics.setPattern(30, 0, 1.0, 0, 0, 0.7, 0.8, 1.0);
+~graphics.setPattern(30, 0, 1.0, 1, 1, 0.7, 0.8, 1.0);
 
-~graphics.setPattern(31, 0, 1.0, 0, 0, 0.5, 0.3, 1.0);
-~graphics.setPattern(31, 1, 1.0, 1, 1, 0.3, 0.9, 0.9);
+~graphics.setPattern(31, 1, 1.0, 0, 0, 0.5, 0.3, 1.0);
+~graphics.setPattern(31, 0, 0.8, 1, 1, 0.3, 0.9, 0.9);
 
-~graphics.setPattern(32, 0, 1.0, 0, 0, 0.9, 0.9, 0.3);
+~graphics.setPattern(32, 0, 0.4, 1, 1, 0.0, 0.3, 0.4);
 
-~graphics.setPattern(33, 0, 0.5, 1, 1, 0.3, 0.6, 0.8);
+~graphics.setPattern(33, 0, 0.2, 1, 1, 0.3, 0.4, 0.0);
 
-~graphics.setPattern(34, 1, 1.0, 1, 1, 1.0, 0.2, 0.5);
+~graphics.setPattern(34, 0, 0.2, 1, 1, 1.0, 1.0, 0.5);
+
+
+~graphics.setPattern(34, 0, 0.2, 1, 1, 1.0, 0.2, 0.5);
+
+
+~pava = Pseq([16], inf).asStream;
+~pact = [];
+
+Ndef('graphics', {
+	loop({
+		var fadeIn, fadeOut;
+		fadeIn = ~pava.next;
+		~pact = ~pact.add
+	})
+}).play
+
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
-
+	
 24.do({|i| (i%4).postln })
 
-~rot = Rotation(140.0, 0.007, 100.0, 60.0, 0.0, 0.0094, 0.0, 0.0088);
+~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, -0.02, 0.0, 0.0);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
 ~graphics.stopRotation
 
 
-~graphics.setViewpoint(100.0, 100.0, 100.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(70.0, 70.0, 70.0, 0.0, 0.0, 0.0)
 
 ~graphics.sendPredefined3DRule(\faders)
 
@@ -218,6 +289,10 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.sendPredefined3DRule(\xtasy)
 
 ~graphics.sendPredefined3DRule(\flamingstarbow)
+
+
+~graphics.sendPredefined3DRule(\starwars)
+
 
 ~graphics.sendGenRule([2],[3,4,5],6);
 
@@ -239,10 +314,12 @@ Array.geom(30, 1.0, 0.96)
 Generations
 
 
+
+
 Tdef(\sendVector, {
 	loop({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
-		0.25.wait;
+		[0.25, 0.75, 0.35, 0.5].choose.wait;
 	});
 });
 
@@ -279,12 +356,12 @@ Routine({
 })
 )
 
-
+(
 Tdef(\autopilot, {
 	var active, max=15, min=5;
 	active = 6;
 	~graphics.fadeInPattern(6, 10, 1.0);
-	30.wait;
+	10.wait;
 	loop({
 		var newPattern, time, fade;
 		fade = rrand(5, 10);
@@ -300,7 +377,7 @@ Tdef(\autopilot, {
 		}
 	})
 }).play
-
+)
 
 ~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0)
 
@@ -314,9 +391,11 @@ Tdef(\autopilot, {
 
 ~graphics.showCodePanel
 
-~graphics.mapCodePanel
+~graphics.hideCodePanel
 
-~graphics.sendCodeTitle("sc.live.code.fest")
+~graphics.unmapCodePanel
+
+~graphics.sendCodeTitle("karlsruhe.algorave.15")
 
 ~graphics.sendPredefinedGenRule(\cooties)
 
@@ -329,6 +408,12 @@ Tdef(\autopilot, {
 ~graphics.rotateCamera
 
 ~graphics.stopRotation
+
+
+~rot = Rotation(140.0, 0.3, 100.0, 20.0, 0.0, 0.34, 0.0, 0.38);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
+
 
 ~matrix.assignCodeWindow(Document.current);
 
@@ -345,25 +430,29 @@ Tdef(\autopilot, {
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.2);
+~graphics.setAdd(0.93);
 
 ~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
 ~graphics.setViewpoint(0.0, 0.0, 80.0, 0.0, 0.0, 0.0)
 
-~graphics.setPattern(18, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
+~graphics.setBackground(0.4, 0.4, 0.4)
 
-~graphics.setPattern(19, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
 
-~graphics.setPattern(20, 0, 1.0, 0, 0, 0.9, 0.9, 0.2);
+~graphics.setPattern(1, 1, 1.0, 0, 0, 0.1, 0.1, 0.1);
+
+
+~graphics.setPattern(19, 1, 1.0, 0, 0, 0.1, 0.1, 0.1);
+
+~graphics.setPattern(20, 0, 1.0, 0, 0, 0.1, 0.1, 0.2);
 
 ~graphics.setPattern(21, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(22, 1, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(22, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
-~graphics.setPattern(23, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(23, 0, 1.0, 1, 1, 0.0, 0.1, 0.1);
 
-~graphics.setPattern(24, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+~graphics.setPattern(24, 1, 1.0, 0, 0, 0.2, 0.1, 0.1);
 
 ~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
@@ -394,7 +483,7 @@ Routine({
 ~graphics.setFrameRate(16.0);
 
 
-~graphics.activateSwarm(16, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 5.0, 100.0);
+~graphics.activateSwarm(8, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 5.0, 100.0);
 
 (
 Routine({
@@ -409,7 +498,7 @@ Routine({
 
 ~graphics.sendBoidPattern(0, 1, 0);
 
-~graphics.sendBoidPattern(1, 0, 0);
+~graphics.sendBoidPattern(4, 0, 0);
 
 ~graphics.sendBoidPattern(3, 1, 0);
 
@@ -425,7 +514,7 @@ Routine({
 
 ~graphics.setViewpoint(25.0,25.0, 25.0, 0.0, 0.0, 0.0)
 
-~graphics.setSwarm(0.9, 50.0, 8.0, 5.0, 100.0)
+~graphics.setSwarm(0.9, 50.0, 8.0, 25.0, 100.0)
 
 ~graphics.killSwarm
 
@@ -443,6 +532,7 @@ Routine({
 // keyDownAction to send evaluated code to the window
 Document.current.keyDownAction = {|doc, char, mod, uni, key|
 	var sendarray;
+	[uni, key].postln;
 	if ((uni == 13) and: { key == 36 })
 	{
 		Post << "Sending: " << doc.selectedString << Char.nl;
@@ -453,13 +543,10 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 		})
 	}
 }
+
 )
 
-
-
-
-
-
+Document.current.keyDownAction ={}
 
 ~rot = Rotation(40.0, 0.1, 20.0, 100.0, 0.0, 0.055, 0.0, 0.06);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
@@ -472,5 +559,8 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 	{ rrand(0.1, 0.5) },
 	{ rrand(0.05, 0.2) }
 );
+
+
+
 
 Generations

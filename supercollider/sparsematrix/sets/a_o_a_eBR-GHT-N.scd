@@ -1,8 +1,8 @@
 (
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-//~graphics = CinderApp();
+//~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+~graphics = CinderApp();
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -51,9 +51,9 @@ MasterEQ(2)
 
 s.queryAllNodes
 
+~graphics.open
 
-
-//~graphics.sendCodeTitle("live.code")
+~graphics.sendCodeTitle("live.code")
 
 //s.queryAllNodes
 

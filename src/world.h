@@ -116,6 +116,7 @@ public:
 	int alive() { return _alive; };
 	Rule* rule() { return _rule; }
 	double cellState(int, int, int);
+	R ruleType() { return _ruleType; }
 	
 	void incrementIndex();
 	void incrementAlive();

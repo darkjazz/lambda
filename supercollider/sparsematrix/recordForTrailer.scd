@@ -1,8 +1,7 @@
 (
 ~ncoef = 20;
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-//~graphics = CinderApp();
+~graphics = CinderApp(1280, 720);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -10,8 +9,6 @@
 
 
 MasterEQ(2)
-
-// ~sparsedata = UGepLoader(headsize: 12, numgenes: 2).load;
 
 (
 ~ncoef = 20;
@@ -28,12 +25,10 @@ MasterEQ(2)
 
 )
 
-//~graphics.open
+~graphics.open
 
-//~matrix.assignCodeWindow(Document.current);
-
-~matrix.setBPM(140);
-~player.setBPM(140)
+~matrix.setBPM(150);
+~player.setBPM(150)
 
 ~matrix.makeEfxProto;
 
@@ -44,20 +39,13 @@ MasterEQ(2)
 
 /// WAAAIIIIIITTTT !!!!!
 
-~matrix.loadEventAnalysis
-
-
 ~matrix.prepareAudio
 
 s.queryAllNodes
 
 
 
-//~graphics.sendCodeTitle("live.code")
-
-//s.queryAllNodes
-
-Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r01'), Pdef('b00') ])).quant(128)
+Pdef('matrix', Ppar([ Pdef('r01'), Pdef('r02'), Pdef('r07'), Pdef('g01'), Pdef('b02'), Pdef('b03') ])).quant(128)
 
 
 Pdef('matrix', Ppar([ Pdef('g00'), Pdef('g01') ])).quant(128)
@@ -102,7 +90,7 @@ Routine({
 
 
 
-~graphics.initWorld(24, 20, 16, ~ncoef);
+~graphics.initWorld(24, 24, 24, ~ncoef);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
 
@@ -111,89 +99,30 @@ Routine({
 ~graphics.setSymmetry(11)
 
 //~graphics.showCodePanel
-gt
-~graphics.setViewpoint(70.0, 80.0, 60.0, 0.0, 0.0, 0.0);
+
+~graphics.setViewpoint(0.0, 0.0, 100.0, 0.0, 0.0, 0.0);
 
 
-~graphics.sendPredefined3DRule(\xtasy)
+~graphics.sendPredefined3DRule(\nova)
 
 
-~graphics.setPattern(30, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-
-
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.7, 1.0) },
-	{ rrand(0.2, 0.8) },
-	0.1
-);
-
-
-~matrix.defsAt('g01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.7, 1.5) },
-	{ rrand(0.1, 0.5) },
-	0.1
-);
-
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.7, 1.5) },
-	{ rrand(0.04, 0.2) },
-	0.1
-);
-
-
-~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.9, 1.0);
-
-
-~matrix.defsAt('b00').setGroups((0..7), 1, 1.0, {arg name;
-	~matrix.defsAt('b00').buffers[name]
-		.duration.round(~matrix.beatdur).clip(0, ~matrix.beatdur) * 4;
-}, 0.0)
-
-
-~graphics.setPattern(8, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
-
-
-
-~matrix.makeMelody('m00', 'fsyn00', 32, 'efx1');
-
-Pdef('m00').play
-
-~matrix.efxamps['efx1'] = 0.1
-
-
-Pdef('matrix', Ppar([ Pdef('r04'), Pdef('r05') ])).quant(128)
-
-Pdef('matrix').play
-
-~matrix.ampctrls['m00'] = 2.0
 
 
 s.queryAllNodes
 
-Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r03'), Pdef('r04') ])).quant(128)
-
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 
 
-
-
-~matrix.defsAt('r05').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+~matrix.defsAt('r01').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.4, 2.0) },
 	{ exprand(0.05, 0.1) },
 	0.1
 );
 
-
-
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.4, 2.0) },
-	{ exprand(0.2, 0.6) },
+	{ exprand(0.05, 0.1) },
 	0.1
 );
 
@@ -204,190 +133,31 @@ Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('r01') ])).quant(128)
 	0.1
 );
 
-
-~matrix.defsAt('r01').setActives(
-	{ exprand(0.4, 2.0) },
-	{ exprand(0.01, 0.2) },
-	0.1
-);
-
-
-
 ~matrix.defsAt('g01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.4, 1.0) },
-	{ exprand(0.1, 0.5) },
-	0.1
-);
-
-
-~matrix.defsAt('g00').setControls(
 	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.4, 1.0) },
 	{ exprand(0.01, 0.1) },
 	0.1
 );
 
+~matrix.defsAt('g01').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ exprand(0.4, 1.0) },
+	{ exprand(0.1, 0.5) },
+	0.1
+);
 
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.5, 2.0) },
 	{ rrand(0.05, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.5, 1.5) },
-	{ exprand(0.05, 0.1) },
-	0.1
-);
-
-~matrix.defsAt('r04').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.1, 1.5) },
-	{ exprand(0.01, 0.09) },
-	0.1
-);
-
-
-~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
-	{ exprand(0.5, 2.0) },
-	{ exprand(0.04, 0.1) },
-	0.1
-);
-
-~matrix.defsAt('g01').recall(0);
-
-~matrix.defsAt('r03').recall(0);
-
-~matrix.defsAt('b03').recall(0);
 
 
 
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 1.6) },
-	{ rrand(0.01, 0.05) },
-	0.1
-);
-
-~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.6, 1.0) },
-	{ rrand(0.05, 0.2) },
-	0.1
-);
-
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.1, 2.0) },
-	{ rrand(0.05, 0.1) },
-	0.1
-);
-
-
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
-	{ exprand(0.3, 2.0) },
-	{ rrand(0.01, 0.2) },
-	{ rrand(0.1, 0.3) }
-);
-
-
-
-~matrix.defsAt('r07').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 1.0) },
-	{ rrand(0.05, 0.3) },
-	{ rrand(0.1, 0.3) }
-);
-
-
-
-
-~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.1, 1.0) },
-	{ rrand(0.1, 0.2) },
-	0
-);
-
-
-~matrix.defsAt('r02').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.1, 1.0) },
-	{ rrand(0.1, 0.2) },
-	0
-);
-
-
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.3, 2.0) },
-	{ exprand(0.01, 0.2) },
-	{ rrand(0.3, 0.5) }
-);
-
-~matrix.defsAt('r07').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ rrand(0.5, 1.0) },
-	{ exprand(0.05, 0.1) },
-	{ rrand(0.1, 0.4) }
-);
-
-
-~matrix.defsAt('r03').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ rrand(0.3, 1.0) },
-	{ rrand(0.04, 0.15) },
-	0
-);
-
-~matrix.defsAt('r06').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.3, 1.0) },
-	{ rrand(0.01, 0.2) },
-	0
-);
-
-
-~matrix.defsAt('r05').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ rrand(0.3, 1.0) },
-	{ rrand(0.05, 0.2) },
-	0
-);
-
-~matrix.defsAt('g00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ rrand(0.3, 1.5) },
-	{ rrand(0.2, 0.6) },
-	0.1
-);
-
-
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r05'), Pdef('g00'), Pdef('r06')])).quant(128)
-
-
-~matrix.defsAt('r02').recall(1);
-
-
-s.queryAllNodes
-
-
-Tdef(\background, {
-	loop({
-//		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
-		if (0.66.coin) {
-			~graphics.setBackground(*[0.0, 0.1, 0.2].choose.dup(3).round(0.1));
-		};
-		0.125.wait;
-	});
-});
-
-Tdef(\background).play
 
 
 (
@@ -475,15 +245,12 @@ Tdef(\autopilot).stop
 
 // 56-60, 61-62
 
-~indZoom = 56;
-~indPush = 60;
-
 ~indZoom = 61;
 ~indPush = 62;
 
 
-~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5]*2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0]*2, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
+~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
+~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
 
 ~player.stopRoutine(~indZoom);
 ~player.stopRoutine(~indPush);
@@ -491,8 +258,8 @@ Tdef(\autopilot).stop
 
 // 38-40, 42-43, 44-45, 50-49
 
-~indZoom = 44;
-~indPush = 45;
+~indZoom = 50;
+~indPush = 49;
 
 ~player.playRoutine(~indZoom, Pseq([0.5, 0, 0.5, 0, 0, 0.5], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
 ~player.playRoutine(~indPush, Pseq([0, 0.5, 0, 0.5, 0.5, 0], inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
@@ -516,12 +283,12 @@ Tdef(\autopilot).stop
 
 // zoom 0 // 7, 9, 10, 11, 13, 14, 15, 19, 22, 25, 26, 35, 36, 38, 39
 // **** 10, 26, 29, 33, 34, 37
-~ind0 = 7
+~ind0 = 91
 
 
 ~player.play(~ind0, 0, 'zoom', 0)
 
-~player.set(~ind0, 1.0)
+~player.set(~ind0, 0.5)
 
 ~player.setWithPattern(~ind0,
 	Pseq([0.1, 0, 0.1, 0.05, 0.15, 0.5, 0.1, 0, 0.2, 0, 0.6, 0.2].mirror2, inf), ~matrix.beatdur/2)
@@ -611,8 +378,8 @@ s.sendMsg("/n_free", 1021)
 
 
 ~matrix.activateSkismSynth('neuralFilter')
-#
-~matrix.setSkismAmp('neuralFilter', 0.2)
+
+~matrix.setSkismAmp('neuralFilter', 0.1)
 
 ~matrix.deactivateSkismSynth('neuralFilter')
 
@@ -620,7 +387,7 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('latchOnset',0.4)
+~matrix.setSkismAmp('latchOnset', 0.002)
 
 ~matrix.deactivateSkismSynth('latchOnset')
 
@@ -628,7 +395,7 @@ s.sendMsg("/n_free", 1021)
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 0.5)
+~matrix.setSkismAmp('cliqSaw', 0.2)
 
 ~matrix.setSkismAmp('cliqSaw', 0.0)
 
@@ -637,7 +404,9 @@ s.sendMsg("/n_free", 1021)
 
 
 
+s.record
 
+s.stopRecording
 
 
 

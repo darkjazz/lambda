@@ -1,153 +1,147 @@
 (
 ~ncoef = 20;
+~rate = 20;
+~headsize = 14;
+~numgenes = 4;
+
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp();
+~graphics = CinderApp(1024, 768, mode: 1);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
 
 
 
-
-(
-~ncoef = 20;
-~rate = 20;
-~headsize = 16;
-~numgenes = 4;
-
-~data = UGepLoader(~headsize, ~numgenes).load;
-
-~sparsedata = UGepLoader().loadFromFile(Paths.devdir +/+ "lambda/supercollider/sparsematrix/2014-01-01/defnames00.scd");
-
-~foa = #[zoom,focus,push,press];
-~player = GepPlayer(~data, ~decoder, ~graphics);
-
-)
-
-
-
-(
-~matrix.setBPM(135);
-
-~matrix.makeEfxProto;
-
-~matrix.preparePatternDefs(~sparsedata);
-)
-
-
-
-
-(
-~matrix.prepareAudio;
-
-// ~longbufs = "/Users/alo/sounds/wfsfx/*".pathMatch.collect({|path|
-// 	Buffer.read(s, path)
-// });
-
 MasterEQ(2)
 
+(
+
+~foa = #[zoom,push];
+~player = JGepPlayer(~decoder, dbname: "ges_00");
+~player.getDefNamesByHeader(~headsize, ~numgenes);
 )
 
 
+~matrix.setBPM(142);
+~player.setBPM(142);
+
+~matrix.loadPatternDefs("patternDefs.scd");
+
+
+~loader = JsonLoader("ges_00");
+~defnames = ~loader.getDefNamesByHeader(16, 1).collect({|def| def['value'] });
+~matrix.prepareGepDefs(~defnames, ~loader);
+
+~matrix.prepareAudio
+
+
+
+Pdef('matrix', Ppar([ Pdef('g00'), Pdef('g01') ])).quant(64)
+
+
+Pdef('matrix').play
+
+
+~buf = Buffer.read(s, Paths.soundDir +/+ "tehishing/tehishing_ch1-2_stereo.aif")
+
+~tbus = Bus.control;
+
+~pos = Pstutter(
+	Pwrand([1, 2, 4, 6, 8], [1, 2, 3, 1, 1].normalizeSum, inf), 
+	Pwhite(0, ~buf.numFrames, inf)
+).asStream;
+
+Ndef('meander', {|pos|
+	var trig = InTrig.kr(~tbus);
+	PlayBuf.ar(2, ~buf, 1.0, trig, trig, loop: 1);
+})
+
+~matrix.onsetFunc = { ~tbus.value = ~pos.next; }
 
 (
-~selectN = {|n=1, array|
-	var indices, pdefs = Array();
-	indices = (0..array.size-1);
-	indices = indices.scramble;
-	n.do({
-		pdefs = pdefs.add(Pdef(array[indices.pop]));
-	});
-	pdefs
-};
 
 Routine({
-
-	~intrM = {|sclr| ~matrix.beatdur * sclr };
-	~intrD = {|sclr| ~matrix.beatdur / sclr };
-	~quant = 128;
-
-	~rnames = ['r00', 'r01', 'r02', 'r03', 'r04', 'r05', 'r06', 'r07'];
-	~bnames = ['b00', 'b01', 'b02', 'b03'];
-	~gnames = ['g00', 'g01', 'g02', 'g03', 'g04', 'g05'];
-
-	~pdefs = ~selectN.(2, ~rnames) ++ ~selectN.(1, ~bnames) ++ ~selectN.(1, ~gnames);
-
-	~pdefs.postln;
-
-	Pdef('matrix', Ppar(~pdefs)).quant(~quant);
-	Pdef('matrix').play;
-	~seconds = SystemClock.seconds;
-
-	loop({
-		var removed;
-
-		~matrix.defsAt(~pdefs.collect(_.key).choose).setControls(
-			{ [0, 1].wchoose([0.9, 0.1]) },
-			{ exprand(0.1, 1.0) },
-			{ rrand(0.01, 0.08) },
-			0.0
-		);
-
-		64.do({|i|
-			var key, sc, weights, off, durmin, durmax;
-			sc = sin(i/64*pi);
-			key = ~pdefs.collect(_.key).choose;
-			if (key.asString.contains("r"))
-			{
-				off = sc.linlin(0, 1, 0.9, 0.75);
-				durmin = sc.linlin(0, 1, 0.005, 0.05);
-				durmax = sc.linlin(0, 1, 0.08, 0.2);
-			};
-			if (key.asString.contains("b"))
-			{
-				off = sc.linlin(0, 1, 0.9, 0.6);
-				durmin = sc.linlin(0, 1, 0.04, 0.1);
-				durmax = sc.linlin(0, 1, 0.1, 0.4);
-			};
-			if (key.asString.contains("g"))
-			{
-				off = sc.linlin(0, 1, 0.8, 0.7);
-				durmin = sc.linlin(0, 1, 0.02, 0.08);
-				durmax = sc.linlin(0, 1, 0.08, 0.4);
-			};
-			weights = [off, 1-off];
-			~matrix.defsAt(key).setControls(
-				{ [0, 1].wchoose(weights) },
-				{ exprand(0.1, 1.0) },
-				{ rrand(durmin, durmax) },
-				0.0
-			);
-			// if (0.75.coin) {
-			// 	key = ~pdefs.collect(_.key).choose;
-			// 	~matrix.defsAt(key).recall(0);
-			// };
-			~intrM.([8, 12, 16].choose).wait;
-		});
-
-		2.do({
-			var removed, key;
-			removed = ~pdefs.removeAt(~pdefs.size.rand);
-			key = removed.key.asString;
-			if (key.contains("r")) {
-				~pdefs = ~pdefs ++ ~selectN.(1, ~rnames.select({|it| it != key }));
-			};
-			if (key.contains("b")) {
-				~pdefs = ~pdefs ++ ~selectN.(1, ~bnames.select({|it| it != key }));
-			};
-			if (key.contains("g")) {
-				~pdefs = ~pdefs ++ ~selectN.(1, ~gnames.select({|it| it != key }));
-			};
-		});
-
-		Pdef('matrix', Ppar(~pdefs)).quant(~quant);
-
-		Post << (SystemClock.seconds - ~seconds).round(2) << " s: " << ~pdefs << Char.nl;
-
+	Ndef('meander').play;
+	~tbus.value = 0;
+	(~matrix.beatdur * 16).wait;
+	~matrix.defsAt('g00').setControls(
+		{ [0, 1].wchoose([0.9, 0.1]) },
+		{ exprand(0.3, 1.0) },
+		{ exprand(0.1, 0.4) },
+		0.1
+	);
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([0.8, 0.2]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.07, 0.2) },
+		0.1
+	);	
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g00').setControls(
+		{ [0, 1].wchoose([0.8, 0.2]) },
+		{ exprand(0.5, 1.0) },
+		{ exprand(0.1, 0.2) },
+		0.1
+	);
+	(~matrix.beatdur * 8).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([0.8, 0.2]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.07, 0.4) },
+		0.1
+	);
+	(~matrix.beatdur * 8).wait;
+	['g00', 'g01', 'g01', 'g00', 'g00'].do({|name|
+		~matrix.defsAt(name).recall(0);
+		(~matrix.beatdur * 8).wait;
 	});
-
-
+	(~matrix.beatdur * 16).wait;
+	~matrix.defsAt('g00').setControls(
+		{ [0, 1].wchoose([0.9, 0.1]) },
+		{ exprand(0.3, 1.0) },
+		{ exprand(0.1, 0.4) },
+		0.1
+	);
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([0.8, 0.2]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.07, 0.2) },
+		0.1
+	);	
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([0.8, 0.2]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.07, 0.2) },
+		0.1
+	);	
+	~matrix.defsAt('g00').setControls(
+		{ [0, 1].wchoose([1.0, 0.0]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.07, 0.2) },
+		0.1
+	);	
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([0.9, 0.1]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.1, 0.4) },
+		0.1
+	);
+	~matrix.onsetFunc = { };
+	~tbus.value = ~buf.numFrames - (~buf.sampleRate * ~matrix.beatdur * 32);
+	(~matrix.beatdur * 16).wait;	
+	~matrix.defsAt('g01').setControls(
+		{ [0, 1].wchoose([1.0, 0.0]) },
+		{ exprand(0.2, 0.8) },
+		{ exprand(0.1, 0.4) },
+		0.1
+	);
+	(~matrix.beatdur * 16).wait;	
+	Ndef('meander').clear;	
 }).play
 
-
 )
+
