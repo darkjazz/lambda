@@ -1,9 +1,19 @@
-Ndef(\hit, {|rate=60,size=20,rule=30,del=0.0625,amp=0.3,dur=0.3,freq=1760|
+Ndef(\hit, {|rate=60,size=20,rule=30,del=0.0625,amp=0.3,dur=0.3,freq=59|
 	var trig;
 	trig = Impulse.kr(1);
-	(HCM3.ar(Select.kr(IRand(0, 4), Scale.jiao.ratios * freq), 1.99, 0.8)).dup 
+	(VarSaw.ar(Select.kr(TIRand.kr(0,7), Array.primesN(7, 60)), 0.25, 0.01, 20).clip(-0.5, 0.5)).dup 
 		* EnvGen.kr(Env.perc, trig, timeScale: dur)
 })
+
+(181*2).nextPrime
+5423.nextPrime
+588.nextPrime
+(181+30).nextPrime
+764.prevPrime
+(23**2).asInt.nextPrime
+(13*4+7).asInt.nextPrime
+
+(443+100).asInt.nextPrime
 
 Ndef(\efx, {|amp=0.1, del=0.25, rmp=0.1, rt=4.0|
 	var input, sig, n = 5;
@@ -27,6 +37,19 @@ Ndef(\efx).play
 
 Ndef(\efx).set(\amp, 1.0, \del, 0.25, \rmp, 0.1, \rt, 2.0)
 
+
+
+{Out.ar(0,Pan2.ar(0.5*TermanWang.ar(2.0,Impulse.kr(MouseX.kr(1,1000)),0.1,0.01,1.0,1.0,1.0,MouseX.kr(0.4,1.2), MouseY.kr(2.0,4.0)),0.0))}.play;
+
+(
+{Out.ar(0,Pan2.ar(
+
+CombN.ar(
+Resonz.ar(DoubleWell.ar(Impulse.kr(2),MouseX.kr(0.01,1,'exponential'),MouseY.kr(0.01,1,'exponential'),3.9,MouseX.kr(0.0001,0.01,'exponential'),0.25,LFNoise0.kr(1,0.4,0.5),LFNoise0.kr(1,10.4,10.5)),500,0.1),
+0.05,0.05,2
+)
+,0.0))}.play
+)
 
 rrand(16, 32).round()
 

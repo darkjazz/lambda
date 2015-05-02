@@ -183,7 +183,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(3, 0, 0.4, 1, 1, 0.6, 0.8, 0.8);
 
-~graphics.setPattern(4, 0, 1.0, 1, 0, 0.0, 1.0, 1.0);
+~graphics.setPattern(4, 1, 1.0, 1, 0, 0.0, 1.0, 1.0);
 
 
 ~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
@@ -193,7 +193,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(7, 0, 1.0, 1, 0, 1.0, 0.3, 0.5);
 
-~graphics.setPattern(8, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~graphics.setPattern(8, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
 ~graphics.setPattern(9, 1, 0.5, 0, 0, 0.5, 0.8, 0.9);
 
@@ -201,7 +201,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.5, 0.0);
 
-~graphics.setPattern(12, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.6, 1.0);
 
@@ -254,6 +254,8 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(34, 0, 0.2, 1, 1, 1.0, 0.2, 0.5);
 
+~graphics.setPattern(35, 0, 0.8, 0, 0, 0.0, 1.0, 0.8);
+
 
 ~pava = Pseq([16], inf).asStream;
 ~pact = [];
@@ -274,7 +276,7 @@ Ndef('graphics', {
 ~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, -0.02, 0.0, 0.0);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
-
+	
 ~graphics.stopRotation
 
 

@@ -3496,10 +3496,10 @@ void GraphicsRenderer::pattern36(int x, int y, int z) {
 	//	yB -= hx;
 	//	zF -= hx;
 	
-	red = patternLib[32].color.r * abs(patternLib[32].colormap - cstate);
-	green = patternLib[32].color.g * abs(patternLib[32].colormap - cstate);
-	blue = patternLib[32].color.b * abs(patternLib[32].colormap - cstate);
-	alpha = patternLib[32].alpha * abs(patternLib[32].alphamap - cstate);
+	red = patternLib[36].color.r * abs(patternLib[36].colormap - cstate);
+	green = patternLib[36].color.g * abs(patternLib[36].colormap - cstate);
+	blue = patternLib[36].color.b * abs(patternLib[36].colormap - cstate);
+	alpha = patternLib[36].alpha * abs(patternLib[36].alphamap - cstate);
 	
 	if (x == 0) { 
 		strokeRect(1, 1.0);
