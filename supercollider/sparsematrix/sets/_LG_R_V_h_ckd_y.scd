@@ -1,5 +1,3 @@
-// nanstep infdub niljazz noisefunk
-
 (
 ~ncoef = 20;
 ~rate = 20;
@@ -7,15 +5,10 @@
 ~numgenes = 4;
 
 ~decoder = FoaDecoder(false);
-~graphics = CinderApp(1024, 768, mode: 0);
+~graphics = CinderApp(1024, 768, mode: 1);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
-
-
-SparseMatrix.patterns16.keys
-
-SparseMatrix.patterns12.keys
 
 MasterEQ(2)
 s.scope
@@ -53,7 +46,12 @@ SparseMatrixPattern.useTwinPrimes = true
 
 ~graphics.open
 
-~graphics.initWorld(19, 19, 19, ~ncoef);
+~graphics.showCodePanel
+
+~matrix.assignCodeWindow(Document.current);
+
+
+~graphics.initWorld(17, 17, 17, ~ncoef);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
 
@@ -67,9 +65,6 @@ SparseMatrixPattern.useTwinPrimes = true
 ~graphics.setViewpoint(0.0, 0.0, -120.0, 0.0, 0.0, 0.0);
 
 
-~graphics.showCodePanel
-
-~matrix.assignCodeWindow(Document.current);
 
 /////// END GRAPHICS INIT ////////
 
@@ -81,9 +76,11 @@ s.queryAllNodes
 
 
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('r02'), Pdef('r03'), Pdef('b02')])).quant(64)
+Pdef('matrix', Ppar([ Pdef('r07'), Pdef('r05'), Pdef('r06'), Pdef('g00')])).quant(64)
 
 Pdef('efx').play
+
+Pdef('efx').stop
 
 Pdef('matrix').play
 
@@ -153,12 +150,12 @@ Ndef('meander').clear
 })
 
 ~matrix.defsAt('r00').assignEfx(
-	(efx0: (1,3..31))
+	(efx3: (1,3..31))
 )
 
 
 ~matrix.defsAt('r01').assignEfx(
-	(efx0: (1,3..31))
+	(efx4: (1,3..31))
 )
 
 ~matrix.defsAt('r02').assignEfx(
@@ -171,12 +168,12 @@ Ndef('meander').clear
 )
 
 
-~matrix.defsAt('r07').assignEfx(
-	(efx5: (0,2..31))
+~matrix.defsAt('r05').assignEfx(
+	(efx4: (0,2..31))
 )
 
-~matrix.defsAt('r04').assignEfx(
-	(efx4: (0..31))
+~matrix.defsAt('r06').assignEfx(
+	(efx5: (0..31))
 )
 
 ~matrix.defsAt('r06').assignEfx(
@@ -198,15 +195,15 @@ Ndef('meander').clear
 
 ~matrix.efxamps['efx0'] = 0.3
 
-~matrix.efxamps['efx1'] = 0.3
+~matrix.efxamps['efx1'] = 0.1
 
 ~matrix.efxamps['efx2'] = 0.3
 
-~matrix.efxamps['efx3'] = 0.5
+~matrix.efxamps['efx3'] = 0.2
 
-~matrix.efxamps['efx4'] = 0.5
+~matrix.efxamps['efx4'] = 0.3
 
-~matrix.efxamps['efx5'] = 0.5
+~matrix.efxamps['efx5'] = 0.3
 
 
 
@@ -228,9 +225,9 @@ Ndef('meander').clear
 })
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 1.0) },
-	{ exprand(0.01, 0.1) },
+	{ exprand(0.01, 0.2) },
 	0.1
 );
 
@@ -248,49 +245,61 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 	~matrix.defsAt(key).recall(0)
 });
 
-~matrix.defsAt('r03').setAmpDev(0.2)
+~matrix.defsAt('r01').setAmpDev(0.2)
 
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('r04').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 1.0) },
-	{ exprand(0.08, 0.2) },
+	{ exprand(0.01, 0.2) },
 	0.1
 );
 
-~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+
+~matrix.defsAt('r05').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.2, 1.0) },
 	{ exprand(0.01, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('r02').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 0.6) },
-	{ exprand(0.02, 0.06) },
-	0.1
-);
-
-~matrix.defsAt('r03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 0.6) },
+~matrix.defsAt('b01').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ exprand(0.4, 1.0) },
 	{ exprand(0.02, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.05, 1.0) },
-	{ exprand(0.04, 0.4) },
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.1, 1.0) },
+	{ exprand(0.02, 0.2) },
 	0.1
 );
 
+~matrix.defsAt('g01').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.04, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('r06').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.2, 1.0) },
+	{ exprand(0.01, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('g00').recall(1)
+
+Pdef('b02').source.
 
 
-~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('g00').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.2, 0.7) },
-	{ exprand(0.2, 0.6) },
+	{ exprand(0.05, 0.5) },
 	0.1
 );
 
@@ -758,93 +767,62 @@ Tdef('ciAuto').stop
 
 (
 
-~samplesize = 100;
-~beatrate = Array.fill(~samplesize, 0);
-~collectMfcc = Array.fill(~samplesize, Array.fill(~ncoef, 0));
-
 ~lasttime = SystemClock.seconds;
 ~meanamp = 0;
 ~meandur = 0;
-~ruleWeight = 0.2;
+~ruleWeight = 0.05;
 ~changeWeight = 0.1;
 
-//~img = Image.open("/Users/alo/Pictures/eesti/proc/IMG_0397.JPG");
-
-//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg"); 
-
-//~colors = Array();
-//~img.height.do({|y|
-//	~img.width.do({|x|
-//		var col = ~img.getColor(x, y);
-//		~colors = ~colors.add(Array.with(col.red, col.green, col.blue));
-//	})
-//});
-
-//~colors = ~colors.collect({|arr| (arr ** 0.5).round(0.01) });
-
-~colors = [
-	[0.0, 1.0, 1.0],
-	[0.5, 1.0, 1.0],
-	[0.3, 0.7, 0.3],
-	[0.6, 0.8, 0.8],
-	[0.0, 0.4, 1.0],
-	[0.5, 1.0, 1.0],
-	[0.5, 0.9, 0.8],
-	[1.0, 0.3, 0.5],
-	[0.6, 0.7, 0.9],
-	[0.5, 0.8, 0.9],
-	[0.0, 0.2, 0.2],
-	[0.0, 0.5, 0.0],
-	[0.6, 0.8, 1.0],
-	[0.0, 0.6, 1.0],
-	[0.0, 0.5, 0.5],
-	[0.4, 0.4, 0.4],
-	[0.1, 0.7, 0.3],
-	[0.1, 0.3, 0.7],
-	[1.0, 1.0, 1.0],
-	[0.8, 0.6, 0.7],
-	[1.0, 0.6, 0.2],
-	[0.5, 0.6, 0.7],
-	[1.0, 0.9, 1.0],
-	[0.5, 0.6, 0.7],
-	[0.5, 0.7, 0.6],
-	[0.7, 0.5, 0.6],
-	[0.6, 0.7, 0.5],
-	[0.1, 0.6, 0.5],
-	[0.8, 1.0, 0.8],
-	[0.6, 0.9, 1.0],
-	[0.0, 0.8, 1.0],
-	[0.7, 0.8, 1.0],
-	[0.5, 0.3, 1.0],
-	[0.3, 0.9, 0.9],
-	[0.0, 0.3, 0.4],
-	[0.3, 0.4, 0.0],
-	[1.0, 1.0, 0.5]
+~patches = [ 
+	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
+	[1.0, 1, 1, 0.9, 0.1, 0.4],
+	[1.0, 1, 1, 1.0, 0.8, 0.0],
+	[1.0, 1, 1, 0.6, 0.8, 0.8],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 1, 1, 0.5, 1.0, 1.0], //5
+	[1.0, 1, 1, 0.5, 0.9, 0.8],
+	[1.0, 1, 1, 1.0, 0.3, 0.5],
+	[1.0, 0, 0, 0.6, 0.7, 0.9],
+	[1.0, 0, 0, 0.5, 0.8, 0.9],
+	[1.0, 1, 1, 0.2, 0.8, 0.8], //10
+	[1.0, 0, 0, 0.0, 0.5, 1.0],
+	[1.0, 0, 0, 0.6, 0.8, 1.0],
+	[1.0, 1, 1, 0.2, 0.8, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0], //15
+	[1.0, 1, 1, 0.1, 1.0, 0.3],
+	[1.0, 1, 1, 0.7, 1.0, 0.0],
+	[1.0, 1, 1, 1.0, 1.0, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 1, 1, 1.0, 1.0, 0.2], //20
+	[1.0, 1, 1, 1.0, 1.0, 1.0],
+	[1.0, 1, 1, 1.0, 0.9, 1.0],
+	[1.0, 0, 1, 1.0, 1.0, 1.0],
+	[1.0, 1, 1, 0.5, 0.6, 0.7],
+	[1.0, 0, 0, 0.5, 0.6, 0.7], //25
+	[1.0, 1, 1, 0.6, 0.7, 0.8],
+	[1.0, 1, 1, 0.2, 0.7, 0.6],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 0, 0, 0.6, 0.9, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0], //30
+	[1.0, 0, 0, 0.5, 0.3, 1.0],
+	[1.0, 0, 0, 0.2, 0.5, 0.6],
+	[0.5, 0, 0, 0.7, 0.8, 0.0],
+	[1.0, 0, 0, 1.0, 0.2, 0.5],
+	[1.0, 0, 0, 0.0, 1.0, 0.8]
+	
 ];
 
-~graphPatterns = (0..34);
+~graphPatterns = (0..35);
 
-~activePatterns = [8];
-~graphics.setPattern(8, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
+~activePatterns = [10];
+~graphics.setPattern(10, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
 
 Tdef('ciAuto', {|mfcc|
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
 		~lasttime = SystemClock.seconds;
-		~beatrate.pop;
-		~beatrate.insert(0, delta);
-	//	~collectMfcc.pop;
-	//	~collectMfcc.insert(0, mfcc);
-//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
-//			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
-//		}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
-//			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
-//		}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
-	//		<< Char.nl;
-	//	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
 		
 		if (~changeWeight.coin)
 		{
@@ -854,14 +832,14 @@ Tdef('ciAuto', {|mfcc|
 				~activePatterns.size.rand.do({
 					curr = ~activePatterns.choose;
 					~activePatterns.remove(curr);
-					args = [curr, 0, 1.0, 1, 1] ++ ~colors.choose;
+					args = [curr, 0] ++ ~patches.choose;
 					~graphics.setPattern(*args);
 				})
 			}
 			{
 				curr = ~graphPatterns.choose;
 				~activePatterns = ~activePatterns.add(curr);
-				args = [curr, 1, 1.0] ++ [0, 1].choose.dup ++ ~colors.choose;
+				args = [curr, 1] ++ ~patches.choose;
 				~graphics.setPattern(*args);
 			}
 		};

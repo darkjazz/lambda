@@ -1,0 +1,1 @@
+sonic-annotator -d vamp:qm-vamp-plugins:qm-mfcc:means -r "/Users/alo/Music/iTunes/iTunes Music/2 Cents" -w csv --csv-one-file /Users/alo/Data/test.csv

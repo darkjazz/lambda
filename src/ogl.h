@@ -161,7 +161,12 @@ public:
 	bool bSHADER;
 	Vec3f mLightLoc;
 	bool bLIGHT;
-
+	gl::Texture img00;
+	gl::Texture img01;
+	gl::Texture img02;
+	gl::Texture img03;
+	gl::Texture img04;
+	gl::Texture img05;
 	
 private:
 	

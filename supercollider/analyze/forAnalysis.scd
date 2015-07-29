@@ -3,3 +3,4 @@
 ~batchAnalyzer = MikroBatchAnalyzer(~paths, "/Users/alo/data/mikro/lib004/");
 
 ~batchAnalyzer.process
+

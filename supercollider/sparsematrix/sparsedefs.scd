@@ -20,53 +20,85 @@ SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz
 /** EFX **/
 
 SynthDef(\rev00, {|out, in, amp, rtime, hf|
-	var input, sig;
+	var input, sig, bf, fft;
 	input = In.ar(in) * amp;
 	sig = LPF.ar(Reverb.ar(input, rtime, hf), 800.0);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newOmni))
+	fft = FFT( LocalBuf(1024), sig);
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( fft, Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	Out.ar(out, bf)
 }).add;
 
 SynthDef(\rev01, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail|
-	var input, sig;
+	var input, sig, bf;
 	input = In.ar(in) * amp;
-	sig = GVerb.ar(input, room, rtime, damp, bw, spr, dry, early, tail);
+	sig = GVerb.ar(input, room, rtime, damp, bw, spr, dry, early, tail).dup(2).flat;
 	sig = RLPF.ar(sig, 1000.0, 1.0);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
+	Out.ar(out, bf)
 }).add;
 
+
 SynthDef(\rev02, {|out, in, amp, room, rtime, wsz, pch, pds, tds|
-	var input, sig;
+	var input, sig, bf;
 	input = In.ar(in) * amp;
-	sig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.3, taillevel: 1.0);
+	sig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.3, taillevel: 1.0).dup(2).flat;
 	sig = sig + PitchShift.ar(sig, wsz, pch, pds, tds);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
+	Out.ar(out, bf)
 }).add;
 
 SynthDef(\del00, {|out, in, amp, del, dec, room, rtime, ramp|
-	var input, sig;
+	var input, sig, bf;
 	input = In.ar(in) * amp;
 	sig = CombL.ar(input,del,del,dec*4.0);
 	sig = LPF.ar(GVerb.ar(sig, room, rtime, drylevel: 0)) * ramp + sig;
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newStereo))
+	sig = sig.dup(2).flat;
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
+	Out.ar(out, bf)
 }).add;
 
 SynthDef(\del01, {|out, in, amp, del, dec|
-	var input, sig, n = 5;
+	var input, sig, bf;
 	input = In.ar(in) * amp;
 	sig = CombL.ar(input,del, [del,del*0.5,del*0.33,del],
 		[dec,dec*Rand(0.8, 1.2), dec*Rand(0.8,1.2),dec*Rand(0.8,1.2)]
 	);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newQuad))
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
+	Out.ar(out, bf)
 }).add;
 
 SynthDef(\del02, {|out, in, amp, rtime, del, dec|
-	var input, sig, n = 5;
+	var input, sig, bf;
 	input = In.ar(in) * amp;
 	sig = LPF.ar(Reverb.ar(input, rtime), 800.0);
 	sig = CombL.ar(input,del, [del,del*0.5,del*0.33,del],
 		[dec,dec*Rand(0.8, 1.2), dec*Rand(0.8,1.2),dec*Rand(0.8,1.2)]
 	);
-	Out.ar(out, FoaEncode.ar(sig, FoaEncoderMatrix.newQuad))
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
+	Out.ar(out, bf)
 }).add;
 
 /** END EFX **/

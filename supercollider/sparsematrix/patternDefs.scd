@@ -2,7 +2,7 @@
 
 	matrix.addPatternSynthDef('r00', (0..31), 8, 8, ['kpanilogo', 'yole'], 2, "r0", 'r00');
 
-	matrix.addPatternSynthDef('r01', (0..31), 8, 4, ['sokou', 'liberte'], 2, "r1", 'r01');
+	matrix.addPatternSynthDef('r01', (0..31), 8, 8, ['sokou', 'liberte'], 2, "r1", 'r01');
 
 	matrix.addPatternSynthDef('r02', (16..47), 8, 8, ['kokou', 'raboday'], 2, "r2", protoname: 'r02');
 
@@ -14,7 +14,7 @@
 
 	matrix.addPatternSynthDef('r06', (0,2..63), 8, 8, ['doudoumba', 'mandiani'], 2, "r6", protoname: 'r06');
 
-	matrix.addPatternSynthDef('r07', (0,2..63), 8, 4, ['sokou', 'doudoumba'], 2, "r7", protoname: 'r07');
+	matrix.addPatternSynthDef('r07', (0,2..63), 8, 8, ['sokou', 'doudoumba'], 2, "r7", protoname: 'r07');
 
 	matrix.addPatternBufferDef('b00', (0..31), groupsize: 4, div: 1,
 		sourcenames: ['kokou', 'soli', 'macrou'],

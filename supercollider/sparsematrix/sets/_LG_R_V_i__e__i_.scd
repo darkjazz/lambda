@@ -7,7 +7,7 @@
 ~numgenes = 4;
 
 ~decoder = FoaDecoder(decoderType:'stereo');
-~graphics = CinderApp(1024, 768, mode: 1);
+~graphics = CinderApp(1024, 768, mode: 0);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
@@ -25,8 +25,9 @@ s.scope
 
 
 
-~matrix.setBPM(137);
-~player.setBPM(137);
+~matrix.setBPM(131);
+~player.setBPM(131);
+
 
 SparseMatrixPattern.useTwinPrimes = true
 
@@ -48,7 +49,7 @@ SparseMatrixPattern.useTwinPrimes = true
 
 ~graphics.open
 
-~graphics.initWorld(16, 16, 16, ~ncoef);
+~graphics.initWorld(17, 17, 17, ~ncoef);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
 
@@ -76,7 +77,7 @@ s.queryAllNodes
 
 
 
-Pdef('matrix', Ppar([ Pdef('r07'), Pdef('r04'), Pdef('r01'), Pdef('efx')])).quant(64)
+Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r03'), Pdef('g01'), Pdef('b03'), Pdef('efx')])).quant(64)
 
 
 Pdef('matrix').play
@@ -97,20 +98,20 @@ Ndef('meander', {|pos|
 Ndef('meander').play; ~tbus.value = 0;
 
 ~pos = Pstutter(
-	Pwrand([8, 12, 16, 24, 32, 48, 64], (1..7).reciprocal.normalizeSum, inf), 
+	Pwrand([8, 16, 32, 64, 128], (1..5).reciprocal.normalizeSum, inf), 
 	Pwhite(0, ~buf.numFrames, inf)
 ).asStream;
 
-(
 
-~matrix.onsetFunc = {}
-{
+
+~matrix.onsetFunc = {
 	var pos;
 	if (0.7.coin) { 
 		pos = ~pos.next;
 		~tbus.value = pos;
 	}
 }
+
 )
 
 Ndef('meander').clear
@@ -136,7 +137,7 @@ Ndef('meander').clear
 })
 
 (0..31).do({|index|
-	var efxkeys = ['efx0'].select({ 0.3.coin });
+	var efxkeys = ['efx2'].select({ 0.3.coin });
 	~matrix.defsAt('r02').setEfx(index, efxkeys)
 })
 
@@ -159,7 +160,7 @@ Ndef('meander').clear
 )
 
 
-~matrix.defsAt('r04').assignEfx(
+~matrix.defsAt('r00').assignEfx(
 	(efx4: (0..31))
 )
 
@@ -220,14 +221,16 @@ Ndef('meander').clear
 	ct.amp = exprand(0.3, 0.8)
 })
 
-~matrix.defsAt('r01').setControls(
+~matrix.defsAt('r00').setControls(
 	{ [0, 1].wchoose([0.5, 0.5]) },
 	{ exprand(0.1, 1.0) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.01, 0.3) },
 	0.1
 );
 
 s.scope
+
+s.queryAllNodes
 
 Pdef('matrix').source.list.collect(_.key)
 
@@ -239,16 +242,48 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 	~matrix.defsAt(key).recall(0)
 });
 
-~matrix.defsAt('r00').setAmpDev(0.2)
+~matrix.defsAt('r03').setAmpDev(0.2)
 
-~matrix.defsAt('g01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.5, 1.0) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.05, 0.3) },
 	0.1
 );
 
-~matrix.defsAt('g00').recall(0)
+~matrix.defsAt('r03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.2, 1.0) },
+	{ exprand(0.04, 0.2) },
+	0.1
+);
+
+~matrix.defsAt('g01').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.1, 0.6) },
+	{ exprand(0.03, 0.2) },
+	0.1
+);
+
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.2, 1.0) },
+	{ exprand(0.04, 0.1) },
+	0.1
+);
+
+"fuck"
+
+
+~matrix.defsAt('g00').setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ exprand(0.2, 0.7) },
+	{ exprand(0.2, 0.6) },
+	0.1
+);
+
+
+~matrix.defsAt('r00').recall(0)
 
 ~matrix.defsAt('r01').ctrls.select({|ctr| ctr.active == 1}).do({|ev|
 	ev.dur = exprand(0.01, 0.1)
@@ -506,7 +541,7 @@ Tdef('loadData', {
 
 ~player.play(~ind0, 0, 'zoom', 0)
 
-~player.set(~ind0, 0.8)
+~player.set(~ind0, 0.5)
 
 
 ~player.setWithPattern(~ind0,
@@ -515,7 +550,7 @@ Tdef('loadData', {
 ~player.free(~ind0)
 
 
-~ind1 = 13
+~ind1 = 17
 
 ~player.loadData(~ind1)
 
