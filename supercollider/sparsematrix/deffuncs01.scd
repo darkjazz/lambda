@@ -1,4 +1,4 @@
-[	
+[
 	{|freq=41| Mix(SinOsc.ar(Array.primesN(3, 40), 0.5pi)) },
 	{|freq=1| Mix(DelayC.ar(Impulse.ar(1, 11, 11),0.05,[0, 0.05])).clip(-0.9, 0.9) },
 	{|freq=7993| PinkNoise.ar(11.0).clip(-0.9, 0.9) * SinOsc.ar(freq) },
@@ -7,7 +7,7 @@
 	{|freq=59| VarSaw.ar(Select.kr(TIRand.kr(0,7), Array.primesN(7, 60)), 0.25, 0.01, 20).clip(-0.5, 0.5) },
 	{|freq=23| LFPulse.ar(freq + LFPulse.ar(freq)).distort },
 	{|freq=499| LFNoise2.ar(freq, 2, SinOsc.ar(freq)) },
-	
+
 	{|freq=43| LFGauss.ar(1/freq, XLine.kr(0.1, 0.01, 0.2)) },
 	{|freq=997| LFNoise0.ar(freq + LFNoise0.ar(freq, 11), 199).tanh * 0.8 },
 	{|freq=19| Mix(SinOsc.ar(Array.primesN(4, 19), 0.5pi)) },
@@ -16,7 +16,7 @@
 	{|freq=9973| Impulse.ar(1, 101, 11).clip(-0.9, 0.9) + Dust2.ar(freq, 2).tanh },
 	{|freq=31| LFSaw.ar(freq, 0.5, LFNoise0.ar(9973).range(11, 101)).distort },
 	{|freq=11| Blip.ar(freq, 101, 11).clip(-0.9, 0.9) },
-	
+
 	{|freq=37| LFTri.ar(freq, 0, LFNoise0.ar(257).range(freq, 67)).clip(-0.9, 0.9).distort },
 	{|freq=12289| SinOsc.ar(freq) },
 	{|freq=29| Crackle.ar(1.6, freq).softclip },
@@ -25,18 +25,18 @@
 	{|freq=59| Pluck.ar(SinOsc.ar(LFNoise0.ar(997).range(freq, 127), 0, 11), Impulse.kr(2), 0.1, 0.1, 5).tanh },
 	{|freq=23| LFSaw.ar(LFNoise0.ar(freq**2-5).range(freq, freq*2-5), 0, 10).softclip },
 	{|freq=67| Decimator.ar(Impulse.ar(freq, 17, 17).softclip, 48017, 23, 2) },
-	
+
 	{|freq=11| SineShaper.ar(SinOsc.ar(freq, 0, 11), 0.9) },
 	{|freq=17| SineShaper.ar(SinOsc.ar(freq, 0, 11), 0.8) },
-	{|freq=29| SineShaper.ar(SineShaper.ar(SinOsc.ar(freq, 0, Select.kr(TIRand.kr(0, 10, Impulse.kr(1))), 
+	{|freq=29| SineShaper.ar(SineShaper.ar(SinOsc.ar(freq, 0, Select.kr(TIRand.kr(0, 10, Impulse.kr(1))),
 		Array.primesN(11, 30)), 0.5)) },
 	{|freq=7| SineShaper.ar(SinOsc.ar(freq, 0, IRand(2411, 4813)), 0.7) },
 	{|freq=181| CrossoverDistortion.ar(SinOsc.ar(LFNoise2.ar(2003).range(freq, freq+30), 0, 2).softclip, 0.4, 0.2) },
 	{|freq=53| Disintegrator.ar(SinOsc.ar(LFSaw.ar(23).range(freq, freq*2+5), 0, 2).clip, 0.5, 0.5) },
 	{|freq=41| Gendy1.ar(2, 2, 1, 1, freq, freq*2+1) },
 	{|freq=17| Gendy1.ar(5, 5, 0.01, 0.01, freq, freq*4+3, 1, 1, 23, 23) },
-	
-	{|freq=13| LFSaw.ar(LFSaw.ar(freq).range(freq*2+5, freq*4+7), LFSaw.ar(17).range(0, 2), 
+
+	{|freq=13| LFSaw.ar(LFSaw.ar(freq).range(freq*2+5, freq*4+7), LFSaw.ar(17).range(0, 2),
 		LFPulse.ar(19).range(0.5, 1.0)) },
 	{|freq=29| StkPluck.ar(freq, 1.0, 13).clip(-0.9, 0.9) },
 	{|freq=71| StkSaxofony.ar(freq, 19, 41, XLine.kr(31, 11, 0.2), 11, 17, 11, 61, 1, 61).clip(-0.9, 0.9) },
@@ -45,16 +45,16 @@
 	{|freq=17| SpruceBudworm.ar(0,0.1,25.45,1.5,0.5,5.0, initx:0.7, inity: 0.4).tanh },
 	{|freq=11987| FincoSprottL.ar(freq,2.39,0.1,1/7,1/11,1/17) },
 	{|freq=443| (Perlin3.ar(LFSaw.kr(freq/2+1.5), SinOsc.ar(freq), LFTri.ar(freq+104))*11).distort },
-	
-	{|freq=5519| CA0.ar(freq, 37, 73, 0) },
-	{|freq=11027| CA0.ar(freq, 67, 89, 0) },
-	{|freq=5003| CA0x.ar(freq, 33, 101, 0) },
-	{|freq=44017| (CA0x.ar(freq, 67, 107, 0)*11).clip(-0.9, 0.9) },
+
+	{|freq=5519| CA1.ar(freq, 37, 73, 0) },
+	{|freq=11027| CA1.ar(freq, 67, 89, 0) },
+	{|freq=5003| CA1x.ar(freq, 33, 101, 0) },
+	{|freq=44017| (CA1x.ar(freq, 67, 107, 0)*11).clip(-0.9, 0.9) },
 	{|freq=18013| CA1.ar(freq, 37, 109, 0, 13).softclip },
 	{|freq=521| CA1.ar(freq, 67, 137, 0) },
 	{|freq=2011| CA1x.ar(freq, 37, 149, 0) },
 	{|freq=4799| CA1x.ar(freq, 67, 181, 0) },
-	
+
 	{|freq=439| Logist0.ar((freq), 1.8) },
 	{|freq=113| CML0.ar(Select.kr(IRand(0, 4), Array.primesN(5, 110)), 1.2, 0.05, 1.0) },
 	{|freq=109| GCM0.ar(Select.kr(IRand(0, 4), Array.primesN(5, 110)), 1.5, 0.01) },
@@ -63,13 +63,13 @@
 	{|freq=2053| FIS.ar(LFSaw.ar(4).range(1,5),LFNoise0.ar(11).abs,SinOsc.ar(freq).range(1,11).round(1)) },
 	{|freq=743| CombN.ar(CA1.ar(freq,SinOsc.kr(29, 0.5pi).range(29, 61).round(1)),0.2,0.125,0.25) },
 	{|freq=761| Mix(GVerb.ar(LPF.ar(Impulse.ar(1),freq,19),5)) },
-	
+
 	{|freq=127| Logist0.ar(freq, LFNoise2.kr(5).range(1, 2), 0.01) },
 	{|freq=769| CML0.ar(freq, 1.99, 0.01, 0.1) },
 	{|freq=977| GCM3.ar(Select.kr(IRand(0, 4), Array.primesN(5, 977)), 1.7, 0.1) },
 	{|freq=251| HCM0.ar(Select.kr(IRand(0, 4), Array.primesN(5, 251)), 1.1, 0.3) },
 	{|freq=167| Nagumo.ar(0.01, 0.001, LFPulse.ar(freq).range(0, 1)) },
 	{|freq=3301| FIS.ar(LFSaw.ar(1).range(1,4),Crackle.ar(1.99).abs,LFSaw.ar(freq).range(1,11).round(1)) },
-	{|freq=5431| Mix(DelayN.ar(CA1.ar(freq),0.05,(0.01,0.02..0.04))) },
+	{|freq=5431| Mix(DelayN.ar(CA2.ar(freq),0.05,(0.01,0.02..0.04))) },
 	{|freq=593| Mix(GVerb.ar(HPF.ar(Impulse.ar(1),freq,19),5)) }
-]		
+]

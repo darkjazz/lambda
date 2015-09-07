@@ -12,7 +12,7 @@
 
 //~img = Image.open("/Users/alo/Pictures/eesti/proc/IMG_0397.JPG");
 
-//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg"); 
+//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg");
 
 //~colors = Array();
 //~img.height.do({|y|
@@ -78,19 +78,19 @@ Tdef('ciAuto', {|mfcc|
 		~beatrate.insert(0, delta);
 	//	~collectMfcc.pop;
 	//	~collectMfcc.insert(0, mfcc);
-//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
+	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur
 	//		<< Char.nl;
 	//	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
-		
+
 		if (~changeWeight.coin)
 		{
-			
+
 			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({
@@ -126,7 +126,7 @@ Tdef('ciAuto', {|mfcc|
 				rrand(30.0, 60.0)*[1.0,-1.0].choose,
 				0.0, 0.0, 0.0
 			);
-			~graphics.unmapCodePanel;
+			// ~graphics.unmapCodePanel;
 		}{
 			if (0.5.coin) {
 				~rot = Rotation(rrand(-100.0, 100.0), rrand(0.005, 0.05), rrand(-20.0, 20.0),
@@ -138,7 +138,7 @@ Tdef('ciAuto', {|mfcc|
 			};
 			~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 			~graphics.rotateCamera;
-			~graphics.mapCodePanel;
+			// ~graphics.mapCodePanel;
 		};
 		rrand(0.2, 0.6).round(0.1).wait;
 	})

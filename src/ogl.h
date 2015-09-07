@@ -3,21 +3,21 @@
  *  lambda
  *
  *  Created by alo on 22/04/2011.
- *  
+ *
  *	This file is part of lambda.
  *
  *	lambda is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
- 
+
  *	lambda is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *	GNU General Public License for more details.
- 
+
  *	You should have received a copy of the GNU General Public License
- *	along with lambda.  If not, see <http://www.gnu.org/licenses/>. 
+ *	along with lambda.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 #ifndef OGL_H
@@ -37,24 +37,23 @@
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
-//#include "multicodepanel.h"
 
 using namespace ci;
 using namespace ci::app;
 
-//const double pi = 3.1415926535;
+const double pi = 3.1415926535;
 
 const int numPatterns = 36;
 const int numBoidPatterns = 6;
 
 struct pattern {
 
-	bool active; 
+	bool active;
 	double alpha;
 	int colormap;
 	int alphamap;
 	Color color;
-	
+
 	pattern(): active(false), alpha(0), colormap(0), alphamap(0) { color = Color(0.0, 0.0, 0.0); };
 	~pattern() {};
 };
@@ -92,69 +91,69 @@ public:
 		blocy = 0.0f;
 		blocz = 0.0f;
 	};
-	
+
 	~GraphicsRenderer() {
 		delete [] patternLib;
 		delete [] rowColors;
 		delete [] rowNormals;
-		delete [] rowVertices;		
+		delete [] rowVertices;
 	};
-	
-	pattern* patternLib;	
-	boidPattern* boidPatternLib; 
-	
+
+	pattern* patternLib;
+	boidPattern* boidPatternLib;
+
 	void setupOgl();
-	
+
 	void setupBoidShader();
-	
+
 	void cleanupBoidShader();
-	
+
 	void reshape();
-		
+
 	void startDraw();
-	
+
 	void endDraw();
-	
+
 	void drawFragment(Cell*);
-		
+
 	void update();
-	
+
 	void setBackground(float r, float g, float b) {
 		_bgr = r; _bgg = g; _bgb = b;
 	};
-	
+
 	void drawBoids();
-		
+
 	void drawCodePanel();
-	
+
 	void mapCodePanel();
-	
+
 	Vec3f rotateXYZ;
-	
+
 	float rotateAngle;
-	
-	CameraPersp mCam;	
+
+	CameraPersp mCam;
 	Matrix44f mRotation;
-	
+
 	Vec3f mEye, mCenter, mUp;
-	
+
 	float mDirectional;
-	Vec2f mMousePos;	
-	
+	Vec2f mMousePos;
+
 	vector<CubeMap> mMaps;
-	
+
 	gl::GlslProg boidShader;
 	gl::GlslProg boidShader01;
-	
+
 	bool attachEyeToFirstBoid;
 	bool lookAtCentroid;
-	
+
 	Boids* boids;
-	
+
 	CodePanel codePanel;
 	//MultiCodePanel multiCodePanel;
 	bool codePanelActive;
-	bool codePanelMapped; 
+	bool codePanelMapped;
 	bool multiCodePanelActive;
 
 	gl::GlslProg smShader;
@@ -167,9 +166,9 @@ public:
 	gl::Texture img03;
 	gl::Texture img04;
 	gl::Texture img05;
-	
+
 private:
-	
+
 	double fragSizeX, fragSizeY, fragSizeZ, state;
 	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha, maxphase;
 	int currentIndex, vectorSize, counter;
@@ -177,62 +176,62 @@ private:
 	Cell* ptrBMU;
 	World* ptrWorld;
 	float _bgr, _bgg, _bgb;
-	float hx, hy; 
+	float hx, hy;
 	float blocx, blocy, blocz;
 
 	GLfloat *rowVertices, *worldVertices, *rowNormals, *worldNormals, *rowColors, *worldColors;
-	
-	
+
+
 	void pattern00(int, int, int);
 
 	void pattern01(int, int, int);
-	
+
 	void pattern02(int, int, int);
-	
+
 	void pattern03(int, int, int);
 
 	void pattern04(int, int, int);
-	
+
 	void pattern05(int, int, int);
-	
+
 	void pattern06(int, int, int);
-	
+
 	void pattern07(int, int, int);
-	
+
 	void pattern08(int, int, int);
-	
+
 	void pattern09(int, int, int);
 
 	void pattern10(int, int, int);
-	
+
 	void pattern11(int, int, int);
-	
+
 	void pattern12(int, int, int);
-	
+
 	void pattern13(int, int, int);
-	
+
 	void pattern14(int, int, int);
 
 	void pattern15(int, int, int);
 
 	void pattern16(int, int, int);
-	
+
 	void pattern17(int, int, int);
-	
+
 	void pattern18(int, int, int);
-	
+
 	void pattern19(int, int, int);
-	
+
 	void pattern20(int, int, int);
-	
+
 	void pattern21(int, int, int);
-	
+
 	void pattern22(int, int, int);
-	
+
 	void pattern23(int, int, int);
-	
+
 	void pattern24(int, int, int);
-	
+
 	void pattern25(int, int, int);
 
 	void pattern26(int, int, int);
@@ -246,13 +245,13 @@ private:
 	void pattern30(int, int, int);
 
 	void pattern31(int, int, int);
-	
+
 	void pattern32(int, int, int);
 
 	void pattern33(int, int, int);
 
 	void pattern34(int, int, int);
-	
+
 	void pattern35(int, int, int);
 
 	void pattern36(int, int, int);
@@ -270,24 +269,24 @@ private:
 	void drawBoids04();
 	void drawBoids05();
 	void drawBoidWorldBorders();
-	void drawBoidWorldFrame();	
-	
+	void drawBoidWorldFrame();
+
 	// *** basic drawing functions *** //
-	
+
 	void fillRect (int);
-	
+
 	void strokeRect (int, float);
-	
+
 	void drawPoint (float, float, float, float);
-	
+
 	void drawLine (float, float, float, float, float, float, float);
-	
+
 	void drawCircle (int, float, int, bool);
-	
+
 	void strokeRectArray();
-	
+
 	void createTriMesh();
-	
+
 };
 
 #endif

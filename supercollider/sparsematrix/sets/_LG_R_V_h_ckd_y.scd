@@ -4,7 +4,7 @@
 ~headsize = 14;
 ~numgenes = 4;
 
-~decoder = FoaDecoder(false);
+~decoder = FoaDecoder(decoderType:'stereo');
 ~graphics = CinderApp(1024, 768, mode: 1);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
@@ -76,7 +76,7 @@ s.queryAllNodes
 
 
 
-Pdef('matrix', Ppar([ Pdef('r07'), Pdef('r05'), Pdef('r06'), Pdef('g00')])).quant(64)
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('r02')])).quant(64)
 
 Pdef('efx').play
 
@@ -96,20 +96,20 @@ Ndef('meander', {|pos|
 	var trig = InTrig.kr(~tbus);
 	PlayBuf.ar(2, ~buf, 1.0, trig, trig, loop: 1) * 0.6;
 })
- 	
+
 Ndef('meander').play; ~tbus.value = 0;
 
 ~pos = Pstutter(
-	Pwrand([8, 16, 32, 64, 128], (1..5).reciprocal.normalizeSum, inf), 
+	Pwrand([8, 16, 32, 64, 128], (1..5).reciprocal.normalizeSum, inf),
 	Pwhite(0, ~buf.numFrames, inf)
 ).asStream;
 
 
 
-~matrix.onsetFunc = 
+~matrix.onsetFunc =
 {
 	var pos;
-	if (0.7.coin) { 
+	if (0.7.coin) {
 		pos = ~pos.next;
 		~tbus.value = pos;
 	}
@@ -247,7 +247,7 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 
 ~matrix.defsAt('r01').setAmpDev(0.2)
 
-~matrix.defsAt('r04').setControls(
+~matrix.defsAt('r02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 1.0) },
 	{ exprand(0.01, 0.2) },
@@ -255,15 +255,15 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 );
 
 
-~matrix.defsAt('r05').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.2, 1.0) },
 	{ exprand(0.01, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('r01').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.4, 1.0) },
 	{ exprand(0.02, 0.1) },
 	0.1
@@ -495,9 +495,9 @@ s.queryAllNodes
 ~player.loadData(~indPush)
 
 (
-~player.playRoutine(~indZoom, 
+~player.playRoutine(~indZoom,
 	Pseq([1, 0, 1, 0, 0, 1, 0, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, 
+~player.playRoutine(~indPush,
 	Pseq([0, 1, 0, 1, 1, 0, 1, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
 )
 
@@ -689,7 +689,7 @@ s.sendMsg("/n_free", 1021)
 
 
 ~matrix.deactivateSkismSynth('latchOnset')
-      
+
 
 
 ~matrix.activateSkismSynth('cliqSaw')
@@ -773,7 +773,7 @@ Tdef('ciAuto').stop
 ~ruleWeight = 0.05;
 ~changeWeight = 0.1;
 
-~patches = [ 
+~patches = [
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
 	[1.0, 1, 1, 0.9, 0.1, 0.4],
 	[1.0, 1, 1, 1.0, 0.8, 0.0],
@@ -810,7 +810,7 @@ Tdef('ciAuto').stop
 	[0.5, 0, 0, 0.7, 0.8, 0.0],
 	[1.0, 0, 0, 1.0, 0.2, 0.5],
 	[1.0, 0, 0, 0.0, 1.0, 0.8]
-	
+
 ];
 
 ~graphPatterns = (0..35);
@@ -823,10 +823,10 @@ Tdef('ciAuto', {|mfcc|
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
 		~lasttime = SystemClock.seconds;
-		
+
 		if (~changeWeight.coin)
 		{
-			
+
 			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({

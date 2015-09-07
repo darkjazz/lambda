@@ -207,7 +207,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(9, 0, 1.0, 0, 0, 0.5, 0.8, 0.9);
 
-~graphics.setPattern(10, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
+~graphics.setPattern(10, 0, 1.0, 1, 1, 0.2, 0.8, 0.8);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.5, 1.0);
 
@@ -215,10 +215,10 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 
-~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
+~graphics.setPattern(14, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
-~graphics.setPattern(15, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(15, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
 ~graphics.setPattern(16, 0, 1.0, 1, 1, 0.1, 1.0, 0.3);
@@ -249,9 +249,9 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
 
-~graphics.setPattern(30, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(30, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(31, 1, 1.0, 0, 0, 0.5, 0.3, 1.0);
+~graphics.setPattern(31, 0, 1.0, 0, 0, 0.5, 0.3, 1.0);
 ~graphics.setPattern(31, 0, 0.8, 1, 1, 0.3, 0.9, 0.9);
 
 ~graphics.setPattern(32, 0, 1.0, 0, 0, 0.2, 0.5, 0.6);
@@ -279,13 +279,13 @@ Ndef('graphics', {
 
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
-	
+
 24.do({|i| (i%4).postln })
 
 ~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, -0.02, 0.0, 0.0);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
-	
+
 ~graphics.stopRotations
 
 
@@ -572,7 +572,7 @@ Document.current.keyDownAction ={}
 );
 
 
-
+Tdef('ciAuto').clear
 
 Generations
 
@@ -586,19 +586,19 @@ Tdef('ciAuto', {|mfcc|
 		~beatrate.insert(0, delta);
 	//	~collectMfcc.pop;
 	//	~collectMfcc.insert(0, mfcc);
-//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
+	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur
 	//		<< Char.nl;
 	//	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
-		
+
 		if (~changeWeight.coin)
 		{
-			
+
 			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({
