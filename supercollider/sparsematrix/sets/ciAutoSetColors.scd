@@ -6,7 +6,7 @@
 ~ruleWeight = 0.05;
 ~changeWeight = 0.05;
 
-~patches = [ 
+~patches = [
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
 	[1.0, 1, 1, 0.9, 0.1, 0.4],
 	[1.0, 1, 1, 1.0, 0.8, 0.0],
@@ -43,24 +43,24 @@
 	[0.5, 0, 0, 0.7, 0.8, 0.0],
 	[1.0, 0, 0, 1.0, 0.2, 0.5],
 	[1.0, 0, 0, 0.0, 1.0, 0.8]
-	
+
 ];
 
 ~graphPatterns = (0..35);
 
 ~activePatterns = [8];
-~graphics.setPattern(10, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
 
 Tdef('ciAuto', {|mfcc|
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
 		~lasttime = SystemClock.seconds;
-		
+
 		if (~changeWeight.coin)
 		{
-			
-			if (~activePatterns.size > 3)
+
+			if (~activePatterns.size > 5)
 			{
 				~activePatterns.size.rand.do({
 					curr = ~activePatterns.choose;

@@ -1,6 +1,8 @@
 ~graphics = CinderApp(1024, 768, mode: 1);
 
+~graphics = CinderApp(1600, 1050, mode: 1);
 
+~graphics.open
 
 ~graphics = CinderApp(1024, 768, path: "~/Development/lambda/xcode/build/Debug/lambda.app");
 
@@ -153,7 +155,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.initWorld(17, 17, 17, 20);
 
-~graphics.initWorld(24, 8, 4, 20);
+~graphics.initWorld(24, 24, 24, 20);
 
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
@@ -176,7 +178,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setViewpoint(0.0, 0.0, 0.0, 0.0, 0.0, -1000.0)
 
-~graphics.setViewpoint(140.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(90.0, 0.0, 90.0, 0.0, 0.0, 0.0)
 
 
 ~graphics.setViewpoint(100.0, 100.0, 40.0, 0.0, 0.0, 0.0)
@@ -185,9 +187,9 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setBackground(0.0, 0.0, 0.0)
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
+~graphics.setPattern(0, 1, 1.0, 0, 0, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(1, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
+~graphics.setPattern(1, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 1, 1, 1.0, 0.8, 0.0);
 
@@ -197,7 +199,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
-~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
 
 ~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
@@ -207,16 +209,15 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(9, 0, 1.0, 0, 0, 0.5, 0.8, 0.9);
 
-~graphics.setPattern(10, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
+~graphics.setPattern(10, 0, 1.0, 1, 1, 0.2, 0.8, 0.8);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.5, 1.0);
 
-~graphics.setPattern(12, 0, 1.0, 0, 0, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 1, 1.0, 0, 0, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 
 ~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-~graphics.setPattern(14, 1, 1.0, 0, 0, 0.0, 0.5, 0.5);
 
 ~graphics.setPattern(15, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
@@ -241,7 +242,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(25, 0, 1.0, 0, 0, 0.5, 0.6, 0.7);
 
 
-~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.7, 0.8);
+~graphics.setPattern(26, 11, 1.0, 1, 1, 0.6, 0.7, 0.8);
 
 ~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.7, 0.6);
 
@@ -249,9 +250,8 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
 
-~graphics.setPattern(30, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(30, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(31, 1, 1.0, 0, 0, 0.5, 0.3, 1.0);
 ~graphics.setPattern(31, 0, 0.8, 1, 1, 0.3, 0.9, 0.9);
 
 ~graphics.setPattern(32, 0, 1.0, 0, 0, 0.2, 0.5, 0.6);
@@ -261,7 +261,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(34, 0, 1.0, 0, 0, 1.0, 1.0, 0.5);
 
 
-~graphics.setPattern(34, 0, 1.0, 0, 0, 1.0, 0.2, 0.5);
+~graphics.setPattern(34, 0, 1.0, 0, 1, 1.0, 0.2, 0.5);
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.0, 1.0, 0.8);
 
@@ -279,14 +279,14 @@ Ndef('graphics', {
 
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
-	
+
 24.do({|i| (i%4).postln })
 
 ~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, -0.02, 0.0, 0.0);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
-	
-~graphics.stopRotations
+
+~graphics.stopRotation
 
 
 ~graphics.setViewpoint(70.0, 70.0, 70.0, 0.0, 0.0, 0.0)
@@ -414,9 +414,7 @@ Tdef(\autopilot, {
 
 ~graphics.setBackground(0.0, 0.0, 0.0)
 
-~rot = Rotation(140.0, 0.003, 100.0, 20.0, 0.0, 0.0034, 0.0, 0.0038);
-~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-~graphics.rotateCamera
+
 
 ~graphics.stopRotation
 
@@ -470,6 +468,8 @@ Tdef(\autopilot, {
 ~graphics.unmapCodePanel
 
 ~graphics.mapCodePanel
+
+~graphics.showCodePanel
 
 ~graphics.sendPredefined3DRule(\faders)
 
@@ -586,19 +586,19 @@ Tdef('ciAuto', {|mfcc|
 		~beatrate.insert(0, delta);
 	//	~collectMfcc.pop;
 	//	~collectMfcc.insert(0, mfcc);
-//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
+	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur
 	//		<< Char.nl;
 	//	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
-		
+
 		if (~changeWeight.coin)
 		{
-			
+
 			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({
