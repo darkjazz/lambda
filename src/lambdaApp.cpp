@@ -30,10 +30,11 @@ class LambdaApp : public AppBasic {
 public:
 	void prepareSettings(Settings*);	
 	void setup();
-	void resize(ResizeEvent);
+	void resize();
 	void update();
 	void draw();
 	void shutdown();
+    void keyDown( KeyEvent event );
 
 	OSCMessenger *oscMessenger; 
 	World *world; 
@@ -102,7 +103,7 @@ void LambdaApp::prepareSettings(Settings *settings) {
 
 }
 
-void LambdaApp::resize(ResizeEvent event) {
+void LambdaApp::resize() {
 	ogl->reshape();
 }
 
@@ -175,6 +176,14 @@ void LambdaApp::draw()
 	ogl->endDraw();
 
 }
+
+void LambdaApp::keyDown( KeyEvent event )
+{
+    if( event.getChar() == 'f' || event.getChar() == 'F' ){
+        setFullScreen( ! isFullScreen() );
+    }
+}
+
 
 void LambdaApp::shutdown() {
 	delete ogl;

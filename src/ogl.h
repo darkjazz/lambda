@@ -37,14 +37,17 @@
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
+
+#include <vector>
 //#include "multicodepanel.h"
 
 using namespace ci;
 using namespace ci::app;
+using namespace std;
 
 //const double pi = 3.1415926535;
 
-const int numPatterns = 36;
+const int numPatterns = 40;
 const int numBoidPatterns = 6;
 
 struct pattern {
@@ -95,9 +98,9 @@ public:
 	
 	~GraphicsRenderer() {
 		delete [] patternLib;
-		delete [] rowColors;
-		delete [] rowNormals;
-		delete [] rowVertices;		
+//		delete [] rowColors;
+//		delete [] rowNormals;
+//		delete [] rowVertices;		
 	};
 	
 	pattern* patternLib;	
@@ -167,6 +170,7 @@ public:
 	gl::Texture img03;
 	gl::Texture img04;
 	gl::Texture img05;
+    std::vector<gl::Texture> img;
 	
 private:
 	

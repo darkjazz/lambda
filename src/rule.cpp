@@ -53,7 +53,10 @@ bool Rule::cellAlive(Cell* cell, int index) {
 void Rule::setN() {
 	int x, y, z, i;
 	i = 0;
-	delete [] _nhood;
+    if (world != NULL)
+    {
+        delete [] _nhood;
+    }
 	if (_nSize == 26)
 	{
 		_nhood = new N[_nSize];

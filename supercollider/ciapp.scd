@@ -1,3 +1,217 @@
+~graphics = CinderApp(1024, 768)
+~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
+
+~graphics = CinderApp(ciAddr: NetAddr("169.254.184.218", 7000));
+
+
+~graphics = CinderApp(1280, 720)
+
+
+~graphics.open
+
+~graphics.quit
+
+24**3
+
+40*40*10
+
+~graphics.open
+
+~graphics.initWorld(128, 80, 10, 20);
+
+~graphics.initWorld(17, 17, 17, 20);
+
+~graphics.initWorld(24, 24, 24, 20);
+
+
+~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
+
+~graphics.initGenerations([4,6], [3,5], 8);
+
+
+~graphics.setSymmetry(11)
+
+
+
+
+~graphics.setViewpoint(9.0, -8.0, 8.5, 0.0, 0.0, 0.0)
+
+~graphics.setViewpoint(0.0, 0.0, 0.0, 0.0, 0.0, -1000.0)
+
+~graphics.setViewpoint(90.0, 0.0, 90.0, 0.0, 0.0, 0.0)
+
+
+~graphics.setViewpoint(-170.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+~graphics.setInterpolation(2, 3)
+
+~graphics.setBackground(0.0, 0.0, 0.0)
+
+~graphics.setPattern(0, 0, 1.0, 1, 1, 0.0, 0.8, 1.0);
+
+~graphics.setPattern(1, 0, 1.0, 0, 0, 0.9, 0.1, 0.4);
+
+~graphics.setPattern(2, 0, 1.0, 1, 1, 1.0, 0.8, 0.0);
+
+
+~graphics.setPattern(3, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
+
+~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
+
+~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
+
+~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
+
+~graphics.setPattern(9, 0, 1.0, 0, 0, 0.5, 0.8, 0.9);
+
+~graphics.setPattern(10, 0, 1.0, 1, 1, 0.2, 0.8, 0.8);
+
+~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.5, 1.0);
+
+~graphics.setPattern(12, 0, 1.0, 0, 0, 0.6, 0.8, 1.0);
+
+~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
+
+~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(15, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(16, 0, 1.0, 1, 1, 0.1, 1.0, 0.3);
+~graphics.setPattern(17, 0, 1.0, 1, 1, 0.7, 1.0, 0.0);
+~graphics.setPattern(18, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+
+~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(20, 0, 1.0, 1, 1, 1.0, 1.0, 0.2);
+
+~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(22, 0, 1.0, 1, 1, 1.0, 0.9, 1.0);
+
+~graphics.setPattern(23, 0, 1.0, 0, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(25, 0, 1.0, 0, 0, 0.5, 0.6, 0.7);
+
+
+~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.7, 0.8);
+
+~graphics.setPattern(27, 1, 1.0, 1, 1, 0.2, 0.7, 0.6);
+
+~graphics.setPattern(28, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
+
+~graphics.setPattern(30, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(31, 0, 1.0, 1, 1, 1.0, 1.0, 0.0);
+
+~graphics.setPattern(32, 0, 1.0, 1, 1, 0.0, 1.0, 0.0);
+
+~graphics.setPattern(33, 0, 1.0, 1, 1, 0.0, 1.0, 0.0);
+
+~graphics.setPattern(34, 1, 1.0, 0, 0, 1.0, 0.0, 0.5);
+
+
+~graphics.setPattern(34, 0, 1.0, 0, 1, 1.0, 0.2, 0.5);
+
+~graphics.setPattern(35, 0, 1.0, 0, 0, 1.0, 0.2, 0.9);
+
+~graphics.setPattern(36, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(37, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(38, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(39, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+
+
+Tdef(\sendVector, {
+	loop({
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		[0.25, 0.75, 0.35, 0.5].choose.wait;
+	});
+});
+
+Tdef(\sendVector).play
+
+Tdef(\sendVector).stop
+
+
+
+
+~pava = Pseq([16], inf).asStream;
+~pact = [];
+
+Ndef('graphics', {
+	loop({
+		var fadeIn, fadeOut;
+		fadeIn = ~pava.next;
+		~pact = ~pact.add
+	})
+}).play
+
+
+~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
+
+24.do({|i| (i%4).postln })
+
+~rot = Rotation(60.0, 0.0, 100.0, 0.0, 0.0, -0.2, 0.0, 0.0);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
+
+~graphics.stopRotation
+
+
+~graphics.setViewpoint(170.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+
+~graphics.sendPredefined3DRule(\faders)
+
+~graphics.sendPredefined3DRule(\cooties)
+
+~graphics.sendPredefined3DRule(\nova)
+
+~graphics.sendPredefined3DRule(\xtasy)
+
+~graphics.sendPredefined3DRule(\flamingstarbow)
+
+
+~graphics.sendPredefined3DRule(\starwars)
+
+
+~graphics.sendGenRule([2],[3,4,5],6);
+
+
+~graphics.sendPredefined3DRule(\briansbrain)
+
+
+~graphics.sendPredefined3DRule(\belzhab)
+
+~graphics.sendPredefined3DRule(\belzhabsedi)
+
+~graphics.sendPredefined3DRule(\bombers)
+
+~graphics.sendPredefined3DRule(\brain6)
+
+~graphics.sendPredefined3DRule(\chenille)
+
+
+Generations
+
+
+~graphics.quit
+
+
+
+
 ~graphics = CinderApp(1024, 768, mode: 1);
 
 ~graphics = CinderApp(1600, 1050, mode: 1);
@@ -65,7 +279,42 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 }
 )
 
+~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/ciAutoSetColors.scd", "r")
+
+~code = ~file.readAllString
+
+~graphics.showCodePanel
+
+~graphics.mapCodePanel
+
+Tdef('sendcode', {
+	loop({
+		var str;
+		str = "";
+		rrand(4, 16).do({
+			6.do({ str = str ++ [rrand(48, 56),  rrand(65, 70)].choose.asAscii });
+			str = str ++ " ";
+		});
+		~graphics.sendCodeLine(str);
+		rrand(5, 30).wait
+	})
+})
+
+.play
+
+
+48.asAscii
+90.asAscii
+
+~sendarr = ~code.split(Char.nl)
+
+~sendarr.do({|line|
+	~graphics.sendCodeLine("alo@ " ++ "Pdef('matrix', Ppar([Pdef('r00'), Pdef('r01')]))")
+})
+
 Document.current.keyDownAction = {}
+
+
 
 (
 Routine({
@@ -131,213 +380,6 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.patternLib.select({|ev| ev.active == 1}).collect(_.index)
 
 ~graphics = CinderApp();
-
-~graphics = CinderApp(1024, 768)
-~graphics = CinderApp(ciAddr: NetAddr("192.168.1.100", 7000));
-
-~graphics = CinderApp(ciAddr: NetAddr("169.254.184.218", 7000));
-
-
-~graphics = CinderApp(1280, 720)
-
-
-~graphics.open
-
-~graphics.quit
-
-24**3
-
-40*40*10
-
-~graphics.open
-
-~graphics.initWorld(128, 80, 10, 20);
-
-~graphics.initWorld(17, 17, 17, 20);
-
-~graphics.initWorld(24, 24, 24, 20);
-
-
-~graphics.initGenerations([4,6,8], [3,5,7,9], 12);
-
-~graphics.initGenerations([4,6], [3,5], 8);
-
-
-~graphics.setSymmetry(11)
-
-
-~graphics.initContinuous;
-
-~graphics.setAdd(1.0-(pi*0.01));
-
-~graphics.resetWorld(9, 9, 9, 4, 4, 4)
-
-
-
-~graphics.setViewpoint(9.0, -8.0, 8.5, 0.0, 0.0, 0.0)
-
-~graphics.setViewpoint(0.0, 0.0, 0.0, 0.0, 0.0, -1000.0)
-
-~graphics.setViewpoint(90.0, 0.0, 90.0, 0.0, 0.0, 0.0)
-
-
-~graphics.setViewpoint(100.0, 100.0, 40.0, 0.0, 0.0, 0.0)
-
-~graphics.setInterpolation(1, 3)
-
-~graphics.setBackground(0.0, 0.0, 0.0)
-
-~graphics.setPattern(0, 1, 1.0, 0, 0, 0.0, 1.0, 1.0);
-
-~graphics.setPattern(1, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
-
-~graphics.setPattern(2, 0, 1.0, 1, 1, 1.0, 0.8, 0.0);
-
-
-~graphics.setPattern(3, 0, 1.0, 1, 1, 0.6, 0.8, 0.8);
-
-~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-
-~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
-
-~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
-
-~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
-
-~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
-
-~graphics.setPattern(9, 0, 1.0, 0, 0, 0.5, 0.8, 0.9);
-
-~graphics.setPattern(10, 0, 1.0, 1, 1, 0.2, 0.8, 0.8);
-
-~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.5, 1.0);
-
-~graphics.setPattern(12, 1, 1.0, 0, 0, 0.6, 0.8, 1.0);
-
-~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
-
-~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(15, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-
-~graphics.setPattern(16, 0, 1.0, 1, 1, 0.1, 1.0, 0.3);
-~graphics.setPattern(17, 0, 1.0, 1, 1, 0.7, 1.0, 0.0);
-~graphics.setPattern(18, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-
-~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(20, 0, 1.0, 1, 1, 1.0, 1.0, 0.2);
-
-~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(22, 0, 1.0, 1, 1, 1.0, 0.9, 1.0);
-
-~graphics.setPattern(23, 0, 1.0, 0, 1, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);
-
-~graphics.setPattern(25, 0, 1.0, 0, 0, 0.5, 0.6, 0.7);
-
-
-~graphics.setPattern(26, 11, 1.0, 1, 1, 0.6, 0.7, 0.8);
-
-~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.7, 0.6);
-
-~graphics.setPattern(28, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(29, 0, 1.0, 0, 0, 0.6, 0.9, 1.0);
-
-~graphics.setPattern(30, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(31, 0, 0.8, 1, 1, 0.3, 0.9, 0.9);
-
-~graphics.setPattern(32, 0, 1.0, 0, 0, 0.2, 0.5, 0.6);
-
-~graphics.setPattern(33, 0, 0.5, 0, 0, 0.7, 0.8, 0.0);
-
-~graphics.setPattern(34, 0, 1.0, 0, 0, 1.0, 1.0, 0.5);
-
-
-~graphics.setPattern(34, 0, 1.0, 0, 1, 1.0, 0.2, 0.5);
-
-~graphics.setPattern(35, 0, 1.0, 0, 0, 0.0, 1.0, 0.8);
-
-
-~pava = Pseq([16], inf).asStream;
-~pact = [];
-
-Ndef('graphics', {
-	loop({
-		var fadeIn, fadeOut;
-		fadeIn = ~pava.next;
-		~pact = ~pact.add
-	})
-}).play
-
-
-~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
-
-24.do({|i| (i%4).postln })
-
-~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, -0.02, 0.0, 0.0);
-~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-~graphics.rotateCamera
-
-~graphics.stopRotation
-
-
-~graphics.setViewpoint(70.0, 70.0, 70.0, 0.0, 0.0, 0.0)
-
-~graphics.sendPredefined3DRule(\faders)
-
-~graphics.sendPredefined3DRule(\cooties)
-
-~graphics.sendPredefined3DRule(\nova)
-
-~graphics.sendPredefined3DRule(\xtasy)
-
-~graphics.sendPredefined3DRule(\flamingstarbow)
-
-
-~graphics.sendPredefined3DRule(\starwars)
-
-
-~graphics.sendGenRule([2],[3,4,5],6);
-
-
-~graphics.sendPredefined3DRule(\briansbrain)
-
-
-~graphics.sendPredefined3DRule(\belzhab)
-
-~graphics.sendPredefined3DRule(\belzhabsedi)
-
-~graphics.sendPredefined3DRule(\bombers)
-
-~graphics.sendPredefined3DRule(\brain6)
-
-~graphics.sendPredefined3DRule(\chenille)
-
-
-Generations
-
-
-
-
-Tdef(\sendVector, {
-	loop({
-		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
-		[0.25, 0.75, 0.35, 0.5].choose.wait;
-	});
-});
-
-Tdef(\sendVector).play
-
-Tdef(\sendVector).stop
-
 (
 Routine({
 
@@ -404,7 +446,7 @@ Tdef(\autopilot, {
 
 ~graphics.hideCodePanel
 
-~graphics.unmapCodePanel
+~graphics.mapCodePanel
 
 ~graphics.sendCodeTitle("karlsruhe.algorave.15")
 
