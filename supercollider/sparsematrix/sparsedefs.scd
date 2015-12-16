@@ -1,6 +1,11 @@
-SynthDef(\bit00, {|out, efx, amp, emp, buf, rate=1, rotx, roty, rotz|
+SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 	var sig;
-	sig = Normalizer.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate, doneAction: 2), amp);
+	sig = Normalizer.ar(
+		PitchShift.ar(
+			PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate),
+			0.1, 1/rate),
+		amp
+	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
 		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
@@ -44,6 +49,7 @@ SynthDef(\rev01, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail|
 	Out.ar(out, bf)
 }).add;
 
+|
 
 SynthDef(\rev02, {|out, in, amp, room, rtime, wsz, pch, pds, tds|
 	var input, sig, bf;
@@ -127,7 +133,7 @@ SynthDef(\frag01, {|out, buf, grate, gdlo, gdhi, rate, ffrq, fwid, fflo, ffhi, r
 SynthDef(\frag02, {|out, buf, rate, warp, wisz, genv, wrnd, dens, intr, ffrq, fwid, fflo, ffhi, amp=1, dur, rotx, roty, rotz, done=2|
 	var env, sig, fft, enc;
 	env = EnvGen.kr(EnvControl.kr, timeScale: dur, levelScale: amp, doneAction: 2);
-	sig = Disintegrator.ar( 
+	sig = Disintegrator.ar(
 		Warp1.ar(1, buf, LFSaw.kr(warp, 1).range(0, 1), rate, wisz, genv, dens, wrnd, intr),
 		0.5, -1
 	) * LFPulse.kr(ffrq, 0, fwid).range(fflo, ffhi) * env;
@@ -177,7 +183,7 @@ SynthDef(\mfcc, {|in, th|
 	mfcc = MFCC.kr(fft, ~ncoef ? 8);
 	onsets = Onsets.kr(fft, th);
 	SendReply.kr(onsets, '/mfcc', mfcc);
-}).add;	
+}).add;
 
 SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
 	var sig, swp, env, bf;
@@ -186,7 +192,7 @@ SynthDef(\mtrxbass, {|out, freq, dur, amp, wbl|
 	sig = LPF.ar(sig, swp);
 	sig = Normalizer.ar(sig);
 	sig = sig + GVerb.ar(sig,10,0.5,0.7,mul:0.5);
-	sig = (sig.distort + tanh(sig**0.8)) * 
+	sig = (sig.distort + tanh(sig**0.8)) *
 		EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	bf = FoaEncode.ar(sig*amp, FoaEncoderMatrix.newStereo);
 	Out.ar(out,bf)

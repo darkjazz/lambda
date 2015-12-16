@@ -1,5 +1,5 @@
 (
-~chordloader = ChordLoader("/Users/alo/Data/pixies/pixieschords.csv");
+~chordloader = ChordLoader(Paths.dataDir +/+ "pixies/pixieschords.csv");
 
 ~chordloader.load;
 
@@ -25,11 +25,13 @@
 
 )
 
+
+
 (
-~len = 7;
+~len = 5;
 ~key = ~uchords.keys(Array).choose;
 ~chords = ~len.collect({
-	~key = ~chordset.next(~key)	
+	~key = ~chordset.next(~key)
 });
 
 ~freqs = ~chords.collect({|key| ~uchords[key].collect(_.asInt)
@@ -41,35 +43,40 @@
 ~amps = ~len.collect({ rrand(0.2, 0.4) });
 )
 
+~durs
+~deltas
+~freqs
 
 SynthDef('pluck', {|freq, amp, dur|
 	var sig;
-	sig = Mix(SinOsc.ar([freq * 0.5, freq, freq * 64], 
+	sig = Mix(SinOsc.ar([freq * 0.5, freq, freq * 64],
 		LFSaw.kr(8).range(0, 2), [amp * 0.5, amp, amp * 0.2]))
-		* EnvGen.kr(Env.perc, timeScale: dur, doneAction: 2);
+		* EnvGen.kr(Env.sine, timeScale: dur, doneAction: 2);
 	Out.ar(0, Pan2.ar(sig))
 }).add
 
 
 SynthDef('pluck', {|freq, amp, dur|
 	var sig;
-	sig = LPF.ar(PMOsc.ar(freq, freq * 4, 100) * amp, freq * 4 )
+	sig = LPF.ar(PMOsc.ar(freq, freq * 23, Line.kr(20, 40, dur)) * amp, freq * 4 )
 		+ Mix(SinOsc.ar([freq * 0.5, freq * 0.25], 0, amp))
 		* EnvGen.kr(Env.perc, timeScale: dur, doneAction: 2);
 	Out.ar(0, Pan2.ar(sig))
 }).add
 
 (
-Pdef('caribou', 
+Pdef('caribou',
 	Pbind(
 		\instrument, 'pluck',
-		\freq, Pseq(~freqs, inf), 
-		\amp, Pseq(~amps, inf), \dur, Pseq(~durs * 0.25, inf), 
+		\freq, Pseq(~freqs, inf),
+		\amp, Pseq(~amps, inf), \dur, Pseq(~durs * 0.25, inf),
 		\delta, Pseq(~deltas * 0.25, inf)
 	)
 )
 )
+
 Pdef('caribou').play;
+
 Pdef('caribou').clear
 
 

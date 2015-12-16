@@ -18,7 +18,7 @@
 
 ~graphics.resetWorld(9, 9, 9, 4, 4, 4)
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 0.6, 0.8, 1.0);
+~graphics.setPattern(0, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(1, 1, 0.5, 1, 1, 0.9, 0.1, 0.4);
 
@@ -187,7 +187,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(0, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(1, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
+~graphics.setPattern(1, 1, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 1, 1, 1.0, 0.8, 0.0);
 
@@ -197,7 +197,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 
-~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
 
 ~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
@@ -211,7 +211,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.5, 1.0);
 
-~graphics.setPattern(12, 0, 1.0, 0, 0, 0.6, 0.8, 1.0);
+~graphics.setPattern(12, 1, 1.0, 0, 0, 0.6, 0.8, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 
@@ -241,7 +241,7 @@ Array.geom(30, 1.0, 0.96)
 ~graphics.setPattern(25, 0, 1.0, 0, 0, 0.5, 0.6, 0.7);
 
 
-~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.7, 0.8);
+~graphics.setPattern(26, 1, 0.3, 1, 1, 0.6, 0.7, 0.8);
 
 ~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.7, 0.6);
 
@@ -263,7 +263,7 @@ Array.geom(30, 1.0, 0.96)
 
 ~graphics.setPattern(34, 0, 1.0, 0, 0, 1.0, 0.2, 0.5);
 
-~graphics.setPattern(35, 0, 1.0, 0, 0, 0.0, 1.0, 0.8);
+~graphics.setPattern(35, 1, 1.0, 0, 0, 0.0, 1.0, 0.8);
 
 
 ~pava = Pseq([16], inf).asStream;
@@ -277,6 +277,19 @@ Ndef('graphics', {
 	})
 }).play
 
+
+Tdef('sendcode', {
+	loop({
+		var str;
+		str = "";
+		rrand(4, 16).do({
+			6.do({ str = str ++ [rrand(48, 56), rrand(65, 70)].choose.asAscii });
+			str = str ++ " ";
+		});
+		~graphics.sendCodeLine(str);
+		rrand(2, 6).wait;
+	})
+}).play
 
 ~graphics.setPattern(35, 0, 1.0, 0, 0, 0.5, 1.0, 1.0);
 
@@ -430,7 +443,7 @@ Tdef(\autopilot, {
 
 
 ~graphics.setFrameRate(32.0)
-
+0
 ~graphics = CinderApp();
 
 ~graphics.open

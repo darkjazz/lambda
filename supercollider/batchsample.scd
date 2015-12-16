@@ -2,8 +2,8 @@
 
 Routine({
 	var file, dur, num, sect = 15;
-	file = Buffer.readChannel(s, 
-		"/Users/alo/sounds/gep/evolver00.aif",
+	file = Buffer.readChannel(s,
+		"/home/alo/sounds/musikfestival.aif",
 		s.sampleRate,
 		channels:[0]
 	);
@@ -17,14 +17,14 @@ Routine({
 		start = sect * s.sampleRate * i;
 		end = start + (sect * s.sampleRate - buf.numFrames);
 		file.copyData(
-			buf, 
-			0, 
+			buf,
+			0,
 			rrand(start, end),
 			buf.numFrames
 		);
-		buf.write("/Users/alo/sounds/evo_loops/ev_" ++ (i + 1).asString ++ ".aif");
+		buf.write("/home/alo/sounds/sparsematrix/msk_" ++ (i + 1).asString ++ ".aif");
 		s.sync;
-		("Wrote " ++ "/Users/alo/sounds/evo_loops/ev_" ++ (i + 1).asString ++ ".aif").postln;
+		("Wrote " ++ "/home/alo/sounds/sparsematrix/msk_" ++ (i + 1).asString ++ ".aif").postln;
 	})
 }).play
 

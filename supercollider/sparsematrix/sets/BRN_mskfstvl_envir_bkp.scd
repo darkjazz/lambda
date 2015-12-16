@@ -2,7 +2,7 @@
 
 e = SpEnvir(~settings)
 
-e.initGraphics(false, Document.current)
+e.initGraphics(false)
 
 s.queryAllNodes
 
@@ -10,9 +10,9 @@ s.quit
 
 ~sender.registerDocument(Document.current)
 
-~matrix.setBPM(151)
+~matrix.setBPM(113)
 
-Pdef('matrix', Ppar([ Pdef('b01'), Pdef('r03'), Pdef('g02'), Pdef('g03')]))
+Pdef('matrix', Ppar([ Pdef('g02'), Pdef('g03'), Pdef('b03'), Pdef('b04')]))
 
 Pdef('efx').play
 
@@ -42,40 +42,42 @@ s.stopRecording
 })
 
 
-~defs['b01'].setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(1.0, 2.0) },
-	{ exprand(0.05, 0.3) },
+~defs['g02'].setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.2, 0.8) },
+	{ exprand(0.5, 2.0) },
 	0.1
 );
 
 ~defs['g03'].setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.2, 2.0) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.2, 1.0) },
+	{ exprand(0.8, 2.0) },
+	0.1
+);
+
+~defs['b03'].setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
+	{ exprand(0.3, 0.8) },
 	0.1
 );
 
-~defs['g02'].setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
-	{ exprand(0.5, 2.0) },
-	{ exprand(0.1, 0.5) },
-	0.1
-);
-
-~defs['r00'].setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+~defs['b04'].setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 0.8) },
-	{ exprand(0.01, 0.3) },
+	{ exprand(0.4, 1.0) },
 	0.1
-);
+)
 
-~defs['r01'].recall(0)
+13*60
 
-~defs['r03'].setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+~defs['b03'].recall(0)
+
+~defs['b03'].setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.1, 2.0) },
-	{ exprand(0.03, 0.4) },
+	{ exprand(0.3, 0.8) },
 	0.1
 )
 
