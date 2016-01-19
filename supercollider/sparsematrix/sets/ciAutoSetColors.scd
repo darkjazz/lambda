@@ -1,3 +1,12 @@
+Tdef('ciAuto').clear
+
+(
+
+~patches.do({|arr, i|
+	~graphics.setPattern(i, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+})
+)
+
 (
 
 ~lasttime = SystemClock.seconds;
@@ -42,16 +51,20 @@
 	[1.0, 1, 1, 0.0, 1.0, 0.0],
 	[0.5, 1, 1, 1.0, 0.0, 1.0],
 	[1.0, 0, 0, 1.0, 0.2, 0.5],
-	[1.0, 0, 0, 0.0, 1.0, 0.8]
-
+	[1.0, 0, 0, 0.0, 1.0, 0.8], //35
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 1, 1, 1.0, 1.0, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0]
 ];
 
-~graphPatterns = (0..35);
+~graphPatterns = (0..39);
 
-~activePatterns = [8];
-~graphics.setPattern(28, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~activePatterns = [0];
+~graphics.setPattern(0, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
 
 Tdef('ciAuto', {|mfcc|
+	// 120.wait;
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
@@ -60,7 +73,7 @@ Tdef('ciAuto', {|mfcc|
 		if (~changeWeight.coin)
 		{
 
-			if (~activePatterns.size > 5)
+			if (~activePatterns.size > 4)
 			{
 				~activePatterns.size.rand.do({
 					curr = ~activePatterns.choose;
@@ -87,7 +100,7 @@ Tdef('ciAuto', {|mfcc|
 				].choose;
 			);
 		};
-		if (0.3.coin) {
+		if (0.1.coin) {
 			~graphics.stopRotation;
 			~graphics.setViewpoint(
 				rrand(30.0, 60.0)*[1.0,-1.0].choose,
@@ -97,7 +110,7 @@ Tdef('ciAuto', {|mfcc|
 			);
 			~graphics.unmapCodePanel;
 		}{
-			if (0.5.coin) {
+			if (0.1.coin) {
 				~rot = Rotation(rrand(-100.0, 100.0), rrand(0.005, 0.05), rrand(-20.0, 20.0),
 					rrand(-120.0, 120.0),
 					rrand(-pi, pi), rrand(0.01, 0.08), rrand(-pi, pi), rrand(0.01, 0.07));

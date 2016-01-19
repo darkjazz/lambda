@@ -6,7 +6,7 @@
 ~headsize = 14;
 ~numgenes = 4;
 
-~decoder = FoaDecoder(false);
+~decoder = FoaDecoder(true, 'stereo');
 ~graphics = CinderApp(1024, 768, mode: 0);
 
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
@@ -29,13 +29,13 @@ s.scope
 
 
 
-~matrix.setBPM(150);
-~player.setBPM(150);
+~matrix.setBPM(135);
+~player.setBPM(135);
 
 
 SparseMatrixPattern.useTwinPrimes = true
 
-~matrix.loadPatternDefs("patternDefsAppend.scd");
+~matrix.loadPatternDefs("patternDefs.scd");
 
 
 ~loader = JsonLoader("ges_00");
@@ -74,14 +74,14 @@ SparseMatrixPattern.useTwinPrimes = true
 /////// END GRAPHICS INIT ////////
 
 
-
+~decoder.start
 ~matrix.prepareAudio
 
 s.queryAllNodes
 
 
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('r02'), Pdef('r03'), Pdef('b02')])).quant(64)
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('r02'), Pdef('b03')])).quant(64)
 
 Pdef('efx').play
 
@@ -99,20 +99,20 @@ Ndef('meander', {|pos|
 	var trig = InTrig.kr(~tbus);
 	PlayBuf.ar(2, ~buf, 1.0, trig, trig, loop: 1) * 0.6;
 })
- 	
+
 Ndef('meander').play; ~tbus.value = 0;
 
 ~pos = Pstutter(
-	Pwrand([8, 16, 32, 64, 128], (1..5).reciprocal.normalizeSum, inf), 
+	Pwrand([8, 16, 32, 64, 128], (1..5).reciprocal.normalizeSum, inf),
 	Pwhite(0, ~buf.numFrames, inf)
 ).asStream;
 
 
 
-~matrix.onsetFunc = 
+~matrix.onsetFunc =
 {
 	var pos;
-	if (0.7.coin) { 
+	if (0.7.coin) {
 		pos = ~pos.next;
 		~tbus.value = pos;
 	}
@@ -251,9 +251,9 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 ~matrix.defsAt('r03').setAmpDev(0.2)
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.1, 1.0) },
-	{ exprand(0.08, 0.2) },
+	{ exprand(0.01, 0.1) },
 	0.1
 );
 
@@ -271,7 +271,7 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 	0.1
 );
 
-~matrix.defsAt('r03').setControls(
+~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.1, 0.6) },
 	{ exprand(0.02, 0.1) },
@@ -319,7 +319,7 @@ Pdef('matrix').source.list.collect(_.key)[[1, 2]].do({|key|
 
 ~matrix.defsAt('r03').setAmpDev(0.2)
 
-~matrix.defsAt('r07').setControls(
+~matrix.defsAt('r00').setControls(
 	{ [0, 1].wchoose([0.5, 0.5]) },
 	{ exprand(0.3, 2.0) },
 	{ exprand(0.04, 0.2) },
@@ -486,9 +486,9 @@ s.queryAllNodes
 ~player.loadData(~indPush)
 
 (
-~player.playRoutine(~indZoom, 
+~player.playRoutine(~indZoom,
 	Pseq([1, 0, 1, 0, 0, 1, 0, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, 
+~player.playRoutine(~indPush,
 	Pseq([0, 1, 0, 1, 1, 0, 1, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
 )
 
@@ -680,7 +680,7 @@ s.sendMsg("/n_free", 1021)
 
 
 ~matrix.deactivateSkismSynth('latchOnset')
-      
+
 
 
 ~matrix.activateSkismSynth('cliqSaw')
@@ -770,7 +770,7 @@ Tdef('ciAuto').stop
 
 //~img = Image.open("/Users/alo/Pictures/eesti/proc/IMG_0397.JPG");
 
-//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg"); 
+//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg");
 
 //~colors = Array();
 //~img.height.do({|y|
@@ -836,19 +836,19 @@ Tdef('ciAuto', {|mfcc|
 		~beatrate.insert(0, delta);
 	//	~collectMfcc.pop;
 	//	~collectMfcc.insert(0, mfcc);
-//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
+//		~meandur = ~matrix.patterndefs.values.asArray.select({|patdef|
 //			patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 //		}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
+	//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur
 	//		<< Char.nl;
 	//	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
-		
+
 		if (~changeWeight.coin)
 		{
-			
+
 			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({

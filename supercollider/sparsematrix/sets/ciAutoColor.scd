@@ -12,7 +12,7 @@
 
 //~img = Image.open("/Users/alo/Pictures/eesti/proc/IMG_0397.JPG");
 
-//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg"); 
+//~img = Image.open("/Users/alo/Pictures/colorlab/351_1000_4.jpg");
 
 //~colors = Array();
 //~img.height.do({|y|
@@ -77,19 +77,19 @@
 	~beatrate.insert(0, delta);
 //	~collectMfcc.pop;
 //	~collectMfcc.insert(0, mfcc);
-	~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef| 
+	~meanamp = ~matrix.patterndefs.values.asArray.select({|patdef|
 		patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 	}).collect({|patdef| patdef.ctrls.collect(_.amp) }).collect(_.values).collect(_.asArray).flat.mean;
-	~meandur = ~matrix.patterndefs.values.asArray.select({|patdef| 
+	~meandur = ~matrix.patterndefs.values.asArray.select({|patdef|
 		patdef.ctrls.select({|ctr| ctr.active == 1 }).size > 0
 	}).collect({|patdef| patdef.ctrls.collect(_.dur) }).collect(_.values).collect(_.asArray).flat.mean;
-//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur 
+//	Post << "BPS: " << ~beatrate.mean.reciprocal << " | AMP: " << ~meanamp << " | DUR: " << ~meandur
 //		<< Char.nl;
 //	Post << "MFCC: " << ~collectMfcc.flop.collect(_.mean).collect(_.round(0.01)) << Char.nl;
-	
+
 	if (~changeWeight.coin)
 	{
-		
+
 		if (~activePatterns.size > 3)
 		{
 			~activePatterns.size.rand.do({
@@ -110,7 +110,7 @@
 			~graphics.sendPredefined3DRule(
 			[
 			\flamingstarbow, \chenille, \belzhab, \glissergy,
-			\cooties, \faders, \frozenspirals, \glisserati,
+			\faders, \frozenspirals, \glisserati,
 			\nova, \orthogo, \rainzha, \rake, \sedimental,
 			\snake, \starwars, \sticks, \thrillgrill,
 			\transers, \wanderers, \worms, \xtasy

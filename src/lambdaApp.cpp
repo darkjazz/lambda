@@ -181,6 +181,8 @@ void LambdaApp::keyDown( KeyEvent event )
 {
     if( event.getChar() == 'f' || event.getChar() == 'F' ){
         setFullScreen( ! isFullScreen() );
+        if (isFullScreen()) { hideCursor(); }
+        else { showCursor(); }
     }
 }
 

@@ -82,6 +82,7 @@
 		599CECEC15B5B41600373ACF /* boid_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 599CECE815B5B41500373ACF /* boid_vert.glsl */; };
 		599DE52D164EBE8300CAC2C9 /* frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 599DE52B164EBE8300CAC2C9 /* frag.glsl */; };
 		599DE52E164EBE8300CAC2C9 /* vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 599DE52C164EBE8300CAC2C9 /* vert.glsl */; };
+		59A0F48F1C273BAC0042E30E /* fu_00.png in Resources */ = {isa = PBXBuildFile; fileRef = 59A0F48E1C273BAC0042E30E /* fu_00.png */; };
 		59BF73721B4D5D2B00633CDD /* mtrx_004.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 59BF73711B4D5D2B00633CDD /* mtrx_004.jpg */; };
 		59BF73761B4D5EA000633CDD /* mtrx_07.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 59BF73751B4D5EA000633CDD /* mtrx_07.jpg */; };
 		59BF73A91B4D6EC400633CDD /* l_26.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 59BF73A81B4D6EC400633CDD /* l_26.jpg */; };
@@ -129,6 +130,7 @@
 		59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */; };
 		59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */; };
 		59EF1F0C19B0F3B5005CA9B2 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */; };
+		59FDC2131BBA6A1C00C994A9 /* 09.png in Resources */ = {isa = PBXBuildFile; fileRef = 59FDC2121BBA6A1C00C994A9 /* 09.png */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -211,6 +213,7 @@
 		599CECE815B5B41500373ACF /* boid_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = boid_vert.glsl; path = ../resources/boid_vert.glsl; sourceTree = SOURCE_ROOT; };
 		599DE52B164EBE8300CAC2C9 /* frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = frag.glsl; sourceTree = "<group>"; };
 		599DE52C164EBE8300CAC2C9 /* vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vert.glsl; sourceTree = "<group>"; };
+		59A0F48E1C273BAC0042E30E /* fu_00.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fu_00.png; sourceTree = "<group>"; };
 		59BF73711B4D5D2B00633CDD /* mtrx_004.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mtrx_004.jpg; sourceTree = "<group>"; };
 		59BF73751B4D5EA000633CDD /* mtrx_07.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = mtrx_07.jpg; sourceTree = "<group>"; };
 		59BF73A81B4D6EC400633CDD /* l_26.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = l_26.jpg; sourceTree = "<group>"; };
@@ -261,6 +264,7 @@
 		59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
 		59EF1F1919B0F496005CA9B2 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		59FDC2121BBA6A1C00C994A9 /* 09.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 09.png; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* xcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = xcode; path = ../xcode; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -397,6 +401,8 @@
 		29B97317FDCFA39411CA2CEA /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				59A0F48E1C273BAC0042E30E /* fu_00.png */,
+				59FDC2121BBA6A1C00C994A9 /* 09.png */,
 				59D2BE2B1BAF468800225EA0 /* 01.png */,
 				59D2BE2C1BAF468800225EA0 /* 02.png */,
 				59D2BE2D1BAF468800225EA0 /* 03.png */,
@@ -640,7 +646,9 @@
 				5928B9E715B9E51D00792C66 /* fxhl_pos_x.png in Resources */,
 				5928B9E815B9E51D00792C66 /* fxhl_pos_y.png in Resources */,
 				5928B9E915B9E51D00792C66 /* fxhl_pos_z.png in Resources */,
+				59A0F48F1C273BAC0042E30E /* fu_00.png in Resources */,
 				5928B9EA15B9E51D00792C66 /* fxic_neg_x.png in Resources */,
+				59FDC2131BBA6A1C00C994A9 /* 09.png in Resources */,
 				5928B9EB15B9E51D00792C66 /* fxic_neg_y.png in Resources */,
 				5928B9EC15B9E51D00792C66 /* fxic_neg_z.png in Resources */,
 				5928B9ED15B9E51D00792C66 /* fxic_pos_x.png in Resources */,
