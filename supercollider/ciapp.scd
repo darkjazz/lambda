@@ -1,10 +1,10 @@
 ~graphics = CinderApp(1024, 768)
 
-~graphics.initWorld(19, 19, 19, 20);
+~graphics.initWorld(20, 20, 20, 20);
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.99);
+~graphics.setAdd(0.95);
 
 ~graphics.resetWorld(8, 8, 8, 4, 4, 4)
 
@@ -57,7 +57,7 @@
 ~graphics.setBackground(0.0, 0.0,0.0)
 
 
-~graphics.setPattern(0, 1, 1.0, 1, 1, 0.0, 0.7, 1.0);
+~graphics.setPattern(0, 0, 1.0, 1, 1, 0.0, 0.7, 1.0);
 
 ~graphics.setPattern(1, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
 
@@ -67,11 +67,11 @@
 
 ~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(5, 1, 1.0, 1, 1, 0.5, 1.0, 1.0);
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
 
-~graphics.setPattern(6, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
-~graphics.setPattern(7, 1, 1.0, 1, 1, 1.0, 0.3, 0.5);
+~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
 
 ~graphics.setPattern(8, 0, 1.0, 0, 0, 0.6, 0.7, 0.9);
 
@@ -109,7 +109,7 @@
 
 ~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.8, 0.7);
 
-~graphics.setPattern(26, 1, 1.0, 0, 0, 0.6, 0.7, 0.8);
+~graphics.setPattern(26, 0, 1.0, 0, 0, 0.6, 0.7, 0.8);
 
 ~graphics.setPattern(27, 0, 1.0, 0, 0, 0.2, 0.7, 0.6);
 
@@ -133,7 +133,7 @@
 
 ~graphics.setPattern(37, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(38, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(38, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(39, 0, 0.5, 0, 0, 1.0, 1.0, 1.0);
 

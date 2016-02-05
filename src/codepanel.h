@@ -37,6 +37,7 @@ public:
 	void update( ci::Vec2f );
 	void render( ci::Vec2f );
 	void addLine( string );
+    void putLine( int, string );
 	void bind();
 	void unbind();
 	

@@ -125,3 +125,9 @@ void CodePanel::addLine(string line) {
 	lines.insert(it, line);
 	
 }
+
+void CodePanel::putLine(int index, string line) {
+    show = true;
+    counter = 0;
+    lines[index] = line;
+}

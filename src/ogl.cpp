@@ -121,7 +121,7 @@ void GraphicsRenderer::setupOgl () {
 	mUp = Vec3f::yAxis();
 	
 	mCam.lookAt(mEye, mCenter, mUp);
-	mRotation.setToIdentity();	
+	mRotation.setToIdentity();
 	
 	glEnable( GL_TEXTURE_2D );
 	codePanel.createTexture();	

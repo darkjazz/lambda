@@ -22,6 +22,7 @@
  */
 
 #include "osc.h"
+#include "bit.h"
 
 #define SCREENX		1440
 #define SCREENY		900
@@ -41,11 +42,14 @@ public:
 	GraphicsRenderer *ogl; 
 	Rule *rule;
 	Boids *boids;
+    BitalinoCtr *bitalino;
 	
 private:
 	int _winSizeX, _winSizeY;
 	int _frameRate, _inport, _outport, _windowMode;
 	string _remoteHost;
+    string _bitMacAddress;
+    int _bitFrameRate;
 		
 };
 
@@ -62,6 +66,8 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	_inport = 7000;
 	_outport = 57120;
 	_windowMode = 0;
+    _bitMacAddress = "/dev/tty.bitalino-DevB";
+    _bitFrameRate = 100;
 	
 	args = getArgs();
 	
@@ -100,7 +106,7 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	settings->setFrameRate( _frameRate );
 		
 	oscMessenger = new OSCMessenger(_remoteHost, _outport, _inport);
-
+    bitalino = new BitalinoCtr(_bitMacAddress, _bitFrameRate);
 }
 
 void LambdaApp::resize() {
@@ -116,7 +122,7 @@ void LambdaApp::setup()
 	oscMessenger->setWorld(world);
 	
 	ogl->setupOgl();
-	
+
 }
 
 void LambdaApp::update()
@@ -139,7 +145,19 @@ void LambdaApp::draw()
 	if (world->initialized()) {
 		
 		int x, y, z;
-		
+        
+        if (bitalino->activated) {
+            std::stringstream fmt;
+            fmt << "Mean: " << bitalino->mean;
+            ogl->codePanel.putLine(0, fmt.str());
+            fmt << "Variance: " << bitalino->variance;
+            ogl->codePanel.putLine(1, fmt.str());
+            fmt << "Std dev: " << bitalino->stdDev;
+            ogl->codePanel.putLine(2, fmt.str());
+            ogl->codePanel.show = true;
+//            world->rule()->setAdd(bitalino->mapValues());
+        }
+        
 		world->prepareNext();
 		
 		for (x = 0; x < world->sizeX(); x++) {
@@ -179,11 +197,23 @@ void LambdaApp::draw()
 
 void LambdaApp::keyDown( KeyEvent event )
 {
-    if( event.getChar() == 'f' || event.getChar() == 'F' ){
+    if( event.getChar() == 'f' || event.getChar() == 'F' ) {
         setFullScreen( ! isFullScreen() );
         if (isFullScreen()) { hideCursor(); }
         else { showCursor(); }
     }
+
+    if( event.getChar() == 'b' || event.getChar() == 'B' ) {
+        bitalino->activated = !bitalino->activated;
+        if (bitalino->activated) {
+            bitalino->connect();
+            bitalino->start();
+        }
+        else {
+            bitalino->stop();
+        }
+    }
+
 }
 
 
@@ -191,6 +221,7 @@ void LambdaApp::shutdown() {
 	delete ogl;
 	delete world;
 	delete oscMessenger;
+    delete bitalino;
 }
 
 

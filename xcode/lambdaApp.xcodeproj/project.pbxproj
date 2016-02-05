@@ -67,6 +67,8 @@
 		5928B9F915B9E55200792C66 /* fxd_pos_x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5928B9F315B9E55200792C66 /* fxd_pos_x.png */; };
 		5928B9FA15B9E55200792C66 /* fxd_pos_y.png in Resources */ = {isa = PBXBuildFile; fileRef = 5928B9F415B9E55200792C66 /* fxd_pos_y.png */; };
 		5928B9FB15B9E55200792C66 /* fxd_pos_z.png in Resources */ = {isa = PBXBuildFile; fileRef = 5928B9F515B9E55200792C66 /* fxd_pos_z.png */; };
+		592981A81C4E76D900B66EF7 /* bitalino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592981A61C4E76D900B66EF7 /* bitalino.cpp */; };
+		592981AB1C4E8A2B00B66EF7 /* bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592981A91C4E8A2B00B66EF7 /* bit.cpp */; };
 		592ADB1315B05CD1001FBC4F /* boids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592ADB1215B05CD1001FBC4F /* boids.cpp */; };
 		59590A4B14B349AD00EF570A /* lambdaApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590A4A14B349AD00EF570A /* lambdaApp.cpp */; };
 		59590AAB14B47F6200EF570A /* ogl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AA514B47F6200EF570A /* ogl.cpp */; };
@@ -189,6 +191,10 @@
 		5928B9F315B9E55200792C66 /* fxd_pos_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fxd_pos_x.png; sourceTree = "<group>"; };
 		5928B9F415B9E55200792C66 /* fxd_pos_y.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fxd_pos_y.png; sourceTree = "<group>"; };
 		5928B9F515B9E55200792C66 /* fxd_pos_z.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fxd_pos_z.png; sourceTree = "<group>"; };
+		592981A61C4E76D900B66EF7 /* bitalino.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bitalino.cpp; sourceTree = "<group>"; };
+		592981A71C4E76D900B66EF7 /* bitalino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitalino.h; sourceTree = "<group>"; };
+		592981A91C4E8A2B00B66EF7 /* bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bit.cpp; sourceTree = "<group>"; };
+		592981AA1C4E8A2B00B66EF7 /* bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bit.h; sourceTree = "<group>"; };
 		592ADB1115B05CD1001FBC4F /* boids.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boids.h; path = ../src/boids.h; sourceTree = "<group>"; };
 		592ADB1215B05CD1001FBC4F /* boids.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boids.cpp; path = ../src/boids.cpp; sourceTree = "<group>"; };
 		59590A4A14B349AD00EF570A /* lambdaApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lambdaApp.cpp; path = ../src/lambdaApp.cpp; sourceTree = SOURCE_ROOT; };
@@ -311,6 +317,8 @@
 		080E96DDFE201D6D7F000001 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				592981A61C4E76D900B66EF7 /* bitalino.cpp */,
+				592981A71C4E76D900B66EF7 /* bitalino.h */,
 				59EF1F1919B0F496005CA9B2 /* Particle.h */,
 				59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */,
 				59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */,
@@ -336,6 +344,8 @@
 				5990345E15D5B16A0078E3A5 /* codepanel.cpp */,
 				59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */,
 				59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */,
+				592981A91C4E8A2B00B66EF7 /* bit.cpp */,
+				592981AA1C4E8A2B00B66EF7 /* bit.h */,
 			);
 			name = src;
 			path = ../src;
@@ -725,6 +735,7 @@
 				59590A4B14B349AD00EF570A /* lambdaApp.cpp in Sources */,
 				59590AAB14B47F6200EF570A /* ogl.cpp in Sources */,
 				59ED00CE1BA8157100CD2ECA /* IpEndpointName.cpp in Sources */,
+				592981A81C4E76D900B66EF7 /* bitalino.cpp in Sources */,
 				59590AAC14B47F6200EF570A /* util.cpp in Sources */,
 				59590AAD14B47F6200EF570A /* world.cpp in Sources */,
 				59ED00D81BA8157100CD2ECA /* OscOutboundPacketStream.cpp in Sources */,
@@ -735,6 +746,7 @@
 				59590BA514B4F4D200EF570A /* rule.cpp in Sources */,
 				5990B62815AC5CE000210DBD /* swarm.cpp in Sources */,
 				592ADB1315B05CD1001FBC4F /* boids.cpp in Sources */,
+				592981AB1C4E8A2B00B66EF7 /* bit.cpp in Sources */,
 				5928B62815B8223200792C66 /* cubemap.cpp in Sources */,
 				5990345F15D5B16A0078E3A5 /* codepanel.cpp in Sources */,
 				59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */,
