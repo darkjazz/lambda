@@ -1,4 +1,4 @@
-~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, ip: "127.0.0.1", decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_02", patdefs: "patternDefsAppend.scd", initPdefs: ['r00', 'r01', 'b00', 'b06'], worldDim: 23);
+~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, ip: "127.0.0.1", decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_02", patdefs: "patternDefsAppend.scd", initPdefs: ['r02', 'r03', 'r04', 'r05'], worldDim: 23);
 
 e = SpEnvir(~settings)
 
@@ -10,10 +10,19 @@ s.quit
 
 ~sender.registerDocument(Document.current)
 
-~matrix.setBPM(143)
+~matrix.setBPM(140)
+
+Tdef('fuckbpm', {
+	loop({
+		~matrix.setBPM(rrand(60, 160));
+		(~matrix.beatdur * rrand(0.5, 4)).wait
+	})
+}).play
+
+Tdef('fuckbpm').stop
 
 
-Pdef('matrix', Ppar([ Pdef('r02'), Pdef('r03'), Pdef('r04'), Pdef('b05'), Pdef('b04')]))
+Pdef('matrix', Ppar([ Pdef('r05'), Pdef('r06'), Pdef('r07'), Pdef('b06')]))
 
 Pdef('matrix', Ppar([Pdef('r00')]))
 
@@ -54,49 +63,53 @@ s.stopRecording
 ~defs['r01'].ctrls['r101'].dur = 0.2
 
 
-~defs['r00'].setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.4, 2.0) },
-	{ exprand(0.01, 0.1) },
-	0.1
-);
-
-~defs['r01'].setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+~defs['r02'].setControls(
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.3, 2.0) },
-	{ exprand(0.04, 0.1) },
+	{ exprand(0.1, 0.4) },
+	0.1
+);
+
+~defs['r03'].setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.6, 2.0) },
+	{ exprand(0.1, 0.2) },
 	0.1
 );
 
 
-~defs['b05'].setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.4, 2.0) },
-	{ exprand(0.2, 0.6) },
-	0.1
-);
+~defs['r00'].recall(0);
 
-~defs['b04'].setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.2, 1.4) },
-	{ exprand(0.1, 0.6) },
-	0.1
-);
+~defs['r01'].recall(0)
 
 ~defs['r04'].setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.2, 1.4) },
-	{ exprand(0.05, 0.1) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.4, 2.0) },
+	{ exprand(0.07, 0.1) },
+	0.1
+);
+
+~defs['r05'].setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.2, 2.0) },
+	{ exprand(0.1, 0.03) },
+	0.1
+);
+
+~defs['b00'].setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(0.5, 2.0) },
+	{ exprand(0.05, 0.2) },
 	0.1
 );
 
 
-~defs['r03'].recall(0)
+~defs['r01'].recall(0)
 
 ~defs['b06'].setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.5, 2.0) },
-	{ exprand(1.0, 3.0) },
+	{ exprand(0.2, 0.4) },
 	0.1
 )
 
@@ -166,50 +179,102 @@ e.clearAutoGraphics
 
 [neuralFilter,granularReverb,latchOnset,cliqSaw,flangingDecimator,feedbackSpectrum,cyclicWarp,fxGrain,arhythmicGendy]
 
-~matrix.activateSkismSynth('latchOnset')
+~matrix.activateSkismSynth('feedbackSpectrum')
 
-~matrix.setSkismAmp('latchOnset', 1.0)
+~matrix.setSkismAmp('feedbackSpectrum', 0.5)
 
-~matrix.deactivateSkismSynth('latchOnset')
+~matrix.deactivateSkismSynth('neuralFilter')
+
+s.record
+
+s.stopRecording
+
+~matrix.buffers['evo'].collect(_.path).selectIndices({|item|
+	item.find("_151228_").notNil.or(item.find("_151227_").notNil)
+}).size
+
+// added variable length recordings 27&28-12-15
+[ 0, 5, 8, 10, 12, 14, 24, 28, 34, 35, 37, 38, 39, 41, 43, 47, 51, 54, 61, 63, 66,
+
+	67, 71, 77, 82, 84, 86, 87, 91, 92, 93, 94, 95, 96, 97,
+
+	98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127 ]
 
 
+~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 30, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][92], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
-~wrp0 = Synth('wrprev', ['out', 0, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 30, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][0], 'amp', 0.0])
+
+~wrp0.set('amp', 0.0, 'wamp', 1.0, 'iamp', 0.7, 'ramp', 0.0, 'rate', 0.5, 'freq', 0.125, 'wrp', 0.1)
+
+~wrp0.free
 
 Pdef('swrp0',
 	Pbind(
 		\type, \set,
 		\id, ~wrp0.nodeID,
-		\amp, Pseq([0.3, 0.1, 0.3, 0.2, 0.1], inf),
-		\iamp, Pseq([0.1, 0.2, 0.0, 0.2, 0.1]),
-		\rate, Pseq([0.25, 2.0, 0.5], inf),
-		\freq, Pfunc({|ev| ev.rate.reciprocal }),
-		\delta, Pseq([5, 7, 3, 5, 3, 7] * ~matrix.beatdur, inf),
-		\args, #[amp, iamp, rate, freq]
+		\rx, Pbrown(-pi, pi, pi/36),
+		\ry, Pbrown(-pi, pi, pi/36),
+		\rz, Pbrown(-pi, pi, pi/36),
+		\args, #[rx, ry, rz]
 	)
 )
 
 Pdef('swrp0').play
 
+Pdef('swrp0').clear
 
-~wrp0.set('amp', 0.3, 'iamp', 0.0, 'rate', 1.0, 'freq', 1.0)
 
-~wrp0.free
 
-~wrp1 = Synth('revwrp', ['out', 0, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][9], 'amp', 0.0])
 
-~wrp1.set('amp', 0.4, 'iamp', 0.5, 'freq', 1.0, 'rate', 0.5, 'wrp', 0.1)
+
+~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][93], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+
+~wrp1.set('amp', 0.0, 'iamp', 1.0, 'ramp', 0.0, 'freq', 1.0, 'rate', 0.5, 'wrp', 0.1)
 ~wrp1.free
 
 
+Pdef('swrp1',
+	Pbind(
+		\type, \set,
+		\id, ~wrp1.nodeID,
+		\rx, Pwhite(-pi, pi, inf),
+		\ry, Pwhite(-pi, pi, inf),
+		\rz, Pwhite(-pi, pi, inf),
+		\delta, 0.1,
+		\args, #[rx, ry, rz]
+	)
+)
 
-~wrp2 = Synth('revwrp', ['out', 0, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][33], 'amp', 0.0])
+Pdef('swrp1').play
 
-~wrp2.set('iamp', 0.0, 'amp', 0.05, 'rate', 1.0, 'freq', 0.5)
+Pdef('swrp1').clear
+
+//revwrp 56 + revwrp 63
+
+
+~wrp2 = Synth('revwrp', ['out', 0, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][94], 'amp', 0.0])
+
+~wrp2.set('iamp', 1.0, 'amp', 0.0, 'ramp', 0.01, 'rate', 1.0, 'freq', 1.0)
 ~wrp2.free
 
+Pdef('swrp2',
+	Pbind(
+		\type, \set,
+		\id, ~wrp2.nodeID,
+		\rx, Pwhite(-pi, pi, inf),
+		\ry, Pwhite(-pi, pi, inf),
+		\rz, Pwhite(-pi, pi, inf),
+		\args, #[rx, ry, rz]
+	)
+)
 
-~wrp3 = Synth('wrprev', ['out', 0, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][11], 'amp', 0.0])
 
-~wrp3.set('iamp', 0.0, 'amp', 0.0, 'rate', 0.5, 'freq', 0.5)
+~wrp3 = Synth('wrprev', ['out', 0, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 80, 'rtime', 8.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][63], 'amp', 0.0])
+
+~wrp3.set('iamp', 0.0, 'wamp', 0.0, 'amp', 0.2, 'rate', 0.5, 'freq', 0.5, 'rx', 0, 'rz', 0)
 ~wrp3.free
+
+
+s.queryAllNodes
+
+s.sendMsg("/n_free", 1018)

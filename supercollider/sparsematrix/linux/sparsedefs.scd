@@ -57,9 +57,9 @@ SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 /** WARP GES DEFS **/
 
 SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
-		room, rtime, ramp, damp, iamp, buf, amp |
-	var input, warpsig, revsig;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1).dup;
+		room, rtime, ramp, damp, iamp, buf, amp, wamp, rx, ry, rz |
+	var input, warpsig, revsig, bf;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
 	warpsig = Warp0.ar(
 		buffer: buf,
 		warpFactor: [wrp, wrp*15/16],
@@ -70,43 +70,54 @@ SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 	);
 	revsig = GVerb.ar(warpsig * amp, room, rtime,
 		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
-	Out.ar(out, revsig + (input * iamp));
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(revsig, FoaEncoderMatrix.newStereo(pi/4));
+	bf = FoaTransform.ar(bf, 'focus', pi/2);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, bf);
 }).add;
 
 SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
-		room, rtime, ramp, damp, iamp, buf, amp |
-	var input, warpsig, revsig;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1).dup;
-	revsig = GVerb.ar(input[0], room, rtime,
+		room, rtime, ramp, damp, iamp, buf, amp, rx, ry, rz |
+	var input, warpsig, revsig, bf;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	revsig = GVerb.ar(input, room, rtime,
 		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
-	warpsig = Warp0.ar(
-		buffer: buf,
+	warpsig = WarpIn.ar(
+		in: revsig,
+		buffer: LocalBuf(SampleRate.ir * 4, 2),
 		warpFactor: [wrp, wrp*15/16],
 		freqScale: freq,
 		windowSize: wsize,
 		overlaps: dens,
 		windowRandRatio: randr
 	) * amp;
-	Out.ar(out, warpsig + (input * iamp));
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(revsig, FoaEncoderMatrix.newStereo(pi/4)) +
+	FoaEncode.ar(warpsig, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/3);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, bf);
 }).add;
 
 /** CHORD DEFS **/
 
-SynthDef('sinechord', {|out, efx, amp, emp, dur|
-	var sig, frqs, amps, durs, n=5;
-	frqs = ArrayControl.kr('frqs', n, 1);
-	amps = ArrayControl.kr('amps', n, 0);
-	sig = Mix.arFill(n, {|i|
-		SinOsc.ar(frqs[i],mul:amps[i])
-	}) * EnvGen.kr(EnvControl.kr(size: 12), timeScale: dur, doneAction: 2);
-	Out.ar(efx, sig);
-	Out.ar(out,
-		FoaTransform.ar(
-			FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection),
-			'rtt', Rand(0.0, 2pi), Rand(0.0, 2pi), Rand(0.0, 2pi)
-		)
-	)
+SynthDef('chordnote', {|out, efx, amp, emp, freq, dur, azim, elev|
+	var sig, bf;
+	sig = DelayN.ar(
+		Decimator.ar(
+			SinOsc.ar(freq, 0, amp)
+			,2048,16
+		) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2),
+		0.2,
+		Rand(0.02, 0.07)
+	);
+	Out.ar(efx, sig * emp);
+	bf = FoaPanB.ar(sig * amp, azim, elev);
+	Out.ar(out, bf)
 }).add;
+
 
 /** EFX **/
 

@@ -10,6 +10,8 @@ s.quit
 
 ~sender.registerDocument(Document.current)
 
+
+
 ~matrix.setBPM(143)
 
 Pdef('matrix', Ppar([ Pdef('r04'), Pdef('r06'), Pdef('r07'), Pdef('b04')]))
@@ -67,7 +69,7 @@ s.stopRecording
 
 ~defs['b04'].setControls(
 	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.2, 0.8) },
+	{ exprand(0.5, 1.0) },
 	{ exprand(0.3, 0.6) },
 	0.1
 );

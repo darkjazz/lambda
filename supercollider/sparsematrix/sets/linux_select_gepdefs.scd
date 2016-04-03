@@ -1,9 +1,9 @@
 ~decoder = FoaDecoder(decoderType: 'stereo')
 
-~player = JGepPlayer(~decoder, dbname: "ges_02")
+~player = JGepPlayer.newWithLoader(~decoder, loader: JsonLDLoader("ges_ld_00"))
 
 
-~player.getDefNamesByDateRange("151104", "151106")
+~player.getDefNamesByDateRange("151220", "151230")
 
 
 ~player.defnames.size
@@ -17,14 +17,23 @@
 ~player.start(~foa)
 
 
+SparseMatrix
+
 ~player.setFoa('zoom', 1.0);
 
 
-~ind = 151;
+~ind = 99;
 ~player.play(~ind, 0, 'zoom', 0)
 ~player.set(~ind, 0.5)
 
 ~player.free(~ind)
+
+
+s.prepareForRecord("/home/alo/sounds/sparsematrix/ges/" ++ ~player.defnames[~ind].asString ++ ".aif");
+
+s.record;
+
+s.stopRecording;
 
 
 s.queryAllNodes

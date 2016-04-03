@@ -40,24 +40,24 @@
 		2, "b2", 'argproto', matrix.buffers.frags.drop(32), 'bit01', true
 	);
 
-	matrix.addPatternBufferDef('b03', (0..31), 4, 4,
+	matrix.addPatternBufferDef('b03', (0..31), 4, 8,
 		['kpanilogo', 'diansa', 'yole', 'rumba', 'kpanilogo', 'diansa', 'yole', 'rumba'],
-		2, "b3", 'argproto', matrix.buffers.evo.keep(32), '\bitSt2', true
+		2, "b3", 'argproto', matrix.buffers.evo.keep(32), 'bitSt2', true
 	);
 
-	matrix.addPatternBufferDef('b04', (32..63), 4, 4,
+	matrix.addPatternBufferDef('b04', (32..63), 4, 2,
 		['kpanilogo', 'diansa', 'yole', 'rumba'].reverse.mirror2,
-		2, "b4", 'argproto', matrix.buffers.evo.drop(32), '\bitSt0', true
+		2, "b4", 'argproto', matrix.buffers.evo.drop(32), 'bitSt0', true
 	);
 
-	matrix.addPatternBufferDef('b05', (0..31), 4, 4,
+	matrix.addPatternBufferDef('b05', (0..31), 4, 8,
 		['doudoumba', 'basikolo', 'foret', 'cassa', 'yole', 'diansa', 'rumba', 'sokou'].reverse,
-		2, "b5", 'argproto', matrix.buffers.msk.keep(32), 'bit02', true
+		2, "b5", 'argproto', matrix.buffers.evo.drop(64), 'bitSt2', true
 	);
 
-	matrix.addPatternBufferDef('b06', (0..31), 4, 8,
+	matrix.addPatternBufferDef('b06', (0..31), 4, 4,
 		['doudoumba', 'basikolo', 'foret', 'cassa', 'yole', 'diansa', 'rumba', 'sokou'],
-		2, "b6", 'argproto', matrix.buffers.msk.drop(16), 'bit00', true
+		2, "b6", 'argproto', matrix.buffers.evo.drop(96), 'bitSt0', true
 	);
 
 }
