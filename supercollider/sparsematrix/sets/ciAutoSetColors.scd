@@ -7,7 +7,16 @@ Tdef('ciAuto').clear
 })
 )
 
+
+Tdef(\sendVector, {
+	loop({
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		[ 0.0625, 0.125, 0.25].choose.wait;
+	});
+}).play;
+
 (
+
 
 ~lasttime = SystemClock.seconds;
 ~meanamp = 0;
@@ -18,7 +27,7 @@ Tdef('ciAuto').clear
 ~patches = [
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
 	[1.0, 1, 1, 0.9, 0.1, 0.4],
-	[1.0, 1, 1, 1.0, 0.8, 0.0],
+	[1.0, 0, 0, 1.0, 1.0, 1.0],
 	[1.0, 1, 1, 0.6, 0.8, 0.8],
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
 	[1.0, 1, 1, 0.5, 1.0, 1.0], //5
@@ -60,11 +69,10 @@ Tdef('ciAuto').clear
 
 ~graphPatterns = (0..39);
 
-~activePatterns = [0];
-~graphics.setPattern(0, 1, 1.0, 1, 1, 0.2, 0.8, 0.8);
-
+~activePatterns = [4];
+~graphics.setPattern(4, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0);
 Tdef('ciAuto', {|mfcc|
-	// 120.wait;
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
@@ -73,19 +81,19 @@ Tdef('ciAuto', {|mfcc|
 		if (~changeWeight.coin)
 		{
 
-			if (~activePatterns.size > 4)
+			if (~activePatterns.size > 3)
 			{
 				~activePatterns.size.rand.do({
 					curr = ~activePatterns.choose;
 					~activePatterns.remove(curr);
-					args = [curr, 0] ++ ~patches.choose;
+					args = [curr, 0] ++ ~patches[curr];
 					~graphics.setPattern(*args);
 				})
 			}
 			{
 				curr = ~graphPatterns.choose;
 				~activePatterns = ~activePatterns.add(curr);
-				args = [curr, 1] ++ ~patches.choose;
+				args = [curr, 1] ++ ~patches[curr];
 				~graphics.setPattern(*args);
 			}
 		};
@@ -100,6 +108,7 @@ Tdef('ciAuto', {|mfcc|
 				].choose;
 			);
 		};
+
 		if (0.1.coin) {
 			~graphics.stopRotation;
 			~graphics.setViewpoint(
@@ -122,6 +131,7 @@ Tdef('ciAuto', {|mfcc|
 			~graphics.rotateCamera;
 			~graphics.mapCodePanel;
 		};
+
 		rrand(0.2, 0.6).round(0.1).wait;
 	})
 }).play

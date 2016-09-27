@@ -2,10 +2,10 @@
 
 (
 ~ncoef = 20;
-~dur = 8 * 60;
+~dur = 20 * 60;
 
-~nano = NanoKONTROL();
-~decoder = FoaDecoder(false);
+// ~nano = NanoKONTROL();
+~decoder = FoaDecoder(decoderType:'stereo');
 ~graphics = CinderApp(1024, 768, mode: 0);
 )
 
@@ -26,6 +26,12 @@
 ~geenLambda.prepare
 
 )
+
+Server.killAll
+
+
+~geenLambda.geen.eventData.datalib
+
 
 ~analyzer.elapsedTime/60
 

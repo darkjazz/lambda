@@ -171,7 +171,7 @@ public:
 	gl::Texture img04;
 	gl::Texture img05;
     std::vector<gl::Texture> img;
-	
+    	
 private:
 	
 	double fragSizeX, fragSizeY, fragSizeZ, state;

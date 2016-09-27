@@ -1,6 +1,11 @@
-SynthDef(\bit00, {|out, efx, amp, emp, buf, rate=1, rotx, roty, rotz|
+SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 	var sig;
-	sig = Normalizer.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate, doneAction: 2), amp);
+	sig = Normalizer.ar(
+		PitchShift.ar(
+			PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate),
+			0.1, 1/rate),
+		amp
+	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
 		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
@@ -17,12 +22,94 @@ SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz
 	)
 }).add;
 
+SynthDef(\bit02, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
+	var sig;
+	sig = Normalizer.ar(
+		PlayBuf.ar(1, buf, BufRateScale.ir(buf) * 1.neg, 1, BufFrames.kr(buf)),
+		amp) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, FoaTransform.ar(
+		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
+	)
+}).add;
+
+SynthDef(\bitSt0, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
+	var sig;
+	sig = Normalizer.ar(
+		PitchShift.ar(
+			PlayBuf.ar(2, buf, BufRateScale.ir(buf) * rate),
+			0.1, 1/rate),
+		amp
+	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, sig * amp)
+}).add;
+
+SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
+	var sig;
+	sig = Normalizer.ar(
+		PlayBuf.ar(2, buf, BufRateScale.ir(buf) * 1.neg, 1, BufFrames.kr(buf)),
+		amp) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, sig * amp)
+}).add;
+
+
+// *** WRP REV ** //
+
+SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
+		room, rtime, ramp, damp, iamp, buf, amp, wamp, rx, ry, rz |
+	var input, warpsig, revsig, bf;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	warpsig = Warp0.ar(
+		buffer: buf,
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	revsig = GVerb.ar(warpsig, room, rtime,
+		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/2);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
+		room, rtime, ramp, damp, iamp, wamp, buf, amp, rx, ry, rz |
+	var input, warpsig, revsig, bf;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	revsig = GVerb.ar(input, room, rtime,
+		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	warpsig = WarpIn.ar(
+		in: revsig,
+		buffer: LocalBuf(BufFrames.kr(buf) * (1.0 / wrp), 2),
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/3);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+// *** WRP REV ** //
+
 /** EFX **/
 
 SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	var input, sig, bf, fft;
 	input = In.ar(in) * amp;
-	sig = LPF.ar(Reverb.ar(input, rtime, hf), 800.0);
+	sig = LPF.ar(FreeVerb1.ar(input, rtime, hf), 800.0);
 	fft = FFT( LocalBuf(1024), sig);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( fft, Dust.kr(200.0) ))
@@ -89,7 +176,7 @@ SynthDef(\del01, {|out, in, amp, del, dec|
 SynthDef(\del02, {|out, in, amp, rtime, del, dec|
 	var input, sig, bf;
 	input = In.ar(in) * amp;
-	sig = LPF.ar(Reverb.ar(input, rtime), 800.0);
+	sig = LPF.ar(FreeVerb1.ar(input, rtime), 800.0);
 	sig = CombL.ar(input,del, [del,del*0.5,del*0.33,del],
 		[dec,dec*Rand(0.8, 1.2), dec*Rand(0.8,1.2),dec*Rand(0.8,1.2)]
 	);

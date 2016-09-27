@@ -106,7 +106,7 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	settings->setFrameRate( _frameRate );
 		
 	oscMessenger = new OSCMessenger(_remoteHost, _outport, _inport);
-    bitalino = new BitalinoCtr(_bitMacAddress, _bitFrameRate);
+    //bitalino = new BitalinoCtr(_bitMacAddress, _bitFrameRate);
 }
 
 void LambdaApp::resize() {
@@ -145,7 +145,7 @@ void LambdaApp::draw()
 	if (world->initialized()) {
 		
 		int x, y, z;
-        
+/*
         if (bitalino->activated) {
             std::stringstream fmt;
             fmt << "Mean: " << bitalino->mean;
@@ -157,7 +157,7 @@ void LambdaApp::draw()
             ogl->codePanel.show = true;
 //            world->rule()->setAdd(bitalino->mapValues());
         }
-        
+*/
 		world->prepareNext();
 		
 		for (x = 0; x < world->sizeX(); x++) {
@@ -202,7 +202,7 @@ void LambdaApp::keyDown( KeyEvent event )
         if (isFullScreen()) { hideCursor(); }
         else { showCursor(); }
     }
-
+/*
     if( event.getChar() == 'b' || event.getChar() == 'B' ) {
         bitalino->activated = !bitalino->activated;
         if (bitalino->activated) {
@@ -213,7 +213,7 @@ void LambdaApp::keyDown( KeyEvent event )
             bitalino->stop();
         }
     }
-
+*/
 }
 
 
@@ -221,7 +221,7 @@ void LambdaApp::shutdown() {
 	delete ogl;
 	delete world;
 	delete oscMessenger;
-    delete bitalino;
+    //delete bitalino;
 }
 
 

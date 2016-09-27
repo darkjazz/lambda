@@ -96,14 +96,14 @@ Tdef('ciAuto', {|mfcc|
 				~activePatterns.size.rand.do({
 					curr = ~activePatterns.choose;
 					~activePatterns.remove(curr);
-					args = [curr, 0, 1.0, 1, 1] ++ ~colors.choose;
+					args = [curr, 0, 1.0, 1, 1] ++ ~colors[curr];
 					~graphics.setPattern(*args);
 				})
 			}
 			{
 				curr = ~graphPatterns.choose;
 				~activePatterns = ~activePatterns.add(curr);
-				args = [curr, 1, 1.0] ++ [0, 1].choose.dup ++ ~colors.choose;
+				args = [curr, 1, 1.0] ++ [0, 1].choose.dup ++ ~colors[curr];
 				~graphics.setPattern(*args);
 			}
 		};

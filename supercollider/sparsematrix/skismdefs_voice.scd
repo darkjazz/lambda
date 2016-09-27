@@ -1,17 +1,23 @@
 Array.with(
 	SynthDef(\granularReverb, {|out, in, iroom, rev, dry, ear, tail, trg, grs, gre, amp, lim=1.0, ang, xng, grainEnvBuf, bps|
-		var sig, dels, pchs, trdl, n = 4, bf, af, src;
+		var sig, dels, pchs, trdl, n = 4, bf, af, src, fft, mfcc, m1, m2, m3, m4;
 		dels = Array.geom(n, 0.001, 2**(1/3));
-		pchs = Array.geom(n, 1.0, 0.5);
-		trdl = Array.geom(n, 0.001, 1.618);
+		pchs = Array.geom(n, 2.0, 0.5);
+		trdl = Array.geom(n, 0.08, 1.618);
 		src = In.ar(in);
-		sig = GVerb.ar(src, iroom, rev, 0.5, 0.5, 15, dry, ear, tail);
+		fft = FFT(LocalBuf(1024), src);
+		mfcc = MFCC.kr(fft, 13);
+		m1 = mfcc[0];
+		m2 = mfcc[[1, 2]].sum;
+		m3 = mfcc[(3..6)].sum;
+		m4 = mfcc[(7..12)].sum;
+		sig = GVerb.ar(src, iroom, rev, 0.5, 0.5, 15, dry, LinLin.kr(m4, 0, 2.38, 0, 0.5), tail);
 		af = Array.fill(n, {|i|
-			var trig = DelayN.kr(Impulse.kr(trg), 0.01, trdl[i]);
+			var trig = DelayN.kr(Impulse.kr(LinLin.kr(m1, -0.62, 1.47, 10.0, 50.0)), 0.01, trdl[i]);
 			DelayC.ar(
 				Mix(
 					PitchShift.ar(
-						GrainIn.ar(1, trig, TRand.kr(grs, gre, trig), sig, 0, grainEnvBuf),
+						GrainIn.ar(1, trig, TRand.kr(LinLin.kr(m2, -0.41, 1.57, 0.01, 0.1), LinLin.kr(m3, -0.1, 1.86, 0.05, 0.2), trig), sig, 0, grainEnvBuf),
 						0.1,
 						[pchs[i], pchs[i] * LFNoise1.kr(Rand(0.1, 0.4)).range(0.5*35/36, 0.5*36/35)],
 						mul: [0, 1].dbamp
@@ -21,7 +27,7 @@ Array.with(
 			)
 		});
 		bf = FoaEncode.ar(Limiter.ar(af * amp, lim), FoaEncoderMatrix.newAtoB);
-		bf = FoaTransform.ar(bf, 'zoomX', LFSaw.kr(ang).range(-pi/3, pi/3));
+		bf = FoaTransform.ar(bf, 'zoomX', LFNoise1.kr(ang).range(-pi/3, pi/3));
 		Out.ar(out,
 			FoaTransform.ar(bf, 'rotate', LFNoise1.kr(xng).range(-pi, pi))
 		)

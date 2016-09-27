@@ -12,6 +12,8 @@
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
 
+SparseMatrix.patterns16.keys
+.makeSparsePatterns(2)
 
 SparseMatrix.patterns16.keys
 
