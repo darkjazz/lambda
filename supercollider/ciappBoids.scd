@@ -5,13 +5,13 @@
 ~graphics.initWorld(20, 20, 20, 20);
 
 
-~graphics.activateSwarm(30, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
+~graphics.activateSwarm(17, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 
 ~graphics.sendBoidPattern(0, 1, 0);
 
 ~graphics.sendBoidPattern(1, 0, 0);
 
-~graphics.sendBoidPattern(2, 1, 1);
+~graphics.sendBoidPattern(2, 0, 1);
 
 ~graphics.sendBoidPattern(4, 1, 0);
 
@@ -25,7 +25,7 @@
 
 ~graphics.killSwarm
 
-~graphics.setBoidCam(true, true)
+~graphics.setBoidCam(true, false)
 
 
 Server.killAll

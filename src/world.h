@@ -142,7 +142,9 @@ public:
 
 	int getQueryStatesSize() { return _queryStatesSize; }
 	double getQueryStateAtIndex(int index) { return _queryStates[index].value; }
-	void stopQuery() { _bQueryStates = false; };
+    int getQueryFaderStateItem(int index) { return _queryFaderStates[index]; }
+    void startQuery() { _bQueryStates = true; _queryStates.clear(); }
+	void stopQuery() { _bQueryStates = false; }
 	void mapStates();
 	
 	void setInputVector(vector<double>);
@@ -187,6 +189,7 @@ private:
 	bool _updateStates; 
 	bool _bQueryStates;
 	vector<State> _queryStates;
+    vector<int> _queryFaderStates;
 	
 	int _queryStatesSize, _currentQueryIndex;
 	

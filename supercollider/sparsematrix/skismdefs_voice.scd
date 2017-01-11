@@ -49,12 +49,14 @@ Array.with(
 	)),
 
 	SynthDef(\flangingDecimator, {|out, in, del, rate, bit, dep, rte, fdbk, dec, amp, lim=1.0, ang, xng, bps|
-		var sig, loc, pchs, n = 4, af, bf;
+		var sig, loc, pchs, n = 4, af, bf, ampctr;
 		var src = In.ar(in);
+		ampctr = Slope.kr(Lag.kr(Amplitude.kr(src)));
 		pchs = Array.geom(n, 36/35, 35/36 );
 		loc = LocalIn.ar;
 		sig = AllpassN.ar(
-			Decimator.ar(FreeVerb1.ar(src * 0.05, 1) + src, rate, bit) + (loc * fdbk),
+			Decimator.ar(FreeVerb1.ar(src * 0.05, 1) + src, rate, bit)
+			+ (loc * LinLin.kr(ampctr, 0.001, 1.0, 0.01, 0.2)),
 			0.1,
 			Select.kr(TIRand.kr(0, 3, Impulse.kr(bps)),
 				[
@@ -87,14 +89,20 @@ Array.with(
 		)
 	)),
 
-/*	SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp=0.1, fs=0.5, wz=0.1, dns=4, rnd=0, lpf=8000.0, amp=0.2, lim=0.5, ang, xng, bps|
-		var sig, n=4, dels, af, bf;
+SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp=0.1, fs=0.5, wz=0.1, dns=4, rnd=0, lpf=8000.0, amp=0.2, lim=0.5, ang, xng, bps|
+		var sig, n=4, dels, af, bf, fft, mfcc, m1, m2, m3, m4;
 		var src = In.ar(in);
-		dels = Array.series(n, 0, 0.25);
+		fft = FFT(LocalBuf(1024), src);
+		mfcc = MFCC.kr(fft, 13);
+		m1 = mfcc[0];
+		m2 = mfcc[[1, 2]].sum;
+		m3 = mfcc[(3..6)].sum;
+		m4 = mfcc[(7..12)].sum;
+		dels = Array.series(n, 0, 0.15);
 		sig = FitzHughNagumo.ar(Impulse.kr(bps), src.abs.round(0.05), ry, b0, b1);
 		af = Array.fill(n, {|i|
 			DelayN.ar(
-				WarpIn.ar(sig ** Amplitude.kr(src), LocalBuf(SampleRate.ir/4), wrp, fs, wz, -1, dns, rnd, 0.1, 1, 0), 1.0, dels[i]);
+				WarpIn.ar(sig + src, LocalBuf(SampleRate.ir/2), LinLin.kr(abs(m1), 0.0, 1.0, 0.01, 0.3), LinLin.kr(abs(m2), 0.0, 1.0, 0.25, 4.0), LinLin.kr(abs(m3), 0.0, 1.0, 0.01, 0.3), -1, dns, LinLin.kr(abs(m4), 0.0, 1.0, 0.0, 0.2), 0.1, 1, 0), 1.0, dels[i]);
 		}) + sig;
 		af = Limiter.ar(LPF.ar(af.distort, lpf) * amp, lim);
 		bf = FoaEncode.ar(af, FoaEncoderMatrix.newAtoB);
@@ -116,7 +124,7 @@ Array.with(
 			ang: ControlSpec(0.4, 2.0, default: 0.9),
 			xng: ControlSpec(0.5, 4.0, default: 1.6)
 		)
-	)),*/
+	)),
 
 	SynthDef(\feedbackSpectrum, {|out, in, iroom=100, rev=6, dry=1, ear=0.7, tail=0.1, mrph=0.5, amp=0.5, fdba=0.3, th=0.2, lim=0.5, ang, xng, bps|
 		var fftsrc, fftrev, fft, sig, ampctr, mfcc, pch, bf, output, diff;
@@ -135,7 +143,7 @@ Array.with(
 			mfcc[3].clip(0, 1).linlin(0.0, 1.0, 0.0, 0.5)
 		);
 		LocalOut.ar(pch);
-		output = 	Limiter.ar(
+		output = Limiter.ar(
 			Select.ar(
 				TRand.kr(0, 3, Onsets.kr(fftsrc, 0.5)),
 				[src, Mix(sig), IFFT(fft), pch]
@@ -169,21 +177,17 @@ Array.with(
 		delt = Array.series(n, 0, 1/iwrp*(1/(n-1)));
 		bufs = Array.fill(n, { LocalBuf(SampleRate.ir*(1/bps)) });
 		ptrs = Array.fill(n, { LFNoise0.kr(iwrp).range(0, 1) });
-		trgs = Array.fill(n, {|i| DelayN.kr(Impulse.kr(iwrp*(2/3)), delt[i], delt[i]) });
-		frqs = Array.geom(n, 35/36**(n-1), 36/35 );
+		trgs = Array.fill(n, {|i| DelayN.kr(Dust.kr(iwrp*(2/3)), delt[i], delt[i]) });
+		frqs = Array.geom(n, 15/16**(n-1), 16/15 );
 		Array.fill(n, {|i|
-			RecordBuf.ar(
-				Mix(GVerb.ar(src + (Crackle.ar(1.95, src * 2, src*0.1)), 80, 10, 0.5, 0.5, 5, 0.5, 0.4, 0.8)),
-				bufs[i],
-				loop: 0.0,
-				trigger: trgs[i]
-			)
+			RecordBuf.ar(src, bufs[i], loop: 0.0, trigger: trgs[i])
 		});
 		sig = Mix.fill(n, {|i|
 			Warp1.ar(1, bufs[i], ptrs[i], frqs[i], wsz, grainEnvBuf, dns, rnd) ** 0.5
 				+ PlayBuf.ar(1, bufs[i], 2.0, Impulse.kr(3), 0)
 				* EnvGen.kr(Env([0,1,1,0],[0.33,0.33,0.33],\sine,0,3), trgs.rotate(-1)[i], timeScale: 1/iwrp);
 		}) * Amplitude.kr(src).expexp(0.001, 1.0, 0.5, 1.0).round(0.1);
+		sig = sig + GVerb.ar(src, 80, 10, 0.5, 0.5, 5, 0.5, 0.4, 0.8).dup;
 		fft = FFT(LocalBuf(1024), sig * amp);
 		bf = Array.fill(4, {
 			IFFT(PV_Diffuser(fft, Dust.kr(20)))
@@ -192,7 +196,7 @@ Array.with(
 		Out.ar(out, FoaTransform.ar(bf, 'rtt', LFNoise2.kr(xng).range(-pi, pi) ))
 	}, metadata: (
 		specs: (
-			iwrp: ControlSpec(0.01, 0.5, default: 0.1),
+			iwrp: ControlSpec(0.2, 1.0, default: 0.5),
 			ibufscale: ControlSpec(0.01, 1.0, default: 0.25),
 			wsz: ControlSpec(0.01, 0.2, step: 0.01, default: 0.1),
 			dns: ControlSpec(0.5, 10.0, default: 3),
@@ -296,11 +300,12 @@ Array.with(
 
 	SynthDef(\fxGrain, {|out, in, th=0.1, amp=1.0, ang, xng, bps|
 		var input, src, trg, fft, bfft, ampctr, bufnums, envbufnums, bf;
-		bufnums = ArrayControl.kr(\bufnums, 3, {|i| i });
+		bufnums = Array.fill(3, {|i| LocalBuf(SampleRate.ir * 0.5) });
 		envbufnums = ArrayControl.kr(\envbufnums, 4, {|i| i });
 		input = In.ar(in);
 		fft = FFT(LocalBuf(1024), input);
 		trg = Onsets.kr(fft, th);
+		RecordBuf.ar(input, Select.kr(TRand.kr(0, 2, trg), bufnums), trigger: trg);
 		ampctr = Amplitude.kr(input, 0.01, 0.1);
 		src = GrainBuf.ar(1, trg, ampctr.expexp(0.001, 1.0, 0.2, 2.0),
 			Select.kr(TRand.kr(0, 2, trg), bufnums), 1, LFNoise2.kr(ampctr.explin(0.001, 1.0, 1.0, 10.0)), 2, 0,
@@ -318,11 +323,6 @@ Array.with(
 			ang: ControlSpec(0.5, 4.0, default: 2.0),
 			xng: ControlSpec(1.0, 8.0, default: 2.33)
 		),
-		readbufs: {
-			"/Users/alo/sounds/skism/*".pathMatch.collect({|path|
-				Buffer.read(s, path)
-			})
-		},
 		envbufnums: {
 			[Env.sine,Env.perc,Env([0.001, 1.0, 0.001], [0.99, 0.01], [4, 0]),Env.triangle].collect({|env|
 				Buffer.sendCollection(s, env.discretize)
@@ -338,7 +338,7 @@ Array.with(
 		fft = FFT(LocalBuf(1024), input);
 		ampctr = Lag.kr(Amplitude.kr(input), 0.25);
 		trigB = Trig.kr(Onsets.kr(fft, th), 1/bps);
-		sB = Gendy3.ar(2, 5, 0.5, 0.5, pch, 0.25, 0.25, 21, 21)
+		sB = Gendy3.ar(2, 5, 0.5, Select.kr(TRand.kr(0, 2, trigB), [pch*0.25, pch * 0.5, pch]), 0.25, 0.25, 21, 21)
 			* EnvGen.kr(Env([1, 1, 0], [0.25, 0.75], \sine), trigB, timeScale: drB);
 		sB = GVerb.ar(sB, LFSaw.kr(LFSaw.kr(1).range(0.5, 2)).range(4, 20),
 			Latch.kr(ampctr, trigB)).first;

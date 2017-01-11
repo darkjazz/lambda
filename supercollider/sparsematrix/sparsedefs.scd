@@ -60,7 +60,7 @@ SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		room, rtime, ramp, damp, iamp, buf, amp, wamp, rx, ry, rz |
 	var input, warpsig, revsig, bf;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	input = Mix(PlayBuf.ar(2, buf, rate, 1, start * BufFrames.kr(buf), 1));
 	warpsig = Warp0.ar(
 		buffer: buf,
 		warpFactor: [wrp, wrp*15/16],
@@ -82,7 +82,7 @@ SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		room, rtime, ramp, damp, iamp, wamp, buf, amp, rx, ry, rz |
 	var input, warpsig, revsig, bf;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	input = Mix(PlayBuf.ar(2, buf, rate, 1, start * BufFrames.kr(buf), 1));
 	revsig = GVerb.ar(input, room, rtime,
 		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
 	warpsig = WarpIn.ar(
@@ -102,7 +102,74 @@ SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
 	Out.ar(out, LeakDC.ar(bf));
 }).add;
 
-// *** WRP REV ** //
+// *** WRP REV END ** //
+
+SynthDef('wrprevconv', {|out, rate, start, wrp, freq, wsize, dens, randr,
+		room, rtime, ramp, damp, iamp, buf, cbuf, amp, camp, wamp, rx, ry, rz |
+	var input, warpsig, revsig, bf, vox;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	vox = PlayBuf.ar(1, cbuf, 1, 1, 0, 1) * camp;
+	warpsig = Warp0.ar(
+		buffer: buf,
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	warpsig = Convolution.ar(warpsig, vox, 1024);
+	revsig = GVerb.ar(warpsig, room, rtime,
+		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/2);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+SynthDef('revwrpconv', {|out, rate, start, wrp, freq, wsize, dens, randr,
+		room, rtime, ramp, damp, iamp, wamp, camp, buf, cbuf, amp, rx, ry, rz |
+	var input, warpsig, revsig, bf, vox;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	vox = PlayBuf.ar(1, cbuf, 1, 1, 0, 1) * camp;
+	revsig = GVerb.ar(input, room, rtime,
+		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	warpsig = WarpIn.ar(
+		in: revsig,
+		buffer: LocalBuf(BufFrames.kr(buf) * (1.0 / wrp), 2),
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	warpsig = Convolution.ar(warpsig, vox, 1024);
+	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/3);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+/** WRPREVCONV END **/
+
+SynthDef('nested_pm', {|out, efx, amp, emp, dur, lpf=700, az=0, el=0|
+	var sig, freqs, inds;
+	freqs = ArrayControl.kr('freqs', 5, 1);
+	inds = ArrayControl.kr('inds', 5, 1);
+	sig = SinOsc.ar(freqs[0],
+		SinOsc.ar(freqs[1],
+			SinOsc.ar(freqs[2], inds[2]),
+			inds[1]
+		), inds[0]
+	) + ( SinOsc.ar(freqs[3], SinOsc.ar(freqs[4], 0, inds[4]), inds[3] * freqs[3]) );
+	sig = LPF.ar(sig.distort, lpf)
+	* EnvGen.kr(Env.perc, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, PanB.ar(sig * amp, az, el))
+}).add;
 
 /** EFX **/
 

@@ -262,7 +262,10 @@ void::World::prepareNext() {
 		if (_trainCount < _trainDur) {
 			_tRadius = _mapRadius * exp(_trainCount / (_timeConst*-1.0));
 		}
-	}	
+	}
+    if (_bQueryStates && ruleType() != CONT) {
+        _queryFaderStates.clear();
+    }
 }
 
 void World::next(int x, int y, int z) { 
@@ -288,10 +291,18 @@ void World::next(int x, int y, int z) {
 	
 		
 	if (_bQueryStates) {
-		if (_queryStates[_currentQueryIndex].include(x, y, z)) {
-			_queryStates[_currentQueryIndex].value = cells[x][y][z].states[_index];
-			_currentQueryIndex++;
-		}
+        if (ruleType() == CONT) {
+            if (_queryStates[_currentQueryIndex].include(x, y, z)) {
+                _queryStates[_currentQueryIndex].value = cells[x][y][z].states[_index];
+                _currentQueryIndex++;
+            }
+        }
+        else{
+            if (cells[x][y][z].phase > 0.0) {
+                _queryFaderStates.push_back( (int)((x*_sizeX+y)*_sizeY+z) );
+                _queryFaderStates.push_back( cells[x][y][z].states[_index] );
+            }
+        }
 	}
 	
 }
@@ -328,6 +339,11 @@ void World::finalizeNext() {
 		setCells(_bmu->x, _bmu->y, _bmu->z);
 		_newBMUFound = true;
 	}
+    
+    if (_bQueryStates && ruleType() != CONT) {
+        _queryStatesSize = _queryFaderStates.size();
+    }
+
 }
 
 void World::interpolate(int x, int y, int z) {

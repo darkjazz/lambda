@@ -1,10 +1,12 @@
-~graphics = CinderApp(1024, 768)
+50 * 9
 
-~graphics.initWorld(20, 20, 20, 20);
+~graphics = CinderApp(800, 450)
+
+~graphics.initWorld(13, 13, 13, 20);
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.97);
+~graphics.setAdd(0.01);
 
 ~graphics.resetWorld(8, 8, 8, 4, 4, 4)
 
@@ -15,9 +17,9 @@
 
 ~graphics = CinderApp(1024, 768, mode: 1)
 
-~graphics = CinderApp(1024, 768, mode: 0, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Debug/lambda.app")
+~graphics = CinderApp(800, 600, mode: 0, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Debug/lambda.app")
 
-~graphics.setFrameRate(32.0)
+~graphics.setFrameRate(13.0)
 
 ~graphics.open
 
@@ -29,15 +31,15 @@
 
 ~graphics.open
 
-~graphics.initWorld(128, 80, 10, 20);
+~graphics.initWorld(64, 64, 10, 20);
 
-~graphics.initWorld(12, 12, 12, 20);
+~graphics.initWorld(11, 11, 11, 20);
 
-~graphics.initWorld(21, 21, 21, 20);
+~graphics.initWorld(17, 17, 17, 20);
 
 43**3
 
-~graphics.initGenerations([4,6],[4,6],16);
+~graphics.initGenerations([4,6],[4,6],17);
 
 ~graphics.initGenerations([4,6], [3,5], 8);
 
@@ -49,105 +51,117 @@
 
 ~graphics.setViewpoint(0.0, 0.0, 0.0, 0.0, 0.0, -100.0)
 
-~graphics.setViewpoint(70.0, 70.0, 70.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(80.0, 20.0, 20.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(60.0, 60.0, 60.0, -40.0, -40.0, -40.0)
+~graphics.setViewpoint(0.0, 0.0, 50.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(0.0, 0.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, 50.0, 0.0, 0.0, 0.0, 0.0)
 
-~graphics.setInterpolation(1, 4)
+~graphics.setInterpolation(2, 1)
 
 ~graphics.setBackground(0.0, 0.0, 0.0)
-
-
-~graphics.setPattern(0, 1, 1.0, 1, 1, 0.5, 0.8, 1.0);
-
-~graphics.setPattern(1, 0, 1.0, 1, 1, 0.9, 0.1, 0.4);
-
-~graphics.setPattern(2, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(3, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(4, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(5, 0, 1.0, 1, 1, 0.5, 1.0, 1.0);
-
-~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
-
-~graphics.setPattern(7, 1, 1.0, 0, 0, 1.0, 0.3, 0.5);
-
-~graphics.setPattern(8, 0, 1.0, 1, 1, 0.6, 0.7, 0.9);
-
-~graphics.setPattern(9, 0, 1.0, 1, 1, 0.6, 0.8, 0.9);
-
-~graphics.setPattern(10, 0, 1.0, 0, 0, 0.2, 0.8, 0.8);
-
-~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.7, 1.0);
-
-~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
-
-~graphics.setPattern(13, 0, 1.0, 1, 1, 0.0, 0.5, 1.0);
-
-~graphics.setPattern(14, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(15, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(16, 0, 1.0, 1, 1, 0.1, 1.0, 0.7);
-
-~graphics.setPattern(17, 0, 1.0, 1, 1, 0.7, 1.0, 0.0);
-
-~graphics.setPattern(18, 0, 0.9, 1, 1, 0.4, 0.7, 0.4);
-
-~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 0.33, 1.0);
-
-~graphics.setPattern(20, 0, 1.0, 1, 1, 0.3, 0.4, 1.0);
-
-~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
-
-~graphics.setPattern(22, 1, 1.0, 0, 0, 0.4, 0.8, 1.0);
-
-~graphics.setPattern(23, 0, 1.0, 0, 0, 0.9, 0.0, 0.3);
-
-~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);
-
-~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.8, 0.7);
-
-~graphics.setPattern(26, 0, 0.2, 1, 1, 0.6, 0.7, 0.8);
-
-~graphics.setPattern(27, 0, 0.5, 1, 1, 0.2, 0.7, 0.6);
-
-~graphics.setPattern(28, 0, 0.3, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(29, 0, 0.3, 0, 0, 0.6, 0.9, 1.0);
-
-~graphics.setPattern(30, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(31, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
-
-~graphics.setPattern(32, 0, 0.01, 1, 1, 0.1, 0.1, 0.1);
-
-~graphics.setPattern(33, 0, 1.0, 0, 0, 0.0, 0.4, 0.4);
-
-~graphics.setPattern(34, 0, 1.0, 1, 1, 1.0, 0.0, 0.5);
-
-~graphics.setPattern(35, 0, 0.5, 1, 1, 1.0, 0.2, 0.8);
-
-~graphics.setPattern(36, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(37, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(38, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
-~graphics.setPattern(39, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-
+~graphics.setBackground(0.0, 0.0, 0.0)
 
 
 Tdef(\sendVector, {
 	loop({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		[ 0.0625, 0.125, 0.25].choose.wait;
+	});
+});
+
+Tdef(\sendVector).play
+
+Tdef(\sendVector).clear
+
+~graphics.setPattern(0, 1, 1.0, 0, 0, 1.0, 0.0, 0.6);
+
+~graphics.setPattern(1, 0, 1.0, 1, 1, 1.0, 0.0, 0.6);
+
+~graphics.setPattern(2, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(3, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(5, 1, 1.0, 1, 1, 1.0, 0.4, 0.8);
+
+~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
+
+~graphics.setPattern(7, 0, 1.0, 1, 1, 1.0, 0.3, 0.5);
+
+~graphics.setPattern(8, 1, 1.0, 1, 1, 0.6, 0.7, 0.9);
+
+~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
+
+~graphics.setPattern(10, 0, 1.0, 1, 1, 1.0, 1.0, 0.0);
+
+~graphics.setPattern(11, 0, 1.0, 1, 1, 0.0, 0.7, 1.0);
+
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.6, 0.8, 1.0);
+
+~graphics.setPattern(13, 0, 1.0, 0, 0, 0.4, 0.5, 1.0);
+
+~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(15, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(16, 0, 0.3, 1, 1, 0.1, 1.0, 0.7);
+
+~graphics.setPattern(17, 0, 1.0, 1, 1, 0.7, 1.0, 0.4);
+
+~graphics.setPattern(18, 0, 0.2, 1, 1, 0.4, 0.7, 0.4);
+
+~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(20, 0, 1.0, 1, 1, 0.5, 0.5, 1.0);
+
+~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
+
+~graphics.setPattern(22, 0, 1.0, 1, 1, 0.4, 0.8, 1.0);
+
+~graphics.setPattern(23, 1, 0.5, 0, 0, 0.9, 0.0, 0.3);
+
+~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);
+
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.8, 0.7);
+
+~graphics.setPattern(26, 0, 0.7, 1, 1, 0.1, 0.2, 0.3);
+
+~graphics.setPattern(27, 0, 0.3, 1, 1, 0.1, 0.6, 0.3);
+
+~graphics.setPattern(28, 0, 0.3, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(29, 0, 0.4, 0, 0, 0.6, 0.9, 1.0);
+
+~graphics.setPattern(30, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(31, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
+
+~graphics.setPattern(32, 0, 0.1, 0, 1, 0.8, 0.5, 0.9);
+
+~graphics.setPattern(33, 0, 1.0, 0, 0, 0.0, 0.4, 0.4);
+
+~graphics.setPattern(34, 0, 0.4, 1, 1, 1.0, 0.0, 0.9);
+
+~graphics.setPattern(35, 0, 0.1, 1, 1, 1.0, 0.2, 0.8);
+
+~graphics.setPattern(36, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(37, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+~graphics.setPattern(38, 0, 0.8, 0, 0, 0.5, 1.0, 1.0);
+
+~graphics.setPattern(39, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+
+
+
+Tdef(\sendVector, {
+	loop({
+		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
+		[ 0.1, 0.05 ].choose.wait;
 	});
 });
 
@@ -174,7 +188,7 @@ Ndef('graphics', {
 
 24.do({|i| (i%4).postln })
 
-~rot = Rotation(60.0, 0.0, 90.0, 0.0, 0.0, -0.02, 0.0, 0.0);
+~rot = Rotation(60.0, 0.0, 60.0, 0.0, 0.0, 0.0, 0.0, 0.01);
 
 ~rot = Rotation(60.0, 0.01, 90.0, 0.01, 0.01, -0.02, 0.01, 0.01);
 
@@ -184,7 +198,7 @@ Ndef('graphics', {
 ~graphics.stopRotation
 
 
-~rot = Rotation(140.0, 0.03, 100.0, 20.0, 0.0, 0.034, 0.0, 0.038);
+~rot = Rotation(140.0, 0.1, 100.0, 20.0, 0.0, 0.14, 0.0, 0.18);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 ~graphics.setViewpoint(170.0, 0.0, 0.0, 0.0, 0.0, 0.0)
@@ -198,21 +212,21 @@ Ndef('graphics', {
 
 ~graphics.sendPredefined3DRule(\nova)
 
-~graphics.sendPredefined3DRule(\belzhab)
+~graphics.sendPredefined3DRule(\frozenspirals)
 
+
+
+~graphics.sendPredefined3DRule(\rainzha)
+
+~graphics.sendPredefined3DRule(\glisserati)
 
 
 ~graphics.sendPredefined3DRule(\xtasy)
 
-~graphics.sendPredefined3DRule(\flamingstarbow)
 
+~graphics.sendGenRule([4,5,6,7,8],[4,5,6,7,8],29);
 
-~graphics.sendPredefined3DRule(\transers)
-
-
-~graphics.sendGenRule([4,6],[4,6],16);
-
-~graphics.sendGenRule([6],[6],25);
+~graphics.sendGenRule([4],[4, 6],8);
 
 
 
@@ -228,7 +242,7 @@ Ndef('graphics', {
 ~graphics.sendGenRule([2],[6],13);
 
 
-~graphics.sendPredefined3DRule(\briansbrain)
+~graphics.sendPredefined3DRule(\nova)
 
 
 ~graphics.sendPredefined3DRule(\belzhab)
@@ -239,7 +253,7 @@ Ndef('graphics', {
 
 ~graphics.sendPredefined3DRule(\brain6)
 
-~graphics.sendPredefined3DRule(\chenille)
+~graphics.sendPredefined3DRule(\faders)
 
 
 Generations
@@ -339,11 +353,19 @@ Tdef('sendcode', {
 			str = str ++ " ";
 		});
 		~graphics.sendCodeLine(str);
-		rrand(0.1, 1.0).wait
+		rrand(3.0, 6.0).wait
 	})
 }).play
 
 Tdef('sendcode').stop
+
+
+
+10.do({
+	~txt.drop(rrand(0, 3000)).keep(60).postln
+})
+
+~graphics.sendCodeLine("buffering buffering bits and bites and megabytes")
 
 48.asAscii
 90.asAscii
@@ -490,7 +512,7 @@ Tdef(\autopilot, {
 
 ~graphics.unmapCodePanel
 
-~graphics.sendCodeTitle("karlsruhe.algorave.15")
+~graphics.sendCodeTitle("buffering......................")
 
 ~graphics.sendPredefinedGenRule(\cooties)
 
@@ -744,3 +766,17 @@ Tdef('ciAuto', {|mfcc|
 )
 
 Tdef('ciAuto').clear
+
+
+QueryStates.uniform3D(7, 3)
+
+~graphics.queryAliveStates({|ms|
+	~msg = ms;
+	~msg.size.postln
+})
+
+~msg.
+
+~graphics.stopQuery
+
+~graphics.queryFunc

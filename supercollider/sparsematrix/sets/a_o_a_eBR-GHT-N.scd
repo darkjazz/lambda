@@ -73,7 +73,7 @@ Pdef('matrix').play
 	(efx0: [0, 1, 2], efx1: [3, 4, 5], efx3: [6, 7, 8])
 )
 
-~matrix.defsAt('r01').assignEfx(
+~matrix.defsAt('r03').assignEfx(
 	(efx0: [3, 13, 23, 33], efx1: [4, 14, 24, 44], efx3: [6, 16, 26, 56], efx4: [8, 18, 28, 60], efx5: [10, 20, 30, 40])
 )
 

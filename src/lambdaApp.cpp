@@ -177,8 +177,13 @@ void LambdaApp::draw()
 		world->finalizeNext();
 		
 		if (world->bQueryStates()) {
-			oscMessenger->sendStates();
-		}	
+            if (world->ruleType() == CONT) {
+                oscMessenger->sendStates();
+            }
+            else {
+                oscMessenger->sendFaderStates();
+            }
+		}
 		
 	}
 	

@@ -51,6 +51,8 @@ public:
 	void sendAlive();
 	
 	void sendStates();
+    
+    void sendFaderStates();
 	
 	void collectMessages();
 	

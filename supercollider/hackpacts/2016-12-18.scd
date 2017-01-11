@@ -39,21 +39,21 @@ MasterEQ(2)
 ~matrix.efxamps['efx4'] = 0.5
 
 ~matrix.defsAt('m00').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
-	{ exprand(0.4, 0.4) },
-	{ exprand(0.4, 0.4) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.1, 0.2) },
+	{ exprand(0.1, 0.2) },
 	1.0
 );
 
 ~matrix.defsAt('m01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.1, 0.4) },
-	{ exprand(0.31, 0.5) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.05, 0.1) },
+	{ exprand(0.1, 0.3) },
 	0.5
 );
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
 	{ exprand(0.01, 0.3) },
 	0.1
@@ -66,17 +66,17 @@ MasterEQ(2)
 	0.1
 );
 
-~matrix.defsAt('b04').setControls(
+~matrix.defsAt('b06').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.8) },
-	{ exprand(2.0, 4.0) },
+	{ exprand(0.1, 0.4) },
+	{ exprand(1.0, 3.0) },
 	0.1
 );
 
 ~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.5) },
-	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 1.0) },
+	{ exprand(0.2, 0.4) },
 	0.1
 );
 
@@ -101,7 +101,7 @@ Server.killAll
 
 ~matrix.setBPM(140)
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('m01'), Pdef('m00'), Pdef('efx')]))
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('b03'), Pdef('b06'), Pdef('m01'), Pdef('m00')]))
 
 
 s.record
@@ -214,10 +214,10 @@ s.record
 
 s.stopRecording
 
-~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][69], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][20], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
 
-~wrp0.set('amp', 0.4, 'wamp', 0.3, 'iamp', 0.9, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp0.set('amp', 0.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.4, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 
 ~wrp0.free

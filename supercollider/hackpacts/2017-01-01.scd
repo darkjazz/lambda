@@ -1,10 +1,10 @@
-~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b03', 'b04', 'b05', 'b06'], worldDim: 21, ip: "127.0.0.1");
+~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['r04', 'r05', 'r06', 'r07', 'b02'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings)
 
 e.initGraphics(true)
 
-~matrix.setBPM(135)
+~matrix.setBPM(167)
 
 Tdef('fuckbpm').clear
 
@@ -18,90 +18,57 @@ Tdef('fuckbpm', {
 
 s.queryAllNodes
 
-
-MasterEQ(2)
-~matrix.addPatternMelodyDef('m00', (0..31), 4, 8,
-	['basikolo', 'cassa', 'diansa', 'sokou'],
-	0, "m0", 'argproto', false, 'd08', Prand(Array.primeSeries(5, 201, 7), inf)
-);
-
-
-~matrix.defsAt('m01').assignEfx(
-	(efx0: (0..31))
-)
-
-~matrix.efxamps['efx0'] = 0.5
-
-~matrix.defsAt('m00').assignEfx(
-	(efx4: (0..31))
-)
-
-~matrix.efxamps['efx4'] = 0.5
-
-~matrix.defsAt('m00').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
-	{ exprand(0.4, 0.4) },
-	{ exprand(0.4, 0.4) },
-	1.0
-);
-
-~matrix.defsAt('m01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.1, 0.4) },
-	{ exprand(0.31, 0.5) },
-	0.5
-);
-
-~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.01, 0.3) },
-	0.1
-);
-
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.01, 0.1) },
-	0.1
-);
-
-~matrix.defsAt('b04').setControls(
+~matrix.defsAt('b02').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.8) },
-	{ exprand(2.0, 4.0) },
+	{ exprand(0.5, 1.5) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
-~matrix.defsAt('b03').setControls(
+~matrix.defsAt('b02').recall(0)
+
+~matrix.defsAt('r04').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.5) },
-	{ exprand(0.5, 1.0) },
+	{ exprand(0.3, 1.0) },
+	{ exprand(0.05, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('b05').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.1, 0.4) },
+~matrix.defsAt('r04').recall(0)
+
+~matrix.defsAt('r05').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.1, 1.0) },
+	{ exprand(0.02, 0.1) },
 	0.1
 );
+
+~matrix.defsAt('r05').recall(0)
+
+~matrix.defsAt('r06').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.04, 0.1) },
+	0.1
+
+);
+
+~matrix.defsAt('r06').recall(0)
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.04, 0.1) },
+	0.1
+
+);
+
+~matrix.defsAt('r07').recall(0)
 
 s.queryAllNodes
 
-Server.killAll
 
-~matrix.defsAt('b06').recall(0);
-
-~matrix.defsAt('r00').recall(0);
-~matrix.defsAt('r01').recall(0);
-
-~matrix.defsAt('b03').recall(0);
-
-
-~matrix.setBPM(140)
-
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('m01'), Pdef('m00'), Pdef('efx')]))
+Pdef('matrix', Ppar([ Pdef('r04'), Pdef('r05'), Pdef('r06'), Pdef('r07'), Pdef('b02')]))
 
 
 s.record
@@ -114,80 +81,28 @@ s.scope(2)
 
 ~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('latchOnset', 1.0)
+~matrix.setSkismAmp('latchOnset', 0.7)
 
 ~matrix.deactivateSkismSynth('latchOnset')
 
 
 
-~matrix.activateSkismSynth('feedbackSpectrum')
+~matrix.activateSkismSynth('arhythmicGendy')
 
-~matrix.setSkismAmp('feedbackSpectrum', 0.5)
+~matrix.setSkismAmp('arhythmicGendy', 0.2)
 
-~matrix.deactivateSkismSynth('feedbackSpectrum')
+~matrix.deactivateSkismSynth('arhythmicGendy')
 
 
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 1.0)
+~matrix.setSkismAmp('cliqSaw', 0.0)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
 
-~changeWeight = 0.3
-
-Server.killAll
-
-
-~player.start(~foa)
-
-
-~player.setFoa('zoom', 1.0)
-~player.setFoa('push', 1.0)
-
-
-~ind0 = 67
-
-~player.loadData(~ind0)
-
-~player.play(~ind0, 0, 'zoom', 0)
-
-~player.set(~ind0, 1.0)
-
-~player.free(~ind0)
-
-
-s.scope(2)
-
-~ind1 = 42
-
-~player.loadData(~ind1)
-
-~player.play(~ind1, 0, 'zoom', 0)
-
-~player.set(~ind1, 0.0)
-
-~player.free(~ind1);
-
-
-~ind2 = 50
-
-~player.loadData(~ind2)
-
-~player.play(~ind2, 0, 'zoom', 0)
-
-~player.set(~ind2, 0.0)
-
-~player.free(~ind2);
-
-
-s.queryAllNodes
-
-
-s.sendMsg("/n_free", 1009)
-
-~graphics = CinderApp(1024, 768, mode: 1)
+~graphics = CinderApp(800, 450, mode: 0, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Debug/lambda.app")
 
 
 ~graphics.open
@@ -196,16 +111,17 @@ s.sendMsg("/n_free", 1009)
 ~graphics.setSymmetry(11)
 ~graphics.setViewpoint(80.0, 80.0, 80.0, 0.0, 0.0, 0.0)
 
-Tdef(\sendVector, {
+Tdef(\sendVector).clear
+
+, {
 	loop({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		[ 0.25, 0.125, 0.5].choose.wait;
 	});
-});
+}).play;
 
-Tdef(\sendVector).play
+~graphics.setFrameRate(13.0)
 
-Tdef('ciAuto').clear
 
 s.queryAllNodes
 

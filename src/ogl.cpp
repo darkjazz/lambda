@@ -1690,39 +1690,37 @@ void GraphicsRenderer::pattern13(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern14(int x, int y, int z) {
-    if ((x % 4 == 0 || y % 4 == 0 || z % 4 == 0) && state > 0.0) {
-        float mapState, maxState;
-
-        maxState = ptrWorld->rule()->numStates() - 1;
+    float maxState = 13;
+    if (state < maxState && state > 0.0) {
+        float mapState;
+        
         mapState = (maxState - currentCell->states[ptrWorld->index()]) * (1 / maxState);
-                
-        xL = (float)x * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * PI)));
-        yB = (float)y * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * PI)));
-        zF = (float)z * fragSizeX + (fragSizeX * 0.5 + (fragSizeX * sin((1.0-mapState) * 2 * PI)));
+        
+        xL = (float)x * fragSizeX + fragSizeX - (fragSizeX * 0.25);
+        yB = (float)y * fragSizeX + fragSizeX - (fragSizeX * 0.25);
+        zF = (float)z * fragSizeX + fragSizeX - (fragSizeX * 0.25);
+        
+        xW = yH = zD = fragSizeX * 0.75;
         
         xL -= hx;
         yB -= hx;
         zF -= hx;
-                
-        xW = yH = zD = mapf(fragSizeX * (1.0 / currentCell->states[ptrWorld->index()]), 2.0, 4.0);
         
         red = patternLib[14].color.r * abs(patternLib[14].colormap - mapState);
         green = patternLib[14].color.g * abs(patternLib[14].colormap - mapState);
         blue = patternLib[14].color.b * abs(patternLib[14].colormap - mapState);
         alpha = patternLib[14].alpha * abs(patternLib[14].alphamap - mapState);
-                
+        
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img[3].bind();
-//        img[0].bind();
+        img[0].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
-        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );	
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
         
         gl::popMatrices();
-        img[3].unbind();
-//        img[0].unbind();
+        img[0].unbind();
         glDisable( GL_TEXTURE_2D );
 			
 	}
@@ -3649,7 +3647,7 @@ void GraphicsRenderer::pattern36(int x, int y, int z) {
         yB -= hx;
         zF -= hx;
         
-        cstate = mapf(cstate, 0.5, 2.0);
+        cstate = mapf(cstate, 1.0, 4.0);
         
         red = patternLib[36].color.r * abs(patternLib[36].colormap - cstate);
         green = patternLib[36].color.g * abs(patternLib[36].colormap - cstate);
@@ -3675,7 +3673,7 @@ void GraphicsRenderer::pattern36(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern37(int x, int y, int z) {
-    if ((x % 4 == 0 || y % 4 == 0 || z % 4 == 0) && state > 0.0)
+    if ((x % 3 == 0 || y % 3 == 0 || z % 3 == 0) && state > 0.0)
     {
         float cstate;
         
@@ -3685,7 +3683,7 @@ void GraphicsRenderer::pattern37(int x, int y, int z) {
         else {
             if (state != 0)
             {
-                cstate = 1.0 / state;
+                cstate = state;
             }
             else {
                 cstate = 0.0f;
@@ -3700,7 +3698,7 @@ void GraphicsRenderer::pattern37(int x, int y, int z) {
         yB -= hx;
         zF -= hx;
         
-        cstate = mapf(cstate, 0.5, 2.0);
+        cstate = mapf(cstate, 0.5, 1.0);
         
         red = patternLib[37].color.r * abs(patternLib[37].colormap - cstate);
         green = patternLib[37].color.g * abs(patternLib[37].colormap - cstate);
@@ -3711,14 +3709,14 @@ void GraphicsRenderer::pattern37(int x, int y, int z) {
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img[8].bind();
+        img[3].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
         gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );	
         
         gl::popMatrices();
-        img[8].unbind();
+        img[3].unbind();
         glDisable( GL_TEXTURE_2D );
         
     }
@@ -3762,14 +3760,14 @@ void GraphicsRenderer::pattern38(int x, int y, int z) {
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img[5].bind();
+        img[6].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
         gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
         
         gl::popMatrices();
-        img[5].unbind();
+        img[6].unbind();
         glDisable( GL_TEXTURE_2D );
         
     }
