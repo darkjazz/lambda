@@ -37,7 +37,7 @@ Tdef('play', {
 			dur = next - time;
 			freq = (dict["afo:value"].asInt * 12).nearestPrime;
 			[freq, dur].postln;
-			Synth('sino', ['freq', freq, 'dur', dur * 0.2]);
+			Synth('sino', ['freq', freq, 'dur', dur * 0.2, 'amp', rrand(0.4, 0.7)]);
 			(dur * 4).wait;
 		})
 	})

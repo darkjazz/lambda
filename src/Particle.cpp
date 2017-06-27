@@ -1,100 +1,103 @@
-/*
- *  Particle.cpp
- *
- *  Created by Mehmet Akten on 02/05/2009.
- *  Copyright 2009 MSA Visuals Ltd.. All rights reserved.
- *
- */
-
 #include "Particle.h"
 #include "cinder/Rand.h"
 #include "cinder/gl/gl.h"
-
-static const float MOMENTUM = 0.5f;
-static const float FLUID_FORCE = 0.6f;
+#include "cinder/Perlin.h"
 
 using namespace ci;
 
-void Particle::init( float x, float y ) {
-	pos = Vec2f( x, y );
-	vel.x = vel.y = 0;
-	radius = 5;
-	alpha  = Rand::randFloat( 0.3f, 1 );
-	mass = Rand::randFloat( 0.1f, 1 );
+Perlin sPerlin( 2 );
+
+Particle::Particle( Vec3f _loc, Vec3f _vel, bool _bPerlin)
+{
+    radius      = Rand::randFloat( 10, 40 );
+    len         = (int)radius;
+    
+    startLoc = _loc + Rand::randVec3f() * Rand::randFloat( 5.0f );
+    
+    for( int i = 0; i < len; i++ ) {
+        loc.push_back( startLoc );
+    }
+    
+    vel = _vel * 0.5f + Rand::randVec3f() * Rand::randFloat( 10.0f );
+    
+    perlin = Vec3f::zero();
+    
+    age         = 0;
+    agePer		= 1.0f;
+    lifeSpan    = (int)( radius );
+    ISDEAD		= false;
+    bPerlin = _bPerlin;
 }
 
-void Particle::update( const ciMsaFluidSolver &solver, const Vec2f &windowSize, const Vec2f &invWindowSize ) {
-	// only update if particle is visible
-	if( alpha == 0 )
-		return;
-	
-	vel = solver.getVelocityAtPos( pos * invWindowSize ) * (mass * FLUID_FORCE ) * windowSize + vel * MOMENTUM;
-	pos += vel;	
-
-	// bounce of edges
-	if( pos.x < 0 ) {
-		pos.x = 0;
-		vel.x *= -1;
-	}
-	else if( pos.x > windowSize.x ) {
-		pos.x = windowSize.x;
-		vel.x *= -1;
-	}
-	
-	if( pos.y < 0 ) {
-		pos.y = 0;
-		vel.y *= -1;
-	}
-	else if( pos.y > windowSize.y ) {
-		pos.y = windowSize.y;
-		vel.y *= -1;
-	}
-	
-	// hackish way to make particles glitter when the slow down a lot
-	if( vel.lengthSquared() < 1 ) {
-		vel += Rand::randVec2f() * 0.5f;
-	}
-	
-	// fade out a bit (and kill if alpha == 0);
-	alpha *= 0.999f;
-	if( alpha < 0.01f )
-		alpha = 0;
+void Particle::exist(int brownZ)
+{
+    if( bPerlin )
+        findPerlin(brownZ);
+    
+    findVelocity();
+    setPosition();
+    render();
+    //setAge();
 }
 
+void Particle::findPerlin(int brownZ)
+{
+    Vec3f noise = sPerlin.dfBm( loc[0] * 0.01f + Vec3f( 0, 0, brownZ / 100.0f ) );
+    perlin = noise.normalized() * 0.5f;
+}
 
-void Particle::updateVertexArrays( bool drawingFluid, const Vec2f &invWindowSize, int i, float* posBuffer, float* colBuffer) {
-	int vi = i * 4;
-	posBuffer[vi++] = pos.x - vel.x;
-	posBuffer[vi++] = pos.y - vel.y;
-	posBuffer[vi++] = pos.x;
-	posBuffer[vi++] = pos.y;
-	
-	int ci = i * 6;
-	if( drawingFluid ) {
-		// if drawing fluid, draw lines as black & white
-		colBuffer[ci++] = alpha;
-		colBuffer[ci++] = alpha;
-		colBuffer[ci++] = alpha;
-		colBuffer[ci++] = alpha;
-		colBuffer[ci++] = alpha;
-		colBuffer[ci++] = alpha;
-	} else {
-		// otherwise, use color
-		float vxNorm = vel.x * invWindowSize.x;
-		float vyNorm = vel.y * invWindowSize.y;
-		float v2 = vxNorm * vxNorm + vyNorm * vyNorm;
-#define VMAX 0.013f
-		if(v2>VMAX*VMAX) v2 = VMAX*VMAX;
-		float satInc = mass > 0.5 ? mass * mass * mass : 0;
-		satInc *= satInc * satInc * satInc;
-		//color.setHSV(0, ofMap(v2, 0, VMAX*VMAX, 0, 1) + satInc, ofLerp(0.5, 1, mass) * alpha);
-		Color color( CM_HSV, 0, v2 / ( VMAX * VMAX ), lerp( 0.5f, 1.0f, mass ) * alpha );
+void Particle::findVelocity()
+{
+    
+    if( bPerlin )
+        vel += perlin;
+    
+}
 
-		colBuffer[ci++] = color.r;
-		colBuffer[ci++] = color.g;
-		colBuffer[ci++] = color.b;
-		colBuffer[ci++] = color.r;
-		colBuffer[ci++] = color.g;
-		colBuffer[ci++] = color.b;
-	}
+void Particle::setPosition()
+{
+    for( int i = len - 1; i > 0; i-- ) {
+        loc[i] = loc[i-1];
+    }
+    
+    loc[0] += vel;
+}
+
+void Particle::render()
+{
+    color = Color( agePer, agePer * 0.75f, 1.0f - agePer );
+    //ogl->renderImage( loc[0], radius * agePer, c, 1.0f );
+}
+
+void Particle::renderTrails()
+{
+    gl::begin( GL_QUAD_STRIP );
+    
+    for( int i = 0; i < len - 2; i++ ) {
+        float per     = 1.0f - i / (float)(len-1);
+        Vec3f perp0 = loc[i] - loc[i+1];
+        Vec3f perp1 = perp0.cross( Vec3f::yAxis() );
+        Vec3f perp2 = perp0.cross( perp1 );
+        perp1 = perp0.cross( perp2 ).normalized();
+        
+        Vec3f off = perp1 * ( radius * agePer * per * 0.1f );
+        
+        gl::color( per, per * 0.25f, 1.0f - per, per * 0.5f );
+        gl::vertex( loc[i] - off );
+        gl::vertex( loc[i] + off );
+    }
+    
+    gl::end();
+}
+
+void Particle::setAge()
+{
+    age += 1.0f;
+    
+    if( age > lifeSpan ) {
+        ISDEAD = true;
+    }
+    else {
+        agePer = 1.0f - age / (float)lifeSpan;
+    }
 }

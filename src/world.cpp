@@ -31,7 +31,7 @@ World::World () {
 
 World::World (int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	this->initVars();
-	this->init(sizeX, sizeY, sizeZ, vectorSize);
+    this->init(sizeX, sizeY, sizeZ, vectorSize);
 }
 
 World::~World() {
@@ -121,6 +121,8 @@ void World::init(int sizeX, int sizeY, int sizeZ, int vectorSize) {
 	
 			
 }
+
+
 
 void World::clear (void) {
 	int x, y;

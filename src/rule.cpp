@@ -41,7 +41,7 @@ void Rule::setDimensions(N dim) {
 	if (dim.z == 1)
 		_nSize = 8;
 	else
-		_nSize = 26;	
+		_nSize = 26;
 	
 	setN();
 }

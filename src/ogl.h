@@ -32,11 +32,13 @@
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/DisplayList.h"
 #include "cinder/Rand.h"
+#include "cinder/Color.h"
 
 #include "world.h"
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
+#include "emitter.h"
 
 #include <vector>
 //#include "multicodepanel.h"
@@ -48,7 +50,7 @@ using namespace std;
 //const double pi = 3.1415926535;
 
 const int numPatterns = 40;
-const int numBoidPatterns = 6;
+const int numBoidPatterns = 7;
 
 struct pattern {
 
@@ -83,7 +85,6 @@ public:
 		boids = NULL;
 		counter = 0;
 		codePanelActive = true;
-		multiCodePanelActive = false;
 		codePanelMapped = false;
 		maxphase = 28;
 		ptrBMU = NULL;
@@ -98,9 +99,6 @@ public:
 	
 	~GraphicsRenderer() {
 		delete [] patternLib;
-//		delete [] rowColors;
-//		delete [] rowNormals;
-//		delete [] rowVertices;		
 	};
 	
 	pattern* patternLib;	
@@ -131,6 +129,10 @@ public:
 	void drawCodePanel();
 	
 	void mapCodePanel();
+    
+    void renderImage(Vec3f, float, Color, float);
+    
+    void renderTrails(int len, float radius, float agePer, std::vector<ci::Vec3f> loc);
 	
 	Vec3f rotateXYZ;
 	
@@ -155,10 +157,8 @@ public:
 	Boids* boids;
 	
 	CodePanel codePanel;
-	//MultiCodePanel multiCodePanel;
 	bool codePanelActive;
 	bool codePanelMapped; 
-	bool multiCodePanelActive;
 
 	gl::GlslProg smShader;
 	bool bSHADER;
@@ -170,13 +170,20 @@ public:
 	gl::Texture img03;
 	gl::Texture img04;
 	gl::Texture img05;
+    gl::Texture eImg;
+    gl::Texture pImg;
+    
     std::vector<gl::Texture> img;
-    	
+    
+    Emitter	mEmitter;
+    int counter;
+    bool bPerlin, bTrails;
+    
 private:
 	
 	double fragSizeX, fragSizeY, fragSizeZ, state;
 	float xL, yB, zF, xW, yH, zD, red, green, blue, alpha, maxphase;
-	int currentIndex, vectorSize, counter;
+	int currentIndex, vectorSize;
 	Cell* currentCell;
 	Cell* ptrBMU;
 	World* ptrWorld;
@@ -272,7 +279,8 @@ private:
 	void drawBoids02();
 	void drawBoids03();
 	void drawBoids04();
-	void drawBoids05();
+    void drawBoids05();
+	void drawBoids06();
 	void drawBoidWorldBorders();
 	void drawBoidWorldFrame();	
 	
@@ -291,7 +299,7 @@ private:
 	void strokeRectArray();
 	
 	void createTriMesh();
-	
+    
 };
 
 #endif

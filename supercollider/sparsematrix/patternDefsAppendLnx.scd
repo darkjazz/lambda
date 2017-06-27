@@ -35,12 +35,12 @@
 
 	matrix.addPatternBufferDef('b01', (32..63), 8, 8,
 		['sokou', 'cassa', 'sokou', 'cassa', 'doudoumba', 'mandiani', 'foret', 'tiriba'],
-		2, "b1", 'argproto', matrix.buffers.frags.keep(32), 'bit01', true
+		2, "b1", 'argproto', matrix.buffers.dnb.keep(32), 'bit01', true
 	);
 
 	matrix.addPatternBufferDef('b02', (0..31), 8, 8,
 		['rumba', 'liberte', 'rumba', 'liberte','rumba', 'liberte', 'rumba', 'liberte' ],
-		2, "b2", 'argproto', matrix.buffers.frags.drop(32), 'bit01', true
+		2, "b2", 'argproto', matrix.buffers.dnb.drop(32), 'bit01', true
 	);
 
 	matrix.addPatternBufferDef('b03', (0..31), 4, 8,

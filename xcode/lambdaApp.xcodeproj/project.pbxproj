@@ -77,6 +77,12 @@
 		59590AAD14B47F6200EF570A /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AA914B47F6200EF570A /* world.cpp */; };
 		59590AEC14B49D9200EF570A /* osc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AEA14B49D9200EF570A /* osc.cpp */; };
 		59590BA514B4F4D200EF570A /* rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590BA314B4F4D200EF570A /* rule.cpp */; };
+		5989C2861E2794C60028A618 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5989C2841E2794C60028A618 /* emitter.cpp */; };
+		5989C2871E2794C60028A618 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5989C2841E2794C60028A618 /* emitter.cpp */; };
+		5989C28A1E36AF620028A618 /* emitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2881E36AF620028A618 /* emitter.png */; };
+		5989C28B1E36AF620028A618 /* emitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2881E36AF620028A618 /* emitter.png */; };
+		5989C28C1E36AF620028A618 /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2891E36AF620028A618 /* particle.png */; };
+		5989C28D1E36AF620028A618 /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2891E36AF620028A618 /* particle.png */; };
 		5990345F15D5B16A0078E3A5 /* codepanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5990345E15D5B16A0078E3A5 /* codepanel.cpp */; };
 		5990B62815AC5CE000210DBD /* swarm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5990B62615AC5CE000210DBD /* swarm.cpp */; };
 		599CECE915B5B41500373ACF /* fx_hairs.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 599CECE515B5B41500373ACF /* fx_hairs.jpg */; };
@@ -133,7 +139,6 @@
 		59ED00E71BA8157100CD2ECA /* OscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59ED00CC1BA8157100CD2ECA /* OscSender.cpp */; };
 		59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */; };
 		59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */; };
-		59EF1F0C19B0F3B5005CA9B2 /* ParticleSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
@@ -211,6 +216,10 @@
 		59590AEB14B49D9200EF570A /* osc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osc.h; path = ../src/osc.h; sourceTree = SOURCE_ROOT; };
 		59590BA314B4F4D200EF570A /* rule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rule.cpp; path = ../src/rule.cpp; sourceTree = SOURCE_ROOT; };
 		59590BA414B4F4D200EF570A /* rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule.h; path = ../src/rule.h; sourceTree = SOURCE_ROOT; };
+		5989C2841E2794C60028A618 /* emitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = emitter.cpp; sourceTree = "<group>"; };
+		5989C2851E2794C60028A618 /* emitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emitter.h; sourceTree = "<group>"; };
+		5989C2881E36AF620028A618 /* emitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emitter.png; sourceTree = "<group>"; };
+		5989C2891E36AF620028A618 /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
 		5990345D15D5B16A0078E3A5 /* codepanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codepanel.h; sourceTree = "<group>"; };
 		5990345E15D5B16A0078E3A5 /* codepanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = codepanel.cpp; sourceTree = "<group>"; };
 		5990B62615AC5CE000210DBD /* swarm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = swarm.cpp; path = ../src/swarm.cpp; sourceTree = "<group>"; };
@@ -270,9 +279,7 @@
 		59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fluidParticles.h; sourceTree = "<group>"; };
 		59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fluidParticles.cpp; sourceTree = "<group>"; };
 		59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
-		59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParticleSystem.cpp; sourceTree = "<group>"; };
 		59EF1F1919B0F496005CA9B2 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
-		59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* xcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = xcode; path = ../xcode; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -322,9 +329,7 @@
 				592981A61C4E76D900B66EF7 /* bitalino.cpp */,
 				592981A71C4E76D900B66EF7 /* bitalino.h */,
 				59EF1F1919B0F496005CA9B2 /* Particle.h */,
-				59EF1F1A19B0F496005CA9B2 /* ParticleSystem.h */,
 				59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */,
-				59EF1F0A19B0F3B5005CA9B2 /* ParticleSystem.cpp */,
 				5990B62615AC5CE000210DBD /* swarm.cpp */,
 				5990B62715AC5CE000210DBD /* swarm.h */,
 				59590BA314B4F4D200EF570A /* rule.cpp */,
@@ -348,6 +353,8 @@
 				59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */,
 				592981A91C4E8A2B00B66EF7 /* bit.cpp */,
 				592981AA1C4E8A2B00B66EF7 /* bit.h */,
+				5989C2841E2794C60028A618 /* emitter.cpp */,
+				5989C2851E2794C60028A618 /* emitter.h */,
 			);
 			name = src;
 			path = ../src;
@@ -413,6 +420,8 @@
 		29B97317FDCFA39411CA2CEA /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				5989C2881E36AF620028A618 /* emitter.png */,
+				5989C2891E36AF620028A618 /* particle.png */,
 				59014B771D1EC74400840912 /* 00.png */,
 				59A404281D181F8200E7D0FB /* lambdaICO.png */,
 				59A0F48E1C273BAC0042E30E /* fu_00.png */,
@@ -633,7 +642,9 @@
 				59D2BE3C1BAF468800225EA0 /* 05.png in Resources */,
 				59D2BE421BAF468800225EA0 /* 08.png in Resources */,
 				59D2BE3E1BAF468800225EA0 /* 06.png in Resources */,
+				5989C28B1E36AF620028A618 /* emitter.png in Resources */,
 				59D2BE401BAF468800225EA0 /* 07.png in Resources */,
+				5989C28D1E36AF620028A618 /* particle.png in Resources */,
 				59D2BE341BAF468800225EA0 /* 01.png in Resources */,
 				59D2BE3A1BAF468800225EA0 /* 04.png in Resources */,
 				59D2BE381BAF468800225EA0 /* 03.png in Resources */,
@@ -661,6 +672,7 @@
 				5928B9E915B9E51D00792C66 /* fxhl_pos_z.png in Resources */,
 				59A0F48F1C273BAC0042E30E /* fu_00.png in Resources */,
 				5928B9EA15B9E51D00792C66 /* fxic_neg_x.png in Resources */,
+				5989C28A1E36AF620028A618 /* emitter.png in Resources */,
 				5928B9EB15B9E51D00792C66 /* fxic_neg_y.png in Resources */,
 				5928B9EC15B9E51D00792C66 /* fxic_neg_z.png in Resources */,
 				5928B9ED15B9E51D00792C66 /* fxic_pos_x.png in Resources */,
@@ -676,6 +688,7 @@
 				5928B9FB15B9E55200792C66 /* fxd_pos_z.png in Resources */,
 				59EB70E815BF46D9002D2586 /* glass_frag.glsl in Resources */,
 				59EB70E915BF46D9002D2586 /* glass_vert.glsl in Resources */,
+				5989C28C1E36AF620028A618 /* particle.png in Resources */,
 				5920B88815C16C5C0008F297 /* lambda.icns in Resources */,
 				5920B89E15C171E60008F297 /* fx_8_neg_x.png in Resources */,
 				5920B89F15C171E60008F297 /* fx_8_neg_y.png in Resources */,
@@ -722,6 +735,7 @@
 				59ED00E31BA8157100CD2ECA /* OscListener.cpp in Sources */,
 				59ED00D31BA8157100CD2ECA /* UdpSocket.cpp in Sources */,
 				59ED00D91BA8157100CD2ECA /* OscOutboundPacketStream.cpp in Sources */,
+				5989C2871E2794C60028A618 /* emitter.cpp in Sources */,
 				59ED00E71BA8157100CD2ECA /* OscSender.cpp in Sources */,
 				59ED00DF1BA8157100CD2ECA /* OscTypes.cpp in Sources */,
 				59ED00E11BA8157100CD2ECA /* OscBundle.cpp in Sources */,
@@ -736,6 +750,7 @@
 			files = (
 				59ED00E01BA8157100CD2ECA /* OscBundle.cpp in Sources */,
 				59ED00D21BA8157100CD2ECA /* UdpSocket.cpp in Sources */,
+				5989C2861E2794C60028A618 /* emitter.cpp in Sources */,
 				59590A4B14B349AD00EF570A /* lambdaApp.cpp in Sources */,
 				59590AAB14B47F6200EF570A /* ogl.cpp in Sources */,
 				59ED00CE1BA8157100CD2ECA /* IpEndpointName.cpp in Sources */,
@@ -759,7 +774,6 @@
 				59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */,
 				59ED00E41BA8157100CD2ECA /* OscMessage.cpp in Sources */,
 				59ED00DC1BA8157100CD2ECA /* OscReceivedElements.cpp in Sources */,
-				59EF1F0C19B0F3B5005CA9B2 /* ParticleSystem.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

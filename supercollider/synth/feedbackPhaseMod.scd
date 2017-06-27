@@ -15,7 +15,7 @@ SynthDef('grain', {|out, efx, amp, emp, dur, theta=0, phi=0|
 }).add;
 
 ~decoder = FoaDecoder(decoderType: 'stereo');
-~freqmap = Array.primeSeries(9, 47.nearestPrime, 47).clump(3);
+~freqmap = Array.primeSeries(9, 47, 47).clump(3);
 ~rbus = Bus.audio;
 ~bpm = 111;
 ~bps = ~bpm/60;
@@ -29,7 +29,7 @@ Pdef('x00',
 		'theta', Pwhite(-pi, pi), 'phi', Pwhite(-0.5pi, 0.5pi),
 		'inds', Pfunc({ [1, 1, 3].bubble }), 'amps', Pfunc({ Array.rand(3, 0.5, 1.0).bubble }),
 		'env', Pfunc({ Env.perc.asArray.bubble }),
-		'delta', ~beatdur / 4, 'type', Pwrand([\note, \rest], [0.7, 0.3], inf),
+		'delta', ~beatdur / 5.4, 'type', Pwrand([\note, \rest], [0.7, 0.3], inf),
 		'freqs', Pfunc({|ev| var freqs = ~freqmap.collect(_.choose).scramble; if (ev['type'] == \note) { freqs.postln} ; freqs.bubble }),
 	)
 )
@@ -47,7 +47,7 @@ Pdef('x00',
 
 ~rev.free
 
-~rev.set('revamp', 0.01, 'revtime', 2.6, 'dry', 0.0, 'delamp', 1.0, 'del', ~beatdur / 2);
+~rev.set('revamp', 0.01, 'revtime', 1.6, 'dry', 0.0, 'delamp', 1.0, 'del', ~beatdur / 2);
 
 
 ~decoder.start
@@ -60,8 +60,13 @@ Tdef('cloud', {
 		Synth.before(~decoder.synth, 'grain', ['out', ~decoder.bus, 'amp', rrand(0.05, 0.1), 'dur', rrand(4.0, 8.0), 'theta', rrand(-pi, pi), 'phi', rrand(-0.5pi, 0.5pi)]).setn('freqs', ~freqs).setn('amps', Array.rand(3, 0.5, 1.0)).setn('inds', ~inds).setn('env', Env([0.0, 1.0, 0.0], Array.rand(2, 0.1, 1.0).normalizeSum, Array.rand(2, 1.0, 4.0)));
 		[1/3, 1/5, 1/7, 1, 3].choose.wait;
 	})
-})
+}).play
+
+Tdef('cloud').clear
 
 Pdef('x00').play
 
 Pdef('x00').stop
+
+
+Array.primes(7000, 7999).

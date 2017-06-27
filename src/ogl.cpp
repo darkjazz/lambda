@@ -50,6 +50,9 @@ void GraphicsRenderer::setupOgl () {
 	img04 = loadImage( loadResource("fu_00.png") );
 	img05 = loadImage( loadResource("lambdaICO.png") );
     
+    pImg = loadImage( loadResource( "particle.png" ) );
+    eImg = loadImage( loadResource( "emitter.png" ) );
+    
     for (int i = 0; i <= 8; i++) {
         std::stringstream sstm;
         sstm << "0" << i << ".png";
@@ -131,7 +134,10 @@ void GraphicsRenderer::setupOgl () {
 	gl::enableDepthWrite();		
 	gl::enableAlphaBlending();	
 	gl::enable(GL_LINE_SMOOTH);
-		
+    
+    mEmitter = Emitter();
+    bPerlin = true;
+    bTrails = true;
 }
 
 void GraphicsRenderer::setupBoidShader() {
@@ -168,14 +174,18 @@ void GraphicsRenderer::update() {
 	
 	mCam.lookAt( mEye, mCenter, mUp );
 	gl::setMatrices( mCam );
-	
-	gl::clear( Color( _bgr, _bgg, _bgb ) );
-	
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	glEnable( GL_MULTISAMPLE_ARB );
-	glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
-	
+    gl::enableAdditiveBlending();
+    glEnable( GL_MULTISAMPLE_ARB );
+    glHint (GL_MULTISAMPLE_FILTER_HINT_NV, GL_NICEST);
+    
+    if (counter%3==0) {
+
+        gl::clear( Color( _bgr, _bgg, _bgb ) );
+        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+    }
+    
 	if (boids) {
 	
 		if (attachEyeToFirstBoid)
@@ -3774,6 +3784,7 @@ void GraphicsRenderer::pattern38(int x, int y, int z) {
 	
 }
 
+
 void GraphicsRenderer::pattern39(int x, int y, int z) {
     if ((x % 4 == 0 || y % 4 == 0 || z % 4 == 0) && state > 0.0)
     {
@@ -3825,6 +3836,49 @@ void GraphicsRenderer::pattern39(int x, int y, int z) {
 	
 }
 
+/*
+void GraphicsRenderer::pattern39(int x, int y, int z) {
+    float cstate;
+    
+    if (ptrWorld->ruleType() == CONT) {
+        cstate = state;
+    }
+    else {
+        if (state != 0)
+        {
+            cstate = 1.0 / state;
+        }
+        else {
+            cstate = 0.0f;
+        }
+    }
+    
+    if (cstate == 1.0f) {
+        
+        xL = (float)x * fragSizeX + (fragSizeX * 0.5);
+        yB = (float)(counter%100) * fragSizeX + (fragSizeX * 0.5);
+        zF = (float)y * fragSizeX + (fragSizeX * 0.5);
+        
+        xL -= hx;
+        yB -= hx;
+        zF -= hx;
+        
+        cstate = mapf(cstate, 0.5, 1.0);
+        red = patternLib[39].color.r * abs(patternLib[39].colormap - cstate);
+        green = patternLib[39].color.g * abs(patternLib[39].colormap - cstate);
+        blue = patternLib[39].color.b * abs(patternLib[39].colormap - cstate);
+        alpha = patternLib[39].alpha * abs(patternLib[39].alphamap - cstate);
+        
+        xW = zD = fragSizeX * cstate;
+        yH = fragSizeX;
+        
+        gl::color(red, green, blue, alpha);
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
+        
+    }
+}
+*/
+
 void GraphicsRenderer::drawBoids() {
 
 	if (attachEyeToFirstBoid)
@@ -3851,6 +3905,9 @@ void GraphicsRenderer::drawBoids() {
 	if (boidPatternLib[5].active) {
 		drawBoids05();
 	}
+    if (boidPatternLib[6].active) {
+        drawBoids06();
+    }
 	
 }
 
@@ -4155,6 +4212,71 @@ void GraphicsRenderer::drawBoids05() {
 	
 }
 
+void GraphicsRenderer::drawBoids06() {
+    for (int i = 0; i < boids->numBoids(); i++) {
+        mEmitter.addParticles( 1 );
+        mEmitter.exist( boids->getBoidAtIndex( i )->pos - (boids->dimensions() * 0.5f) );
+        gl::enable( GL_TEXTURE_2D );
+        pImg.bind();
+        
+        for( list<Particle>::iterator it = mEmitter.particles.begin(); it != mEmitter.particles.end(); ) {
+            if( ! it->ISDEAD ) {
+                it->exist(counter);
+                renderImage(it->loc[0], it->radius * it->agePer, it->color, 1.0f);
+                it->setAge();
+                ++it;
+            }
+            else {
+                it = mEmitter.particles.erase( it );
+            }
+        }
+        eImg.bind();
+        renderImage( mEmitter.loc, 150, mEmitter.myColor, 1.0 );
+        
+        gl::disable( GL_TEXTURE_2D );
+        if( bTrails ) {
+            for( list<Particle>::iterator it = mEmitter.particles.begin(); it != mEmitter.particles.end(); ++it ) {
+                renderTrails(it->len, it->radius, it->agePer, it->loc);
+            }
+        }
+    }
+}
+
+void GraphicsRenderer::renderImage( Vec3f _loc, float _diam, Color _col, float _alpha )
+{
+    gl::pushMatrices();
+    gl::translate( _loc.x, _loc.y, _loc.z );
+    gl::scale( _diam, _diam, _diam );
+    gl::color( _col.r, _col.g, _col.b, _alpha );
+    gl::begin( GL_QUADS );
+    gl::texCoord(0, 0);    gl::vertex(-.5, -.5);
+    gl::texCoord(1, 0);    gl::vertex( .5, -.5);
+    gl::texCoord(1, 1);    gl::vertex( .5,  .5);
+    gl::texCoord(0, 1);    gl::vertex(-.5,  .5);
+    gl::end();
+    gl::popMatrices();
+}
+
+void GraphicsRenderer::renderTrails(int len, float radius, float agePer, std::vector<ci::Vec3f> loc)
+{
+    gl::begin( GL_QUAD_STRIP );
+    
+    for( int i = 0; i < len - 2; i++ ) {
+        float per     = 1.0f - i / (float)(len-1);
+        Vec3f perp0 = loc[i] - loc[i+1];
+        Vec3f perp1 = perp0.cross( Vec3f::yAxis() );
+        Vec3f perp2 = perp0.cross( perp1 );
+        perp1 = perp0.cross( perp2 ).normalized();
+        
+        Vec3f off = perp1 * ( radius * agePer * per * 0.1f );
+        
+        gl::color( per, per * 0.25f, 1.0f - per, per * 0.5f );
+        gl::vertex( loc[i] - off );
+        gl::vertex( loc[i] + off );
+    }
+    
+    gl::end();
+}
 
 void GraphicsRenderer::drawBoidWorldBorders() {
 	

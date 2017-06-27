@@ -22,7 +22,6 @@
  */
 
 #include "osc.h"
-#include "bit.h"
 
 #define SCREENX		1440
 #define SCREENY		900
@@ -42,7 +41,6 @@ public:
 	GraphicsRenderer *ogl; 
 	Rule *rule;
 	Boids *boids;
-    BitalinoCtr *bitalino;
 	
 private:
 	int _winSizeX, _winSizeY;
@@ -207,23 +205,11 @@ void LambdaApp::keyDown( KeyEvent event )
         if (isFullScreen()) { hideCursor(); }
         else { showCursor(); }
     }
-/*
-    if( event.getChar() == 'b' || event.getChar() == 'B' ) {
-        bitalino->activated = !bitalino->activated;
-        if (bitalino->activated) {
-            bitalino->connect();
-            bitalino->start();
-        }
-        else {
-            bitalino->stop();
-        }
-    }
-*/
 }
 
 
 void LambdaApp::shutdown() {
-	delete ogl;
+	delete ogl;      
 	delete world;
 	delete oscMessenger;
     //delete bitalino;

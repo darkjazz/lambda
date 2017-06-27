@@ -7,13 +7,14 @@ Tdef('ciAuto').clear
 })
 )
 
-
+(
 Tdef(\sendVector, {
 	loop({
 		~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
 		[ 0.0625, 0.125, 0.25].choose.wait;
 	});
 }).play;
+)
 
 (
 
@@ -21,8 +22,8 @@ Tdef(\sendVector, {
 ~lasttime = SystemClock.seconds;
 ~meanamp = 0;
 ~meandur = 0;
-~ruleWeight = 0.05;
-~changeWeight = 0.05;
+~ruleWeight = 0.3;
+~changeWeight = 0.3;
 
 ~patches = [
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
@@ -69,11 +70,11 @@ Tdef(\sendVector, {
 
 ~graphPatterns = (0..39);
 
-~activePatterns = [14];
-~graphics.setPattern(14, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-~graphics.setViewpoint(0.0, 0.0, 60.0, 0.0, 0.0, 0.0);
+~activePatterns = [9];
+~graphics.setPattern(9, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setViewpoint(0.0, 0.0, 20.0, 0.0, 0.0, 0.0);
 Tdef('ciAuto', {|mfcc|
-	60.wait;
+	// 240wait.;
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
@@ -101,10 +102,8 @@ Tdef('ciAuto', {|mfcc|
 				~graphics.sendPredefined3DRule(
 				[
 				\flamingstarbow, \chenille, \belzhab, \glissergy,
-				\cooties, \faders, \frozenspirals, \glisserati,
-				\nova, \orthogo, \rainzha, \rake, \sedimental,
-				\snake, \starwars, \sticks, \thrillgrill,
-				\transers, \wanderers, \worms, \xtasy
+				\frozenspirals,\nova, \rainzha, \rake, \sedimental,
+				\transers, \worms, \xtasy
 				].choose;
 			);
 		};

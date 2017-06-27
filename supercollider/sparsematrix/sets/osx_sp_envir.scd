@@ -1,10 +1,10 @@
-~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b03', 'b04', 'b05', 'b06'], worldDim: 21, ip: "127.0.0.1");
+~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b01', 'b02', 'b05', 'b06'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings)
 
 e.initGraphics(true)
 
-~matrix.setBPM(135)
+~matrix.setBPM(141)
 
 Tdef('fuckbpm').clear
 
@@ -52,38 +52,31 @@ MasterEQ(2)
 	0.5
 );
 
-~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.01, 0.3) },
+~matrix.defsAt('b01').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.5, 2.0) },
+	{ exprand(0.3, 0.6) },
+	0.1
+);
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.5, 2.0) },
+	{ exprand(0.1, 0.5) },
 	0.1
 );
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.01, 0.1) },
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(0.6, 2.0) },
+	{ exprand(0.01, 0.08) },
 	0.1
 );
 
-~matrix.defsAt('b04').setControls(
+~matrix.defsAt('b06').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.8) },
-	{ exprand(2.0, 4.0) },
-	0.1
-);
-
-~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.5) },
-	{ exprand(0.5, 1.0) },
-	0.1
-);
-
-~matrix.defsAt('b05').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.5, 1.5) },
+	{ exprand(1.0, 3.0) },
 	0.1
 );
 
@@ -91,17 +84,17 @@ s.queryAllNodes
 
 Server.killAll
 
-~matrix.defsAt('b06').recall(0);
+~matrix.defsAt('b05').recall(0);
 
 ~matrix.defsAt('r00').recall(0);
-~matrix.defsAt('r01').recall(0);
+~matrix.defsAt('b01').recall(0);
 
 ~matrix.defsAt('b03').recall(0);
 
 
 ~matrix.setBPM(140)
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('m01'), Pdef('m00'), Pdef('efx')]))
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('b01'), Pdef('b02'), Pdef('b05')]))
 
 
 s.record
@@ -122,7 +115,7 @@ s.scope(2)
 
 ~matrix.activateSkismSynth('feedbackSpectrum')
 
-~matrix.setSkismAmp('feedbackSpectrum', 0.5)
+~matrix.setSkismAmp('feedbackSpectrum', 0.2)
 
 ~matrix.deactivateSkismSynth('feedbackSpectrum')
 
@@ -130,7 +123,7 @@ s.scope(2)
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 1.0)
+~matrix.setSkismAmp('cliqSaw', 0.4)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
@@ -217,7 +210,7 @@ s.stopRecording
 ~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][69], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
 
-~wrp0.set('amp', 0.4, 'wamp', 0.3, 'iamp', 0.9, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp0.set('amp', 0.4, 'wamp', 0.3, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 
 ~wrp0.free
@@ -243,25 +236,31 @@ Pdef('swrp0').stop
 
 Server.killAll
 
-~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.5, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][17], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+s.record
 
-~wrp1.set('amp', 0.2, 'wamp', 0.5, 'iamp', 0.5, 'ramp', 0.4, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
+s.stopRecording
+
+~matrix.buffers['evo'].size
+
+~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.5, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][101], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+
+~wrp1.set('amp', 0.2, 'wamp', 0.7, 'iamp', 1.0, 'ramp', 2.0, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
 
 ~wrp1.free
 
 
 ~wrp2 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][14], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
-~wrp2.set('amp', 0.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.5, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
+~wrp2.set('amp', 0.0, 'wamp', 0.9, 'iamp', 1.0, 'ramp', 1.0, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
 
 ~wrp2.free
 
 
 
-~wrp3 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 30, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][13], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+~wrp3 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 30, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][107], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
 
-~wrp3.set('amp', 0.0, 'wamp', 0.1, 'iamp', 0.0, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp3.set('amp', 0.0, 'wamp', 1.0, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp3.free
 

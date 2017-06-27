@@ -98,6 +98,7 @@ class World {
 public:
 	World();
 	World(int, int, int, int);
+    World(int, int, int);
 	~World();
 	
 	Cell*** cells;

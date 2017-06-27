@@ -2,23 +2,26 @@
 
 e = SpEnvir(~settings)
 
-~matrix.buffers['evo'].collect(_.path).do(_.postln)
-
-~matrix.setBPM(171)
-
-
 ~matrix.defsAt('b03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.5, 1.4) },
 	{ exprand(0.03, 0.1) },
 	0.1
 );
 
+Server.killAll
 
-~matrix.defsAt('b05').setControls(
+~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][36], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+
+
+~wrp0.set('amp', 0.4, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.6, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+
+
+
+~matrix.defsAt('b06').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
-	{ exprand(0.3, 0.6) },
+	{ exprand(2.0, 4.0) },
 	0.1
 );
 
@@ -45,7 +48,7 @@ e = SpEnvir(~settings)
 
 ~graphics.setSymmetry(11)
 
-~graphics.setViewpoint(0.0, 80.0, 0.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(70.0, 0.0, -70.0, 0.0, 0.0, 0.0)
 
 Tdef(\sendVector, {
 	loop({
@@ -54,11 +57,11 @@ Tdef(\sendVector, {
 	});
 }).play;
 
-~graphics.setPattern(15, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(10, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(28, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(36, 1, 0.4, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(36, 1, 0.1, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.activateSwarm(17, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 
@@ -77,7 +80,7 @@ Tdef(\sendVector, {
 ~wrp0 = Synth.tail(~matrix.group, 'wrprev', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][5], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
 
-~wrp0.set('amp', 0.4, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp0.set('amp', 0.4, 'wamp', 0.0, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 
 ~wrp0.free
@@ -86,7 +89,7 @@ Tdef(\sendVector, {
 
 ~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.5, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][2], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
-~wrp1.set('amp', 0.4, 'wamp', 0.4, 'iamp', 0.3, 'ramp', 0.7, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1);
+~wrp1.set('amp', 0.4, 'wamp', 0.1, 'iamp', 1.0, 'ramp', 0.2, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1);
 
 ~wrp1.free
 
