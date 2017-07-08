@@ -57,7 +57,7 @@
 ~graphics.setViewpoint(0.0, 10.0, -105.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(-76.0, -50.0, -90.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(0.0, 0.0, -90.0, 0.0, 0.0, 0.0)
 
 ~graphics.setInterpolation(1, 1)
 
@@ -78,11 +78,11 @@ Tdef(\sendVector).clear
 
 
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 1.0, 0.0, 0.6);
+~graphics.setPattern(0, 0, 0.2, 1, 1, 1.0, 0.0, 0.6);
 
 ~graphics.setPattern(1, 0, 1.0, 1, 1, 0.4, 0.0, 1.0);
 
-~graphics.setPattern(2, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(2, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(3, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
@@ -114,11 +114,11 @@ Tdef(\sendVector).clear
 
 ~graphics.setPattern(17, 0, 1.0, 1, 1, 0.7, 1.0, 0.4);
 
-~graphics.setPattern(18, 0, 1.0, 1, 1, 0.4, 0.7, 0.4);
+~graphics.setPattern(18, 0, 0.4, 1, 1, 0.4, 0.7, 0.4);
 
 ~graphics.setPattern(19, 0, 1.0, 1, 1, 0.3, 0.4, 0.2);
 
-~graphics.setPattern(20, 1, 1.0, 0, 0, 0.3, 0.5, 0.4);
+~graphics.setPattern(20, 0, 1.0, 0, 0, 0.3, 0.5, 0.4);
 
 ~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
 
@@ -128,7 +128,7 @@ Tdef(\sendVector).clear
 
 ~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);
 
-~graphics.setPattern(25, 1, 1.0, 1, 1, 0.9, 0.8, 0.7);
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.9, 0.8, 0.7);
 
 ~graphics.setPattern(26, 0, 0.7, 1, 1, 0.1, 0.2, 0.3);
 
@@ -140,13 +140,13 @@ Tdef(\sendVector).clear
 
 ~graphics.setPattern(30, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(31, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
+~graphics.setPattern(31, 1, 1.0, 1, 1, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(32, 0, 0.01, 1, 1, 0.0, 0.5, 0.9);
+~graphics.setPattern(32, 1, 0.01, 1, 1, 0.0, 0.5, 0.9);
 
-~graphics.setPattern(33, 0, 1.0, 0, 0, 0.0, 0.4, 0.4);
+~graphics.setPattern(33, 1, 1.0, 0, 0, 0.0, 0.4, 0.4);
 
-~graphics.setPattern(34, 1, 0.4, 1, 1, 1.0, 0.0, 0.9);
+~graphics.setPattern(34, 0, 0.4, 1, 1, 1.0, 0.0, 0.9);
 
 ~graphics.setPattern(35, 0, 1.0, 1, 1, 1.0, 0.2, 0.8);
 
@@ -320,7 +320,7 @@ Generations
 
 ~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
-~graphics.setPattern(5, 0, 1.0, 1, 0, 0.7, 0.9, 1.0);
+~graphics.setPattern(5, 1, 1.0, 1, 0, 0.7, 0.9, 1.0);
 
 ~graphics.setPattern(6, 1, 1.0, 1, 1, 1.0, 1.0, 0.3);
 
@@ -372,12 +372,17 @@ Tdef('sendcode', {
 	loop({
 		var str;
 		str = "";
-		rrand(4, 16).do({
-			6.do({ str = str ++ [rrand(48, 56),  rrand(65, 70)].choose.asAscii });
-			str = str ++ " ";
-		});
+		if (0.4.coin) {
+			rrand(4, 16).do({
+				6.do({ str = str ++ [rrand(48, 56),  rrand(65, 70)].choose.asAscii });
+				str = str ++ " ";
+			});
+		}
+		{
+			str = "-     "
+		};
 		~graphics.sendCodeLine(str);
-		rrand(3.0, 6.0).wait
+		rrand(0.3, 0.6).wait
 	})
 }).play
 

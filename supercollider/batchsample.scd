@@ -1,9 +1,11 @@
+s.boot
+
 (
 
 Routine({
 	var file, dur, num, sect = 15;
 	file = Buffer.readChannel(s,
-		"/Users/alo/snd/STE-008.wav",
+		"/Users/alo/snd/bocca/pink.aiff",
 		s.sampleRate,
 		channels:[0]
 	);
@@ -22,14 +24,13 @@ Routine({
 			rrand(start, end),
 			buf.numFrames
 		);
-		buf.write("/Users/alo/snd/mskf_" ++ (i + 1).asString ++ ".aif");
+		buf.write("/Users/alo/snd/bocca/samples/boc_" ++ (i + 1).asString ++ ".aif");
 		s.sync;
-		("Wrote " ++ "/Users/alo/snd/mskf_" ++ (i + 1).asString ++ ".aif").postln;
+		("Wrote " ++ "/Users/alo/snd/bocca/samples/boc_" ++ (i + 1).asString ++ ".aif").postln;
 	})
 }).play
 
 )
-
 
 (
 ~analyser = MikroBatchAnalyzer("/Users/alo/snd/dnb/*".pathMatch);

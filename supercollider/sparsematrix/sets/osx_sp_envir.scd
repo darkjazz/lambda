@@ -53,23 +53,23 @@ MasterEQ(2)
 );
 
 ~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 2.0) },
-	{ exprand(0.3, 0.6) },
+	{ exprand(0.1, 0.7) },
 	0.1
 );
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 2.0) },
-	{ exprand(0.1, 0.5) },
+	{ exprand(0.05, 0.5) },
 	0.1
 );
 
 ~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.6, 2.0) },
-	{ exprand(0.01, 0.08) },
+	{ exprand(0.01, 0.3) },
 	0.1
 );
 
@@ -94,7 +94,7 @@ Server.killAll
 
 ~matrix.setBPM(140)
 
-Pdef('matrix', Ppar([ Pdef('r00'), Pdef('b01'), Pdef('b02'), Pdef('b05')]))
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('b01'), Pdef('b02'), Pdef('b06')]))
 
 
 s.record
@@ -115,7 +115,7 @@ s.scope(2)
 
 ~matrix.activateSkismSynth('feedbackSpectrum')
 
-~matrix.setSkismAmp('feedbackSpectrum', 0.2)
+~matrix.setSkismAmp('feedbackSpectrum', 0.8)
 
 ~matrix.deactivateSkismSynth('feedbackSpectrum')
 
@@ -123,7 +123,7 @@ s.scope(2)
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 0.4)
+~matrix.setSkismAmp('cliqSaw', 0.8)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
@@ -140,7 +140,7 @@ Server.killAll
 ~player.setFoa('push', 1.0)
 
 
-~ind0 = 67
+~ind0 = 43
 
 ~player.loadData(~ind0)
 
@@ -153,27 +153,28 @@ Server.killAll
 
 s.scope(2)
 
-~ind1 = 42
+~ind1 = 61
 
 ~player.loadData(~ind1)
 
 ~player.play(~ind1, 0, 'zoom', 0)
 
-~player.set(~ind1, 0.0)
+~player.set(~ind1, 1.0)
 
 ~player.free(~ind1);
 
 
-~ind2 = 50
+~ind2 = 67
 
 ~player.loadData(~ind2)
 
 ~player.play(~ind2, 0, 'zoom', 0)
 
-~player.set(~ind2, 0.0)
+~player.set(~ind2, 1.0)
 
 ~player.free(~ind2);
 
+Server.killAll
 
 s.queryAllNodes
 
@@ -242,9 +243,9 @@ s.stopRecording
 
 ~matrix.buffers['evo'].size
 
-~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.5, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][101], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
+~wrp1 = Synth.tail(~matrix.group, 'revwrp', ['out', ~decoder.bus, 'rate', 0.5, 'start', 0, 'wrp', 0.1, 'freq', 2.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 40, 'rtime', 12.0, 'ramp', 0.5, 'damp', 0, 'iamp', 0.0, 'buf', ~matrix.buffers['evo'][27], 'amp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0])
 
-~wrp1.set('amp', 0.2, 'wamp', 0.7, 'iamp', 1.0, 'ramp', 2.0, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
+~wrp1.set('amp', 0.2, 'wamp', 0.0, 'iamp', 1.0, 'ramp', 1.0, 'freq', 1.0, 'rate', 1.0, 'wrp', 0.1)
 
 ~wrp1.free
 
@@ -268,3 +269,6 @@ s.stopRecording
 Server.default.queryAllNodes
 
 Server.killAll
+
+
+

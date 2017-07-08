@@ -28,7 +28,7 @@ Tdef(\sendVector, {
 ~patches = [
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //0
 	[1.0, 1, 1, 0.9, 0.1, 0.4],
-	[1.0, 0, 0, 1.0, 1.0, 1.0],
+	// [1.0, 0, 0, 1.0, 1.0, 1.0],
 	[1.0, 1, 1, 0.6, 0.8, 0.8],
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
 	[1.0, 1, 1, 0.5, 1.0, 1.0], //5
@@ -70,11 +70,10 @@ Tdef(\sendVector, {
 
 ~graphPatterns = (0..39);
 
-~activePatterns = [9];
-~graphics.setPattern(9, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~activePatterns = [1];
+~graphics.setPattern(1, 1, 1.0, 1, 1, 0.0, 1.0, 1.0);
 ~graphics.setViewpoint(0.0, 0.0, 20.0, 0.0, 0.0, 0.0);
 Tdef('ciAuto', {|mfcc|
-	// 240wait.;
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;
