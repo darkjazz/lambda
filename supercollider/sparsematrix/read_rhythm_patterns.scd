@@ -95,9 +95,12 @@ Post << ~patterns[4].unraveled_pattern.asString << Char.nl
 
 
 
+
+
+
 /// WRITE DJEMBELIB
 
-~db = CouchDB(NetAddr(JsonLoader.localIP, JsonLoader.localPort), "rhythm_patterns");
+~db = CouchDB(NetAddr(JsonLoader.localIP, JsonLoader.localPort), "pat_test");
 
 ~patterns = [];
 

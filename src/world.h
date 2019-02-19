@@ -48,6 +48,7 @@ enum Sym { ZERO, X, Y, Z, XY, YZ, ZX, XYZ, QX, QY, QZ, TOTAL };
 struct State { 
 	int x, y, z, index;
 	double value;
+    int intvalue;
 	State() {};
 	State(int ax, int ay, int az, int aindex) { 
 		x = ax; y = ay; z = az; index = aindex;
@@ -136,16 +137,19 @@ public:
 		
 	bool initialized() { return (cellsInitialized && ruleInitialized) || (cellsInitialized && somActivated); };
 	bool bQueryStates() { return _bQueryStates; }
+    bool bQueryCoords() { return _bQueryCoords; }
 	
 	void setInterpolation(Interpolation, int);
 	void setQueryIndices(int*, int);
 	void setQueryIndices(int*, int, int);
+    void setQueryStates(int, int);
 
 	int getQueryStatesSize() { return _queryStatesSize; }
 	double getQueryStateAtIndex(int index) { return _queryStates[index].value; }
-    int getQueryFaderStateItem(int index) { return _queryFaderStates[index]; }
+    int getQueryFaderStateItem(int index) { return _queryStates[index].intvalue; }
+    int getQueryCoordAtIndex(int index) { return _queryFaderStates[index]; }
     void startQuery() { _bQueryStates = true; _queryStates.clear(); }
-	void stopQuery() { _bQueryStates = false; }
+    void stopQuery() { _bQueryStates = false; _bQueryCoords = false; }
 	void mapStates();
 	
 	void setInputVector(vector<double>);
@@ -189,6 +193,9 @@ private:
 	
 	bool _updateStates; 
 	bool _bQueryStates;
+    bool _bQueryCoords;
+    int _queryMinState;
+    int _queryMaxState;
 	vector<State> _queryStates;
     vector<int> _queryFaderStates;
 	

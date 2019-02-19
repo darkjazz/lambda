@@ -1,4 +1,4 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 140, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b03', 'b04', 'b05', 'b06'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 140, channels: 4, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b03', 'b04', 'b05', 'b06'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings))
 
@@ -16,7 +16,7 @@ SynthDef('addsin', {|out, amp, dur, rx, ry, rz|
 	env = EnvControl.kr;
 	sig = Mix.fill(freqs.size, {|i|
 		DelayC.ar(SinOsc.ar(freqs[i], 0, amps[i]), 0.05, Rand(0.01, 0.05))
-		* EnvGen.kr(env, timeScale: dur * Rand(0.9, 1.0), doneAction: 2);
+		* EnvGen.kr(env, timeScale: dur * Rand(0.8, 0.95), doneAction: 2);
 	});
 	Line.kr(dur: dur, doneAction: 2);
 	bf = FoaTransform.ar(
@@ -28,12 +28,14 @@ SynthDef('addsin', {|out, amp, dur, rx, ry, rz|
 
 ~seq = [ [ 479, 599, 701, 823, 941 ], [ 653, 769, 883, 1013, 1117 ], [ 419, 521, 631, 743, 859 ], [ 709, 827, 947, 1061, 1187 ], [ 463, 587, 683, 811, 929 ] ];
 
-~envs = [Env.perc, Env.sine, Env([0, 1, 0], [0.8, 0.2], [3])].collect(_.bubble);
+~seq = ~seq.collect({|chord| chord.collect({|freq| Array.primeSeries(2, freq, 43).last }) })
+
+~envs = [Env.perc, Env.sine, Env([0.001, 1.0, 1.0, 0.001], [0.8, 0.1, 0.1], [3])].collect(_.bubble);
 
 Pdef('c00',
 	Pbind('instrument', 'addsin', 'out', ~matrix.decoder.bus, 'target', ~matrix.group,
 		'amp', Pwhite(0.3, 0.5), 'dur', Pwhite(0.4, 1.0) , 'amps', Array.geom(5, 1.0, 13/21).bubble,
-		'freqs', Pseq(~seq.collect(_.bubble), inf), 'env', Pwrand(~envs, [1.0, 0.0, 0.0], inf),
+		'freqs', Pseq(~seq.collect(_.bubble), inf), 'env', Pwrand(~envs, [0.0, 0.0, 1.0], inf),
 		'delta', Pwrand([0.4, 0.8, 1.6] * 2.0, [0.3, 0.2, 0.5], inf),
 		'rx', Pwhite(0, 2pi, inf), 'ry', Pwhite(0, 2pi, inf), 'rz', Pwhite(0, 2pi, inf)
 	)
@@ -67,7 +69,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -87,7 +89,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.1)
+~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp1.free; Pdef('swrp1').clear
 
@@ -107,12 +109,12 @@ Pdef('swrp2',
 ).play
 )
 
-~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.2, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.2, 'ramp', 0.8, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp2.free; Pdef('swrp2').clear
 
 (
-~ind = 44;
+~ind = 56;
 ~wrp3 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[~ind], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp3',
@@ -127,26 +129,26 @@ Pdef('swrp3',
 
 )
 
-~wrp3.set('amp', 1.0, 'wamp', 0.0, 'iamp', 1.0, 'ramp', 1.5, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp3.set('amp', 1.0, 'wamp', 0.0, 'iamp', 1.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp3.free; Pdef('swrp3').clear
 
 
-Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02'), Pdef('b03'), Pdef('b05'), Pdef('b04')]))
+Pdef('matrix', Ppar([ Pdef('b00'), Pdef('b01'), Pdef('b02'), Pdef('b03'), Pdef('b04'), Pdef('b05')]))
 
 
 
 ~matrix.defsAt('b01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.4, 1.5) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.5, 0.9) },
 	{ exprand(0.2, 0.4) },
 	0.1
 );
 
-~matrix.defsAt('b00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.4, 1.5) },
-	{ exprand(0.02, 0.1) },
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.8, 1.5) },
+	{ exprand(0.05, 0.5) },
 	0.1
 );
 
@@ -157,21 +159,28 @@ Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 
 ~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.6, 1.0) },
-	{ exprand(0.2, 0.5) },
+	{ exprand(0.3, 0.6) },
+	0.1
+);
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.6, 1.5) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('b04').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.7) },
-	{ exprand(3.0, 6.0) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.2, 0.5) },
+	{ exprand(1.0, 5.0) },
 	0.1
 );
 
 ~matrix.defsAt('b05').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 0.6) },
-	{ exprand(0.1, 0.8) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.7, 1.0) },
+	{ exprand(0.2, 0.4) },
 	0.1
 );
 
@@ -183,16 +192,24 @@ Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 
 	0.1
 );
 
-~matrix.defsAt('b04').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('b06').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.7, 1.0) },
-	{ exprand(2.0, 3.0) },
+	{ exprand(2.0, 5.0) },
 	0.1
 );
 
-~matrix.defsAt('b01').recall(0)
+~matrix.defsAt('b01').recall(0);
+
+~matrix.defsAt('r02').recall(0)
 
 ~matrix.defsAt('b05').recall(0)
+
+
+~matrix.addPatternBufferDef('b02', (64..127), 8, 4,
+		['kpanilogo', 'yole', 'diansa', 'kokou', 'kakilambe', 'soli', 'mandiani'].reverse,
+		2, "b2", 'bufproto', ~matrix.buffers.bits, 'bit01', true
+	);
 
 ctrls.select({|ctr| ctr.active == 1 }).postcs
 
@@ -264,7 +281,7 @@ Tdef(\sendVector, {
 
 ~matrix.activateSkismSynth('feedbackSpectrum')
 
-~matrix.setSkismAmp('feedbackSpectrum', 1.0)
+~matrix.setSkismAmp('feedbackSpectrum', 0.3)
 
 ~matrix.deactivateSkismSynth('feedbackSpectrum')
 
@@ -272,7 +289,7 @@ Tdef(\sendVector, {
 
 ~matrix.activateSkismSynth('cliqSaw')
 
-~matrix.setSkismAmp('cliqSaw', 0.8)
+~matrix.setSkismAmp('cliqSaw', 0.4)
 
 ~matrix.deactivateSkismSynth('cliqSaw')
 
@@ -314,3 +331,6 @@ x.free
 o=SynthDef('out34', {|amp=0.3| Out.ar([2, 3], SoundIn.ar([0, 1]) * amp) }).play
 o.set('amp', 0.03)
 o.free
+
+
+SparseMatrix.allPatterns['Dalah']

@@ -15,7 +15,7 @@ SynthDef('grain', {|out, efx, amp, emp, dur, theta=0, phi=0|
 }).add;
 
 ~decoder = FoaDecoder(decoderType: 'stereo');
-~freqmap = Array.primeSeries(9, 47, 47).clump(3);
+~freqmap = Array.primeSeries(18, 47, 19).clump(6);
 ~rbus = Bus.audio;
 ~bpm = 111;
 ~bps = ~bpm/60;
@@ -45,22 +45,40 @@ Pdef('x00',
 }).play(~decoder.synth, ['in', ~rbus, 'revamp', 0.01, 'revtime', 4.4, 'dry', 0.0, 'del', ~beatdur / 8, 'dec', ~beatdur], 'addAfter')
 )
 
+
+(
+~rev = SynthDef('reverb', {arg revamp=0.01, dry=0.8, revtime=0.5;
+	var sig;
+	sig = In.ar(0, ~decoder.numChannels);
+	ReplaceOut.ar(0, GVerb.ar(sig, 150, revtime, drylevel: dry, earlyreflevel: revamp))
+}).play(~decoder.synth, nil, \addAfter)
+)
 ~rev.free
 
-~rev.set('revamp', 0.01, 'revtime', 1.6, 'dry', 0.0, 'delamp', 1.0, 'del', ~beatdur / 2);
+~rev.set('revamp', 0.03, 'revtime', 5.0, 'dry', 1.0)
+
+~rev.free
+
+~rev.set('revamp', 1.0, 'revtime', 2.5, 'dry', 0.0, 'delamp', 1.0, 'del', ~beatdur / 2);
 
 
 ~decoder.start
 
 Tdef('cloud', {
+	var delta = Pstutter(Pwhite(1, 4), Prand([1/3, 1/5, 1/7, 1/11], inf)).asStream;
 	loop({
 		~freqs = ~freqmap.collect(_.choose);
-		~inds = [1, 1, 1]; //Array.rand(3, 1, 5);
+		~inds = Array.rand(3, 1, 1);
 		[~freqs, ~inds].postln;
-		Synth.before(~decoder.synth, 'grain', ['out', ~decoder.bus, 'amp', rrand(0.05, 0.1), 'dur', rrand(4.0, 8.0), 'theta', rrand(-pi, pi), 'phi', rrand(-0.5pi, 0.5pi)]).setn('freqs', ~freqs).setn('amps', Array.rand(3, 0.5, 1.0)).setn('inds', ~inds).setn('env', Env([0.0, 1.0, 0.0], Array.rand(2, 0.1, 1.0).normalizeSum, Array.rand(2, 1.0, 4.0)));
-		[1/3, 1/5, 1/7, 1, 3].choose.wait;
+		Synth.before(~decoder.synth, 'grain', ['out', ~decoder.bus, 'amp', rrand(0.05, 0.1), 'dur', rrand(0.3, 1.0), 'theta', rrand(-pi, pi), 'phi', rrand(-0.5pi, 0.5pi)]).setn('freqs', ~freqs).setn('amps', Array.rand(3, 0.5, 1.0)).setn('inds', ~inds).setn('env', Env.perc);
+		// .setn('env', Env([0.0, 1.0, 0.0], Array.rand(2, 0.1, 1.0).normalizeSum, Array.rand(2, 1.0, 4.0)));
+		delta.next.wait;
 	})
 }).play
+
+
+
+p.next
 
 Tdef('cloud').clear
 

@@ -59,12 +59,27 @@ void OSCMessenger::sendFaderStates() {
     msg.setAddress("/lambda/world/faderstates");
     
     for (i = 0; i < _world->getQueryStatesSize(); i++) {
-        msg.addIntArg(_world->getQueryFaderStateItem(i));
+        msg.addFloatArg(_world->getQueryFaderStateItem(i));
     }
     
     msg.setRemoteEndpoint(_remoteHost, _sendToPort);
     _sender.sendMessage(msg);
     
+}
+
+void OSCMessenger::sendCoordinatesByState() {
+    int i;
+    
+    osc::Message msg;
+    msg.setAddress("/lambda/world/coords");
+
+    for (i = 0; i < _world->getQueryStatesSize(); i++) {
+        msg.addIntArg(_world->getQueryCoordAtIndex(i));
+    }
+
+    msg.setRemoteEndpoint(_remoteHost, _sendToPort);
+    _sender.sendMessage(msg);
+
 }
 
 void OSCMessenger::collectMessages() {
@@ -165,6 +180,9 @@ void OSCMessenger::collectMessages() {
 				_world->setQueryIndices(ind, msg.getNumArgs());
 				delete [] ind;
 			}
+            else if (addr.compare("/lambda/world/query/coords") == 0) {
+                _world->setQueryStates(msg.getArgAsInt32(0), msg.getArgAsInt32(1));
+            }
             else if (addr.compare("/lambda/world/query/alive") == 0) {
                 _world->startQuery();
             }

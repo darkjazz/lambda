@@ -1,4 +1,4 @@
-SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
+SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.5, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(
 		PitchShift.ar(
@@ -14,7 +14,7 @@ SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 
 SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz|
 	var sig;
-	sig = Normalizer.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate, 1, off), amp)
+	sig = Normalizer.ar(PlayBuf.ar(1, buf, BufRateScale.kr(buf) * rate, 1, off), amp)
 		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
@@ -56,6 +56,16 @@ SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 	Out.ar(out, FoaTransform.ar(
 		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
 	)
+}).add;
+
+SynthDef(\hold, {|out, buf, amp|
+	var sig, bf;
+	sig = PlayBuf.ar(2, buf, loop: 1).dup.flat * amp;
+	bf = FoaEncode.ar(Array.fill(4, { |i|
+			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
+		}), FoaEncoderMatrix.newAtoB('fud')
+	);
+	Out.ar(out, bf)
 }).add;
 
 

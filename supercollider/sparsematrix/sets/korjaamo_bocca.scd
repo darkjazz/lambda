@@ -1,8 +1,11 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', bpm: 111, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b00', 'r07'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 111, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['b00', 'r07'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings))
 
 Server.killAll
+
+
+[255,20,147]/255.0
 
 ~gesbufs = GESBufferLoader().loadByDate("161224")
 ~gesbufs.preload
@@ -32,7 +35,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.3, 'ramp', 0.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.1)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -52,7 +55,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.4, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.1)
+~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.1)
 
 ~wrp1.free; Pdef('swrp1').clear
 
@@ -113,11 +116,11 @@ Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 
 
 ~graphics.setSymmetry(11)
 
-~graphics.setPattern(6, 0, 1.0, 0, 1, 0.5, 0.9, 0.8);
+~graphics.setPattern(6, 1, 1.0, 0, 1, 0.5, 0.9, 0.8);
 
-~graphics.setPattern(22, 0, 0.7, 0, 0, 1.0, 0.0, 1.0);
+~graphics.setPattern(22, 1, 0.7, 0, 0, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(24, 0, 1.0, 1, 1, 0.6, 0.7, 0.8);
+~graphics.setPattern(26, 0, 1.0, 1, 1, 0.6, 0.7, 0.8);
 
 (
 
@@ -172,18 +175,20 @@ Tdef(\sendVector, {
 
 ~matrix.defsAt('b00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.2, 0.5) },
+	{ exprand(0.3, 0.8) },
 	{ exprand(0.5, 1.0) },
 	0.1
 );
 
-~voice = Synth.head(~matrix.efxgroup, 'bocca', [\out, ~decoder.bus, \efx, ~bbus, \buffer, ~bocca, \amp, 1.0, \emp, 1.0]);
+~voice = Synth.head(~matrix.efxgroup, 'bocca', [\out, ~decoder.bus, \efx, ~bbus, \buffer, ~bocca, \amp, 0.5, \emp, 1.0]);
 
-~voice.set('amp', 1.0)
+~voice.set('amp', 0.0)
+
+~voice.free
 
 ~matrix.activateBoccaSynth('cyclicWarp', ~bbus);
 
-~matrix.setSkismAmp('cyclicWarp', 0.0)
+~matrix.setSkismAmp('cyclicWarp', 0.1)
 
 ~matrix.deactivateSkismSynth('cyclicWarp')
 
@@ -199,7 +204,7 @@ Tdef(\sendVector, {
 
 ~matrix.activateBoccaSynth('feedbackSpectrum', ~bbus)
 
-~matrix.setSkismAmp('feedbackSpectrum', 0.2)
+~matrix.setSkismAmp('feedbackSpectrum', 0.5)
 
 ~matrix.deactivateSkismSynth('feedbackSpectrum')
 
@@ -207,7 +212,7 @@ Tdef(\sendVector, {
 
 ~matrix.activateBoccaSynth('flangingDecimator', ~bbus)
 
-~matrix.setSkismAmp('flangingDecimator', 1.0)
+~matrix.setSkismAmp('flangingDecimator', 0.7)
 
 ~matrix.deactivateSkismSynth('flangingDecimator')
 
@@ -223,7 +228,7 @@ Tdef(\sendVector, {
 
 ~matrix.activateBoccaSynth('arhythmicGendy', ~bbus)
 
-~matrix.setSkismAmp('arhythmicGendy', 0.4)
+~matrix.setSkismAmp('arhythmicGendy', 0.1)
 
 ~matrix.deactivateSkismSynth('arhythmicGendy')
 

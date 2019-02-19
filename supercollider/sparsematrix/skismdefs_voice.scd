@@ -171,7 +171,7 @@ SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp
 		)
 	)),
 
-	SynthDef(\cyclicWarp, {|out, in, iwrp=0.1, ibufscale=0.01, wsz=0.1, dns=1,rnd=0.01, rev=0.1, fdba=0.1, amp=1.0, lim=0.5, grainEnvBuf, ang, xng, bps|
+	SynthDef(\cyclicWarp, {|out, in, iwrp=0.1, ibufscale=0.01, wsz=0.1, dns=4,rnd=0.1, rev=0.1, fdba=0.1, amp=1.0, lim=0.5, grainEnvBuf, ang, xng, bps|
 		var delt, n=4, bufs, ptrs, trgs, frqs, sig, fft, bf;
 		var src = In.ar(in);
 		delt = Array.series(n, 0, 1/iwrp*(1/(n-1)));
@@ -184,7 +184,7 @@ SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp
 		});
 		sig = Mix.fill(n, {|i|
 			Warp1.ar(1, bufs[i], ptrs[i], frqs[i], wsz, grainEnvBuf, dns, rnd) ** 0.5
-				+ PlayBuf.ar(1, bufs[i], 2.0, Impulse.kr(3), 0)
+				+ PlayBuf.ar(1, bufs[i], 0.5, Impulse.kr(3), 0)
 				* EnvGen.kr(Env([0,1,1,0],[0.33,0.33,0.33],\sine,0,3), trgs.rotate(-1)[i], timeScale: 1/iwrp);
 		}) * Amplitude.kr(src).expexp(0.001, 1.0, 0.5, 1.0).round(0.1);
 		sig = sig + GVerb.ar(src, 80, 10, 0.5, 0.5, 5, 0.5, 0.4, 0.8).dup;

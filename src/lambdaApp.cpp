@@ -182,6 +182,9 @@ void LambdaApp::draw()
                 oscMessenger->sendFaderStates();
             }
 		}
+        
+        if (world->bQueryCoords())
+            oscMessenger->sendCoordinatesByState();
 		
 	}
 	

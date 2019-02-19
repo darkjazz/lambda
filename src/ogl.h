@@ -38,7 +38,7 @@
 #include "boids.h"
 #include "cubemap.h"
 #include "codepanel.h"
-#include "emitter.h"
+//#include "emitter.h"
 
 #include <vector>
 //#include "multicodepanel.h"
@@ -175,7 +175,7 @@ public:
     
     std::vector<gl::Texture> img;
     
-    Emitter	mEmitter;
+//    Emitter	mEmitter;
     int counter;
     bool bPerlin, bTrails;
     
@@ -280,7 +280,7 @@ private:
 	void drawBoids03();
 	void drawBoids04();
     void drawBoids05();
-	void drawBoids06();
+//	void drawBoids06();
 	void drawBoidWorldBorders();
 	void drawBoidWorldFrame();	
 	

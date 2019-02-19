@@ -1,8 +1,26 @@
 
-
 (
+~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/codehack.scd", "r");
+~code = ~file.readAllString;
+~file.close;
+~sendarr = ~code.split($%);
+~sendCode = {
+	Tdef('code', {
+		loop({
+			~sendarr.do({|code|
+				var usr = ["poni$ ", "roosa$ "].choose;
+				code.split(Char.nl).do({|line|
+					if (line.size > 0) {
+						~graphics.sendCodeLine(usr ++ line)
+					}
+				});
+				rrand(4.0, 15.0).wait;
+			})
+		})
+	}).play
+};
 ~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
-~wrldsz = 13;
+~wrldsz = 11;
 ~initMsg = {
 	Tdef(\sendVector, {
 		loop({
@@ -20,40 +38,36 @@ Tdef('init', {
 	~graphics.initGenerations([ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23);
 	1.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 120.0, 0.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, 60.0, 0.0, 0.0, 0.0, 0.0);
 	~initMsg.();
 	1.wait;
-	~activePatterns = Array.with(6);
+	~activePatterns = Array();
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.sendBoidPattern(3, 0, 4);
-	~graphics.setPattern(13, 1, 0.5, 0, 0, 0.2, 0.8, 1.0);
-	~graphics.setPattern(3, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
-	~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
+	~graphics.setPattern(38, 1, 0.0, 0, 0, 1.0, 1.0, 1.0);
+	~graphics.fadeInPattern(38, 240, 1.0);
+	~graphics.sendCodeTitle("roosa poni");
 	Post << "Initialised..." << Char.nl;
 }).play
 )
 
+~sendCode.();
 
-
+~graphics.hideCodePanel
 
 Tdef('ciAuto').clear
-
-
-
-Tdef(\sendVector).clear
 
 (
 
 ~patches.do({|arr, i|
 	~graphics.setPattern(i, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
-})
+});
 )
 
 (
 ~ruleWeight = 0.1;
 ~changeWeight = 0.1;
-~maxPatterns = 2;
+~maxPatterns = 1;
 ~initWaitTime = 0;
 ~rotWeight = 0.1;
 )
@@ -101,7 +115,7 @@ Tdef(\sendVector).clear
 	[1.0, 1, 1, 0.0, 0.6, 1.0], //0
 	[1.0, 1, 1, 1.0, 0.1, 0.4],
 	[1.0, 0, 0, 0.9, 0.2, 0.9],
-	[1.0, 1, 1, 1.0, 0.0, 0.3],
+	[1.0, 1, 1, 1.0, 0.1, 0.4],
 	[0.3, 0, 0, 1.0, 1.0, 0.0],
 	[1.0, 1, 1, 0.6, 1.0, 0.3], //5
 	[1.0, 1, 1, 0.5, 0.9, 0.8],
@@ -116,12 +130,12 @@ Tdef(\sendVector).clear
 	[1.0, 0, 0, 1.0, 1.0, 1.0], //15
 	[1.0, 1, 1, 1.0, 1.0, 1.0],
 	[1.0, 0, 1, 0.4, 0.8, 1.0],
-	[1.0, 1, 0, 1.0, 0.0, 1.0],
+	[1.0, 1, 1, 0.2, 0.8, 1.0],
 	[1.0, 0, 1, 0.1, 1.0, 0.4],
 	[1.0, 1, 0, 1.0, 0.0, 0.5], //20
 	[1.0, 0, 0, 1.0, 1.0, 0.0],
 	[1.0, 1, 1, 0.4, 0.8, 1.0],
-	[1.0, 1, 1, 0.9, 0.0, 0.3],
+	[1.0, 1, 1, 1.0, 0.0, 1.0],
 	[1.0, 1, 1, 0.5, 0.6, 0.7],
 	[0.3, 1, 1, 0.8, 0.8, 0.8], //25
 	[0.4, 1, 1, 0.1, 0.2, 0.3],
@@ -129,9 +143,9 @@ Tdef(\sendVector).clear
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
 	[0.5, 0, 0, 0.6, 0.9, 1.0],
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //30
-	[1.0, 1, 1, 1.0, 0.0, 1.0],
+	[0.4, 1, 1, 1.0, 0.0, 1.0],
 	[1.0, 1, 1, 0.0, 0.04, 0.04],
-	[1.0, 1, 1, 0.4, 0.0, 0.2],
+	[0.5, 1, 1, 0.4, 0.0, 0.2],
 	[0.4, 1, 1, 0.4, 0.4, 0.7],
 	[1.0, 0, 1, 0.0, 0.0, 0.5], //35
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
@@ -140,12 +154,11 @@ Tdef(\sendVector).clear
 	[1.0, 1, 1, 0.5, 1.0, 1.0]
 ];
 
-~graphPatterns = (0..39);
+~graphPatterns = [1, 3, 7, 8, 18, 22, 30, 31, 33, 35];
 
 Tdef('ciAuto', {|mfcc|
 	~initWaitTime.wait;
-	~graphics.killSwarm;
-	~graphics.setPattern(13, 0, 0.5, 0, 0, 0.2, 0.8, 1.0);
+	~graphics.sendBoidPattern(3, 1, 0);
 	loop({
 		var delta, curr, args;
 		delta = SystemClock.seconds - ~lasttime;

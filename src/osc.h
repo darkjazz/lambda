@@ -53,6 +53,8 @@ public:
 	void sendStates();
     
     void sendFaderStates();
+    
+    void sendCoordinatesByState();
 	
 	void collectMessages();
 	

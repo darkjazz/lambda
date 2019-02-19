@@ -48,6 +48,7 @@ void World::initVars() {
 	_interpPhase = 0;
 	_interpCount = 1;
 	_bQueryStates = false;
+    _bQueryCoords = false;
 	_cellHistorySize = 8;
 	_trainDur = 1000;
 	_trainCount = 0;
@@ -265,7 +266,7 @@ void::World::prepareNext() {
 			_tRadius = _mapRadius * exp(_trainCount / (_timeConst*-1.0));
 		}
 	}
-    if (_bQueryStates && ruleType() != CONT) {
+    if (_bQueryCoords) {
         _queryFaderStates.clear();
     }
 }
@@ -293,19 +294,22 @@ void World::next(int x, int y, int z) {
 	
 		
 	if (_bQueryStates) {
-        if (ruleType() == CONT) {
-            if (_queryStates[_currentQueryIndex].include(x, y, z)) {
+        
+        if (_queryStates[_currentQueryIndex].include(x, y, z)) {
+            if (ruleType() == CONT)
                 _queryStates[_currentQueryIndex].value = cells[x][y][z].states[_index];
-                _currentQueryIndex++;
-            }
-        }
-        else{
-            if (cells[x][y][z].phase > 0.0) {
-                _queryFaderStates.push_back( (int)((x*_sizeX+y)*_sizeY+z) );
-                _queryFaderStates.push_back( cells[x][y][z].states[_index] );
-            }
+            else
+                _queryStates[_currentQueryIndex].intvalue = cells[x][y][z].states[_index];
+            _currentQueryIndex++;
         }
 	}
+    
+    if (_bQueryCoords) {
+        if ((int)cells[x][y][z].states[_index] >= _queryMinState && (int)cells[x][y][z].states[_index] <= _queryMaxState) {
+            _queryFaderStates.push_back( (int)((x*_sizeX+y)*_sizeY+z) );
+            _queryFaderStates.push_back( (int)cells[x][y][z].states[_index] );
+        }
+    }
 	
 }
 
@@ -342,7 +346,7 @@ void World::finalizeNext() {
 		_newBMUFound = true;
 	}
     
-    if (_bQueryStates && ruleType() != CONT) {
+    if (_bQueryCoords) {
         _queryStatesSize = _queryFaderStates.size();
     }
 
@@ -408,6 +412,12 @@ void World::setQueryIndices(int * indices, int size) {
 	}
 	_bQueryStates = true;
 	
+}
+
+void World::setQueryStates(int minState, int maxState) {
+    _queryMinState = minState;
+    _queryMaxState = maxState;
+    _bQueryCoords = true;
 }
 
 void World::setInputVector(vector<double> inputVector) {

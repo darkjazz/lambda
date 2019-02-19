@@ -10,8 +10,6 @@
 ~matrix = SparseMatrix(~decoder, ~graphics, 2, ~ncoef);
 )
 
-
-
 MasterEQ(2)
 
 (
@@ -27,7 +25,6 @@ MasterEQ(2)
 
 ~matrix.loadPatternDefs("patternDefs.scd");
 
-
 ~loader = JsonLoader("ges_00");
 ~defnames = ~loader.getDefNamesByHeader(16, 1).collect({|def| def['value'] });
 ~matrix.prepareGepDefs(~defnames, ~loader);
@@ -36,17 +33,13 @@ MasterEQ(2)
 
 s.queryAllNodes
 
-
-
 Pdef('matrix', Ppar([ Pdef('g00'), Pdef('g01'), Pdef('r01'), Pdef('efx')])).quant(64)
-
 
 Pdef('matrix').play
 
 ~buf = Buffer.read(s, Paths.soundDir +/+ "tehishing/tehishing_ch1-2_stereo.aif")
 
 ~tbus = Bus.control;
-
 
 Ndef('meander', {|pos|
 	var trig = InTrig.kr(~tbus);
@@ -56,7 +49,7 @@ Ndef('meander', {|pos|
 Ndef('meander').play; ~tbus.value = 0;
 
 ~pos = Pstutter(
-	Pwrand([1, 2, 4, 6, 8, 12, 16], (1..7).reciprocal.normalizeSum, inf), 
+	Pwrand([1, 2, 4, 6, 8, 12, 16], (1..7).reciprocal.normalizeSum, inf),
 	Pwhite(0, ~buf.numFrames, inf)
 ).asStream;
 
@@ -71,13 +64,10 @@ Ndef('meander').play; ~tbus.value = 0;
 ~matrix.defsAt('r00').setEfx(2, ['efx3', 'efx5'])
 ~matrix.defsAt('r00').setEfx(3, ['efx1', 'efx4'])
 
-
-
 (0..31).do({|index|
 	var efxkeys = ['efx3'].select({ 0.2.coin });
 	~matrix.defsAt('r01').setEfx(index, efxkeys)
 })
-
 
 (0..31).do({|index|
 	var efxkeys = ['efx3', 'efx4'].select({ 0.3.coin });
@@ -88,7 +78,6 @@ Ndef('meander').play; ~tbus.value = 0;
 	(efx0: (1,3..31))
 )
 
-
 ~matrix.defsAt('r00').assignEfx(
 	(efx0: (1,3..31))
 )
@@ -97,11 +86,9 @@ Ndef('meander').play; ~tbus.value = 0;
 	(efx3: (1,4..31))
 )
 
-
 ~matrix.defsAt('r04').assignEfx(
 	(efx4: (0..31))
 )
-
 
 ~matrix.defsAt('r07').assignEfx(
 	(efx5: (0,2..31))
@@ -115,16 +102,18 @@ Ndef('meander').play; ~tbus.value = 0;
 	(efx5: (0..31))
 )
 
-
-
-
 ~matrix.defsAt('r06').assignEfx(
 	(efx4: (0..31))
 )
 
 
 ~matrix.defsAt('r01').assignEfx(
-	(efx0: [3, 13, 23, 33], efx1: [4, 14, 24, 44], efx3: [6, 16, 26, 56], efx4: [8, 18, 28, 60], efx5: [10, 20, 30, 40])
+	(
+		efx0: [3, 13, 23, 33],
+		efx1: [4, 14, 24, 44],
+		efx3: [6, 16, 26, 56],
+		efx4: [8, 18, 28, 60],
+		efx5: [10, 20, 30, 40])
 )
 
 
@@ -140,23 +129,15 @@ Ndef('meander').play; ~tbus.value = 0;
 
 ~matrix.efxamps['efx5'] = 0.3
 
-
-
 ~graphics.open
 
 ~graphics.initWorld(24, 24, 24, ~ncoef);
 
 ~graphics.initGenerations([4,6,8], [3,5,7,9], 16);
 
-
-
 ~graphics.setSymmetry(11)
 
-
-
-
 ~graphics.setViewpoint(0.0, 0.0, -120.0, 0.0, 0.0, 0.0);
-
 
 ~graphics.sendPredefined3DRule(\nova)
 
@@ -166,7 +147,6 @@ Ndef('meander').play; ~tbus.value = 0;
 	~matrix.defsAt('r00').ctrls[name].active = 1;
 	~matrix.defsAt('r00').ctrls[name].emp = 0.6;
 })
-
 
 ~matrix.defsAt('g00').ctrls.select({|ctr| ctr.active == 1 }).do({|ct|
 	ct.amp = exprand(0.3, 0.8)
@@ -185,10 +165,7 @@ Ndef('meander').play; ~tbus.value = 0;
 	{ exprand(0.01, 0.1) },
 	0.1
 );
-
-
 ~matrix.defsAt('g00').recall(0)
-
 
 ~matrix.defsAt('g01').setControls(
 	{ [0, 1].wchoose([0.9, 0.1]) },
@@ -207,7 +184,6 @@ Ndef('meander').play; ~tbus.value = 0;
 	{ exprand(0.005, 0.1) },
 	0.1
 );
-
 
 ~matrix.defsAt('b03').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
@@ -254,9 +230,6 @@ Ndef('meander').play; ~tbus.value = 0;
 );
 
 
-
-
-
 ~matrix.defsAt('r05').recall(0);
 
 ~matrix.defsAt('r01').recall(0);
@@ -269,14 +242,7 @@ Ndef('meander').play; ~tbus.value = 0;
 
 ~graphics.setPattern(8, 1, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
-
-
-
-
-
 s.queryAllNodes
-
-
 
 ~matrix.defsAt('r02').recall(0);
 
@@ -306,9 +272,9 @@ s.queryAllNodes
 ~player.loadData(~indPush)
 
 (
-~player.playRoutine(~indZoom, 
+~player.playRoutine(~indZoom,
 	Pseq([1, 0, 1, 0, 0, 1, 0, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'zoom');
-~player.playRoutine(~indPush, 
+~player.playRoutine(~indPush,
 	Pseq([0, 1, 0, 1, 1, 0, 1, 0]*0.3, inf), Pseq([0.5, 0.25, 0.25, 0.5, 0.25, 0.25], inf), 'push');
 )
 
@@ -409,9 +375,6 @@ Tdef('loadData', {
 
 ~player.free(~ind0)
 
-
-
-
 // push 1 // 14, 16, 18
 ~ind1 = 37
 
@@ -429,8 +392,6 @@ Tdef('loadData', {
 ~player.setWithPattern(~ind1, Pseq(Array.rand(8, 0.0, 1.0).round(0.1), inf), 0.125)
 
 ~player.free(~ind1)
-
-
 
 // press 2 //
 ~ind2 = 26

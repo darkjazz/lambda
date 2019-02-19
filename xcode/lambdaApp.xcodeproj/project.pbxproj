@@ -77,8 +77,6 @@
 		59590AAD14B47F6200EF570A /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AA914B47F6200EF570A /* world.cpp */; };
 		59590AEC14B49D9200EF570A /* osc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AEA14B49D9200EF570A /* osc.cpp */; };
 		59590BA514B4F4D200EF570A /* rule.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590BA314B4F4D200EF570A /* rule.cpp */; };
-		5989C2861E2794C60028A618 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5989C2841E2794C60028A618 /* emitter.cpp */; };
-		5989C2871E2794C60028A618 /* emitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5989C2841E2794C60028A618 /* emitter.cpp */; };
 		5989C28A1E36AF620028A618 /* emitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2881E36AF620028A618 /* emitter.png */; };
 		5989C28B1E36AF620028A618 /* emitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2881E36AF620028A618 /* emitter.png */; };
 		5989C28C1E36AF620028A618 /* particle.png in Resources */ = {isa = PBXBuildFile; fileRef = 5989C2891E36AF620028A618 /* particle.png */; };
@@ -216,8 +214,6 @@
 		59590AEB14B49D9200EF570A /* osc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = osc.h; path = ../src/osc.h; sourceTree = SOURCE_ROOT; };
 		59590BA314B4F4D200EF570A /* rule.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = rule.cpp; path = ../src/rule.cpp; sourceTree = SOURCE_ROOT; };
 		59590BA414B4F4D200EF570A /* rule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = rule.h; path = ../src/rule.h; sourceTree = SOURCE_ROOT; };
-		5989C2841E2794C60028A618 /* emitter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = emitter.cpp; sourceTree = "<group>"; };
-		5989C2851E2794C60028A618 /* emitter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = emitter.h; sourceTree = "<group>"; };
 		5989C2881E36AF620028A618 /* emitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = emitter.png; sourceTree = "<group>"; };
 		5989C2891E36AF620028A618 /* particle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = particle.png; sourceTree = "<group>"; };
 		5990345D15D5B16A0078E3A5 /* codepanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = codepanel.h; sourceTree = "<group>"; };
@@ -353,8 +349,6 @@
 				59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */,
 				592981A91C4E8A2B00B66EF7 /* bit.cpp */,
 				592981AA1C4E8A2B00B66EF7 /* bit.h */,
-				5989C2841E2794C60028A618 /* emitter.cpp */,
-				5989C2851E2794C60028A618 /* emitter.h */,
 			);
 			name = src;
 			path = ../src;
@@ -735,7 +729,6 @@
 				59ED00E31BA8157100CD2ECA /* OscListener.cpp in Sources */,
 				59ED00D31BA8157100CD2ECA /* UdpSocket.cpp in Sources */,
 				59ED00D91BA8157100CD2ECA /* OscOutboundPacketStream.cpp in Sources */,
-				5989C2871E2794C60028A618 /* emitter.cpp in Sources */,
 				59ED00E71BA8157100CD2ECA /* OscSender.cpp in Sources */,
 				59ED00DF1BA8157100CD2ECA /* OscTypes.cpp in Sources */,
 				59ED00E11BA8157100CD2ECA /* OscBundle.cpp in Sources */,
@@ -750,7 +743,6 @@
 			files = (
 				59ED00E01BA8157100CD2ECA /* OscBundle.cpp in Sources */,
 				59ED00D21BA8157100CD2ECA /* UdpSocket.cpp in Sources */,
-				5989C2861E2794C60028A618 /* emitter.cpp in Sources */,
 				59590A4B14B349AD00EF570A /* lambdaApp.cpp in Sources */,
 				59590AAB14B47F6200EF570A /* ogl.cpp in Sources */,
 				59ED00CE1BA8157100CD2ECA /* IpEndpointName.cpp in Sources */,
@@ -809,6 +801,7 @@
 					"-lz",
 				);
 				PRODUCT_NAME = lambdaApp;
+				SDKROOT = macosx10.12;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -845,6 +838,7 @@
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder.a";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
 				PRODUCT_NAME = lambdaApp;
+				SDKROOT = macosx10.12;
 				STRIP_INSTALLED_PRODUCT = YES;
 				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = app;
@@ -878,6 +872,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder_d.a";
 				PRODUCT_NAME = lambda;
 				SDKROOT = macosx10.12;
@@ -916,6 +911,7 @@
 				LD_GENERATE_MAP_FILE = YES;
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder.a";
 				PRESERVE_DEAD_CODE_INITS_AND_TERMS = NO;
@@ -946,9 +942,9 @@
 					"\"$(CINDER_PATH)/blocks/msaFluid/include\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.12;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\"";
 			};
 			name = Debug;
@@ -972,9 +968,9 @@
 					"\"$(CINDER_PATH)/blocks/msaFluid/include\"",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PREBINDING = NO;
-				SDKROOT = macosx10.10;
+				SDKROOT = macosx10.12;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\"";
 			};
 			name = Release;

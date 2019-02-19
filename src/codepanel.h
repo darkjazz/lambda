@@ -43,7 +43,7 @@ public:
 	
 	ci::Vec2f loc;
 	
-	float opacity;
+	float opacity, max_opacity;
 	bool show;
 	int fadeTime, maxLines, counter;			
 	ci::gl::Texture	texture; 

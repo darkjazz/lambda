@@ -33,8 +33,9 @@ CodePanel::CodePanel()
 {
 	show = false;
 	opacity	= 0.0f;
-	fadeTime = 300;
-	maxLines = 32;
+    max_opacity = 0.8f;
+	fadeTime = 150;
+	maxLines = 19;
 	counter = 0;
 	title = "sc.code";
 }
@@ -42,13 +43,13 @@ CodePanel::CodePanel()
 void CodePanel::createTexture()
 {
 	TextLayout layout;
-	layout.setFont( Font("Arial Black", 14) );
-	layout.setColor( Color(0.5f, 0.5f, 0.5f) );
+	layout.setFont( Font("Arial Black", 11) );
+	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 	layout.addLine( title );
 	
-	layout.setFont(Font("Inconsolata", 14));
-	layout.setColor(Color(0.8f, 0.8f, 0.8f));
-	layout.addLine("------------------------------------------------------------------------------------------");	
+	layout.setFont(Font("Noteworthy Bold", 15));
+	layout.setColor(Color(1.0f, 0.41f, 0.71f));
+	layout.addLine("------------------------------------------------------------------------------------------------------------------------");
 		
 	for (int i = lines.size() - 1; i >= 0; i--) {
 		layout.addLine(lines[i]);
@@ -64,11 +65,11 @@ void CodePanel::update( Vec2f dim )
 			show = false;
 		}
 		else {
-			opacity = clipf(opacity+0.2f, 0.0f, 1.0f);
+			opacity = clipf(opacity+0.2f, 0.0f, max_opacity);
 			counter++;
 		}
 	} else {
-		opacity = clipf(opacity-0.05f, 0.0f, 1.0f);
+		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
 	}
 	
 	if( opacity > 0.05f ){
@@ -93,11 +94,11 @@ void CodePanel::bind()
 			show = false;
 		}
 		else {
-			opacity = clipf(opacity+0.2f, 0.0f, 1.0f);
+			opacity = clipf(opacity+0.2f, 0.0f, max_opacity);
 			counter++;
 		}
 	} else {
-		opacity = clipf(opacity-0.05f, 0.0f, 1.0f);
+		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
 	}
 	
 	createTexture();
