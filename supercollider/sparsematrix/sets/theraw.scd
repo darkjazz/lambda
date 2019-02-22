@@ -7,7 +7,7 @@ Server.killAll
 
 
 (
-~gespaths = (Paths.soundDir +/+ "evolver/wrp/*").pathMatch;
+~gespaths = (Paths.soundDir +/+ "evolver/ev/*").pathMatch;
 ~gesbufs = GESBufferLoader(~gespaths);
 )
 
@@ -72,7 +72,7 @@ SynthDef('prsine', {|out, efx, freq, amp, dur, ang|
 // 73, 74, 75, 76, 77
 
 (
-~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[7], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[0], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
@@ -85,7 +85,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.1, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.6, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -94,7 +94,7 @@ s.stopRecording
 
 
 (
-~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[17], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[4], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp1',
 	Pbind(
@@ -107,7 +107,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.15, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
+~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.5, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
 
 
 ~wrp1.free; Pdef('swrp1').clear
@@ -115,7 +115,7 @@ Pdef('swrp1',
 
 
 (
-~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[7], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[5], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp2',
 	Pbind(
@@ -128,7 +128,7 @@ Pdef('swrp2',
 ).play
 )
 
-~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
+~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 1, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
 
 ~wrp2.free; Pdef('swrp2').clear
 
@@ -160,7 +160,7 @@ Pdef('swrp3',
 s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('b02'), Pdef('r02'), Pdef('r00'), Pdef('r01'), Pdef('b04'), Pdef('b07'), Pdef('b08'), Pdef('b12'), Pdef('b10'), Pdef('b11') ]))
+Pdef('matrix', Ppar([ Pdef('b02'), Pdef('r02'), Pdef('r00'), Pdef('r01'), Pdef('b04'), Pdef('b07'), Pdef('b08'), Pdef('b12'), Pdef('b10'), Pdef('b13') ]))
 
 
 Pdef('matrix', Ppar([ Pdef('r01') ]))
@@ -265,9 +265,9 @@ Tdef('check', {
 ~matrix.defsAt('r06').recall(0);
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.6, 0.4]) },
 	{ exprand(0.4, 1.0) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.1, 0.25) },
 	0.1
 );
 
@@ -292,31 +292,31 @@ Tdef('check', {
 (
 
 ~matrix.defsAt('b08').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.3, 0.8) },
-	{ exprand(0.3, 0.8) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.01, 0.03) },
 	0.1
 );
 
 ~matrix.defsAt('b07').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([0.7, 0.3]) },
 	{ exprand(0.2, 0.8) },
-	{ exprand(0.3, 0.6) },
+	{ exprand(0.03, 0.04) },
 	0.1
 );
 )
 
 
 (
-~matrix.defsAt('b12').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 1.0) },
-	{ exprand(0.1, 0.3) },
+~matrix.defsAt('b13').setControls(
+	{ [0, 1].wchoose([0.0, 1.0]) },
+	{ exprand(0.6, 1.0) },
+	{ exprand(0.1, 0.2) },
 	0.1
 );
 
 ~matrix.defsAt('b11').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 1.0) },
 	{ exprand(0.1, 0.3) },
 	0.1
@@ -613,16 +613,16 @@ Archive.global[\matrix][\presets]
 
 
 // 38 niice
-
+// 251, 227
 // 30, 42 fuck yeah
 
-~ind0 = 221
+~ind0 = 247
 
 ~player.loadData(~ind0)
 
 ~player.play(~ind0, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind0, 1);
+~player.set(~ind0, 1.0);
 
 ~player.free(~ind0)
 
@@ -632,20 +632,21 @@ s.queryAllNodes
 
 // 271
 
-~ind1 = 74
+~ind1 = 211
 
 ~player.loadData(~ind1)
 
 ~player.play(~ind1, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind1, 1.0)
+~player.set(~ind1, 1.0 )
 
 ~player.free(~ind1)
 
 
 // 249 sick!
+// 12
 
-~ind2 = 223
+~ind2 = 176
 
 ~player.loadData(~ind2)
 
@@ -672,6 +673,6 @@ s.queryAllNodes
 
 
 
-s.sendMsg("/n_free", 100953)
+s.sendMsg("/n_free", 46981)
 
 s.queryAllNodes

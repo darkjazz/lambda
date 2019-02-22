@@ -14,7 +14,7 @@
 
 ~graphics.sendBoidPattern(1, 0, 0);
 
-~graphics.sendBoidPattern(2, 0, 0);
+~graphics.sendBoidPattern(2, 1, 0);
 
 ~graphics.sendBoidPattern(4, 0, 0);
 
@@ -28,7 +28,7 @@
 
 ~graphics.killSwarm
 
-~graphics.setBoidCam( false, false)
+~graphics.setBoidCam( true, true)
 
 
 Server.killAll

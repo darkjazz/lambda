@@ -101,6 +101,10 @@
 		2, "b12", 'argproto', matrix.buffers.lctr[(64..95)], 'bit01', true
 	);
 
+	matrix.addPatternDubDef('b13', (0..15), 4, 4,
+		['Dubstep 01', 'Dubstep 02', 'Dubstep 03', 'Dubstep 04'].reverse,
+		2, "b13", 'argproto', matrix.buffers.evo.keep(16), 'bitSt2', false
+	);
 
 	// matrix.addPatternMelodyDef('m00', (0..31), 4, 8,
 	// 	['basikolo', 'cassa', 'diansa', 'sokou'],

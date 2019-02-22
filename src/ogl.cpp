@@ -55,7 +55,7 @@ void GraphicsRenderer::setupOgl () {
     
     for (int i = 0; i <= 8; i++) {
         std::stringstream sstm;
-        sstm << "0" << i << ".png";
+        sstm << "r0" << i << ".png";
         img.push_back(loadImage( loadResource( sstm.str() ) ));
     }
 	
@@ -731,7 +731,7 @@ void GraphicsRenderer::pattern04(int x, int y, int z) {
     
     glDisable( GL_LIGHTING );
     glEnable( GL_TEXTURE_2D );
-    img[0].bind();
+    img[5].bind();
     gl::pushMatrices();
     
     gl::color(red, green, blue, alpha);
@@ -768,7 +768,7 @@ void GraphicsRenderer::pattern04(int x, int y, int z) {
     }
     
     gl::popMatrices();
-    img[0].bind();
+    img[5].bind();
     glDisable( GL_TEXTURE_2D );
     
 	
@@ -1567,14 +1567,14 @@ void GraphicsRenderer::pattern14(int x, int y, int z) {
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img[1].bind();
+        img[8].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
         gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
         
         gl::popMatrices();
-        img[1].unbind();
+        img[8].unbind();
         glDisable( GL_TEXTURE_2D );
 			
 	}
@@ -3546,7 +3546,7 @@ void GraphicsRenderer::pattern36(int x, int y, int z) {
         blue = patternLib[36].color.b * abs(patternLib[36].colormap - cstate);
         alpha = patternLib[36].alpha * abs(patternLib[36].alphamap - cstate);
         
-        xW = yH = zD = fragSizeX * cstate;
+        xW = yH = zD = fragSizeX;
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
@@ -3704,7 +3704,7 @@ void GraphicsRenderer::pattern39(int x, int y, int z) {
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img04.bind();
+        img[3].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
@@ -3713,7 +3713,7 @@ void GraphicsRenderer::pattern39(int x, int y, int z) {
 //        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
         
         gl::popMatrices();
-        img04.unbind();
+        img[3].unbind();
         glDisable( GL_TEXTURE_2D );
         
     }

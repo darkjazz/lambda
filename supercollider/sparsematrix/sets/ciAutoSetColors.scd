@@ -23,7 +23,7 @@ Tdef('init', {
 	~graphics.setViewpoint(0.0, 120.0, 0.0, 0.0, 0.0, 0.0);
 	~initMsg.();
 	1.wait;
-	~activePatterns = Array.with(6);
+	~activePatterns = [3, 9, 13];
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
 	~graphics.sendBoidPattern(3, 0, 4);
