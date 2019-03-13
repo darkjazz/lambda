@@ -2,7 +2,7 @@
 
 (
 ~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
-~wrldsz = 13;
+~wrldsz = 7;
 ~initMsg = {
 	Tdef(\sendVector, {
 		loop({
@@ -34,6 +34,9 @@ Tdef('init', {
 }).play
 )
 
+~graphics.setPattern(13, 0, 0.5, 0, 0, 0.2, 0.8, 1.0);
+~graphics.setPattern(3, 0, 1.0, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
 
 
 

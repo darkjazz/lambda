@@ -7,6 +7,11 @@ e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([4, 6], inf)).initFunc))
 ['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy']
 
 
+839.18 / 12
+
+0.003.ampdb
+
+(-50.0).dbamp
 
 s.record
 
@@ -17,11 +22,11 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 1.0, 'revamp', 0.4, 'revtime', 5.1)
+~ins.ins[0].set('amp', 2.0, 'revamp', 1.0, 'revtime', 5.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.03, 'iwrp', 0.25, 'ibufscale', 0.25, 'wsz', 0.1, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 0.25, 'ibufscale', 0.25, 'wsz', 0.1, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -40,16 +45,22 @@ Server.killAll
 
 
 ~ins.startEfx('granularReverb', 0)
-~ins.setEfx('granularReverb', ['amp', 0.4])
+~ins.setEfx('granularReverb', ['amp', 1.0])
 ~ins.stopEfx('granularReverb')
 
 ~ins.startEfx('feedbackSpectrum', 0)
-~ins.setEfx('feedbackSpectrum', ['amp', 0.9])
+~ins.setEfx('feedbackSpectrum', ['amp', 0.0])
 ~ins.stopEfx('feedbackSpectrum')
 
 ~ins.startEfx('cliqSaw', 0)
-~ins.setEfx('cliqSaw', ['amp', 0.4])
+~ins.setEfx('cliqSaw', ['amp', 0.0])
 ~ins.stopEfx('cliqSaw')
+
+
+~ins.startEfx('cliqSaw', 0)
+~ins.setEfx('cliqSaw', ['amp', 0.1])
+~ins.stopEfx('cliqSaw')
+
 
 s.scope(2)
 
@@ -58,13 +69,13 @@ s.scope(2)
 ~ins.stopRecording
 
 ~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(0, ['shift', 1.0, 'rate', 1.0, 'amp', 1.0])
+~ins.setShift(0, ['shift', 1.0, 'rate', 1.0, 'amp', 0.5])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(1, ['amp', 1.0, 'shift', 1.0, 'rate', -1.0])
+~ins.setShift(1, ['amp', 0.5, 'shift', -2.0, 'rate', -1.0])
 
 ~ins.stopShift(1)
 
@@ -86,7 +97,7 @@ Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
 		'out', ~decoder.bus, 'rate', Prand([1.0, 0.5, 0.25, 0.125, -0.5, -1.0], inf),
-		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.8, 1.0),
+		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(1.0, 2.0),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
 		'delta', Pfunc({|ev| ev.buffer.duration * ev.rate.abs.reciprocal })
 	)
@@ -113,7 +124,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 0.0, 'wamp', 0.1, 'iamp', 0.6, 'ramp', 0.4, 'rate', 0.5, 'freq', 0.25, 'wrp', 0.3)
+~wrpv0.set('amp', 1.0, 'wamp', 0.1, 'iamp', 1.0, 'ramp', 1.0, 'rate', 0.5, 'freq', 0.25, 'wrp', 0.125)
 
 ~wrpv0.free; Pdef('swrp0').clear
 
@@ -132,7 +143,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrpv1.set('amp', 0.0, 'wamp', 0.1, 'iamp', 1.0, 'ramp', 0.7, 'rate', 1.0, 'freq', 2.0, 'buf', ~ins.recBufs.choose)
+~wrpv1.set('amp', 1.0, 'wamp', 0.1, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 2.0, 'buf', ~ins.recBufs.choose)
 
 
 ~wrpv1.free; Pdef('swrp1').clear
@@ -142,8 +153,8 @@ s.queryAllNodes
 
 Tdef('warploop', {
 	loop({
-		~wrpv1.set('amp', 0.7, 'wamp', 0.9, 'iamp', 0.5, 'ramp', 1.0, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
-		rrand(3, 8).wait
+		~wrpv1.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.4, 'ramp', 0.3, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		rrand(1, 5).wait
 	})
 }).play
 
@@ -165,15 +176,15 @@ s.stopRecording
 );
 
 
-Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r01'), Pdef('b07'), Pdef('b02'), Pdef('b06'), Pdef('p00'), Pdef('p01'), Pdef('b11'), Pdef('b12') ]))
+Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r00'), Pdef('b07'), Pdef('b02'), Pdef('b06'), Pdef('p00'), Pdef('p01'), Pdef('b11'), Pdef('b12') ]))
 
 
 Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01') ]))
 
 ~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.5, 1.0) },
 	0.1
 );
 
