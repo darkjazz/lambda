@@ -283,6 +283,12 @@ void OSCMessenger::collectMessages() {
 				else
 					_ogl->codePanelMapped = true;
 			}
+            else if (addr.compare("/lambda/livecode/mapimage") == 0) {
+                if (msg.getArgAsInt32(0) == 0)
+                    _ogl->imageMapped = false;
+                else
+                    _ogl->imageMapped = true;
+            }
 			else if (addr.compare("/lambda/livecode/codeline") == 0) {
 				_ogl->codePanel.addLine(msg.getArgAsString(0));
 			}

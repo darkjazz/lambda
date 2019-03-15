@@ -86,6 +86,7 @@ public:
 		counter = 0;
 		codePanelActive = true;
 		codePanelMapped = false;
+        imageMapped = false;
 		maxphase = 28;
 		ptrBMU = NULL;
 		mDirectional = 1.0f;
@@ -130,6 +131,8 @@ public:
 	
 	void mapCodePanel();
     
+    void mapImage();
+    
     void renderImage(Vec3f, float, Color, float);
     
     void renderTrails(int len, float radius, float agePer, std::vector<ci::Vec3f> loc);
@@ -158,7 +161,8 @@ public:
 	
 	CodePanel codePanel;
 	bool codePanelActive;
-	bool codePanelMapped; 
+	bool codePanelMapped;
+    bool imageMapped;
 
 	gl::GlslProg smShader;
 	bool bSHADER;
