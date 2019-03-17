@@ -22,7 +22,7 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 2.0, 'revamp', 1.0, 'revtime', 5.1)
+~ins.ins[0].set('amp', 2.0, 'revamp', 0.7, 'revtime', 10.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
@@ -53,7 +53,7 @@ Server.killAll
 ~ins.stopEfx('feedbackSpectrum')
 
 ~ins.startEfx('cliqSaw', 0)
-~ins.setEfx('cliqSaw', ['amp', 0.0])
+~ins.setEfx('cliqSaw', ['amp', 0.4])
 ~ins.stopEfx('cliqSaw')
 
 

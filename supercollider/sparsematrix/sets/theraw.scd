@@ -77,7 +77,7 @@ SynthDef('prsine', {|out, efx, freq, amp, dur, ang|
 // 73, 74, 75, 76, 77
 
 (
-~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[37], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[47], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
@@ -90,7 +90,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.6, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.1, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -187,6 +187,7 @@ Pdef('matrix', Ppar([ Pdef('r00') ]))
 ~matrix.defsAt('b08').recall(0);
 
 ~matrix.defsAt('b10').recall(0);
+
 ~matrix.defsAt('b11').recall(0);
 ~matrix.defsAt('b12').recall(0);
 ~matrix.defsAt('r01').recall(0);
@@ -269,16 +270,16 @@ Tdef('check', {
 ~matrix.defsAt('r06').recall(0);
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.4, 1.0) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.01, 0.1) },
 	0.1
 );
 
-~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 0.8) },
-	{ exprand(0.05, 0.2) },
+	{ exprand(0.05, 0.07) },
 	0.1
 );
 
@@ -296,16 +297,16 @@ Tdef('check', {
 (
 
 ~matrix.defsAt('b08').setControls(
-	{ [0, 1].wchoose([0.9, 0.1 ]) },
-	{ exprand(0.5, 1.0) },
-	{ exprand(0.1, 0.2) },
+	{ [0, 1].wchoose([1.0, 0.0 ]) },
+	{ exprand(0.4, 1.0) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('b07').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.2, 0.8) },
-	{ exprand(0.1, 0.2) },
+	{ exprand(0.2, 0.5) },
 	0.1
 );
 )
@@ -313,9 +314,9 @@ Tdef('check', {
 
 (
 ~matrix.defsAt('b12').setControls(
-	{ [0, 1].wchoose([0.9, 0.1]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.8, 1.0) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.01, 0.3) },
 	0.1
 );
 
@@ -331,8 +332,8 @@ Tdef('check', {
 
 ~matrix.defsAt('b10').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.6, 1.0) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.6, 1.4) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
