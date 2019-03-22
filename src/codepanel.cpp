@@ -47,7 +47,7 @@ void CodePanel::createTexture()
 //	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 //	layout.addLine( title );
 	
-	layout.setFont(Font("Zapfino", 17));
+	layout.setFont(Font("Zapfino", 31));
 	layout.setColor(Color(0.85f, 0.27f, 0.24f ));
 
    /* layout.addLine("------------------------------------------------------------------------------------------------------------------------");
@@ -70,7 +70,7 @@ void CodePanel::update( Vec2f dim )
 			counter++;
 		}
 	} else {
-		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
+//		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
 	}
 	
 	if( opacity > 0.05f ){
@@ -99,7 +99,7 @@ void CodePanel::bind()
 			counter++;
 		}
 	} else {
-		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
+//		opacity = clipf(opacity-0.05f, 0.0f, max_opacity);
 	}
 	
 	createTexture();

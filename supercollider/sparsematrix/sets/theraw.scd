@@ -1,4 +1,4 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['r01', 'r02', 'b02', 'b06', 'b07', 'b08', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['r06', 'r07', 'b02', 'b06', 'b03'], worldDim: 21, ip: "127.0.0.1");
 
 
 e = SpEnvir(~settings))
@@ -17,7 +17,7 @@ s.scope(2)
 
 s.queryAllNodes
 
-~matrix.setBPM(63)
+~matrix.setBPM(211)
 
 (
 ~freqs = Array.twinPrimes(47, 1001).select({|it, i| it.odd });
@@ -68,11 +68,16 @@ SynthDef('prsine', {|out, efx, freq, amp, dur, ang|
 
 ~matrix.onsetFunc_({})
 
+s.record
+
+
+s.sendMsg("/n_free", 4151)
+s.queryAllNodes
 
 // 73, 74, 75, 76, 77
 
 (
-~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[0], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[35], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
@@ -85,7 +90,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.6, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.4, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.125)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -94,7 +99,7 @@ s.stopRecording
 
 
 (
-~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[4], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[87], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp1',
 	Pbind(
@@ -107,7 +112,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.5, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
+~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.01, 'rate', 1.0, 'freq', 2.0, 'wrp', 1.0)
 
 
 ~wrp1.free; Pdef('swrp1').clear
@@ -115,7 +120,7 @@ Pdef('swrp1',
 
 
 (
-~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[5], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[93], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp2',
 	Pbind(
@@ -128,7 +133,7 @@ Pdef('swrp2',
 ).play
 )
 
-~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 1, 'ramp', 0.0, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
+~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.3, 'rate', 1.0, 'freq', 0.25, 'wrp', 0.125)
 
 ~wrp2.free; Pdef('swrp2').clear
 
@@ -165,6 +170,22 @@ Pdef('matrix', Ppar([ Pdef('b02'), Pdef('r02'), Pdef('r00'), Pdef('r01'), Pdef('
 
 Pdef('matrix', Ppar([ Pdef('r01') ]))
 
+~matrix.defsAt('r06').recall(0)
+
+
+~matrix.defsAt('r07').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.4, 1.0) },
+	{ exprand(0.01, 0.05) },
+	0.1
+);
+
+~matrix.defsAt('b06').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(1.0, 2.0) },
+	0.1
+);
 
 
 

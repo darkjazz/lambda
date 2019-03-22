@@ -33,8 +33,8 @@
 	matrix.addPatternSynthDef('r07', (0,2..63), 8, 4,
 		['sokou', 'doudoumba', 'sorsornet', 'cassa'], 2, "r7", 'r07', true);
 
-	matrix.addPatternSynthDef('r08', (0..31), 8, 4,
-	['kpanilogo', 'yole', 'kpanilogo', 'yole'], 2, "r8", 'r00', true);
+	// matrix.addPatternSynthDef('r08', (0..31), 8, 4,
+	// ['kpanilogo', 'yole', 'kpanilogo', 'yole'], 2, "r8", 'r08', true);
 
 	matrix.addPatternBufferDef('b00', (0..63), 8, 4,
 		['kpanilogo', 'yole', 'diansa', 'kokou', 'kakilambe', 'soli', 'mandiani'],

@@ -33,7 +33,7 @@ SynthDef(\bit02, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 	)
 }).add;
 
-SynthDef(\bitSt0, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
+SynthDef(\bitSt0, {|out, efx, amp, emp, buf, dur, rate=0.5, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(
 		PitchShift.ar(
