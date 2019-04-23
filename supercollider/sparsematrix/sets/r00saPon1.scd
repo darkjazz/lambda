@@ -1,6 +1,5 @@
 (~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['r00', 'r08', 'b02', 'b06', 'b07', 'b08', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
 
-
 e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([1, 2, 3, 4], inf)).initFunc))
 
 
@@ -19,7 +18,7 @@ Server.killAll
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.4, 'iwrp', 2.0, 'ibufscale', 0.25, 'wsz', 0.01, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 2.0, 'ibufscale', 0.25, 'wsz', 0.01, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -56,8 +55,8 @@ s.scope(2)
 
 ~ins.stopRecording
 
-~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(0, ['shift', 1.0, 'rate', 1.0, 'amp', 1.0])
+~ins.startShift(1.0, -0.5, 1.0)
+~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.7])
 
 ~ins.stopShift(0)
 
@@ -99,7 +98,7 @@ Pdef('playsamp').clear
 
 
 (
-~wrpv0 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~ins.recBufs.choose, 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrpv0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~ins.recBufs.first, 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
@@ -112,7 +111,11 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 0.0, 'wamp', 0.1, 'iamp', 0.6, 'ramp', 0.4, 'rate', 0.5, 'freq', 0.25, 'wrp', 0.3)
+(
+~wrpv0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 2.0, 'freq', 1.0, 'wrp', 0.25,
+	'buf', ~ins.recBufs.choose
+)
+)
 
 ~wrpv0.free; Pdef('swrp0').clear
 
@@ -131,8 +134,9 @@ Pdef('swrp1',
 ).play
 )
 
-~wrpv1.set('amp', 0.0, 'wamp', 0.1, 'iamp', 0.8, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'buf', ~ins.recBufs.choose)
-
+(
+~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 2.0, 'buf', ~ins.recBufs.choose)
+)
 
 ~wrpv1.free; Pdef('swrp1').clear
 
@@ -171,15 +175,15 @@ Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01') ]))
 
 ~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.2, 0.7) },
+	{ exprand(0.5, 1.0) },
 	0.1
 );
 
 ~matrix.defsAt('p01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.3, 0.6) },
+	{ exprand(0.5, 2.0) },
 	0.1
 );
 
@@ -189,7 +193,7 @@ Pdef('matrix').clear
 
 
 
-
+s.record
 
 
 s.queryAllNodes

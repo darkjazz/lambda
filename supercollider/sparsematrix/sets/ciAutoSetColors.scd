@@ -26,7 +26,7 @@ Tdef('init', {
 	~activePatterns = Array.with(6);
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.sendBoidPattern(3, 0, 4);
+	~graphics.sendBoidPattern(3, 1, 4);
 	~graphics.setPattern(13, 1, 0.5, 0, 0, 0.2, 0.8, 1.0);
 	~graphics.setPattern(3, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
 	~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
@@ -37,6 +37,9 @@ Tdef('init', {
 ~graphics.setPattern(13, 0, 0.5, 0, 0, 0.2, 0.8, 1.0);
 ~graphics.setPattern(3, 0, 1.0, 1, 1, 0.38, 0.0, 0.3);
 ~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
+
+~graphics.sendBoidPattern(3, 0, 0);
+~graphics.setBoidCam(false, false)
 
 
 

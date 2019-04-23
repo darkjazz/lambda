@@ -80,7 +80,7 @@ send
 ~graphics.setViewpoint(95.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(180.0, 180.0, 180.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(150.0, 130.0, 130.0, 0.0, 0.0, 0.0)
 
 ~graphics.setInterpolation(0, 7)
 
@@ -182,7 +182,7 @@ Tdef('run', {
 
 ~graphics.setPattern(21, 0, 1.0, 0, 0, 1.0, 1.0, 0.0);
 
-~graphics.setPattern(22, 1, 1.0, 1, 1, 0.4, 0.8, 1.0);
+~graphics.setPattern(22, 0, 1.0, 1, 1, 0.4, 0.8, 1.0);
 
 ~graphics.setPattern(23, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
 
