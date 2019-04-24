@@ -47,7 +47,7 @@ void CodePanel::createTexture()
 //	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 //	layout.addLine( title );
 	
-	layout.setFont(Font("Zapfino", 31));
+	layout.setFont(Font("Zapfino", 13));
 	layout.setColor(Color(0.85f, 0.27f, 0.24f ));
 
    /* layout.addLine("------------------------------------------------------------------------------------------------------------------------");
