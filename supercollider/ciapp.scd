@@ -139,21 +139,21 @@ Tdef('run', {
 
 ~graphics.setPattern(0, 0, 1.0, 1, 1, 0.3, 0.6, 1.0);
 
-~graphics.setPattern(1, 0, 1.0, 1, 1, 1.0, 0.1, 0.4);
+~graphics.setPattern(1, 1, 1.0, 1, 1, 1.0, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 0, 0, 0.9, 1.0, 0.9);
 
-~graphics.setPattern(3, 0, 0.7, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(3, 1, 0.7, 1, 1, 0.38, 0.0, 0.3);
 
-~graphics.setPattern(4, 0, 0.1, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(5, 0, 1.0, 1, 0, 1.0, 0.1, 0.4);
 
 ~graphics.setPattern(6, 0, 1.0, 1, 1, 0.7, 0.0, 0.5);
 
-~graphics.setPattern(7, 1, 1.0, 0, 0, 0.9, 0.1, 0.5);
+~graphics.setPattern(7, 0, 1.0, 0, 0, 0.9, 0.1, 0.5);
 
-~graphics.setPattern(8, 1, 1.0, 1, 1, 0.3, 1.0, 0.6);
+~graphics.setPattern(8, 0, 1.0, 1, 1, 0.3, 1.0, 0.6);
 
 ~graphics.setPattern(9, 0, 1.0, 1, 1, 0.1, 0.6, 1.0);
 
@@ -162,7 +162,7 @@ Tdef('run', {
 
 ~graphics.setPattern(11, 0, 1.0, 1, 1, 0.1, 0.8, 1.0);
 
-~graphics.setPattern(12, 0, 1.0, 1, 1, 0.2, 0.4, 0.6);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.2, 0.4, 1.0);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 
@@ -170,15 +170,15 @@ Tdef('run', {
 
 ~graphics.setPattern(15, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(16, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(16, 0, 0.1, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(17, 0, 0.5, 1, 1, 0.4, 0.8, 1.0);
 
-~graphics.setPattern(18, 1, 1.0, 1, 1, 0.2, 0.8, 1.0);
+~graphics.setPattern(18, 1, 1.0, 1, 1, 0.2, 0.8, 0.0);
 
 ~graphics.setPattern(19, 0, 1.0, 1, 1, 0.1, 1.0, 0.4);
 
-~graphics.setPattern(20, 0, 1.0, 0, 0, 1.0, 0.0, 0.5);
+~graphics.setPattern(20, 0, 0.1, 1, 1, 1.0, 0.0, 0.5);
 
 ~graphics.setPattern(21, 0, 1.0, 0, 0, 1.0, 1.0, 0.0);
 
@@ -196,7 +196,7 @@ Tdef('run', {
 
 ~graphics.setPattern(28, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(29, 1, 0.2, 1, 1, 0.0, 1.0, 0.8);
+~graphics.setPattern(29, 1, 0.4, 0, 0, 0.9, 0.0, 0.8);
 
 ~graphics.setPattern(30, 0, 1.0, 1, 1, 0.3, 0.3, 0.3);
 
@@ -209,7 +209,7 @@ Tdef('run', {
 ~graphics.setPattern(34, 0, 0.2, 1, 1, 0.2, 0.4, 1.0);
 
 ~graphics.setPattern(35, 0, 0.6, 1, 1, 0.0, 0.6, 1.0);
-
+0
 ~graphics.setPattern(36, 0, 0.1, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(37, 0, 0.1, 1, 1, 0.1, 0.1, 0.1);
@@ -358,7 +358,7 @@ Tdef('rule').clear
 
 (
 ~graphics.sendGenRule(*
-[ [ 4, 10, 17, 21, 24, 25 ], [ 12, 19, 20, 26 ], 10 ]
+[ [ 4, 6, 9, 13, 20, 23, 24, 25 ], [ 8, 14, 18 ], 23 ]
 );
 )
 
@@ -488,6 +488,9 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 ~graphics.mapCodePanel
 
 ~graphics.unmapCodePanel
+
+
+SparseMatrix
 
 
 Tdef('sendcode', {

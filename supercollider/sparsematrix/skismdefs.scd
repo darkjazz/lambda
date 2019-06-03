@@ -325,7 +325,7 @@ Array.with(
 	)),
 
 	SynthDef(\arhythmicGendy, {|out, in, drB=0.125, amp=0.5, th=0.01, quant=0.25, bps|
-		var sig, trigs, fft, beat, input, sB, pch, ampctr, bfft;
+		var sig, trigs, fft, beat, input, sB, conv, pch, ampctr, bfft;
 		var af, bf, trigB;
 		input = In.ar(in);
 		pch = Tartini.kr(input).first;
@@ -337,7 +337,8 @@ Array.with(
 		sB = GVerb.ar(sB, LFSaw.kr(LFSaw.kr(1).range(0.5, 2)).range(4, 20),
 			Latch.kr(ampctr, trigB)).first;
 		sB = DelayN.ar(CombC.ar(sB, 0.25, 0.25, 1), 0.5, LFSaw.kr(1.5).range(0.0625, 0.5).round(0.0625));
-		bfft = FFT(LocalBuf(1024), Limiter.ar(sB ** 0.7, 1.0) * amp);
+		conv = Convolution.ar(sB, input, 1024);
+		bfft = FFT(LocalBuf(1024), Limiter.ar(conv ** 0.7, 1.0) * amp);
 		bf = Array.fill(4, {
 			IFFT(PV_Diffuser(bfft, trigB))
 		}) * [(3/2).sqrt, 1, 1, 1];
@@ -349,6 +350,28 @@ Array.with(
 			th: ControlSpec(-40.dbamp, -10.dbamp, default: -40.dbamp),
 			quant: ControlSpec(0.0625, 1.0, step: 0.0625, default: 0.25)
 		)
+	)),
+
+	SynthDef(\roosaShift, {|out, in, shift=0.5, del=0.2, dec=10, rate=11, amp=0, ang, xng|
+		var input, fft, sig, bf;
+		input = In.ar(in);
+		fft = FFT(LocalBuf(1024), input);
+		fft = PV_PitchShift(fft, shift);
+		sig = IFFT(fft);
+		sig = PitchShift.ar(sig, 0.1, 1.0 / shift);
+		sig = CombC.ar(sig, 2.0, del * SinOsc.kr(rate).range(0.5, 2.0), dec);
+		fft = FFT(LocalBuf(1024), sig * amp);
+		bf = Array.fill(4, {
+			IFFT(PV_Diffuser(fft, Dust.kr(47)))
+		}) * [(3/2).sqrt, 1, 1, 1];
+		bf = FoaTransform.ar(bf, 'focusX', LFTri.kr(ang).range(-pi/3, pi/3));
+		Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise1.kr(xng).range(pi.neg, pi)));
+	}, metadata: (
+		specs: (
+			ang: ControlSpec(0.25, 2.0, default: 0.5),
+			xng: ControlSpec(0.3, 3.0, default: 0.8)
+		)
 	))
+
 
 )

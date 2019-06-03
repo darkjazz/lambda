@@ -20,27 +20,41 @@ Tdef('init', {
 	~graphics.initGenerations([ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23);
 	1.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 120.0, 0.0, 0.0, 0.0, 0.0);
-	~initMsg.();
+	~graphics.setViewpoint(0.0, 140.0, 0.0, 0.0, 0.0, 0.0);
+	// ~initMsg.();
 	1.wait;
 	~activePatterns = Array.with(6);
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.sendBoidPattern(3, 1, 4);
-	~graphics.setPattern(13, 1, 0.5, 0, 0, 0.2, 0.8, 1.0);
-	~graphics.setPattern(3, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
-	~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
+	// ~graphics.sendBoidPattern(3, 1, 4);
+	~graphics.setPattern(18, 1, 1.0, 1, 1, 0.2, 0.8, 0.0);
+	~graphics.setPattern(29, 1, 0.1, 0, 0, 0.9, 0.0, 0.8);
+	~graphics.setPattern(0, 1, 0.3, 1, 1, 0.3, 0.6, 1.0);
+	~graphics.setPattern(1, 1, 1.0, 1, 1, 1.0, 0.1, 0.4);
+	// ~graphics.setPattern(13, 1, 0.5, 0, 0, 0.2, 0.8, 1.0);
+	// ~graphics.setPattern(3, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
+	// ~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
 	Post << "Initialised..." << Char.nl;
 }).play
 )
 
 ~graphics.setPattern(13, 0, 0.5, 0, 0, 0.2, 0.8, 1.0);
-~graphics.setPattern(3, 0, 1.0, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(3, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
 ~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
 
-~graphics.sendBoidPattern(3, 0, 0);
-~graphics.setBoidCam(false, false)
+~graphics.setPattern(38, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
+
+~graphics.sendBoidPattern(3, 0, 0);
+~graphics.setBoidCam(true, false)
+
+
+~graphics.setPattern(38, 1, 0.2, 0, 0, 1.0, 1.0, 1.0);
+
+
+~rot = Rotation(180.0, 0.0, 180.0, 0.0, 0.0, 0.0, 0.0, 0.01);
+~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+~graphics.rotateCamera
 
 
 Tdef('ciAuto').clear
@@ -59,7 +73,7 @@ Tdef(\sendVector).clear
 (
 ~ruleWeight = 0.1;
 ~changeWeight = 0.1;
-~maxPatterns = 2;
+~maxPatterns = 3;
 ~initWaitTime = 0;
 ~rotWeight = 0.1;
 )
@@ -146,7 +160,9 @@ Tdef(\sendVector).clear
 	[1.0, 1, 1, 0.5, 1.0, 1.0]
 ];
 
-~graphPatterns = (0..39);
+// ~graphPatterns = (0..39);
+
+~graphPatterns = [0, 1, 3, 5, 7, 8, 9, 10, 11, 12, 13, 18, 24, 29];
 
 Tdef('ciAuto', {|mfcc|
 	~initWaitTime.wait;

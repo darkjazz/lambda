@@ -53,7 +53,7 @@ Tdef('init', {
 
 ~sendCode.();
 
-~graphics.hideCodePanel
+~graphics.mapCodePanel
 
 Tdef('ciAuto').clear
 

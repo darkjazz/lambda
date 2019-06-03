@@ -60,6 +60,8 @@ SynthDef('prsine', {|out, efx, freq, amp, dur, rot, til, tum|
 
 )
 
+~rev.set('revamp', 0.02, 'revtime', 5.1)
+
 ~rev.free
 
 

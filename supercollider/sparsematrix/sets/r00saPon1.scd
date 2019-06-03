@@ -14,11 +14,11 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 1.0, 'revamp', 0.4, 'revtime', 5.1)
+~ins.ins[0].set('amp', 1.5, 'revamp', 0.4, 'revtime', 5.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 2.0, 'ibufscale', 0.25, 'wsz', 0.01, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 1.0, 'ibufscale', 1.4, 'wsz', 0.1, 'dns', 6, 'rnd', 0.2, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -36,9 +36,8 @@ Server.killAll
 )
 
 
-
 ~ins.startEfx('granularReverb', 0)
-~ins.setEfx('granularReverb', ['amp', 0.4])
+~ins.setEfx('granularReverb', ['amp', 1.0])
 ~ins.stopEfx('granularReverb')
 
 ~ins.startEfx('feedbackSpectrum', 0)
@@ -56,13 +55,13 @@ s.scope(2)
 ~ins.stopRecording
 
 ~ins.startShift(1.0, -0.5, 1.0)
-~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.7])
+~ins.setShift(0, ['shift', 1.0, 'rate', 1.0, 'amp', 1.0])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(1, ['amp', 1.0, 'shift', 1.0, 'rate', -1.0])
+~ins.setShift(1, ['amp', 1.0, 'shift', 0.5, 'rate', -1.0])
 
 ~ins.stopShift(1)
 
@@ -102,7 +101,7 @@ Pdef('playsamp').clear
 
 Pdef('swrp0',
 	Pbind(
-		\type, \set, \id, ~wrpv0.nodeID, \delta, Pn(0.2, inf),
+		\type, \set, \id, ~wrpv0.nodeID, \delta, Pn(~matrix.beatdur, inf),
 		\rx, Pbrown(-0.5pi, 0.5pi, 0.125pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
@@ -112,7 +111,7 @@ Pdef('swrp0',
 )
 
 (
-~wrpv0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 2.0, 'freq', 1.0, 'wrp', 0.25,
+~wrpv0.set('amp', 1.0, 'wamp', 0.6, 'iamp', 0.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.25,
 	'buf', ~ins.recBufs.choose
 )
 )
@@ -125,7 +124,7 @@ Pdef('swrp0',
 
 Pdef('swrp1',
 	Pbind(
-		\type, \set, \id, ~wrpv1.nodeID, \delta, Pn(0.2, inf),
+		\type, \set, \id, ~wrpv1.nodeID, \delta, Pn(~matrix.beatdur, inf),
 		\rx, Pbrown(-0.5pi, 0.5pi, 0.125pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
@@ -135,7 +134,7 @@ Pdef('swrp1',
 )
 
 (
-~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1.0, 'freq', 2.0, 'buf', ~ins.recBufs.choose)
+~wrpv1.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125, 'buf', ~ins.recBufs.choose)
 )
 
 ~wrpv1.free; Pdef('swrp1').clear
@@ -145,7 +144,7 @@ s.queryAllNodes
 
 Tdef('warploop', {
 	loop({
-		~wrp1.set('amp', 0.6, 'wamp', 0.9, 'iamp', 0.5, 'ramp', 0.7, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		~wrpv1.set('amp', 1.0, 'wamp', 0.1, 'iamp', 0.2, 'ramp', 0.2, 'rate', 0.25, 'freq', 2.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
 		rrand(3, 8).wait
 	})
 }).play

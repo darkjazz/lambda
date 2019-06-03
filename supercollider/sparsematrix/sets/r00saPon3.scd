@@ -14,13 +14,15 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 0.0, 'revamp', 0.4, 'revtime', 5.1)
+~ins.ins[0].set('amp', 1.0, 'revamp', 0.4, 'revtime', 5.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 1.0, 'iwrp', 2.0, 'ibufscale', 0.25, 'wsz', 1.0, 'dns', 1, 'rnd', 0.2, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 1.0, 'iwrp', 2.0, 'ibufscale', 1.0, 'wsz', 1.0, 'dns', 4, 'rnd', 0.2, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
+
+~matrix.setBPM(67.0)
 
 
 ~matrix.addPatternSynthDef('r00', (0..31), 8, 4,
@@ -92,8 +94,8 @@ s.scope(2)
 )
 
 
-~matrix.defsAt('b10').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+~matrix.defsAt('r00').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.6, 1.0) },
 	{ exprand(0.03, 0.1) },
 	0.1
@@ -118,10 +120,10 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([2.0, 4.0, 1.0, -1.0, -2.0], inf),
+		'out', ~decoder.bus, 'rate', Prand([0.5, 1.0, 1.0, -0.5, -0.25], inf),
 		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(1.0, 2.0),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
-		'delta', Pfunc({|ev| ev.buffer.duration * ev.rate.abs.reciprocal })
+		'delta', Prand([ 0.25, 0.5, 1.0, 2.0] * ~matrix.beatdur, inf)
 	)
 ).play
 )
@@ -137,8 +139,8 @@ Pdef('playsamp').clear
 
 Pdef('swrp0',
 	Pbind(
-		\type, \set, \id, ~wrpv0.nodeID, \delta, Pn(0.2, inf),
-		\rx, Pbrown(-0.5pi, 0.5pi, 0.125pi, inf),
+		\type, \set, \id, ~wrpv0.nodeID, \delta, Pn(~matrix.beatdur/4, inf),
+		\rx, Pwhite(-pi, pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
 		\args, #[rx, ry, rz]
@@ -146,7 +148,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 0.0, 'wamp', 0.1, 'iamp', 0.6, 'ramp', 0.4, 'rate', 0.5, 'freq', 0.5, 'wrp', 0.3)
+~wrpv0.set('amp', 1.0, 'wamp', 0.1, 'iamp', 0.6, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.125, 'wrp', 0.125)
 
 ~wrpv0.free; Pdef('swrp0').clear
 
@@ -205,15 +207,15 @@ Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01') ]))
 
 ~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.3, 1.0) },
+	{ exprand(0.2, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('p01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 

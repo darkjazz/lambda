@@ -22,7 +22,7 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 2.0, 'revamp', 0.7, 'revtime', 10.1)
+~ins.ins[0].set('amp', 1.5, 'revamp', 0.5, 'revtime', 10.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
@@ -179,7 +179,7 @@ s.stopRecording
 Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r00'), Pdef('b07'), Pdef('b02'), Pdef('b06'), Pdef('p00'), Pdef('p01'), Pdef('b11'), Pdef('b12') ]))
 
 
-Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01') ]))
+Pdef('matrix', Ppar( [Pdef('r00'), Pdef('b06'),  Pdef('b11'), Pdef('b12'), Pdef('p00'), Pdef('p01') ]))
 
 ~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
