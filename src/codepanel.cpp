@@ -33,7 +33,7 @@ CodePanel::CodePanel()
 {
 	show = false;
 	opacity	= 0.0f;
-    max_opacity = 0.8f;
+    max_opacity = 1.0f;
 	fadeTime = 150;
 	maxLines = 19;
 	counter = 0;
@@ -47,8 +47,8 @@ void CodePanel::createTexture()
 //	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 //	layout.addLine( title );
 	
-	layout.setFont(Font("Zapfino", 13));
-	layout.setColor(Color(0.85f, 0.27f, 0.24f ));
+	layout.setFont(Font("Inconsolata", 10));
+	layout.setColor(Color(0.21f, 0.75f, 0.85f ));
 
    /* layout.addLine("------------------------------------------------------------------------------------------------------------------------");
 	*/
