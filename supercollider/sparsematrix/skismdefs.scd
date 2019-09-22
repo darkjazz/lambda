@@ -81,35 +81,35 @@ Array.with(
 		)
 	)),
 
-/*	SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp=0.1, fs=0.5, wz=0.1, dns=4, rnd=0, lpf=8000.0, amp=0.2, lim=0.5, ang, xng, bps|
-		var sig, n=4, dels, af, bf;
-		var src = In.ar(in);
-		dels = Array.series(n, 0, 0.25);
-		sig = FitzHughNagumo.ar(Impulse.kr(bps), src.abs.round(0.05), ry, b0, b1);
-		af = Array.fill(n, {|i|
-			DelayN.ar(
-				WarpIn.ar(sig ** Amplitude.kr(src), LocalBuf(SampleRate.ir/4), wrp, fs, wz, -1, dns, rnd, 0.1, 1, 0), 1.0, dels[i]);
-		}) + sig;
-		af = Limiter.ar(LPF.ar(af.distort, lpf) * amp, lim);
-		bf = FoaEncode.ar(af, FoaEncoderMatrix.newAtoB);
-		bf = FoaTransform.ar(bf, 'pushX', SinOsc.kr(ang).range(-pi/3, pi/3));
-		Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise0.kr(xng).range(pi.neg, pi)));
+	/*	SynthDef(\neuralFilter, {|out, in, reset=1, rx=0.05, ry=0.1, b0=1.0, b1=1.0, wrp=0.1, fs=0.5, wz=0.1, dns=4, rnd=0, lpf=8000.0, amp=0.2, lim=0.5, ang, xng, bps|
+	var sig, n=4, dels, af, bf;
+	var src = In.ar(in);
+	dels = Array.series(n, 0, 0.25);
+	sig = FitzHughNagumo.ar(Impulse.kr(bps), src.abs.round(0.05), ry, b0, b1);
+	af = Array.fill(n, {|i|
+	DelayN.ar(
+	WarpIn.ar(sig ** Amplitude.kr(src), LocalBuf(SampleRate.ir/4), wrp, fs, wz, -1, dns, rnd, 0.1, 1, 0), 1.0, dels[i]);
+	}) + sig;
+	af = Limiter.ar(LPF.ar(af.distort, lpf) * amp, lim);
+	bf = FoaEncode.ar(af, FoaEncoderMatrix.newAtoB);
+	bf = FoaTransform.ar(bf, 'pushX', SinOsc.kr(ang).range(-pi/3, pi/3));
+	Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise0.kr(xng).range(pi.neg, pi)));
 	}, metadata: (
-		specs: (
-			reset: ControlSpec(0.5, 8.0, step: 0.5, default: 1.0),
-			rx: ControlSpec(0.01, 1.0, default: 0.05),
-			ry: ControlSpec(0.01, 1.0, default: 0.1),
-			b0: ControlSpec(1.0, 1.0, default: 1.0),
-			b1: ControlSpec(1.0, 1.0, default: 1.0),
-			wrp: ControlSpec(0.01, 1.0, default: 0.1),
-			fs: ControlSpec(0.25, 1.0, default: 0.5),
-			wz: ControlSpec(0.01, 0.2, default: 0.1),
-			dns: ControlSpec(1, 8, default: 4),
-			rnd: ControlSpec(0, 0.1, default: 0),
-			lpf: ControlSpec(200.0, 10000.0, \exp, default: 8000.0),
-			ang: ControlSpec(0.4, 2.0, default: 0.9),
-			xng: ControlSpec(0.5, 4.0, default: 1.6)
-		)
+	specs: (
+	reset: ControlSpec(0.5, 8.0, step: 0.5, default: 1.0),
+	rx: ControlSpec(0.01, 1.0, default: 0.05),
+	ry: ControlSpec(0.01, 1.0, default: 0.1),
+	b0: ControlSpec(1.0, 1.0, default: 1.0),
+	b1: ControlSpec(1.0, 1.0, default: 1.0),
+	wrp: ControlSpec(0.01, 1.0, default: 0.1),
+	fs: ControlSpec(0.25, 1.0, default: 0.5),
+	wz: ControlSpec(0.01, 0.2, default: 0.1),
+	dns: ControlSpec(1, 8, default: 4),
+	rnd: ControlSpec(0, 0.1, default: 0),
+	lpf: ControlSpec(200.0, 10000.0, \exp, default: 8000.0),
+	ang: ControlSpec(0.4, 2.0, default: 0.9),
+	xng: ControlSpec(0.5, 4.0, default: 1.6)
+	)
 	)),*/
 
 	SynthDef(\feedbackSpectrum, {|out, in, iroom=100, rev=6, dry=1, ear=0.7, tail=0.1, mrph=0.5, amp=0.5, fdba=0.3, th=0.2, lim=0.5, ang, xng, bps|
@@ -176,7 +176,7 @@ Array.with(
 		sig = Mix.fill(n, {|i|
 			Warp1.ar(1, bufs[i], ptrs[i], frqs[i], wsz, grainEnvBuf, dns, rnd) ** 0.5
 			// + PlayBuf.ar(1, bufs[i], 2.0, Impulse.kr(3), 0)
-				* EnvGen.kr(Env([0,1,1,0],[0.33,0.33,0.33],\sine,0,3), trgs.rotate(-1)[i], timeScale: 1/iwrp);
+			* EnvGen.kr(Env([0,1,1,0],[0.33,0.33,0.33],\sine,0,3), trgs.rotate(-1)[i], timeScale: 1/iwrp);
 		}) * Amplitude.kr(src).expexp(0.001, 1.0, 0.5, 1.0).round(0.1);
 		fft = FFT(LocalBuf(1024), sig * amp);
 		bf = Array.fill(4, {
@@ -268,7 +268,7 @@ Array.with(
 				TRand.kr(pi**5, (pi**5)*(2**(89/17)), trig).round(2**(1/17)),�
 				0.2,�
 				25 * LFNoise1.ar(4).range(0, 1)�
-			).fold(-1, 1)) * ampctr.linlin(0, 1, 0.1, 0.6);
+		).fold(-1, 1)) * ampctr.linlin(0, 1, 0.1, 0.6);
 		sig = Mix(sig + GVerb.ar(sig, 100, 20, 0.9, 0.9, 5, 0, 0.05, 0.05));
 		sig = Mix(sig) * BinaryOpUGen('==', CheckBadValues.kr(sig, 0, 0), 0);
 		af = Array.fill(4, {|i|
@@ -333,7 +333,7 @@ Array.with(
 		ampctr = Lag.kr(Amplitude.kr(input), 0.25);
 		trigB = Trig.kr(Onsets.kr(fft, th), 1/bps);
 		sB = Gendy3.ar(2, 5, 0.5, 0.5, pch, 0.25, 0.25, 21, 21)
-			* EnvGen.kr(Env([1, 1, 0], [0.25, 0.75], \sine), trigB, timeScale: drB);
+		* EnvGen.kr(Env([1, 1, 0], [0.25, 0.75], \sine), trigB, timeScale: drB);
 		sB = GVerb.ar(sB, LFSaw.kr(LFSaw.kr(1).range(0.5, 2)).range(4, 20),
 			Latch.kr(ampctr, trigB)).first;
 		sB = DelayN.ar(CombC.ar(sB, 0.25, 0.25, 1), 0.5, LFSaw.kr(1.5).range(0.0625, 0.5).round(0.0625));
@@ -371,7 +371,31 @@ Array.with(
 			ang: ControlSpec(0.25, 2.0, default: 0.5),
 			xng: ControlSpec(0.3, 3.0, default: 0.8)
 		)
+	)),
+
+	SynthDef(\primeTam, {|out, in, amp=0, prob=0.5, del=0.7, dec=13, xang, yang, zang|
+		var src, sig, trg, freqs, bwr, bf;
+		freqs = Array.primeSeries(23, 101, 7);
+		bwr = Array.geom(freqs.size, 2, 1.1);
+		src = In.ar(in) * amp;
+		trg = Onsets.kr(FFT(LocalBuf(1024), src), 0.1);
+		sig = Mix.fill(freqs.size, {|i|
+			Resonz.ar(src, freqs[i], bwr[i] / freqs[i], bwr.maxItem - bwr[i] + 3.0)
+		});
+		sig = sig + PitchShift.ar(
+			CombC.ar(sig, 1.0, LFNoise0.kr(del).range(0.5, 2.0), SinOsc.kr(dec).range(5.0, 20.0)),
+			0.05, Select.kr(TIRand.kr(0, 2, trg), [4.0, 2.0, 1.0, 0.5, 0.25]), 0.2, 0.2);
+		sig = (sig + Disintegrator.ar(sig, prob));
+		bf = FoaEncode.ar(sig, FoaEncoderMatrix.newDirection);
+		Out.ar(out, FoaTransform.ar(bf, 'rtt',
+			LFNoise2.kr(xang).range(-pi, pi),
+			LFNoise2.kr(yang).range(-pi, pi),
+			LFNoise2.kr(zang).range(-pi, pi)))
+	}, metadata: (
+		specs: (
+			xang: ControlSpec(0.25, 4.0, default: 0.5),
+			yang: ControlSpec(0.25, 4.0, default: 0.8),
+			zang: ControlSpec(0.25, 4.0, default: 0.8)
+		)
 	))
-
-
 )

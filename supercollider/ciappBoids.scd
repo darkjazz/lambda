@@ -24,7 +24,7 @@
 
 ~graphics.setViewpoint(0.0,0.0,-180.0, 0.0, 0.0, 0.0)
 
-~graphics.setSwarm(0.8, 10.0, 20.0, 10.0, 100.0)
+~graphics.setSwarm(0.7, 20.0, 20.0, 10.0, 100.0)
 
 ~graphics.killSwarm
 

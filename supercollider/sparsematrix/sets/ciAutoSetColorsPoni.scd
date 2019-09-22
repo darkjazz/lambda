@@ -30,7 +30,7 @@
 	}).play;
 };
 Tdef('init', {
-	~graphics = CinderApp(800, 800, mode: 1, path: ~path);
+	~graphics = CinderApp(1000, 800, mode: 1, path: ~path);
 	~graphics.open;
 	3.wait;
 	~graphics.initWorld(~wrldsz, ~wrldsz, ~wrldsz, 20);
@@ -44,8 +44,8 @@ Tdef('init', {
 	~activePatterns = Array();
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.setPattern(38, 1, 0.0, 0, 0, 1.0, 1.0, 1.0);
-	~graphics.fadeInPattern(38, 240, 1.0);
+	~graphics.setPattern(38, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
+	// ~graphics.fadeInPattern(38, 240, 1.0);
 	~graphics.sendCodeTitle("roosa poni");
 	Post << "Initialised..." << Char.nl;
 }).play

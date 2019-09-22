@@ -1,4 +1,4 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsAppendLnx.scd", initPdefs: ['r01', 'r02', 'b02', 'b06', 'b07', 'b08', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'binaural', 'localDecoder': false, bpm: 143, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsMix.scd", initPdefs: ['b02', 'b03', 'b04', 'b05', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'd00', 'd01', 'd02', 'd03', 'd04', 'd05', 'd06', 'd07'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings))
 
@@ -6,11 +6,54 @@ Server.killAll
 
 s.record
 
+s.stopRecording
+
+s.scope(4)
+
+~gesbufs.size
 
 (
-~gespaths = (Paths.soundDir +/+ "evolver/wrp/*").pathMatch;
+~gespaths = (Paths.soundDir +/+ "evolver/perc/*").pathMatch;
 ~gesbufs = GESBufferLoader(~gespaths);
+// ~drnbufs = "/Users/alo/snd/drn/choir/*.wav".pathMatch.collect({|path|
+// 	Buffer.read(s, path, 0, ~matrix.beatdur * 4 * 44100);
+// });
 )
+
+CouchD
+
+~drnbufs1 = "/Users/alo/snd/drn/fatou/*.wav".pathMatch.collect({|path|
+	Buffer.read(s, path, 0, ~matrix.beatdur * 4 * 44100);
+});
+
+
+(
+~selected = ~drnbufs.select({|buf| buf.duration > 1.0 });
+~avgdur = ~matrix.beatdur * 16;
+Tdef('drone', {
+	loop({
+		~args = [
+			'out', ~matrix.decoder.bus, 'buf', ~selected.choose,
+			'wrp', rrand(0.33, 1.0),
+			'freq', [0.5, 1.0, 2.0].choose, 'wsize', rrand(0.05, 0.4),
+			'dens', rrand(7, 15), 'randr', rrand(0.01, 0.2),
+			'room', rrand(20, 300), 'rtime', rrand(2.0, 10.0),
+			'ramp', rrand(0.3, 1.0), 'eamp', rrand(0.5, 1.0),
+			'wamp', rrand(0.2, 0.7), 'dur', ~avgdur * rrand(1.0, 4.0),
+			'rx', rrand(0.01, 0.3), 'ry', rrand(0.01, 0.3), 'rz', rrand(0.01, 0.3),
+			'rng', 1
+		];
+		Synth.before(~matrix.decoder.synth, 'wrpdrn', ~args);
+		([0.5, 0.75, 1.0].choose * ~avgdur).wait;
+	})
+}).play
+
+)
+
+
+Tdef('drone').clear
+
+
 
 ~gesbufs.size
 
@@ -18,15 +61,16 @@ s.scope(2)
 
 s.queryAllNodes
 
-~matrix.setBPM(143)
+~matrix.setBPM(127)
 
 (
-~freqs = Array.twinPrimes(47, 1001).select({|it, i| it.odd });
+// ~freqs.size = Array.twinPrimes(47, 1001).select({|it, i| it.odd });
+~freqs = Array.primeSeries(58, 47, 5);
 ~ranges = ~freqs.clump((~freqs.size/3).floor);
 
 SynthDef('prsine', {|out, efx, freq, amp, dur, ang|
 	var sig, bf;
-	sig = SinOsc.ar([freq, freq + 2]) *
+	sig = SinOsc.ar(freq, 0, 0.5) + Resonz.ar(Dust.ar(1011), freq, 10 / freq, 500) *
 	EnvGen.kr(Env.perc, timeScale: dur, doneAction: 2);
 	bf = FoaEncode.ar(Mix(sig), FoaEncoderMatrix.newDirection);
 	bf = FoaRotate.ar(bf, ang);
@@ -55,21 +99,23 @@ SynthDef('prsine', {|out, efx, freq, amp, dur, ang|
 
 (
 ~matrix.onsetFunc_({
-	if (0.4.coin) {
-		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebuss, 'freq', ~ranges[0].choose, 'amp', 0.3.rand, 'dur', 0.3, 'ang', rrand(-pi, pi)]);
-	};
-	if (0.5.coin) {
-		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebus, 'freq', ~ranges[1].choose, 'amp', 0.2.rand, 'dur', 0.2, 'ang', rrand(-pi, pi)]);
+	if (0.3.coin) {
+		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebuss, 'freq', ~ranges[0].choose, 'amp', 0.6.rand, 'dur', 0.3, 'ang', rrand(-pi, pi)]);
 	};
 	if (0.1.coin) {
-		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebuss, 'freq', ~ranges[2].choose, 'amp', 0.3.rand, 'dur', 0.1, 'ang', rrand(-pi, pi)]);
+		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebus, 'freq', ~ranges[1].choose, 'amp', 0.4.rand, 'dur', 0.2, 'ang', rrand(-pi, pi)]);
+	};
+	if (0.3.coin) {
+		Synth.before(~rev, 'prsine', ['out', ~decoder.bus, 'efx', ~sinebuss, 'freq', ~ranges[2].choose, 'amp', 0.5.rand, 'dur', 0.1, 'ang', rrand(-pi, pi)]);
 	};
 });
 )
 
 ~matrix.onsetFunc_({})
-self.knn_score = self.knn.score(self.trans.transform(X_ts), y_ts)
-s.sendMsg("/n_free", 1011)
+
+s.queryAllNodes
+
+s.sendMsg("/n_free", 83645)
 
 
 // 73, 74, 75, 76, 77
@@ -77,20 +123,21 @@ s.sendMsg("/n_free", 1011)
 // 19 hih
 
 (
-~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[17], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[110], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
-		\type, \set, \id, ~wrp0.nodeID, \delta, Pn(~matrix.beatdur * 16, inf),
+		\type, \set, \id, ~wrp0.nodeID, \delta, Pn(~matrix.beatdur * 4, inf),
 		\rx, Pwhite(-pi, pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
+		\ramp, Pseq([0.0, 0.4, 0.0, 0.8, 0.0, 0.6], inf),
 		\args, #[rx, ry, rz]
 	)
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.7, 'ramp', 0.8, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.1, 'ramp', 0.4, 'rate', 1.0, 'freq', 0.6, 'wrp', 0.1)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -98,44 +145,49 @@ s.scope(2)
 
 s.stopRecording
 
-// 16 cool melody
+// 145 of perc i know you are not going to remember but if you ever want to be bathed in bass again
+
 (
-~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[10], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[117], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp1',
 	Pbind(
-		\type, \set, \id, ~wrp1.nodeID, \delta, Pn(~matrix.beatdur, inf),
+		\type, \set, \id, ~wrp1.nodeID, \delta, Pn(~matrix.beatdur * 4, inf),
 		\rx, Pwhite(-pi, pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
 		\freq, Prand([0.5, 0.7, 1.4, 1.0, 2.0], inf),
 		\rate, Pseq([0.25, 0.125, 0.5], inf),
-		\args, #[rx, ry, rz, freq]
+		\iamp, Pseq([1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0] * 0.7, inf),
+		\ramp, Pseq([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0] * 0.8, inf),
+		\args, #[rx, ry, rz, freq, rate]
 	)
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.6, 'ramp', 1.0, 'rate', 0.25, 'freq', 1.0, 'wrp', 0.125)
+~wrp1.set('amp', 1.0, 'wamp', 0.01, 'iamp', 0.01, 'ramp', 0.02, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrp1.free; Pdef('swrp1').clear
 
-
+s.queryAllNodes
 
 (
-~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[11], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[23], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp2',
 	Pbind(
-		\type, \set, \id, ~wrp2.nodeID, \delta, Pn(~matrix.beatdur, inf),
+		\type, \set, \id, ~wrp2.nodeID, \delta, Pn(~matrix.beatdur / 4, inf),
 		\rx, Pwhite(-0.5pi, 0.5pi, inf),
 		\ry, Pbrown(0, 2pi, 2pi/16, inf),
 		\rz, Pbrown(0, 2pi, 2pi/16, inf),
-		\args, #[rx, ry, rz]
+		\rate, Prand(Array.geom(5, 0.125, 2**(1/5)), inf),
+		\wrp, Prand(Array.geom(7, 0.125, 2**(1/3.5)), inf),
+		\args, #[rx, ry, rz, rate, wrp]
 	)
 ).play
 )
 
-~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.9, 'ramp', 0.6, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
+~wrp2.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.4, 'ramp', 0.6, 'rate', 1.0, 'freq', 4.0, 'wrp', 0.125)
 
 ~wrp2.free; Pdef('swrp2').clear
 
@@ -144,13 +196,15 @@ Pdef('swrp2',
 // 10 & 24 & 15
 // 27, 30, 35, 39, 40, 44
 
+
+
 (
-~ind = 9;
+~ind = 46;
 ~wrp3 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[~ind], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp3',
 	Pbind(
-		\type, \set, \id, ~wrp3.nodeID, \delta, Pn(~matrix.beatdur * 17, inf),
+		\type, \set, \id, ~wrp3.nodeID, \delta, Pn(~matrix.beatdur/4, inf),
 		\rx, Pwhite(-0.5pi, 0.5pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
@@ -160,23 +214,27 @@ Pdef('swrp3',
 
 )
 
-~wrp3.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.3, 'ramp', 0.0, 'rate', 0.25, 'freq', 0.5, 'wrp', 0.5)
+~wrp3.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.1, 'ramp', 0.2, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrp3.free; Pdef('swrp3').clear
 
 s.queryAllNodes
 
 
-Pdef('matrix', Ppar([ Pdef('b02'), Pdef('r02'), Pdef('r00'), Pdef('r01'), Pdef('b04'), Pdef('b07'), Pdef('b08'), Pdef('b13'), Pdef('b10'), Pdef('b11') ]))
+Pdef('matrix', Ppar([ Pdef('b02'), Pdef('b03'), Pdef('b04'), Pdef('b05'), Pdef('b07'), Pdef('b08'), Pdef('b09'), Pdef('b10'), Pdef('b11'), Pdef('b12'), Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('d10'), Pdef('d11'), Pdef('d12'), Pdef('d13'), Pdef('p01') ]))
 
 
-Pdef('matrix', Ppar([  Pdef('r00') ]))
+Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('b10'), Pdef('b11')  ]))
+
+
+['b02', 'b03', 'b04', 'b05', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'd00', 'd01', 'd02', 'd03', 'd10', 'd11', 'd12', 'd13']
 
 
 
 
-~matrix.defsAt('b00').setActives(nil, { rrand(0.1, 0.01) });
-~matrix.defsAt('b01').setActives(nil, { rrand(0.1, 0.01) });
+
+~matrix.defsAt('b03').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b05').setActives(nil, { rrand(0.1, 0.01) });
 ~matrix.defsAt('b09').setActives(nil, { rrand(0.1, 0.01) });
 
 
@@ -188,19 +246,78 @@ Pdef('matrix', Ppar([  Pdef('r00') ]))
 
 
 
+~matrix.defsAt('b08').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('d00').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('b03').recall(0);
+~matrix.defsAt('b09').recall(0);
+
+~matrix.defsAt('b05').recall(0);
+
+
+
 
 (
-~matrix.defsAt('b12').setControls(
-	{ [0, 1].wchoose([0.6, 0.4]) },
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.3, 0.7) },
+	{ exprand(0.2, 0.6) },
+	0.1
+);
+
+
+~matrix.defsAt('b05').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.3, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('b09').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
-	{ exprand(0.01, 0.2) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+)
+
+~matrix.set(['dur'], ['b03', 'b09', 'b05'], 0.1)
+~matrix.undo(['b03', 'b05', 'b09'])
+
+~matrix.kill(['b03', 'b05', 'b09'])
+
+~matrix.defsAt('b03').setActives({rrand(0.4, 1.0)});
+
+~matrix.defsAt('b05').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b09').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('b05').recall(0);
+~matrix.defsAt('b09').recall(0);
+
+
+
+(
+~matrix.defsAt('b10').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.4) },
 	0.1
 );
 
 ~matrix.defsAt('b11').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.4, 1.0) },
-	{ exprand(0.2, 0.4) },
+	{ exprand(0.8, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('b12').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.8, 1.0) },
+	{ exprand(0.1, 0.4) },
 	0.1
 );
 
@@ -209,9 +326,167 @@ Pdef('matrix', Ppar([  Pdef('r00') ]))
 
 
 
-~matrix.defsAt('b06').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+~matrix.defsAt('b10').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b11').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b12').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('b10').recall(0);
+~matrix.defsAt('b11').recall(0);
+~matrix.defsAt('b12').recall(0);
+
+
+
+~matrix.set(['dur'], ['b11'], 1.5)
+~matrix.undo(['b03', 'b05', 'b09'])
+
+
+(
+~matrix.defsAt('b07').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.06, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('b08').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+)
+
+~matrix.defsAt('b02').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b08').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('b07').recall(0);
+~matrix.defsAt('b08').recall(0);
+
+
+
+
+~matrix.defsAt('b04').recall(0);
+
+
+~matrix.defsAt('b04').ctrls.select({|ctrl| ctrl.active.booleanValue  })
+
+
+(
+~matrix.defsAt('b04').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.3, 0.5) },
+	{ exprand(2.0, 4.0) },
+	0.1
+);
+
+~matrix.defsAt('b02').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.4, 0.8) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+)
+
+
+~matrix.defsAt('b10').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('b11').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('b11').recall(0);
+~matrix.defsAt('b10').recall(0);
+
+
+
+(
+~matrix.defsAt('d00').setControls(
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(0.3, 0.7) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('d01').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.6, 1.0) },
+	{ exprand(0.1, 0.2) },
+	0.1
+);
+
+)
+
+~matrix.defsAt('d00').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('d01').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('d00').recall(0);
+~matrix.defsAt('d01').recall(0);
+
+
+
+
+
+
+(
+~matrix.defsAt('d02').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+~matrix.defsAt('d03').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.4, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+)
+
+~matrix.defsAt('d02').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('d03').setActives(nil, { rrand(0.1, 0.01) });
+
+
+~matrix.defsAt('d02').recall(2);
+~matrix.defsAt('d11').recall(0);
+
+~matrix.defsAt('d12').recall(0);
+~matrix.defsAt('d13').recall(0);
+
+
+
+(
+~matrix.defsAt('d04').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.2) },
+	0.1
+);
+
+~matrix.defsAt('d05').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.07, 0.2) },
+	0.1
+);
+)
+
+~matrix.defsAt('d12').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('d13').setActives(nil, { rrand(0.1, 0.01) });
+
+
+
+
+
+~matrix.defsAt('b0
+
+	6').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ exprand(0.3, 0.8) },
 	{ exprand(2.0, 4.0) },
 	0.1
 );
@@ -305,39 +580,43 @@ Tdef('check', {
 
 
 
-~matrix.defsAt('b10').recall(0);
-
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 0.25, 'freq', 1.0, 'wrp', 0.125);
-~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 0.5, 'freq', 0.5, 'wrp', 0.125)
+~matrix.defsAt('d02').recall(0);
 
 
-~matrix.defsAt('b06').setControls(
+
+(
+
+~matrix.defsAt('d00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 0.4) },
-	{ exprand(2.0, 4.0) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.07, 0.2) },
 	0.1
 );
 
-~matrix.defsAt('b10').setControls(
+~matrix.defsAt('d01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 1.0) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.6, 1.0) },
+	{ exprand(0.07, 0.2) },
 	0.1
 );
 
-~matrix.defsAt('b11').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ exprand(0.3, 1.0) },
+~matrix.defsAt('d02').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.6, 1.0) },
 	{ exprand(0.05, 0.3) },
 	0.1
 );
 
-~matrix.defsAt('b12').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('d03').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.4, 1.0) },
-	{ exprand(0.05, 0.1) },
+	{ exprand(0.05, 0.2) },
 	0.1
 );
+
+)
+
+
 
 
 (
@@ -412,16 +691,16 @@ Tdef('check', {
 
 
 
-~matrix.defsAt('b08').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.8, 1.0) },
-	{ exprand(0.1, 0.3) },
+~matrix.defsAt('b06').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.1, 0.5) },
+	{ exprand(3.0, 6.0) },
 	0.1
 );
 
 
 ~matrix.defsAt('b07').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 0.7) },
 	{ exprand(0.1, 0.2) },
 	0.1
@@ -429,14 +708,14 @@ Tdef('check', {
 
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
-	{ exprand(0.7, 1.0) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.2, 1.0) },
 	{ exprand(0.02, 0.2) },
 	0.1
 );
 
 ~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.3, 0.8) },
 	{ exprand(0.3, 0.4) },
 	0.1
@@ -458,14 +737,14 @@ Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.3, 0.6), 'emp', 
 
 
 ~matrix.defsAt('r01').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.1, 0.5) },
 	{ exprand(0.05, 0.1) },
 	0.1
 );
 
 ~matrix.defsAt('b10').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
 	{ exprand(0.1, 0.3) },
 	0.1
@@ -575,28 +854,32 @@ Tdef(\sendVector, {
 
 ['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy']
 
-~matrix.activateSkismSynth('arhythmicGendy')
+~matrix.activateSkismSynth('primeTam')
 
-~matrix.setSkismAmp('arhythmicGendy', 0.7)
+~matrix.setSkismAmp('primeTam', 0.6)
 
-~matrix.deactivateSkismSynth('arhythmicGendy')
-
-
-
-~matrix.activateSkismSynth('cliqSaw')
-
-~matrix.setSkismAmp('cliqSaw', 0.2)
-
-~matrix.deactivateSkismSynth('cliqSaw')
+~matrix.deactivateSkismSynth('primeTam')
 
 
 
-~matrix.activateSkismSynth('cyclicWarp')
+~matrix.activateSkismSynth('latchOnset')
 
-~matrix.setSkismAmp('cyclicWarp', 0.3)
+~matrix.setSkismAmp('latchOnset', 0.0)
 
-~matrix.deactivateSkismSynth('cyclicWarp')
+~matrix.deactivateSkismSynth('latchOnset')
 
+
+
+~matrix.activateSkismSynth('feedbackSpectrum')
+
+~matrix.setSkismAmp('feedbackSpectrum', 0.8)
+
+~matrix.deactivateSkismSynth('feedbackSpectrum')
+
+
+s.queryAllNodes
+
+s.sendMsg("/n_free", 1076)
 
 ~matrix.buffers['evo'].size
 
@@ -611,7 +894,7 @@ SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur|
 
 (
 
-Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.3, 0.5), 'emp', 0.0, 'buf', ~matrix.buffers['evo'][rrand(30, 33)], 'dur', exprand(0.7, 2.0), 'env', [Env.perc, Env.sine].choose] );
+Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.3, 0.7), 'emp', 0.0, 'buf', ~matrix.buffers['evo'][rrand(250, 248)], 'dur', exprand(0.5, 2.0), 'env', [Env.perc, Env.sine].choose] );
 )
 
 (
@@ -661,7 +944,7 @@ Archive.global[\matrix][\presets]
 
 // 30, 42 fuck yeah
 
-~ind0 = 53
+~ind0 = 227
 
 ~player.loadData(~ind0)
 
@@ -677,20 +960,20 @@ s.queryAllNodes
 
 // 271
 
-~ind1 = 193
+~ind1 = 21
 
 ~player.loadData(~ind1)
 
 ~player.play(~ind1, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind1, 0.9)
+~player.set(~ind1, 1.0)
 
 ~player.free(~ind1)
 
 
 // 249 sick!
 
-~ind2 = 185
+~ind2 = 249
 
 ~player.loadData(~ind2)
 
@@ -704,7 +987,7 @@ s.queryAllNodes
 
 //
 
-~ind3 = 230
+~ind3 = 34
 
 ~player.loadData(~ind3)
 

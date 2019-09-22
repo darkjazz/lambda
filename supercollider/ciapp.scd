@@ -4,7 +4,7 @@
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.98);
+~graphics.setAdd(0.02);
 
 ~graphics.resetWorld(8, 8, 8, 4, 4, 4)
 
@@ -66,9 +66,9 @@ send
 ~graphics.setViewpoint(0.0, 100.0, 0.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(0.0, 0.0, -90.0, 0.0, -5.0, 0.0)
+~graphics.setViewpoint(0.0, 90.0, -90.0, 0.0, -15.0, 0.0)
 
-~graphics.setViewpoint(0.0, -105.0, 0.0, 0.0, 0.0, -5.0)
+~graphics.setViewpoint(0.0, 105.0, 0.0, 0.0, 0.0, -5.0)
 
 ~graphics.setViewpoint(-95.0, 0.0, 0.0, 0.0, -5.0, -2.0)
 
@@ -80,7 +80,7 @@ send
 ~graphics.setViewpoint(95.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 
 
-~graphics.setViewpoint(150.0, 130.0, 130.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(130.0, 130.0, 130.0, 0.0, 0.0, 0.0)
 
 ~graphics.setInterpolation(0, 7)
 
@@ -126,7 +126,7 @@ Tdef('run', {
 	~graphics.initGenerations( [ 4, 5, 6, 7, 26 ], [ 3, 6, 7, 11, 12, 13, 18, 23, 24, 25 ], 16 );
 	0.5.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 0.0, -0.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, 0.0, -100.0, 0.0, 0.0, 0.0);
 	~startMessaging.();
 	Post << "Initialised.." << Char.nl;
 }).play
@@ -137,48 +137,48 @@ Tdef('run', {
 
 43**3
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 0.3, 0.6, 1.0);
+~graphics.setPattern(0, 1, 1.0, 1, 1, 0.3, 0.6, 1.0);
 
 ~graphics.setPattern(1, 1, 1.0, 1, 1, 1.0, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 0, 0, 0.9, 1.0, 0.9);
 
-~graphics.setPattern(3, 1, 0.7, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(3, 1, 1.0, 1, 1, 1.0, 0.0, 0.33);
 
-~graphics.setPattern(4, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(4, 0, 0.3, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(5, 0, 1.0, 1, 0, 1.0, 0.1, 0.4);
+~graphics.setPattern(5, 1, 1.0, 0, 0, 1.0, 0.1, 0.4);
 
-~graphics.setPattern(6, 0, 1.0, 1, 1, 0.7, 0.0, 0.5);
+~graphics.setPattern(6, 0, 1.0, 0, 0, 0.0, 0.8, 1.0);
 
-~graphics.setPattern(7, 0, 1.0, 0, 0, 0.9, 0.1, 0.5);
+~graphics.setPattern(7, 1, 1.0, 0, 0, 0.9, 0.1, 0.5);
 
-~graphics.setPattern(8, 0, 1.0, 1, 1, 0.3, 1.0, 0.6);
+~graphics.setPattern(8, 1, 1.0, 1, 1, 1.0, 0.0, 0.6);
 
-~graphics.setPattern(9, 0, 1.0, 1, 1, 0.1, 0.6, 1.0);
+~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
 
 
-~graphics.setPattern(10, 0, 0.3, 1, 1, 0.0, 0.9, 1.0);
+~graphics.setPattern(10, 0, 0.3, 0, 0, 0.0, 0.9, 1.0);
 
-~graphics.setPattern(11, 0, 1.0, 1, 1, 0.1, 0.8, 1.0);
+~graphics.setPattern(11, 0, 1.0, 0, 0, 0.3, 0.0, 1.0);
 
-~graphics.setPattern(12, 1, 1.0, 1, 1, 0.2, 0.4, 1.0);
+~graphics.setPattern(12, 0, 1.0, 1, 1, 0.2, 0.2, 0.5);
 
 ~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 
 ~graphics.setPattern(14, 0, 1.0, 0, 0, 0.0, 0.7, 1.0);
 
-~graphics.setPattern(15, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(15, 0, 1.0, 0, 0, 0.0, 1.0, 1.0);
 
 ~graphics.setPattern(16, 0, 0.1, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(17, 0, 0.5, 1, 1, 0.4, 0.8, 1.0);
+~graphics.setPattern(17, 1, 1.0, 1, 1, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(18, 1, 1.0, 1, 1, 0.2, 0.8, 0.0);
+~graphics.setPattern(18, 0, 1.0, 1, 1, 0.2, 0.8, 0.0);
 
-~graphics.setPattern(19, 0, 1.0, 1, 1, 0.1, 1.0, 0.4);
+~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(20, 0, 0.1, 1, 1, 1.0, 0.0, 0.5);
+~graphics.setPattern(20, 1, 1.0, 1, 1, 1.0, 0.0, 0.5);
 
 ~graphics.setPattern(21, 0, 1.0, 0, 0, 1.0, 1.0, 0.0);
 
@@ -194,17 +194,17 @@ Tdef('run', {
 
 ~graphics.setPattern(27, 0, 0.3, 0, 0, 0.4, 0.7, 0.1);
 
-~graphics.setPattern(28, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+~graphics.setPattern(28, 0, 0.1, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(29, 1, 0.4, 0, 0, 0.9, 0.0, 0.8);
+~graphics.setPattern(29, 0, 0.4, 0, 0, 0.9, 0.0, 0.8);
 
-~graphics.setPattern(30, 0, 1.0, 1, 1, 0.3, 0.3, 0.3);
+~graphics.setPattern(30, 1, 1.0, 1, 1, 0.3, 0.3, 0.3);
 
-~graphics.setPattern(31, 0, 0.4, 1, 1, 1.0, 0.0, 1.0);
+~graphics.setPattern(31, 0, 0.6, 1, 1, 1.0, 0.0, 1.0);
 
 ~graphics.setPattern(32, 0, 0.05, 1, 1, 0.0, 0.04, 0.04);
 
-~graphics.setPattern(33, 0, 0.5, 1, 1, 0.4, 0.0, 0.2);
+~graphics.setPattern(33, 0, 1.0, 1, 1, 0.4, 0.0, 0.2);
 
 ~graphics.setPattern(34, 0, 0.2, 1, 1, 0.2, 0.4, 1.0);
 
@@ -214,10 +214,11 @@ Tdef('run', {
 
 ~graphics.setPattern(37, 0, 0.1, 1, 1, 0.1, 0.1, 0.1);
 
-~graphics.setPattern(38, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(38, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(39, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
+2654.sqrt
 
 
 Tdef(\sendVector, {
@@ -340,7 +341,7 @@ Tdef('rule').clear
 [ [ 4, 22, 23, 24 ], [ 4, 6, 11, 17, 24, 26 ], 7 ]
 [ [ 4, 8 ], [ 3, 13, 14 ], 23 ]
 [ [ 4, 11 ], [ 3, 5, 10, 12, 13, 22, 23, 26 ], 15 ]
-[ [ 4, 10, 14, 15,f 21, 23 ], [ 6, 13, 25, 26 ], 23 ]
+[ [ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23 ]
 [ [ 4, 12, 20 ], [ 8, 10, 20 ], 24 ]
 [ [ 4, 6, 7, 10, 14, 19, 22 ], [ 3, 13, 15, 17, 18, 25, 26 ], 19 ],
 [ [ 4, 22, 24 ], [ 14, 24 ], 24 ]
@@ -358,8 +359,8 @@ Tdef('rule').clear
 
 (
 ~graphics.sendGenRule(*
-[ [ 4, 6, 9, 13, 20, 23, 24, 25 ], [ 8, 14, 18 ], 23 ]
-);
+[ [ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23 ]
+)
 )
 
 37**3

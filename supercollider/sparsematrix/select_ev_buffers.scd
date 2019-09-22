@@ -3,7 +3,7 @@ Server.killAll
 ~base = Paths.soundDir +/+ "evolver";
 
 (
-~gespaths = (~base +/+ "*.aiff").pathMatch.select({|path|
+~gespaths = (~base +/+ "*.aif").pathMatch.select({|path|
 	(~base +/+ "perc/*.aiff").pathMatch.collect({|other|
 		(other.basename == path.basename).binaryValue
 	}).sum == 0
@@ -28,7 +28,7 @@ Server.killAll
 
 ~current = ~buffers[0]
 ~buffers.indexOf(~current) - 1
-~current = ~buffers[527]
+~current = ~buffers[528]
 ~current = ~findCurrent.(~base +/+ "gep_gen000_056_170827_095255.aiff")
 
 SynthDef('loop', {|buf, amp|
@@ -41,6 +41,7 @@ SynthDef('loop', {|buf, amp|
 
 ~synth = Synth('loop', ['buf', ~current, 'amp', 1.0])
 
+~synth.free
 
 ~next.()
 
@@ -65,7 +66,7 @@ SynthDef('loop', {|buf, amp|
 ~select = {
 	var src, dst;
 	src = ~current.path;
-	dst = src.replace("gep_", "wrp/gep_");
+	dst = src.replace("gep_", "perc/gep_");
 	("cp " ++ src ++ " " ++ dst).unixCmd;
 };
 

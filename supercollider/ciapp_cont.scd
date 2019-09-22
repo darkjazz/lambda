@@ -1,4 +1,4 @@
-~graphics = CinderApp(800, 800, mode: 0)
+~graphics = CinderApp(800, 800, mode: 1)
 
 ~graphics.open
 
@@ -6,7 +6,7 @@
 
 ~graphics.initContinuous;
 
-~graphics.setAdd(0.1);
+~graphics.setAdd(0.03);
 
 ~graphics.resetWorld(8, 8, 8, 4, 4, 4)
 
@@ -34,9 +34,9 @@ Tdef(\sendVector).play
 
 
 
-~graphics.setPattern(0, 0, 1.0, 1, 1, 1.0, 0.0, 0.4);
+~graphics.setPattern(0, 1, 1.0, 1, 1, 1.0, 0.0, 0.4);
 
-~graphics.setPattern(1, 0, 1.0, 1, 1, 1.0, 0.1, 0.4);
+~graphics.setPattern(1, 1, 1.0, 1, 1, 1.0, 0.1, 0.4);
 
 ~graphics.setPattern(2, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
@@ -52,7 +52,7 @@ Tdef(\sendVector).play
 
 ~graphics.setPattern(8, 0, 1.0, 0, 1, 0.7, 1.0, 1.0);
 
-~graphics.setPattern(9, 0, 1.0, 0, 1, 0.1, 0.6, 1.0);
+~graphics.setPattern(9, 1, 1.0, 0, 1, 0.1, 0.6, 1.0);
 
 ~graphics.setPattern(10, 0, 0.4, 0, 0, 0.6, 0.9, 1.0);
 
@@ -78,15 +78,15 @@ Tdef(\sendVector).play
 
 ~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 1.0, 0.0);
 
-~graphics.setPattern(22, 0, 1.0, 1, 1, 0.4, 0.8, 1.0);
+~graphics.setPattern(22, 1, 1.0, 1, 1, 0.4, 0.8, 1.0);
 
 ~graphics.setPattern(23, 0, 1.0, 1, 1, 0.9, 0.0, 0.3);
 
-~graphics.setPattern(24, 0, 1.0, 1, 1, 0.5, 0.6, 0.7);§
+~graphics.setPattern(24, 1, 1.0, 1, 1, 0.5, 0.6, 0.7);
 
 ~graphics.setPattern(25, 0, 1.0, 1, 1, 0.8, 0.8, 0.8);
 
-~graphics.setPattern(26, 0, 1.0, 1, 1, 0.3, 0.4, 0.7);
+~graphics.setPattern(26, 0, 0.4, 1, 1, 0.3, 0.4, 0.7);
 
 ~graphics.setPattern(27, 0, 0.3, 1, 1, 0.4, 0.7, 0.1);
 

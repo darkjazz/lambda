@@ -1,11 +1,14 @@
 s.boot
 
+
+
 (
 
 Routine({
-	var file, dur, num, sect = 37, target;
+	var file, dur, num, sect = 13, target;
 	file = Buffer.readChannel(s,
-		"/Users/alo/Music/SuperCollider Recordings/SC_181231_141153.aiff",
+		// "/Users/alo/Music/SuperCollider Recordings/SC_181231_141153.aiff",
+		"/Users/alo/snd/poni/blue_planet.wav",
 		s.sampleRate,
 		channels:[0]
 	);
@@ -24,7 +27,7 @@ Routine({
 			rrand(start, end),
 			buf.numFrames
 		);
-		target = "/Users/alo/dev/snd-play-js/snd/snd_" ++ (i + 1).asString.padLeft(2, "0") ++ ".wav";
+		target = "/Users/alo/snd/drn/poni/c_" ++ (i + 1).asString.padLeft(2, "0") ++ ".wav";
 		buf.write(target, "wav", "int16");
 		s.sync;
 		("Wrote " ++ target).postln;

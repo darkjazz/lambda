@@ -212,6 +212,37 @@ SynthDef('revwrpconv', {|out, rate, start, wrp, freq, wsize, dens, randr,
 	Out.ar(out, LeakDC.ar(bf));
 }).add;
 
+SynthDef('wrpdrn', {|out, wrp, freq, wsize, dens, randr,
+		room, rtime, ramp, eamp, buf, wamp, rx, ry, rz, dur, rng |
+	var input, warpsig, revsig, bf, times;
+	times = ArrayControl.kr('times', 3, 1);
+	warpsig = Warp0.ar(
+		buffer: buf,
+		warpFactor: wrp,
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr,
+		interp: 4,
+		range: rng
+	);
+	revsig = GVerb.ar(warpsig * wamp, room, rtime,
+		drylevel: 0, earlyreflevel: eamp, taillevel: ramp);
+	bf = FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newDirection)
+	+
+	FoaEncode.ar(revsig, FoaEncoderMatrix.newStereo);
+	bf = bf * EnvGen.kr(
+		Env([0.001, 1, 1, 0.001], times, 'exp'),
+		timeScale: dur, doneAction: 2);
+	bf = FoaTransform.ar(bf, 'focus', pi/2);
+	bf = FoaTransform.ar(bf, 'rtt',
+		LFNoise2.kr(rx).range(-pi, pi),
+		LFNoise2.kr(ry).range(-pi, pi),
+		LFNoise2.kr(rz).range(-pi, pi)
+	);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
 /** WRPREVCONV END **/
 
 SynthDef('nested_pm', {|out, efx, amp, emp, dur, lpf=700, az=0, el=0|
