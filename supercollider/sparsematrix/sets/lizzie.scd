@@ -18,7 +18,7 @@ SynthDef('bpm', {
 
 
 
-OSCdef('listen', {|ms|
+OSCdef('listenBPM', {|ms|
 	Post << "Current BPM: " << (ms[3] * 60).round(0.1) << Char.nl;
 	~matrix.setBPM((ms[3] * 60).round(0.1))
 

@@ -1510,9 +1510,9 @@ void GraphicsRenderer::pattern13(int x, int y, int z) {
             glPushMatrix();
             gl::color(red, green, blue, alpha);
 			if (state == 1.0)
-				gl::drawSphere(Vec3f(xL, yB, zF), fragSizeX*0.25, 12);
+				gl::drawSphere(Vec3f(xL, yB, zF), fragSizeX*0.47, 12);
 			else
-				gl::drawSphere(Vec3f(xL, yB, zF), mapState*fragSizeX*0.25, 12);
+				gl::drawSphere(Vec3f(xL, yB, zF), mapState*fragSizeX*0.47, 12);
             glPopMatrix();
             boidShader.unbind();
             mMaps[map].unbind();
@@ -3520,50 +3520,37 @@ void GraphicsRenderer::pattern36(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern37(int x, int y, int z) {
-    if ((x % 3 == 0 || y % 3 == 0 || z % 3 == 0) && state > 0.0)
-    {
-        float cstate;
+    float maxState = 13;
+    if (state < maxState && state > 0.0) {
+        float mapState;
         
-        if (ptrWorld->ruleType() == CONT) {
-            cstate = state;
-        }
-        else {
-            if (state != 0)
-            {
-                cstate = state;
-            }
-            else {
-                cstate = 0.0f;
-            }
-        }
+        mapState = (maxState - currentCell->states[ptrWorld->index()]) * (1 / maxState);
         
         xL = (float)x * fragSizeX + (fragSizeX * 0.5);
         yB = (float)y * fragSizeX + (fragSizeX * 0.5);
         zF = (float)z * fragSizeX + (fragSizeX * 0.5);
         
+        xW = yH = zD = mapf(fragSizeX*mapf(mapState, 0.5, 1.0), 1.0, 4.0);
+        
         xL -= hx;
         yB -= hx;
         zF -= hx;
         
-        cstate = mapf(cstate, 0.5, 1.0);
-        
-        red = patternLib[37].color.r * abs(patternLib[37].colormap - cstate);
-        green = patternLib[37].color.g * abs(patternLib[37].colormap - cstate);
-        blue = patternLib[37].color.b * abs(patternLib[37].colormap - cstate);
-        alpha = patternLib[37].alpha * abs(patternLib[37].alphamap - cstate);
-        
-        xW = yH = zD = fragSizeX * cstate;
+        red = patternLib[37].color.r * abs(patternLib[37].colormap - mapState);
+        green = patternLib[37].color.g * abs(patternLib[37].colormap - mapState);
+        blue = patternLib[37].color.b * abs(patternLib[37].colormap - mapState);
+        alpha = patternLib[37].alpha * abs(patternLib[37].alphamap - mapState);
         
         glDisable( GL_LIGHTING );
         glEnable( GL_TEXTURE_2D );
-        img[3].bind();
+        img[8].bind();
         gl::pushMatrices();
         
         gl::color(red, green, blue, alpha);
-        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );	
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
         
         gl::popMatrices();
-        img[3].unbind();
+        img[8].unbind();
         glDisable( GL_TEXTURE_2D );
         
     }
@@ -3571,54 +3558,58 @@ void GraphicsRenderer::pattern37(int x, int y, int z) {
 }
 
 void GraphicsRenderer::pattern38(int x, int y, int z) {
-    if ((x % 4 == 0 || y % 4 == 0 || z % 4 == 0) && state > 0.0)
-    {
-        float cstate;
-        
-        if (ptrWorld->ruleType() == CONT) {
-            cstate = state;
+    float cstate;
+    
+    if (ptrWorld->ruleType() == CONT) {
+        cstate = state;
+    }
+    else {
+        if (state != 0)
+        {
+            cstate = 1.0 / state;
         }
         else {
-            if (state != 0)
-            {
-                cstate = 1.0 / state;
-            }
-            else {
-                cstate = 0.0f;
-            }
+            cstate = 0.0f;
         }
+    }
+    
+    if (ptrWorld->ruleType() == CONT || cstate != 0.0f) {
         
-        xL = (float)x * fragSizeX + (fragSizeX * 0.5);
-        yB = (float)y * fragSizeX + (fragSizeX * 0.5);
-        zF = (float)z * fragSizeX + (fragSizeX * 0.5);
+        float mapState, maxState;
+        
+        maxState = 4;
+        mapState = (maxState - currentCell->states[ptrWorld->index()]) * (1 / maxState);
+        
+        xL = (float)x * fragSizeX + fragSizeX - (fragSizeX * 0.5);
+        yB = (float)y * fragSizeX + fragSizeX - (fragSizeX * 0.5);
+        zF = (float)z * fragSizeX + fragSizeX - (fragSizeX * 0.5);
+        
+        xW = yH = zD = mapf(fragSizeX * mapState, 0.25f, 0.5f);
         
         xL -= hx;
         yB -= hx;
         zF -= hx;
         
-        cstate = mapf(cstate, 0.5, 2.0);
+        red = patternLib[38].color.r * abs(patternLib[38].colormap - mapState);
+        green = patternLib[38].color.g * abs(patternLib[38].colormap - mapState);
+        blue = patternLib[38].color.b * abs(patternLib[38].colormap - mapState);
+        alpha = patternLib[38].alpha * abs(patternLib[38].alphamap - mapState);
         
-        red = patternLib[38].color.r * abs(patternLib[38].colormap - cstate);
-        green = patternLib[38].color.g * abs(patternLib[38].colormap - cstate);
-        blue = patternLib[38].color.b * abs(patternLib[38].colormap - cstate);
-        alpha = patternLib[38].alpha * abs(patternLib[38].alphamap - cstate);
+        mMaps[5].bindMulti(4);
+        boidShader.bind();
+        boidShader.uniform( "LightPos", Vec3f( getWindowWidth()/2 + 350.0f, getWindowHeight()/2 - 150.0f, 150.0f ) );
+        boidShader.uniform( "EnvMap", 4 );
         
-        xW = yH = zD = fragSizeX * cstate;
-        
-        glDisable( GL_LIGHTING );
-        glEnable( GL_TEXTURE_2D );
-        img[6].bind();
-        gl::pushMatrices();
-        
+        boidShader.uniform( "BaseColor", Vec4f( 0.3f, 0.3f, 0.3f, 0.7f ) );
+        boidShader.uniform( "MixRatio", 0.5f );
+        glPushMatrix();
         gl::color(red, green, blue, alpha);
-        gl::drawCube( Vec3f(xL, yB, zF), Vec3f(xW, yH, zD) );
-        
-        gl::popMatrices();
-        img[6].unbind();
-        glDisable( GL_TEXTURE_2D );
+        gl::drawSphere( Vec3f(xL, yB, zF), xW, 16 );
+        glPopMatrix();
+        boidShader.unbind();
+        mMaps[5].unbind();
         
     }
-	
 }
 
 

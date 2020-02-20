@@ -1,4 +1,4 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'binaural', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsMix.scd", initPdefs: ['b02', 'b03', 'b04', 'b05', 'b07', 'b08', 'b09', 'b10', 'b11', 'b12', 'd00', 'd01', 'd02', 'd03', 'd10', 'd11', 'd12', 'd13'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'quad', 'localDecoder': true, bpm: 113, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsPoni.scd", initPdefs: ['r00', 'r01', 'r02', 'r03', 'b00', 'b01', 'b04', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initFunc))
 
@@ -6,17 +6,18 @@ e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initF
 ['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy', '']
 
 
-SparseMatrix
+FoaDecoder
 
 s.record
-FoaDecoder
+
 s.queryAllNodes
 
 s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 1.0, 'revamp', 0.1, 'revtime', 5.1)
+
+~ins.ins[0].set('amp', 0.0, 'revamp', 0.1, 'revtime', 5.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
@@ -40,6 +41,7 @@ Server.killAll
 )
 
 
+
 ~ins.startEfx('primeTam', 0)
 ~ins.setEfx('primeTam', ['amp', 0.4])
 ~ins.stopEfx('primeTam')
@@ -50,18 +52,18 @@ Server.killAll
 
 
 ~ins.startEfx('granularReverb', 0)
-~ins.setEfx('granularReverb', ['amp', 0.0])
+~ins.setEfx('granularReverb', ['amp', 0.4])
 ~ins.stopEfx('granularReverb')
 
 ~ins.startEfx('feedbackSpectrum', 0)
-~ins.setEfx('feedbackSpectrum', ['amp', 0.3])
+~ins.setEfx('feedbackSpectrum', ['amp', 0.32])
 
 ~ins.setEfx('feedbackSpectrum', ['iroom', 300, 'rev', 10, 'dry', 0, 'ear', 0.7, 'tail', 1.0, 'mrph', 0.5, 'amp', 0.3, 'fdba', 0.1, 'th', 0.1, 'lim', 0.5])
 
 ~ins.stopEfx('feedbackSpectrum')
 
 ~ins.startEfx('cliqSaw', 0)
-~ins.setEfx('cliqSaw', ['amp', 0.4])
+~ins.setEfx('cliqSaw', ['amp', 0.6])
 ~ins.stopEfx('cliqSaw')
 
 ~ins.startEfx('fxGrain', 0)
@@ -84,13 +86,13 @@ s.scope(2)
 ~ins.stopRecording
 
 ~ins.startShift(1.0, -0.25, 2.0)
-~ins.setShift(0, ['shift', 0.25, 'rate', -4.0, 'amp', 0.25])
+~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.1])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(0.5, 4.0, 0.125)
-~ins.setShift(1, ['amp', 0.25, 'shift', 4.0, 'rate', 0.25])
+~ins.setShift(1, ['amp', 0.1, 'shift', 1.0, 'rate', 1.0])
 
 ~ins.stopShift(1)
 
@@ -101,37 +103,6 @@ s.scope(2)
 ~ins.stopShift(2)
 
 
-
-~matrix.defsAt('b07').setActives(nil, { rrand(0.1, 0.01) });
-~matrix.defsAt('b08').setActives(nil, { rrand(0.1, 0.01) });
-
-~matrix.defsAt('b10').setActives(nil, { rrand(0.1, 0.01) });
-
-
-(
-
-~matrix.defsAt('b08').setControls(
-	{ [0, 1].wchoose([0.7, 0.2 ]) },
-	{ exprand(0.2, 0.8) },
-	{ exprand(0.1, 0.4) },
-	0.1
-);
-
-~matrix.defsAt('b07').setControls(
-	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.2, 0.8) },
-	{ exprand(0.6, 1.0) },
-	0.1
-);
-)
-
-
-~matrix.defsAt('r00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.6, 1.0) },
-	{ exprand(0.03, 0.1) },
-	0.1
-);
 
 
 
@@ -152,8 +123,8 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([0.5, 0.25, 1.0, 2.0, -0.5], inf),
-		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.4, 0.8),
+		'out', ~decoder.bus, 'rate', Prand([0.5, 2.0, 1.0, -1.0, -0.5], inf),
+		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.5, 0.8),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
 		'delta', Prand([ 0.25, 0.5, 1.0, 2.0] * ~matrix.beatdur, inf)
 	)
@@ -180,7 +151,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.3, 'ramp', 0.1, 'rate', 2.0, 'freq', 1.0, 'wrp', 0.25)
+~wrpv0.set('amp', 1.0, 'wamp', 0.2, 'iamp', 0.2, 'ramp', 0.3, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.25)
 
 ~wrpv0.set('buf', ~ins.recBufs.choose)
 
@@ -201,7 +172,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.02, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125)
+~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.3, 'ramp', 0.1, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrpv1.set('buf', ~ins.recBufs.choose)
 
@@ -235,7 +206,7 @@ Pdef('swrp2',
 
 Tdef('warploop', {
 	loop({
-		~wrpv1.set('amp', 1.0, 'wamp', 0.2, 'iamp', 0.3, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		[~wrpv0, ~wrpv1].choose.set('amp', 1.0, 'wamp', 0.2, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
 		rrand(2, 5).wait
 	})
 }).play
@@ -326,36 +297,46 @@ s.stopRecording
 );
 
 
-Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r01'), Pdef('b03'), Pdef('b07'), Pdef('b04'), Pdef('b06'), Pdef('p00'), Pdef('p01'), Pdef('p02'), Pdef('p03'), Pdef('b11'), Pdef('b12') ]))
+Pdef('matrix', Ppar([ Pdef('r00'), Pdef('r01'), Pdef('r02'), Pdef('r03'), Pdef('b00'), Pdef('b01'), Pdef('b04'), Pdef('p00'), Pdef('p01'), Pdef('p02'), Pdef('p03'), Pdef('b10'), Pdef('b11'), Pdef('b12') ]))
 
 
-Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p02'), Pdef('p03') ]))
+Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01'), Pdef('b00') ]))
+
+~matrix.defsAt('b00').recall(0);
+
+
 
 ~matrix.defsAt('p00').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.5) },
-	{ exprand(0.2, 0.3) },
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(0.3, 1.0) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
+
+
 
 ~matrix.defsAt('p01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.5, 0.5]) },
 	{ exprand(0.3, 0.7) },
-	{ exprand(0.2, 0.7) },
+	{ exprand(0.1, 0.4) },
 	0.1
 );
+
 
 ~matrix.defsAt('p02').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.4, 0.8) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.2, 0.5) },
 	0.1
 );
 
-~matrix.defsAt('p03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+
+
+
+~matrix.defsAt('b03').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 0.7) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(1.0, 3.0) },
 	0.1
 );
 
@@ -591,7 +572,7 @@ Tdef('check', {
 ~matrix.defsAt('r02').ctrls[~key]['active'] = 0
 
 
-~matrix.defsAt('r06').recall(0);
+~matrix.defsAt('b00').recall(0);
 
 ~matrix.defsAt('b02').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },

@@ -44,7 +44,7 @@
 ];
 
 ~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
-~wrldsz = 23;
+~wrldsz = 17;
 ~initMsg = {
 	Tdef(\sendVector, {
 		loop({
@@ -54,7 +54,7 @@
 	}).play;
 };
 Tdef('init', {
-	~graphics = CinderApp(1000, 800, mode: 1, path: ~path);
+	~graphics = CinderApp(1000, 800, mode: 0, path: ~path);
 	~graphics.open;
 	3.wait;
 	~graphics.initWorld(~wrldsz, ~wrldsz, ~wrldsz, 20);
@@ -62,38 +62,50 @@ Tdef('init', {
 	~graphics.initGenerations([ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23);
 	1.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(-180.0, -150.0, 0.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(-150.0, -120.0, 0.0, 0.0, 0.0, 0.0);
 	~initMsg.();
 	1.wait;
 	~activePatterns = Array.with(6);
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
 	~graphics.setPattern(13, 1, 1.0, 1, 1, 0.2, 0.8, 1.0);
-	// ~graphics.sendBoidPattern(3, 1, 4);
+	~graphics.sendBoidPattern(3, 1, 4);
 	Post << "Initialised..." << Char.nl;
 }).play
 )
 
-~graphics.setPattern(16, 0, 0.1, 0, 0, 0.2, 0.8, 1.0);
-~graphics.setPattern(3, 1, 0.4, 1, 1, 0.38, 0.0, 0.3);
-~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
-~graphics.setPattern(1, 1, 1.0, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(20, 1, 0.1, 0, 0, 0.2, 0.8, 1.0);
+~graphics.setPattern(3, 0, 1.0, 1, 1, 0.38, 0.0, 0.3);
+~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
+~graphics.setPattern(0, 1, 1.0, 1, 1, 0.0, 0.2, 0.9);
 
-~graphics.setPattern(31, 1, 1.0, 1, 1, 0.0, 0.0, 1.0);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.0, 0.2, 0.5);
+
+~graphics.setPattern(31, 1, 1.0, 1, 1, 1.0, 0.0, 1.0);
 
 
 ~graphics.setPattern(38, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setViewpoint(180.0, 180.0, 180.0, 0.0, 0.0, 0.0);
+~graphics.setViewpoint(0.0, -180.0, 0.0, 0.0, 0.0, 0.0);
 
-~graphics.sendBoidPattern(0, 1, 0);
+~graphics.sendBoidPattern(0, 0, 0);
+~graphics.sendBoidPattern(3, 1, 4);
+
+
+
+~graphics.sendBoidPattern(2, 0, 0);
+
+
+
+~graphics.sendBoidPattern(4, 0, 0);
+
 ~graphics.setBoidCam(false, false)
 
 
 ~graphics.setPattern(38, 1, 0.2, 0, 0, 1.0, 1.0, 1.0);
 
 ~rot = Rotation(rrand(160.0, 180.0), 0.0, rrand(160.0, 180.0), 0.0, 0.0, -0.02, 0.0, 0.0);
-~rot = Rotation(180.0, 0.0, 180.0, 0.0, 0.0, 0.0, 0.0, 0.01);
+~rot = Rotation(170.0, 0.0, 170.0, 0.0, 0.0, 0.0, 0.0, 0.1);
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
 
@@ -101,7 +113,28 @@ Tdef('init', {
 
 Tdef('ciAuto').clear
 
+(
+Tdef('sendcode', {
+	loop({
+		var str;
+		str = "";
+		if (0.3.coin) {
+			rrand(4, 16).do({
+				6.do({ str = str ++ [rrand(48, 56),  rrand(65, 70)].choose.asAscii });
+				str = str ++ " ";
+			});
+		}
+		{
+			str = "-     "
+		};
+		~graphics.sendCodeLine(str);
+		rrand(0.2, 0.8).wait
+	})
+}).play
+)
+~graphics.mapCodePanel
 
+Tdef('sendcode').clear
 
 Tdef(\sendVector).clear
 
@@ -113,11 +146,11 @@ Tdef(\sendVector).clear
 )
 
 (
-~ruleWeight = 0.3;
-~changeWeight = 0.3;
+~ruleWeight = 0.1;
+~changeWeight = 0.1;
 ~maxPatterns = 3;
 ~initWaitTime = 0;
-~rotWeight = 0.7;
+~rotWeight = 0.1;
 )
 
 0.0.coin
@@ -165,7 +198,7 @@ Tdef(\sendVector).clear
 
 // ~graphPatterns = (0..39);
 
-~graphPatterns = [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 14, 17, 18, 22, 23, 24, 25, 29, 31, 33, 34, 36];
+~graphPatterns = [0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 14, 17, 18, 22, 23, 24, 25, 29, 31, 33, 36, 37];
 
 Tdef('ciAuto', {|mfcc|
 	~initWaitTime.wait;

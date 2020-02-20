@@ -1,9 +1,9 @@
-SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.5, rotx, roty, rotz|
+SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(
 		PitchShift.ar(
-			PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate),
-			0.1, 1/rate),
+			LeakDC.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate)**0.5),
+				0.1, 1/rate/2),
 		amp
 	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
@@ -14,7 +14,7 @@ SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.5, rotx, roty, rotz|
 
 SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz|
 	var sig;
-	sig = Normalizer.ar(PlayBuf.ar(1, buf, BufRateScale.kr(buf) * rate, 1, off), amp)
+	sig = Normalizer.ar(LeakDC.ar(PlayBuf.ar(1, buf, BufRateScale.kr(buf) * rate, 1, off) ** 0.5), amp)
 		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
@@ -83,8 +83,7 @@ SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		overlaps: dens,
 		windowRandRatio: randr
 	);
-	revsig = GVerb.ar(warpsig, room, rtime,
-		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	revsig = GVerb.ar(warpsig, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
 	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
 	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo) +
 	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo);
@@ -93,10 +92,10 @@ SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 	Out.ar(out, LeakDC.ar(bf));
 }).add;
 
-SynthDef('wrprevm', {|out, rate, start, wrp, freq, wsize, dens, randr,
-		room, rtime, ramp, damp, iamp, buf, amp, wamp, rx, ry, rz |
+SynthDef('wrprevm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
+		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf, rx=0, ry=0, rz=0|
 	var input, warpsig, revsig, bf;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) * amp;
 	warpsig = Warp0.ar(
 		buffer: buf,
 		warpFactor: [wrp, wrp*15/16],
@@ -105,11 +104,10 @@ SynthDef('wrprevm', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		overlaps: dens,
 		windowRandRatio: randr
 	);
-	revsig = GVerb.ar(warpsig, room, rtime,
-		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	revsig = GVerb.ar(warpsig, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
 	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
 	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo) +
-	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo);
+	FoaEncode.ar(revsig * ramp, FoaEncoderMatrix.newStereo);
 	bf = FoaTransform.ar(bf, 'focus', pi/2);
 	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
 	Out.ar(out, LeakDC.ar(bf));
@@ -119,8 +117,7 @@ SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		room, rtime, ramp, damp, iamp, wamp, buf, amp, rx, ry, rz |
 	var input, warpsig, revsig, bf;
 	input = Mix(PlayBuf.ar(2, buf, rate, 1, start * BufFrames.kr(buf), 1));
-	revsig = GVerb.ar(input, room, rtime,
-		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+	revsig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
 	warpsig = WarpIn.ar(
 		in: revsig,
 		buffer: LocalBuf(BufFrames.kr(buf) * (1.0 / wrp), 2),
@@ -138,23 +135,24 @@ SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
 	Out.ar(out, LeakDC.ar(bf));
 }).add;
 
-SynthDef('revwrpm', {|out, rate, start, wrp, freq, wsize, dens, randr,
-		room, rtime, ramp, damp, iamp, wamp, buf, amp, rx, ry, rz |
-	var input, warpsig, revsig, bf;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
-	revsig = GVerb.ar(input, room, rtime,
-		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
+SynthDef('revwrpm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
+		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf, rx=0, ry=0, rz=0|
+	var input, warpsig, revsig, bf, tr;
+	tr = Impulse.kr(wrp);
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) * amp;
+	revsig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
 	warpsig = WarpIn.ar(
 		in: revsig,
-		buffer: LocalBuf(BufFrames.kr(buf) * (1.0 / wrp), 2),
+		buffer: LocalBuf(BufSampleRate.kr(buf), 2),
 		warpFactor: [wrp, wrp*15/16],
 		freqScale: freq,
 		windowSize: wsize,
 		overlaps: dens,
-		windowRandRatio: randr
+		windowRandRatio: randr,
+		trig: tr
 	);
 	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
-	FoaEncode.ar(revsig * amp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(revsig * ramp, FoaEncoderMatrix.newStereo) +
 	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo);
 	bf = FoaTransform.ar(bf, 'focus', pi/3);
 	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);

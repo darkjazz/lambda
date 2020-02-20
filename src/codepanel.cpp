@@ -43,12 +43,12 @@ CodePanel::CodePanel()
 void CodePanel::createTexture()
 {
 	TextLayout layout;
-	layout.setFont( Font("Arial Black", 11) );
-	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
-	layout.addLine( title );
+//	layout.setFont( Font("Arial Black", 11) );
+//	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
+//	layout.addLine( title );
 	
 	layout.setFont(Font("Noteworthy Bold", 15));
-	layout.setColor(Color(1.0f, 0.41f, 0.71f));
+	layout.setColor(Color(0.7f, 0.41f, 1.0f));
 	layout.addLine("------------------------------------------------------------------------------------------------------------------------");
 		
 	for (int i = lines.size() - 1; i >= 0; i--) {

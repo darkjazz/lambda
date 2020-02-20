@@ -51,8 +51,6 @@ Tdef('init', {
 }).play
 )
 
-~sendCode.();
-
 ~graphics.mapCodePanel
 
 Tdef('ciAuto').clear
@@ -67,7 +65,7 @@ Tdef('ciAuto').clear
 (
 ~ruleWeight = 0.1;
 ~changeWeight = 0.1;
-~maxPatterns = 1;
+~maxPatterns = 3;
 ~initWaitTime = 0;
 ~rotWeight = 0.1;
 )
@@ -129,8 +127,8 @@ Tdef('ciAuto').clear
 	[1.0, 0, 0, 0.3, 0.7, 1.0],
 	[1.0, 0, 0, 1.0, 1.0, 1.0], //15
 	[1.0, 1, 1, 1.0, 1.0, 1.0],
-	[1.0, 0, 1, 0.4, 0.8, 1.0],
-	[1.0, 1, 1, 0.2, 0.8, 1.0],
+	[1.0, 1, 1, 1.0, 0.0, 1.0],
+	[1.0, 1, 1, 0.2, 0.8, 0.0],
 	[1.0, 0, 1, 0.1, 1.0, 0.4],
 	[1.0, 1, 0, 1.0, 0.0, 0.5], //20
 	[1.0, 0, 0, 1.0, 1.0, 0.0],
@@ -154,7 +152,7 @@ Tdef('ciAuto').clear
 	[1.0, 1, 1, 0.5, 1.0, 1.0]
 ];
 
-~graphPatterns = [1, 3, 7, 8, 18, 22, 30, 31, 33, 35];
+~graphPatterns = [0, 1, 7, 8, 9, 12, 13, 17, 18, 20, 22, 31];
 
 Tdef('ciAuto', {|mfcc|
 	~initWaitTime.wait;
