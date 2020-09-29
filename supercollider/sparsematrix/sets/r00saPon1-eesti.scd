@@ -1,6 +1,7 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'quad', 'localDecoder': true, bpm: 113, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsPoni.scd", initPdefs: ['r00', 'r01', 'r02', 'r03', 'b00', 'b01', 'b04', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'binaural', 'localDecoder': true, bpm: 113, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsPoni.scd", initPdefs: ['r00', 'r01', 'r02', 'r03', 'b00', 'b01', 'b04', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
 
-e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initFunc))
+e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initFunc)
+)
 
 
 ['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy', '']
@@ -123,10 +124,10 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([0.5, 2.0, 1.0, -1.0, -0.5], inf),
-		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.5, 0.8),
+		'out', ~decoder.bus, 'rate', Prand([1.0, 1.0, 1.0, -1.0, -1.0], inf),
+		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.01, 0.1),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
-		'delta', Prand([ 0.25, 0.5, 1.0, 2.0] * ~matrix.beatdur, inf)
+		'delta', Prand([ 1.0, 3.0] * ~matrix.beatdur, inf)
 	)
 ).play
 )
