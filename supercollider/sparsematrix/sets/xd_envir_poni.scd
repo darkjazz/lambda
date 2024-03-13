@@ -18,26 +18,27 @@ s.queryAllNodes
 
 ~matrix.setBPM(127)
 
-
+111
 s.sendMsg("/n_free", 1007)
 
 
 (
-~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[50], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp0 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[1], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp0',
 	Pbind(
-		\type, \set, \id, ~wrp0.nodeID, \delta, Pn(~matrix.beatdur * 4, inf),
+		\type, \set, \id, ~wrp0.nodeID, \delta, Pn(~matrix.beatdur*0.25, inf),
 		\rx, Pwhite(-pi, pi, inf),
 		\ry, Pbrown(0, 2pi, 0.125pi, inf),
 		\rz, Pbrown(0, 2pi, 0.125pi, inf),
-		\ramp, Pseq([0.0, 0.4, 0.0, 0.8, 0.0, 0.6], inf),
-		\args, #[rx, ry, rz]
+		\ramp, Pseq([0.2, 0.4, 0.1, 0.4, 0.1, 0.3, 0.0, 0.3], inf),
+		\rate, Pseq([0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5], inf),
+		\args, [\rx, \ry, \rz, \ramp, \rate]
 	)
 ).play
 )
 
-~wrp0.set('amp', 1.0, 'wamp', 1.0, 'iamp', 0.8, 'ramp', 0.0, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.125)
+~wrp0.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 0.5, 'freq', 0.25, 'wrp', 0.125)
 
 ~wrp0.free; Pdef('swrp0').clear
 
@@ -48,7 +49,7 @@ s.stopRecording
 // 145 of perc i know you are not going to remember but if you ever want to be bathed in bass again
 
 (
-~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[37], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[7], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp1',
 	Pbind(
@@ -60,7 +61,7 @@ Pdef('swrp1',
 		\rate, Pseq([0.25, 0.125, 0.5], inf),
 		\iamp, Pseq([1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0] * 0.7, inf),
 		\ramp, Pseq([0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0] * 0.8, inf),
-		\args, #[rx, ry, rz]
+		\args, #[rx, ry, rz, freq, rate, iamp, ramp]
 	)
 ).play
 )
@@ -106,9 +107,9 @@ Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('
 
 
 
+~matrix.defsAt('r00').setActives(nil, { rrand(0.1, 0.01) });
+~matrix.defsAt('r01').setActives(nil, { rrand(0.1, 0.01) });
 ~matrix.defsAt('r03').setActives(nil, { rrand(0.1, 0.01) });
-~matrix.defsAt('b05').setActives(nil, { rrand(0.1, 0.01) });
-~matrix.defsAt('b09').setActives(nil, { rrand(0.1, 0.01) });
 
 
 ~matrix.defsAt('b10').setActives(nil, { rrand(0.1, 0.01) });
@@ -135,7 +136,7 @@ Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('
 ~matrix.defsAt('r00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.4, 1.0) },
-	{ exprand(0.05, 0.1) },
+	{ exprand(0.2, 0.4) },
 	0.1
 );
 
@@ -154,7 +155,7 @@ Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('
 );
 
 ~matrix.defsAt('r03').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.5, 1.0) },
 	{ exprand(0.1, 0.2) },
 	0.1
@@ -164,10 +165,10 @@ Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('
 
 
 (
-~matrix.defsAt('b04').setControls(
+~matrix.defsAt('b06').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
-	{ exprand(0.2, 0.5) },
-	{ exprand(3.0, 6.0) },
+	{ exprand(0.2, 0.4) },
+	{ exprand(2.0, 4.0) },
 	0.1
 );
 
@@ -206,21 +207,21 @@ Pdef('matrix', Ppar([ Pdef('d00'), Pdef('d01'), Pdef('d02'), Pdef('d03'), Pdef('
 
 (
 ~matrix.defsAt('b10').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.5, 1.0) },
 	{ exprand(0.1, 0.4) },
 	0.1
 );
 
 ~matrix.defsAt('b11').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.9, 0.1]) },
 	{ exprand(0.8, 1.0) },
 	{ exprand(0.1, 0.3) },
 	0.1
 );
 
 ~matrix.defsAt('b12').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.8, 1.0) },
 	{ exprand(0.1, 0.2) },
 	0.1

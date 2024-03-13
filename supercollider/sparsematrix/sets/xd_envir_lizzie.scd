@@ -43,7 +43,7 @@ OSCdef('listenBPM', {|ms|
 
 
 
-~matrix.setBPM(101)
+~matrix.setBPM(111)
 
 
 
@@ -172,7 +172,7 @@ s.stopRecording
 // 145 of perc i know you are not going to remember but if you ever want to be bathed in bass again
 
 (
-~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[29], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp1 = Synth.tail(~matrix.group, 'wrprevm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.0, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[37], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp1',
 	Pbind(
@@ -189,14 +189,14 @@ Pdef('swrp1',
 ).play
 )
 
-~wrp1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.1, 'ramp', 0.1, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
+~wrp1.set('amp', 1.0, 'wamp', 0.1, 'iamp', 0.5, 'ramp', 0.2, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrp1.free; Pdef('swrp1').clear
 
 s.queryAllNodes
 
 (
-~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[35], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
+~wrp2 = Synth.tail(~matrix.group, 'revwrpm', ['out', ~decoder.bus, 'rate', 1, 'start', 0, 'wrp', 0.1, 'freq', 1.0, 'wsize', 0.1, 'dens', 6, 'randr', 0.03, 'room', 100, 'rtime', 6.0, 'ramp', 0.1, 'damp', 0, 'iamp', 0.0, 'buf', ~gesbufs[39], 'amp', 0.0, 'wamp', 0.0, 'rx', 0, 'ry', 0, 'rz', 0]);
 
 Pdef('swrp2',
 	Pbind(
@@ -211,7 +211,7 @@ Pdef('swrp2',
 ).play
 )
 
-~wrp2.set('amp', 1.0, 'wamp', 0.03, 'iamp', 0.1, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
+~wrp2.set('amp', 1.0, 'wamp', 0.03, 'iamp', 0.3, 'ramp', 0.5, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrp2.free; Pdef('swrp2').clear
 
@@ -408,8 +408,8 @@ LFPulse.kr(
 
 (
 ~matrix.defsAt('b04').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.6, 1.0) },
+	{ [0, 1].wchoose([0.2, 0.4]) },
+	{ exprand(0.2, 0.6) },
 	{ exprand(2.0, 4.0) },
 	0.1
 );

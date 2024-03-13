@@ -54,7 +54,7 @@
 	}).play;
 };
 Tdef('init', {
-	~graphics = CinderApp(1000, 800, mode: 0, path: ~path);
+	~graphics = CinderApp(1000, 800, mode: 1, path: ~path);
 	~graphics.open;
 	3.wait;
 	~graphics.initWorld(~wrldsz, ~wrldsz, ~wrldsz, 20);
@@ -63,20 +63,20 @@ Tdef('init', {
 	1.wait;
 	~graphics.setSymmetry(11);
 	~graphics.setViewpoint(-150.0, -120.0, 0.0, 0.0, 0.0, 0.0);
-	~initMsg.();
+	// ~initMsg.();
 	1.wait;
 	~activePatterns = Array.with(6);
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.setPattern(13, 1, 1.0, 1, 1, 0.2, 0.8, 1.0);
+	~graphics.setPattern(13, 0, 1.0, 1, 1, 0.2, 0.8, 1.0);
 	~graphics.sendBoidPattern(3, 1, 4);
 	Post << "Initialised..." << Char.nl;
 }).play
 )
 
-~graphics.setPattern(20, 1, 0.1, 0, 0, 0.2, 0.8, 1.0);
+~graphics.setPattern(20, 0, 0.1, 0, 0, 0.2, 0.8, 1.0);
 ~graphics.setPattern(3, 0, 1.0, 1, 1, 0.38, 0.0, 0.3);
-~graphics.setPattern(9, 1, 1.0, 0, 0, 0.1, 0.6, 1.0);
+~graphics.setPattern(9, 0, 1.0, 0, 0, 0.1, 0.6, 1.0);
 ~graphics.setPattern(0, 1, 1.0, 1, 1, 0.0, 0.2, 0.9);
 
 ~graphics.setPattern(12, 1, 1.0, 1, 1, 0.0, 0.2, 0.5);
@@ -147,8 +147,8 @@ Tdef(\sendVector).clear
 
 (
 ~ruleWeight = 0.1;
-~changeWeight = 0.1;
-~maxPatterns = 3;
+~changeWeight = 0.4;
+~maxPatterns = 2;
 ~initWaitTime = 0;
 ~rotWeight = 0.1;
 )

@@ -3,7 +3,7 @@
 
 ~freqs = Array.twinPrimes(103, 2001).select({|it, i| it.odd });
 
-~base = 47;
+~base = 347;
 ~scale = Scale.minor;
 ~freqs = (Array.geom(12, ~base, 2**(1/12))[~scale.degrees].dup(4) * (1..13)).flat.collect({|f|
 	f.nearestPrime
@@ -17,7 +17,7 @@
 (
 SynthDef('prsine', {|out, efx, freq, amp, dur, rot, til, tum|
 	var sig, bf;
-	sig = SinOsc.ar([freq, freq + 2], SinOsc.kr(Rand(400, 2000)).range(0, 2pi)) *
+	sig = SinOsc.ar([freq, freq + 2]) *
 	EnvGen.kr(Env.perc, timeScale: dur, doneAction: 2);
 	bf = FoaEncode.ar(Mix(sig), FoaEncoderMatrix.newDirection);
 	bf = FoaRTT.ar(bf, rot, til, tum);
@@ -51,9 +51,9 @@ s.queryAllNodes
 (
 Pdef('pr-pat', Pbind(
 	'instrument', 'prsine',
-	'out', ~decoder.bus,
+	'out', ~matrix.decoder.bus,
 	'efx', ~sinebus,
-	'amp', Prand(Array.rand(17, 0.1, 0.5), inf),
+	'amp', Prand(Array.rand(7, 0.01, 0.03), inf),
 	'dur', Prand(Array.series(5, 0.5, -0.05), inf),
 	'rot', Pwhite(-pi, pi), 'til', Pwhite(-pi, pi),
 	'tum', Pwhite(-pi, pi),
@@ -63,9 +63,14 @@ Pdef('pr-pat', Pbind(
 		Prand(~ranges[1], Pwhite(1, 4, 5)),
 		Prand(~ranges[2], Pwhite(1, 4, 6))
 	], inf),
-	'delta', 0.17
+	'delta', ~matrix.beatdur / 4
 )).play
 )
 
+~matrix.beatdur / 4
+
 Pdef('pr-pat').clear
 
+
+
+Server.killAll

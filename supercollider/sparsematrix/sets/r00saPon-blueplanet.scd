@@ -1,4 +1,4 @@
-(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsMix.scd", initPdefs: ['b06', 'b10', 'b11', 'b12', 'd00', 'd01', 'd02', 'd03', 'd10', 'd11', 'd12', 'd13'], worldDim: 21, ip: "127.0.0.1");
+(~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2, screenX: 1024, screenY: 768, mode: 1, decoderType: 'stereo', 'localDecoder': true, bpm: 127, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00", patdefs: "patternDefsMix.scd", initPdefs: ['r00', 'r01', 'r02', 'b00', 'b02', 'b07', 'b06', 'b10', 'b11', 'b12'], worldDim: 21, ip: "127.0.0.1");
 
 e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([1, 2, 3, 4], inf)).initFunc))
 
@@ -9,15 +9,17 @@ s.record
 
 s.queryAllNodes
 
+s.sendMsg(@@)
+
 s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 1.0, 'revamp', 0.4, 'revtime', 5.1)
+~ins.ins[0].set('amp', 0.4, 'revamp', 0.2, 'revtime', 3.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.0, 'iwrp', 0.25, 'ibufscale', 1.0, 'wsz', 0.3, 'dns', 3, 'rnd', 0.05, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.4 , 'iwrp', 0.125, 'ibufscale', 1.0, 'wsz', 0.3, 'dns', 3, 'rnd', 0.05, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -35,17 +37,33 @@ Server.killAll
 )
 
 
+~matrix.skismDefs.collect(_.name)
 
-~ins.startEfx('granularReverb', 0)
-~ins.setEfx('granularReverb', ['amp', 0.4])
-~ins.stopEfx('granularReverb')
+
+
+~ins.startEfx('fxGrain', 0)
+~ins.setEfx('fxGrain', ['amp', 1.0])
+~ins.stopEfx('fxGrain')
+
+
+~ins.startEfx('primeTam', 0)
+~ins.setEfx('primeTam', ['amp', 0.5])
+~ins.stopEfx('primeTam')
+
+~ins.startEfx('roosaShift', 0)
+~ins.setEfx('roosaShift', ['amp', 1.0])
+~ins.stopEfx('roosaShift')
 
 ~ins.startEfx('feedbackSpectrum', 0)
-~ins.setEfx('feedbackSpectrum', ['amp', 0.0])
+~ins.setEfx('feedbackSpectrum', ['amp', 1.0])
 ~ins.stopEfx('feedbackSpectrum')
 
+~ins.startEfx('flangingDecimator', 0)
+~ins.setEfx('flangingDecimator', ['amp', 1.0])
+~ins.stopEfx('flangingDecimator')
+
 ~ins.startEfx('cliqSaw', 0)
-~ins.setEfx('cliqSaw', ['amp', 0.3])
+~ins.setEfx('cliqSaw', ['amp', 1.0])
 ~ins.stopEfx('cliqSaw')
 
 s.scope(2)
@@ -54,16 +72,26 @@ s.scope(2)
 
 ~ins.stopRecording
 
-~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(0, ['shift', 0.25, 'rate', 4.0, 'amp', 0.4])
+~ins.startShift(1.0, 0.25, 4.0)
+~ins.setShift(0, ['shift', 0.5, 'rate', -0.25, 'amp', 1.0])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(1.0, 1.0, 1.0)
-~ins.setShift(1, ['amp', 0.7, 'shift', 0.25, 'rate', 2.0])
+~ins.setShift(1, ['amp', 1.0, 'shift', 0.5, 'rate', 0.5])
 
 ~ins.stopShift(1)
+
+
+
+~ins.startShift(1.0, 2.0, 0.5)
+~ins.setShift(2, ['amp', 1.0, 'shift', 1.0, 'rate', 2.0])
+
+~ins.stopShift(3)
+
+~ins.setShift(3, ['amp', 1.0, 'shift', 1.0, 'rate', 1.0])
+
 
 
 (
@@ -82,7 +110,7 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([1.0, 0.5, 0.25, 0.125, -0.5, -1.0], inf),
+		'out', ~decoder.bus, 'rate', Prand([1.0, 0.5, -2.0, 0.125, -0.5, -1.0], inf),
 		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.8, 1.0),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
 		'delta', Pfunc({|ev| ev.buffer.duration * ev.rate.abs.reciprocal })
@@ -113,7 +141,7 @@ Pdef('swrp0',
 )
 
 (
-~wrpv0.set('amp', 1.0, 'wamp', 0.5, 'iamp', 0.0, 'ramp', 0.4, 'rate', 0.5, 'freq', 0.5, 'wrp', 0.125,
+~wrpv0.set('amp', 1.0, 'wamp', 0.5, 'iamp', 1.0, 'ramp', 0.8, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125,
 	'buf', ~ins.recBufs.choose
 )
 )
@@ -136,7 +164,7 @@ Pdef('swrp1',
 )
 
 (
-~wrpv1.set('amp', 1.0, 'wamp', 0.5, 'iamp', 0.3, 'ramp', 0.7, 'rate', 1.0, 'freq', 4.0, 'buf', ~ins.recBufs.choose)
+~wrpv1.set('amp', 1.0, 'wamp', 0.5, 'iamp', 1.0, 'ramp', 0.0, 'rate', 0.5, 'freq', 0.5, 'buf', ~ins.recBufs.choose)
 )
 
 ~wrpv1.free; Pdef('swrp1').clear
@@ -146,7 +174,7 @@ s.queryAllNodes
 
 Tdef('warploop', {
 	loop({
-		~wrpv1.set('amp', 1.0, 'wamp', 1.0, 'iamp', 0.0, 'ramp', 1.0, 'rate', 1.0, 'freq', [1.0, 0.5, 0.25].choose, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		~wrpv1.set('amp', 1.0, 'wamp', 1.0, 'iamp', 0.5, 'ramp', 1.0, 'rate', 0.5, 'freq', [ 0.5, 0.25].choose, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
 		rrand(3, 8).wait
 	})
 }).play
@@ -158,38 +186,47 @@ Tdef('warploop').clear
 s.stopRecording
 
 
-~matrix.addPatternBufferDef('p00', (0..~ins.recBufs.size), 4, 2,
+~matrix.addPatternBufferDef('p00', (0..~ins.recBufs.size), 4, 8,
 	['Yanvalou', 'Wolosodon', 'Toro', 'Timiny', 'Soli', 'Soboniko'],
 	2, "p0", 'bufproto', ~ins.recBufs, 'bit01', true
 );
 
-~matrix.addPatternBufferDef('p01', (0..~ins.recBufs.size), 4, 4,
+~matrix.addPatternBufferDef('p01', (0..~ins.recBufs.size), 4, 8,
 	['Sinte', 'Sabar', 'Madan', 'Lolo', 'Kpatsia', 'Kpanlogo', 'Kononwulen', 'Konkoba'],
-	2, "p1", 'bufproto', ~ins.recBufs, 'bit00', true
+	2, "p1", 'bufproto', ~ins.recBufs, 'bit01', true
 );
 
 ~matrix.addPatternBufferDef('p02', (0..~ins.recBufs.size), 4, 2,
 	['Yanvalou', 'Wolosodon', 'Toro', 'Timiny', 'Soli', 'Soboniko'],
-	2, "p2", 'bufproto', ~ins.recBufs, 'bit00', true
+	2, "p2", 'bufproto', ~ins.recBufs, 'bit01', true
 );
 
 
-Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r00'), Pdef('d01'), Pdef('d00'), Pdef('b06'), Pdef('p02'), Pdef('p01'), Pdef('b10'), Pdef('b11'), Pdef('b12') ]))
+Pdef('matrix', Ppar([ Pdef('b08'), Pdef('r00'), Pdef('d01'), Pdef('d00'), Pdef('b06'), Pdef('p00'), Pdef('p01'), Pdef('p02'), Pdef('b10'), Pdef('b11'), Pdef('b12') ]))
 
 
 Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01') ]))
 
-~matrix.defsAt('p02').setControls(
+~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.7, 1.0) },
-	{ exprand(0.2, 0.9) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.1, 0.2) },
 	0.1
 );
 
+
 ~matrix.defsAt('p01').setControls(
-	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ [0, 1].wchoose([0.5, 0.5]) },
+	{ exprand(1.0, 2.0) },
+	{ exprand(0.1, 0.2) },
+	0.1
+);
+
+
+~matrix.defsAt('p02').setControls(
+	{ [0, 1].wchoose([0.7, 0.3]) },
+	{ exprand(1.0, 2.0) },
 	{ exprand(0.5, 1.0) },
-	{ exprand(0.2, 0.4) },
 	0.1
 );
 
@@ -454,19 +491,46 @@ Tdef('check', {
 
 (
 
-~matrix.defsAt('b08').setControls(
+~matrix.defsAt('r00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 0.4) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.05, 0.3) },
 	0.1
 );
 
-~matrix.defsAt('b07').setControls(
+~matrix.defsAt('r01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.05, 0.07) },
+	0.1
+);
+
+
+~matrix.defsAt('r02').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 1.0) },
+	{ exprand(0.05, 0.02) },
+	0.1
+);
+
+
+~matrix.defsAt('b00').setControls(
+	{ [0, 1].wchoose([0.8, 0.2]) },
 	{ exprand(0.3, 0.8) },
 	{ exprand(0.1, 0.3) },
 	0.1
 );
+
+
+~matrix.defsAt('b07').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.8, 1.0) },
+	{ exprand(0.1, 0.3) },
+	0.1
+);
+
+
+
 )
 
 
@@ -552,8 +616,8 @@ Tdef('check', {
 	0.1
 );
 
-~matrix.defsAt('b02').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('b00').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.6, 1.0) },
 	{ exprand(0.1, 0.2) },
 	0.1
@@ -574,26 +638,28 @@ s.queryAllNodes
 Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 0.0, 'buf', ~matrix.buffers['evo'][rrand(50, 45)], 'dur', exprand(0.7, 3.0), 'env', [Env.perc, Env.sine].choose] );
 
 
-~matrix.defsAt('r01').setControls(
+~matrix.defsAt('d00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.1, 0.5) },
-	{ exprand(0.05, 0.1) },
+	{ exprand(0.7, 1.0) },
+	{ exprand(0.05, 0.2) },
 	0.1
 );
 
-~matrix.defsAt('b10').setControls(
-	{ [0, 1].wchoose([0.7, 0.3]) },
+~matrix.defsAt('d01').setControls(
+	{ [0, 1].wchoose([1.0, 0.0]) },
 	{ exprand(0.5, 1.0) },
 	{ exprand(0.1, 0.3) },
 	0.1
 );
 
-~matrix.defsAt('r01').setControls(
+~matrix.defsAt('d02').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.6) },
-	{ exprand(0.1, 0.4) },
+	{ exprand(0.3, 1.0) },
+	{ exprand(0.01, 0.2) },
 	0.1
 );
+
+
 
 ~matrix.defsAt('b04').setControls(
 	{ [0, 1].wchoose([0.8, 0.2]) },
@@ -732,7 +798,11 @@ Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.3, 0.7), 'emp', 
 (
 Tdef('tex', {
 	loop({
-		Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 0.0, 'buf', ~matrix.buffers['evo'][rrand(100, 104)], 'dur', exprand(0.4, 0.9), 'env', [Env.perc, Env.sine].choose] );
+		Synth(\bitSt2, ['out', ~decoder.bus, 'efx', 512, 'amp', rrand(0.4, 0.7), 'emp', 0.0, 'buf', ~matrix.buffers['evo'][rrand(0, 11)], 'dur', exprand(0.4, 0.9), 'env', [Env.perc, Env.sine].choose,
+			'rotx', rrand(-pi, pi)
+		]
+
+		);
 		rrand(0.1, 0.4).wait
 	})
 })
@@ -776,13 +846,13 @@ Archive.global[\matrix][\presets]
 
 // 30
 
-~ind0 = 70
+~ind0 = 31
 
 ~player.loadData(~ind0)
 
 ~player.play(~ind0, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind0, 1.0);
+~player.set(~ind0, 0.6);
 
 ~player.free(~ind0)
 
@@ -792,13 +862,13 @@ Archive.global[\matrix][\presets]
 
 // 271
 
-~ind1 = 111
+~ind1 = 53
 
 ~player.loadData(~ind1)
 
 ~player.play(~ind1, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind1, 1.0)
+~player.set(~ind1, 0.5)
 
 ~player.free(~ind1)
 
@@ -811,7 +881,7 @@ Archive.global[\matrix][\presets]
 
 ~player.play(~ind2, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind2, 0.0);
+~player.set(~ind2, 0.5);
 
 ~player.free(~ind2)
 
@@ -825,7 +895,7 @@ Archive.global[\matrix][\presets]
 
 ~player.play(~ind3, 0, ['zoom', 'push'].choose, 0)
 
-~player.set(~ind3, 0.1)
+~player.set(~ind3, 0.4)
 
 ~player.free(~ind3)
 

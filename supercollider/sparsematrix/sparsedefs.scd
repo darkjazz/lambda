@@ -2,7 +2,7 @@ SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(
 		PitchShift.ar(
-			LeakDC.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate)**0.5),
+			LeakDC.ar(PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate)**0.1),
 				0.1, 1/rate/2),
 		amp
 	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
@@ -15,6 +15,30 @@ SynthDef(\bit00, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 SynthDef(\bit01, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(LeakDC.ar(PlayBuf.ar(1, buf, BufRateScale.kr(buf) * rate, 1, off) ** 0.5), amp)
+		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, FoaTransform.ar(
+		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
+	)
+}).add;
+
+SynthDef(\bit00s, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
+	var sig;
+	sig = Normalizer.ar(
+		PitchShift.ar(
+			LeakDC.ar(Mix(PlayBuf.ar(2, buf, BufRateScale.ir(buf) * rate)**0.1)),
+				0.1, 1/rate/2),
+		amp
+	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, FoaTransform.ar(
+		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
+	)
+}).add;
+
+SynthDef(\bit01s, {|out, efx, amp, emp, buf, dur, off=0, rate=1, rotx, roty, rotz|
+	var sig;
+	sig = Normalizer.ar(LeakDC.ar(Mix(PlayBuf.ar(2, buf, BufRateScale.kr(buf) * rate, 1, off) ** 0.5)), amp)
 		* EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
@@ -35,12 +59,12 @@ SynthDef(\bit02, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 
 SynthDef(\bitSt0, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 	var sig;
-	sig = Normalizer.ar(
+	sig = (Normalizer.ar(
 		PitchShift.ar(
 			PlayBuf.ar(2, buf, BufRateScale.ir(buf) * rate),
 			0.1, 1/rate),
 		amp
-	) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
+	) ** 0.1) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
 		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
@@ -50,7 +74,7 @@ SynthDef(\bitSt0, {|out, efx, amp, emp, buf, dur, rate=0.25, rotx, roty, rotz|
 SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 	var sig;
 	sig = Normalizer.ar(
-		PlayBuf.ar(2, buf, BufRateScale.ir(buf) * 1.neg, 1, BufFrames.kr(buf)),
+		PlayBuf.ar(2, buf, BufRateScale.ir(buf), 1) ** 0.1,
 		amp) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2);
 	Out.ar(efx, sig * emp);
 	Out.ar(out, FoaTransform.ar(
@@ -58,12 +82,41 @@ SynthDef(\bitSt2, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 	)
 }).add;
 
+// SynthDef(\bitSt3, {|out, efx, amp, emp, buf, dur|
+// 	var sig;
+// 	sig = Normalizer.ar(
+// 		(PlayBuf.ar(2, buf, BufRateScale.ir(buf), 1) * Line.kr(100, 1, 0.3)).tanh,
+// 	) * EnvGen.kr(\env.kr(Env.newClear(8).asArray), timeScale: dur, doneAction: 2);
+// 	Out.ar(efx, sig * emp);
+// 	Out.ar(out, sig * amp)
+// }).add;
+
+SynthDef(\bitSt3, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
+	var ply, sig, flt, resfr, fund;
+	fund = Control.names([\rfrq]).ir(Array.primesN(17, 73));
+	resfr = Array.fill(3, {
+		Select.kr(IRand(0, fund.lastIndex), fund)
+	});
+	ply = Normalizer.ar(
+		PitchShift.ar(PlayBuf.ar(2, buf, BufRateScale.ir(buf), 1), 0.1, 0.5)**0.1,0.99
+		 );
+	flt = FreeVerb.ar(Mix(Resonz.ar(ply, resfr, 9.neg.dbamp )),0.1)
+	* EnvGen.kr(Env.perc(0.005, 1, 1, -32), timeScale: dur*0.5);
+	sig = (ply + flt) * EnvGen.kr(\env.kr(Env.newClear(8).asArray), timeScale: dur, doneAction: 2);
+	sig = Compander.ar(sig, sig, 1.0, 1.0, 0.1, 0.002, 0.1);
+	Out.ar(efx, sig * emp);
+	Out.ar(out, FoaTransform.ar(
+		FoaEncode.ar(sig * amp, FoaEncoderMatrix.newDirection), 'rtt', rotx, roty, rotz)
+	)
+}).add;
+
+
 SynthDef(\hold, {|out, buf, amp|
 	var sig, bf;
 	sig = PlayBuf.ar(2, buf, loop: 1).dup.flat * amp;
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	Out.ar(out, bf)
 }).add;
@@ -95,7 +148,7 @@ SynthDef('wrprev', {|out, rate, start, wrp, freq, wsize, dens, randr,
 SynthDef('wrprevm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
 		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf, rx=0, ry=0, rz=0|
 	var input, warpsig, revsig, bf;
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) * amp;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) ** 0.3 * amp;
 	warpsig = Warp0.ar(
 		buffer: buf,
 		warpFactor: [wrp, wrp*15/16],
@@ -138,8 +191,7 @@ SynthDef('revwrp', {|out, rate, start, wrp, freq, wsize, dens, randr,
 SynthDef('revwrpm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
 		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf, rx=0, ry=0, rz=0|
 	var input, warpsig, revsig, bf, tr;
-	tr = Impulse.kr(wrp);
-	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) * amp;
+	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1) ** 0.3 * amp;
 	revsig = GVerb.ar(input, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
 	warpsig = WarpIn.ar(
 		in: revsig,
@@ -148,8 +200,7 @@ SynthDef('revwrpm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens
 		freqScale: freq,
 		windowSize: wsize,
 		overlaps: dens,
-		windowRandRatio: randr,
-		trig: tr
+		windowRandRatio: randr
 	);
 	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
 	FoaEncode.ar(revsig * ramp, FoaEncoderMatrix.newStereo) +
@@ -165,7 +216,7 @@ SynthDef('wrprevconv', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		room, rtime, ramp, damp, iamp, buf, cbuf, amp, camp, wamp, rx, ry, rz |
 	var input, warpsig, revsig, bf, vox;
 	input = PlayBuf.ar(1, buf, rate, 1, start * BufFrames.kr(buf), 1);
-	vox = PlayBuf.ar(1, cbuf, 1, 1, 0, 1) * camp;
+	vox = SoundIn.ar * camp;
 	warpsig = Warp0.ar(
 		buffer: buf,
 		warpFactor: [wrp, wrp*15/16],
@@ -174,7 +225,7 @@ SynthDef('wrprevconv', {|out, rate, start, wrp, freq, wsize, dens, randr,
 		overlaps: dens,
 		windowRandRatio: randr
 	);
-	warpsig = Convolution.ar(warpsig, vox, 1024);
+	warpsig = Convolution2.ar(warpsig, vox, 1024);
 	revsig = GVerb.ar(warpsig, room, rtime,
 		drylevel: damp, earlyreflevel: ramp * 0.5, taillevel: ramp);
 	bf = FoaEncode.ar(input * iamp, FoaEncoderMatrix.newDirection) +
@@ -221,8 +272,7 @@ SynthDef('wrpdrn', {|out, wrp, freq, wsize, dens, randr,
 		windowSize: wsize,
 		overlaps: dens,
 		windowRandRatio: randr,
-		interp: 4,
-		range: rng
+		interp: 4
 	);
 	revsig = GVerb.ar(warpsig * wamp, room, rtime,
 		drylevel: 0, earlyreflevel: eamp, taillevel: ramp);
@@ -242,6 +292,7 @@ SynthDef('wrpdrn', {|out, wrp, freq, wsize, dens, randr,
 }).add;
 
 /** WRPREVCONV END **/
+
 
 SynthDef('nested_pm', {|out, efx, amp, emp, dur, lpf=700, az=0, el=0|
 	var sig, freqs, inds;
@@ -268,7 +319,7 @@ SynthDef(\rev00, {|out, in, amp, rtime, hf|
 	fft = FFT( LocalBuf(1024), sig);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( fft, Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	Out.ar(out, bf)
 }).add;
@@ -280,7 +331,7 @@ SynthDef(\rev01, {|out, in, amp, room, rtime, damp, bw, spr, dry, early, tail|
 	sig = RLPF.ar(sig, 1000.0, 1.0);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
 	Out.ar(out, bf)
@@ -294,7 +345,7 @@ SynthDef(\rev02, {|out, in, amp, room, rtime, wsz, pch, pds, tds|
 	sig = sig + PitchShift.ar(sig, wsz, pch, pds, tds);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
 	Out.ar(out, bf)
@@ -308,7 +359,7 @@ SynthDef(\del00, {|out, in, amp, del, dec, room, rtime, ramp|
 	sig = sig.dup(2).flat;
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
 	Out.ar(out, bf)
@@ -322,7 +373,7 @@ SynthDef(\del01, {|out, in, amp, del, dec|
 	);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
 	Out.ar(out, bf)
@@ -337,7 +388,7 @@ SynthDef(\del02, {|out, in, amp, rtime, del, dec|
 	);
 	bf = FoaEncode.ar(Array.fill(4, { |i|
 			IFFT( PV_Diffuser( FFT( LocalBuf(1024), sig[i]), Dust.kr(200.0) ))
-		}), FoaEncoderMatrix.newAtoB('fud')
+		}), FoaEncoderMatrix.newPanto
 	);
 	bf = FoaRotate.ar(bf, LFNoise0.kr(2.5).range(-pi, pi));
 	Out.ar(out, bf)
@@ -407,7 +458,7 @@ SynthDef(\frag05, {|out, amp, dur, rate, buf, rmp, rtm, early, tail, rotx, roty,
 	sig = PlayBuf.ar(1, buf, BufRateScale.ir(buf) * rate) * amp;
 	fft = FFT(LocalBuf(1024), sig);
 	afr = Array.fill(4, { IFFT(PV_Diffuser(fft, Dust.kr(10))) });
-	bfr = FoaEncode.ar(afr, FoaEncoderMatrix.newAtoB);
+	bfr = FoaEncode.ar(afr, FoaEncoderMatrix.newPanto);
 	rvb = GVerb.ar(bfr.first * rmp, 299.0, rtm, drylevel: 0, earlyreflevel: early, taillevel: tail );
 	bfr = FoaTransform.ar(bfr, 'rtt', rotx, roty, rotz);
 	Out.ar(out, (bfr + rvb.dup.flat) * EnvGen.kr(EnvControl.kr, timeScale: dur, doneAction: 2))

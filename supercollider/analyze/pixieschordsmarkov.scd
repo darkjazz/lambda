@@ -1,5 +1,5 @@
 (
-~chordloader = ChordLoader("/Users/alo/Data/pixies/pixieschords.csv");
+~chordloader = ChordLoader("/Users/alo/snd/analyze/pixies/Come On Pilgrim/15 Caribou_vamp_nnls-chroma_chordino_chordnotes.csv");
 
 ~chordloader.load;
 

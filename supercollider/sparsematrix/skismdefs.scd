@@ -20,7 +20,7 @@ Array.with(
 				, 0.1, dels[i]
 			)
 		});
-		bf = FoaEncode.ar(Limiter.ar(af * amp, lim), FoaEncoderMatrix.newAtoB);
+		bf = FoaEncode.ar(Limiter.ar(af * amp, lim), FoaEncoderMatrix.newPanto);
 		bf = FoaTransform.ar(bf, 'zoomX', LFSaw.kr(ang).range(-pi/3, pi/3));
 		Out.ar(out,
 			FoaTransform.ar(bf, 'rotate', LFNoise1.kr(xng).range(-pi, pi))
@@ -64,7 +64,7 @@ Array.with(
 		af = Array.fill(4, {|i|
 			PitchShift.ar(sig.distort, [0.05, 0.1], pchs[i])
 		}).tanh;
-		bf = FoaEncode.ar(Limiter.ar(af * amp, lim), FoaEncoderMatrix.newAtoB);
+		bf = FoaEncode.ar(Limiter.ar(af * amp, lim), FoaEncoderMatrix.newPanto);
 		bf = FoaTransform.ar(bf, 'pressX', LFSaw.kr(ang).range(-pi/3, pi/3));
 		Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise0.kr(xng).range(-pi, pi)))
 	}, metadata: (
@@ -91,7 +91,7 @@ Array.with(
 	WarpIn.ar(sig ** Amplitude.kr(src), LocalBuf(SampleRate.ir/4), wrp, fs, wz, -1, dns, rnd, 0.1, 1, 0), 1.0, dels[i]);
 	}) + sig;
 	af = Limiter.ar(LPF.ar(af.distort, lpf) * amp, lim);
-	bf = FoaEncode.ar(af, FoaEncoderMatrix.newAtoB);
+	bf = FoaEncode.ar(af, FoaEncoderMatrix.newPanto);
 	bf = FoaTransform.ar(bf, 'pushX', SinOsc.kr(ang).range(-pi/3, pi/3));
 	Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise0.kr(xng).range(pi.neg, pi)));
 	}, metadata: (
@@ -227,7 +227,7 @@ Array.with(
 			var args = filt[i];
 			args.ugen.ar(PitchShift.ar(gvrb.wrapAt(i), pitchRatio: args.shift), args.frq, args.rs, args.db)
 		});
-		bf = FoaEncode.ar(af * amp, FoaEncoderMatrix.newAtoB);
+		bf = FoaEncode.ar(af * amp, FoaEncoderMatrix.newPanto);
 		Out.ar(out, FoaTransform.ar(bf, 'rotate', LFNoise2.kr(xng).range(-pi, pi)));
 	}, metadata: (
 		specs: (
@@ -275,7 +275,7 @@ Array.with(
 			var args = filt[i];
 			args.ugen.ar(PitchShift.ar(sig, pitchRatio: args.shift) + sig, args.frq, args.rs, args.db)
 		});
-		bf = FoaEncode.ar(af * amp, FoaEncoderMatrix.newAtoB);
+		bf = FoaEncode.ar(af * amp, FoaEncoderMatrix.newPanto);
 		Out.ar(out, FoaTransform.ar(bf, 'rotate', TRand.kr(-pi, pi, trig)));
 	}, metadata: (
 		specs: (
@@ -396,6 +396,91 @@ Array.with(
 			xang: ControlSpec(0.25, 4.0, default: 0.5),
 			yang: ControlSpec(0.25, 4.0, default: 0.8),
 			zang: ControlSpec(0.25, 4.0, default: 0.8)
+		)
+	)),
+
+	SynthDef(\roosaBufPlay, {|out, in, iamp=1.0, dns=4.0, amp=1.0|
+		var bufs, sig, n=11, input, sdur=0.5;
+		bufs = Array.fill(n, {
+			LocalBuf(SampleRate.ir*sdur)
+		});
+		input = In.ar(in) * iamp;
+		sig = Mix.fill(n, {|i|
+			var rtr, tr, rt, pb, bf, angs;
+			tr = Dust.kr(dns);
+			rtr = Impulse.kr(dns*0.01);
+			RecordBuf.ar(input, bufs[i], trigger: TDelay.kr(tr, sdur*2, sdur*2));
+			rt = Demand.kr(tr, 0, Dseq(Array.geom(5, 0.125, 2).mirror2.dup.flat, inf));
+			angs = Array.fill(3, { Demand.kr(tr, 0, Dwhite(-pi, pi, inf)) });
+			pb = LeakDC.ar(
+				PlayBuf.ar(1, bufs[i], rt, tr, SinOsc.kr(dns).range(0, BufFrames.kr(bufs[i])), 2 )
+			);
+			pb = PitchShift.ar(pb, 0.1, 1.0/rt);
+			bf = FoaEncode.ar(pb, FoaEncoderMatrix.newDirection);
+			FoaTransform.ar(bf, 'rtt', angs[0], angs[1], angs[2] );
+		});
+		Out.ar(out, sig * amp)
+	}, metadata: (
+		specs: (
+			amp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			iamp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			dns: ControlSpec(1.0, 16.0, default: 4.0)
+		)
+	)),
+
+	SynthDef(\roosaBufWrp, {|out, in, iamp=0.5, dns=4.0, amp=1.0|
+		var bufs, sig, n=3, input, sdur=0.3;
+		bufs = Array.fill(n, {
+			LocalBuf(SampleRate.ir*sdur)
+		});
+		input = In.ar(in) * iamp;
+		sig = Mix.fill(n, {|i|
+			var rtr, tr, rt, wp, bf, angs, dn, am;
+			tr = Impulse.kr(dns);
+			rtr = Impulse.kr(dns*0.01);
+			RecordBuf.ar(input, bufs[i], trigger: TDelay.kr(tr, sdur*2, sdur*2));
+			rt = Demand.kr(tr, 0, Drand(Scale.minor.ratios * [0.5, 1]));
+			angs = Array.fill(3, { Demand.kr(tr, 0, Dwhite(-pi, pi, inf)) });
+			dn = LFNoise0.kr(pi).range(3, 10);
+			am = 1.0 / dn;
+			wp = DelayN.ar(
+				Warp0.ar(1, bufs[i], 1.0 , rt, 0.2, -1, dn),
+				1.0, LFNoise2.kr(TRand.kr(0.1, 0.5, tr)).range(0.1, 1.0)
+			);
+			bf = FoaEncode.ar(wp, FoaEncoderMatrix.newDirection);
+			FoaTransform.ar(bf, 'rtt', angs[0], angs[1], angs[2] );
+		});
+		Out.ar(out, sig * amp)
+	}, metadata: (
+		specs: (
+			amp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			iamp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			dns: ControlSpec(1.0, 16.0, default: 4.0)
+		)
+	)),
+
+	SynthDef('magFreeze', {|out, in, amp=0.5, iamp=0.5, thr=0.5, pulse=9.0, depth=0.3|
+		var input, sig, trg, fft, ampc, n=3, onsets;
+		input = In.ar(in) * iamp;
+		ampc = Lag.kr(Amplitude.kr(input, 0.1, 0.1), 0.1);
+		fft = FFT(LocalBuf(1024), input);
+		onsets = Onsets.kr(fft, thr);
+		sig = Mix.fill(n, {|i|
+			var proc, angs, bf;
+			proc = PV_MagFreeze(fft, LFPulse.kr(4, 0, 0.99).range(0, 1));
+			proc = PV_MagShift(proc, LinLin.kr(ampc, 0, 1, 0.5, 2.0), SinOsc.kr(0.25).range(0.5, 2.0));
+			angs = Array.fill(3, { Demand.kr(onsets, 0, Dwhite(-pi, pi, inf)) });
+			bf = FoaEncode.ar(DelayN.ar(IFFT(proc) * LFPulse.kr(pulse).range(depth, 1.0), i*0.3, i*0.3), FoaEncoderMatrix.newDirection);
+			FoaTransform.ar(bf, 'rtt', angs[0], angs[1], angs[2] );
+		});
+		Out.ar(out, sig * amp)
+	}, metadata: (
+		specs: (
+			amp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			iamp: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			thr: ControlSpec(0.001, 1.0, \exp, default: 0.5),
+			pulse: ControlSpec(1.0, 20.0, default: 9.0),
+			depth: ControlSpec(0.0, 1.0, default: 0.5)
 		)
 	))
 )

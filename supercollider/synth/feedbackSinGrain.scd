@@ -21,6 +21,7 @@ SynthDef('grain', {|out, amp, dur, ebf|
 	bf = (osc1 + osc2 + osc3) * EnvGen.kr(env, timeScale: dur, doneAction: 2);
 	Out.ar(out, bf)
 }).add;
+
 )
 
 Server.killAll
@@ -76,18 +77,19 @@ Server.killAll
 
 ~decoder.start
 
+(
 Pdef('cloud',
-	Pbind('instrument', 'grain', 'out', ~decoder.bus, 'addAction', 'addBefore', 'target', ~decoder.synth,
+	Pbind('instrument', 'grain', 'out', ~matrix.decoder.bus, 'addAction', 'addBefore', 'target', ~matrix.decoder.synth,
 		'amp', Pwhite(0.05, 0.1), 'dur', Pwhite(0.3, 1.0), 'ebf', Env.perc.bubble,
 		'freqs', Pseq(~freqs, inf), 'amps', Array.geom(3, 1.0, 0.618).bubble, 'env', Env.sine.bubble,
 		'delta', Pstutter(Pwhite(1, 4), Prand([1/3, 1/5, 1/7, 1/11], inf))
 	)
-)
+);
 
 Pdef('cloud').play
+)
 
-
-
+Pdef('cloud').clear
 
 17/20000
 47/20000

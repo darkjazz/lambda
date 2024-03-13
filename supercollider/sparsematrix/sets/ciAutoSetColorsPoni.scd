@@ -1,6 +1,6 @@
 
 (
-~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/codehack.scd", "r");
+~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/{--kurivar-envir--}_++.postln.scd", "r");
 ~code = ~file.readAllString;
 ~file.close;
 ~sendarr = ~code.split($%);
@@ -20,7 +20,7 @@
 	}).play
 };
 ~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
-~wrldsz = 11;
+~wrldsz = 13;
 ~initMsg = {
 	Tdef(\sendVector, {
 		loop({
@@ -38,20 +38,21 @@ Tdef('init', {
 	~graphics.initGenerations([ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23);
 	1.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 60.0, 0.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, 0.0, -100.0, 0.0, 0.0, 0.0);
 	~initMsg.();
 	1.wait;
 	~activePatterns = Array();
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.setPattern(38, 1, 1.0, 0, 0, 1.0, 1.0, 1.0);
-	// ~graphics.fadeInPattern(38, 240, 1.0);
+	~graphics.setPattern(0, 1, 1.0, 0, 0, 0.0, 0.6, 1.0);
 	~graphics.sendCodeTitle("roosa poni");
 	Post << "Initialised..." << Char.nl;
 }).play
 )
 
 ~graphics.mapCodePanel
+
+~sendCode.value()
 
 Tdef('ciAuto').clear
 
@@ -64,8 +65,8 @@ Tdef('ciAuto').clear
 
 (
 ~ruleWeight = 0.1;
-~changeWeight = 0.1;
-~maxPatterns = 3;
+~changeWeight = 0.5;
+~maxPatterns = 2;
 ~initWaitTime = 0;
 ~rotWeight = 0.1;
 )

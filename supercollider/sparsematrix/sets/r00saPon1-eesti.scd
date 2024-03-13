@@ -4,7 +4,14 @@ e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initF
 )
 
 
-['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy', '']
+// 79.66.151.101
+
+// 92.22.93.23
+
+
+
+
+['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy', 'roosaBufPlay', 'roosaBufWrp', 'magFreeze']
 
 
 FoaDecoder
@@ -18,11 +25,11 @@ s.stopRecording
 Server.killAll
 
 
-~ins.ins[0].set('amp', 0.0, 'revamp', 0.1, 'revtime', 5.1)
+~ins.ins[0].set('amp', 0.0, 'revamp', 0.3, 'revtime', 6)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 1.0, 'ibufscale', 1.0, 'wsz', 0.3, 'dns', 4, 'rnd', 0.1, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.01, 'iwrp', 1.0, 'ibufscale', 1.0, 'wsz', 0.3, 'dns', 4, 'rnd', 0.1, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -41,15 +48,33 @@ Server.killAll
 ~matrix.defsAt('r01').ctrls[~key]['active'] = 0
 )
 
-
+s.queryAllNodes
 
 ~ins.startEfx('primeTam', 0)
-~ins.setEfx('primeTam', ['amp', 0.4])
+~ins.setEfx('primeTam', ['amp', 0.1])
 ~ins.stopEfx('primeTam')
 
 ~ins.startEfx('roosaShift', 0)
-~ins.setEfx('roosaShift', ['amp', 0.2])
+~ins.setEfx('roosaShift', ['amp', 0.01])
 ~ins.stopEfx('roosaShift')
+
+
+~ins.startEfx('roosaBufPlay', 0)
+~ins.setEfx('roosaBufPlay', ['amp', 1.0, 'iamp', 1.0, 'dns', 6])
+~ins.stopEfx('roosaBufPlay')
+
+
+~ins.startEfx('roosaBufWrp', 0)
+~ins.setEfx('roosaBufWrp', ['amp', 1.0, 'iamp', 1.0, 'dns', 7])
+~ins.stopEfx('roosaBufWrp')
+
+~matrix.beatdur * 20
+
+
+~ins.startEfx('magFreeze', 0)
+~ins.setEfx('magFreeze', ['amp', 2.0, 'iamp', 1.5, 'thr', 0.1, 'depth', 0.2, 'pulse', ~matrix.beatdur * 20])
+~ins.stopEfx('magFreeze')
+
 
 
 ~ins.startEfx('granularReverb', 0)
@@ -57,7 +82,7 @@ Server.killAll
 ~ins.stopEfx('granularReverb')
 
 ~ins.startEfx('feedbackSpectrum', 0)
-~ins.setEfx('feedbackSpectrum', ['amp', 0.32])
+~ins.setEfx('feedbackSpectrum', ['amp', 0.2])
 
 ~ins.setEfx('feedbackSpectrum', ['iroom', 300, 'rev', 10, 'dry', 0, 'ear', 0.7, 'tail', 1.0, 'mrph', 0.5, 'amp', 0.3, 'fdba', 0.1, 'th', 0.1, 'lim', 0.5])
 
@@ -87,19 +112,19 @@ s.scope(2)
 ~ins.stopRecording
 
 ~ins.startShift(1.0, -0.25, 2.0)
-~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.1])
+~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.0])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(0.5, 4.0, 0.125)
-~ins.setShift(1, ['amp', 0.1, 'shift', 1.0, 'rate', 1.0])
+~ins.setShift(1, ['amp', 0.1, 'shift', 2.0, 'rate', -0.5])
 
 ~ins.stopShift(1)
 
 
-~ins.startShift(0.5, 8.0, 0.125)
-~ins.setShift(2, ['amp', 0.25, 'shift', 8.0, 'rate', 0.125])
+~ins.startShift(0.9, 8.0, 0.125)
+~ins.setShift(2, ['amp', 0.01, 'shift', 8.0, 'rate', 0.125])
 
 ~ins.stopShift(2)
 
@@ -124,10 +149,10 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([1.0, 1.0, 1.0, -1.0, -1.0], inf),
-		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.01, 0.1),
+		'out', ~decoder.bus, 'rate', Prand([1.0, -1.0], inf),
+		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.3, 0.7),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
-		'delta', Prand([ 1.0, 3.0] * ~matrix.beatdur, inf)
+		'delta', Prand([ 1.0, 0.5, 0.25] * ~matrix.beatdur, inf)
 	)
 ).play
 )
@@ -152,7 +177,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 1.0, 'wamp', 0.2, 'iamp', 0.2, 'ramp', 0.3, 'rate', 1.0, 'freq', 2.0, 'wrp', 0.25)
+~wrpv0.set('amp', 1.0, 'wamp', 0.6, 'iamp', 0.5, 'ramp', 1.0, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrpv0.set('buf', ~ins.recBufs.choose)
 
@@ -173,7 +198,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.3, 'ramp', 0.1, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125)
+~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.3, 'ramp', 0.6, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrpv1.set('buf', ~ins.recBufs.choose)
 
@@ -207,8 +232,8 @@ Pdef('swrp2',
 
 Tdef('warploop', {
 	loop({
-		[~wrpv0, ~wrpv1].choose.set('amp', 1.0, 'wamp', 0.2, 'iamp', 1.0, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
-		rrand(2, 5).wait
+		[~wrpv0, ~wrpv1].choose.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.4, 'ramp', 1.0, 'rate', 1.0, 'freq', 0.5, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		([ 2.0, 4.0, 8.0] * ~matrix.beatdur).choose.wait
 	})
 }).play
 
@@ -308,18 +333,18 @@ Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p01'), Pdef('b00') ]))
 
 
 ~matrix.defsAt('p00').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ exprand(0.3, 1.0) },
-	{ exprand(0.1, 0.3) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.4, 0.8) },
+	{ exprand(0.1, 0.2) },
 	0.1
 );
 
 
 
 ~matrix.defsAt('p01').setControls(
-	{ [0, 1].wchoose([0.5, 0.5]) },
-	{ exprand(0.3, 0.7) },
-	{ exprand(0.1, 0.4) },
+	{ [0, 1].wchoose([1.0, 0.0]) },
+	{ exprand(0.5, 0.8) },
+	{ exprand(0.1, 0.3) },
 	0.1
 );
 
@@ -785,3 +810,14 @@ s.stopRecording
 
 
 s.queryAllNodes
+
+
+Server.default.options.inDevice = "your device name";
+Server.default.options.outDevice = "JackRouter";
+
+
+~voice = { SoundIn.ar(0) }.play
+
+
+Server.killAll
+

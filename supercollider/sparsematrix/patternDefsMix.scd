@@ -37,7 +37,7 @@
 		2, "b4", 'argproto', matrix.buffers.evo.scramble.keep(32), 'bitSt0', true
 	);
 
-	matrix.addPatternBufferDef('b05', (0..31), 4, 4,
+	matrix.addPatternBufferDef('b05', (0..31), 4, 8,
 		SparseMatrix.patterns16.keys(Array).scramble.keep(8),
 		2, "b5", 'argproto', matrix.buffers.evo.scramble.keep(32), 'bitSt2', true
 	);
@@ -47,12 +47,12 @@
 		2, "b6", 'argproto', matrix.buffers.evo.scramble.keep(32), 'bitSt0', true
 	);
 
-	matrix.addPatternBufferDef('b07', (0..31), 4, 4,
+	matrix.addPatternBufferDef('b07', (0..31), 4, 8,
 		SparseMatrix.patterns16.keys(Array).scramble.keep(8),
 		2, "b7", 'argproto', matrix.buffers.evo.scramble.keep(32), 'bitSt2', true
 	);
 
-	matrix.addPatternBufferDef('b08', (0..31), 4, 4,
+	matrix.addPatternBufferDef('b08', (0..31), 4, 8,
 		SparseMatrix.patterns16.keys(Array).scramble.keep(8),
 		2, "b8", 'argproto', matrix.buffers.evo.scramble.keep(32), 'bitSt2', true
 	);
@@ -79,57 +79,57 @@
 
 	matrix.addPatternDubDef('d00', (0..15), 4, 2,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d0", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d0", 'bufproto', matrix.buffers.dnb.keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d01', (0..15), 4, 2,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d1", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d1", 'bufproto', matrix.buffers.dnb.drop(4).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d02', (0..15), 4, 4,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d2", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d2", 'bufproto', matrix.buffers.dnb.drop(8).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d03', (0..15), 4, 4,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d3", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d3", 'bufproto', matrix.buffers.dnb.drop(12).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d04', (0..15), 4, 8,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d4", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d4", 'bufproto', matrix.buffers.dnb.drop(16).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d05', (0..15), 4, 8,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d5", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d5", 'bufproto', matrix.buffers.dnb.drop(20).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d06', (0..15), 4, 16,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d6", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d6", 'bufproto', matrix.buffers.dnb.drop(24).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d07', (0..15), 4, 16,
 		SparseMatrix.patternsDub.keys(Array).scramble.keep(4),
-		0, "d7", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d7", 'bufproto', matrix.buffers.dnb.drop(28).keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d10', (0..15), 4, 4,
 		SparseMatrix.patternsDnB.keys(Array).scramble.keep(4),
-		0, "d10", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d10", 'bufproto', matrix.buffers.dnb.scramble.keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d11', (0..15), 4, 4,
 		SparseMatrix.patternsDnB.keys(Array).scramble.keep(4),
-		0, "d11", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d11", 'bufproto', matrix.buffers.dnb.scramble.keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d12', (0..15), 4, 4,
 		SparseMatrix.patternsDnB.keys(Array).scramble.keep(4),
-		0, "d12", 'bufproto', matrix.buffers.dnb.scramble.keep(16), 'bit01', false
+		0, "d12", 'bufproto', matrix.buffers.dnb.scramble.keep(4), 'bit01', false
 	);
 
 	matrix.addPatternDubDef('d13', (0..15), 4, 4,

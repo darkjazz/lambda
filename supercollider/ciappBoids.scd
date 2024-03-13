@@ -8,23 +8,23 @@
 ~graphics.initWorld(20, 20, 20, 20);
 
 
-~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
+~graphics.activateSwarm(17, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 
-~graphics.sendBoidPattern(0, 0, 0);
+~graphics.sendBoidPattern(0, 1, 4);
 
 ~graphics.sendBoidPattern(1, 0, 0);
 
 ~graphics.sendBoidPattern(2, 0, 0);
 
-~graphics.sendBoidPattern(4, 0, 0);
+~graphics.sendBoidPattern(3, 1, 4);
 
-~graphics.sendBoidPattern(3, 0, 4);
+~graphics.sendBoidPattern(4, 0, 0);
 
 ~graphics.sendBoidPattern(5, 0, 0);
 
-~graphics.setViewpoint(0.0,0.0,-180.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(180.0,180.0,-180.0, 0.0, 0.0, 0.0)
 
-~graphics.setSwarm(0.7, 20.0, 20.0, 10.0, 100.0)
+~graphics.setSwarm(0.8, 20.0, 10.0, 25.0, 100.0)
 
 ~graphics.killSwarm
 

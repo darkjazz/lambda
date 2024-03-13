@@ -5,8 +5,12 @@ e = SpEnvir(~settings, InEnvir(nRecs: 23, bufmul:Prand([3, 4, 5, 6], inf)).initF
 
 ['flangingDecimator', 'granularReverb', 'feedbackSpectrum', 'cyclicWarp', 'latchOnset', 'cliqSaw', 'fxGrain', 'arhythmicGendy', '']
 
-
+s.quit
 SparseMatrix
+
+
+
+
 
 s.record
 FoaDecoder
@@ -20,7 +24,7 @@ Server.killAll
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 0.1, 'iwrp', 1.0, 'ibufscale', 1.0, 'wsz', 0.3, 'dns', 4, 'rnd', 0.1, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.0, 'iwrp', 1.0, 'ibufscale', 1.0, 'wsz', 0.1, 'dns', 6, 'rnd', 0.1, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -41,11 +45,11 @@ Server.killAll
 
 
 ~ins.startEfx('primeTam', 0)
-~ins.setEfx('primeTam', ['amp', 0.4])
+~ins.setEfx('primeTam', ['amp', 0.3])
 ~ins.stopEfx('primeTam')
 
 ~ins.startEfx('roosaShift', 0)
-~ins.setEfx('roosaShift', ['amp', 0.2])
+~ins.setEfx('roosaShift', ['amp', 0.1])
 ~ins.stopEfx('roosaShift')
 
 
@@ -69,7 +73,7 @@ Server.killAll
 ~ins.stopEfx('fxGrain')
 
 ~ins.startEfx('arhythmicGendy', 0)
-~ins.setEfx('arhythmicGendy', ['amp', 1.0])
+~ins.setEfx('arhythmicGendy', ['amp', 0.4])
 ~ins.stopEfx('arhythmicGendy')
 
 
@@ -83,20 +87,20 @@ s.scope(2)
 
 ~ins.stopRecording
 
-~ins.startShift(1.0, -0.25, 2.0)
-~ins.setShift(0, ['shift', 0.25, 'rate', -4.0, 'amp', 0.25])
+~ins.startShift(0.7, -0.5, 2.0)
+~ins.setShift(0, ['shift', 1.0, 'rate', -1.0, 'amp', 0.3])
 
 ~ins.stopShift(0)
 
 
 ~ins.startShift(0.5, 4.0, 0.125)
-~ins.setShift(1, ['amp', 0.25, 'shift', 4.0, 'rate', 0.25])
+~ins.setShift(1, ['amp', 0.5, 'shift', 1.0, 'rate', 1.0])
 
 ~ins.stopShift(1)
 
 
 ~ins.startShift(0.5, 8.0, 0.125)
-~ins.setShift(2, ['amp', 0.25, 'shift', 8.0, 'rate', 0.125])
+~ins.setShift(2, ['amp', 0.1, 'shift', 2.0, 'rate', 0.5])
 
 ~ins.stopShift(2)
 
@@ -152,7 +156,7 @@ Tdef(\playshift).clear
 Pdef('playsamp',
 	Pbind('instrument', 'playSample',
 		'group', ~matrix.group, 'addAction', 'addToTail',
-		'out', ~decoder.bus, 'rate', Prand([0.5, 0.25, 1.0, 2.0, -0.5], inf),
+		'out', ~decoder.bus, 'rate', Prand([0.5, -1.0, 1.0, 2.0, -0.5], inf),
 		'buffer', Pxrand(~ins.recBufs, inf), 'amp', Pwhite(0.4, 0.8),
 		'rx', Pwhite(-pi, pi), 'ry', Pwhite(-pi, pi), 'rz', Pwhite(-pi, pi),
 		'delta', Prand([ 0.25, 0.5, 1.0, 2.0] * ~matrix.beatdur, inf)
@@ -180,7 +184,7 @@ Pdef('swrp0',
 ).play
 )
 
-~wrpv0.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.3, 'ramp', 0.1, 'rate', 2.0, 'freq', 1.0, 'wrp', 0.25)
+~wrpv0.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.3, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.25)
 
 ~wrpv0.set('buf', ~ins.recBufs.choose)
 
@@ -201,7 +205,7 @@ Pdef('swrp1',
 ).play
 )
 
-~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.02, 'rate', 0.5, 'freq', 1.0, 'wrp', 0.125)
+~wrpv1.set('amp', 1.0, 'wamp', 0.0, 'iamp', 0.4, 'ramp', 0.2, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125)
 
 ~wrpv1.set('buf', ~ins.recBufs.choose)
 
@@ -235,7 +239,7 @@ Pdef('swrp2',
 
 Tdef('warploop', {
 	loop({
-		~wrpv1.set('amp', 1.0, 'wamp', 0.2, 'iamp', 0.3, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
+		~wrpv1.set('amp', 1.0, 'wamp', 0.4, 'iamp', 0.6, 'ramp', 0.3, 'rate', 1.0, 'freq', 1.0, 'wrp', 0.125, 'buf', ~ins.recBufs.choose);
 		rrand(2, 5).wait
 	})
 }).play
@@ -333,28 +337,28 @@ Pdef('matrix', Ppar( [Pdef('p00'), Pdef('p02'), Pdef('p03') ]))
 
 ~matrix.defsAt('p00').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.5) },
-	{ exprand(0.2, 0.3) },
+	{ exprand(0.7, 1.0) },
+	{ exprand(0.1, 0.4) },
 	0.1
 );
 
 ~matrix.defsAt('p01').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.7) },
-	{ exprand(0.2, 0.7) },
+	{ exprand(0.7, 1.0) },
+	{ exprand(0.4, 0.8) },
 	0.1
 );
 
 ~matrix.defsAt('p02').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.4, 0.8) },
-	{ exprand(0.1, 0.3) },
+	{ exprand(0.6, 1.0) },
+	{ exprand(0.4, 0.7) },
 	0.1
 );
 
 ~matrix.defsAt('p03').setControls(
 	{ [0, 1].wchoose([1.0, 0.0]) },
-	{ exprand(0.3, 0.7) },
+	{ exprand(0.7, 1.0) },
 	{ exprand(0.1, 0.3) },
 	0.1
 );

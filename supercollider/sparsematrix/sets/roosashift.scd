@@ -9,12 +9,13 @@ SynthDef('roosashift', {|out, in, shift, del, dec, rate, amp|
 	Out.ar(out, sig.dup);
 }).add
 
-~synth = Synth('roosashift', ['out', 0, 'in', 0, 'shift', 2.0, 'del', 0.7, 'dec', 10, 'rate', 10, 'amp', 2.0])
+~synth = Synth('roosashift', ['out', 0, 'in', 0, 'shift', 0.25, 'del', 0.7, 'dec', 10, 'rate', 3, 'amp', 1.0])
 
 ~synth.set( 'shift', 0.5, 'del', 0.2, 'rate', 11, 'amp', 1.0)
 
 ~synth.free
 
+Server.killAll
 
 SynthDef('roosashift', {|out, in, shift=0.5, del=0.2, dec=10, rate=11, amp=0, ang, xng|
 	var input, fft, sig, bf;
@@ -37,4 +38,18 @@ SynthDef('roosashift', {|out, in, shift=0.5, del=0.2, dec=10, rate=11, amp=0, an
 		)
 ))
 
-1/0.8
+
+
+x = {
+	SoundIn.ar([0, 1])
+}.play
+
+
+x.free
+
+s.quit
+
+
+s.queryAllNodes
+
+s.sendMsg("/n_free",1010 )

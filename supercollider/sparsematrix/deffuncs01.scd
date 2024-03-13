@@ -52,7 +52,7 @@
 	{|freq=37| Mix(Oregonator.ar(Impulse.kr(freq), 5, 0.5).clip(-0.9, 0.9)) },
 	{|freq=17| Mix(Oregonator.ar(Impulse.kr(freq), 5, 0.5).clip(-0.9, 0.9)) },
 	{|freq=139| PMOsc.ar(SinOsc.kr(17).range(freq, freq*1.5), SinOsc.kr(13).range(1693,401)) },
-	{|freq=11987| FincoSprottL.ar(freq,2.39,0.1,1/7,1/11,1/17) },
+	{|freq=11987| FincoSprottL.ar(freq,2.39,0.1,1/7,1/11,1/17).first },
 	{|freq=27| (Perlin3.ar(LFSaw.kr(freq/2+1.5), SinOsc.ar(freq), LFTri.ar(freq+104))*11).distort },
 // 48
 	{|freq=23| LFTri.ar(freq, 0, LFNoise0.ar(257).range(freq, 67)).clip(-0.9, 0.9).distort },

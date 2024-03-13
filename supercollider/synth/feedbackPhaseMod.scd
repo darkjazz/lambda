@@ -1,12 +1,13 @@
+(
 SynthDef('grain', {|out, efx, amp, emp, dur, theta=0, phi=0|
 	var osc1, osc2, osc3, freqs, amps, inds, mono, bf, env, n = 3;
 	freqs = ArrayControl.kr('freqs', n, 1.0);
 	amps = ArrayControl.kr('amps', n, 1.0);
 	inds = ArrayControl.kr('inds', n, 1.0);
 	env = EnvControl.kr;
-	osc1 = SinOsc.ar(freqs[0], LocalIn.ar * inds[0], amps[0]);
-	osc2 = SinOsc.ar(freqs[1], osc1 * inds[1], amps[1]);
-	osc3 = SinOsc.ar(freqs[2], osc2 * inds[2], amps[2]);
+	osc1 = SinOsc.ar(freqs[0], LocalIn.ar * inds[0], 0.5, amps[0]);
+	osc2 = SinOsc.ar(freqs[1], osc1 * inds[1], 0.5, amps[1]);
+	osc3 = SinOsc.ar(freqs[2], osc2 * inds[2], 0.5, amps[2]);
 	LocalOut.ar(osc3);
 	mono = (osc1 + osc2 + osc3) * EnvGen.kr(env, timeScale: dur, doneAction: 2);
 	bf = PanB.ar(mono * amp, theta, phi);
@@ -14,25 +15,66 @@ SynthDef('grain', {|out, efx, amp, emp, dur, theta=0, phi=0|
 	Out.ar(out, bf)
 }).add;
 
-~decoder = FoaDecoder(decoderType: 'stereo');
+~decoder = FoaDecoder(decoderType: 'binaural');
 ~freqmap = Array.primeSeries(18, 47, 19).clump(6);
 ~rbus = Bus.audio;
 ~bpm = 111;
 ~bps = ~bpm/60;
-~beatdur = ~bps.reciprocal
-
+~beatdur = ~bps.reciprocal;
+~makeScale = {|note = "a", octave = 0|
+	var degs, freqs, fund, mul;
+	mul = 2**octave;
+	fund = (note ++ " 3").notemidi.midicps;
+	degs = Scale.minor.degrees;
+	freqs = Array.geom(12, fund, 2**(1/12))[degs] * mul;
+	freqs.collect(_.nearestPrime)
+};
+~keys = "abcdefg".scramble.keep(3);
+)
+~decoder.start
 
 Pdef('x00',
 	Pbind('instrument', 'grain', 'addAction', 'addBefore', 'target', ~decoder.synth,
 		'out', ~decoder.bus, 'amp', Pwhite(0.05, 0.1), 'efx', ~rbus, 'emp', 0.01,
-		'dur', Pfunc({ ~beatdur * [0.2, 0.4] }),
+		'dur', Pfunc({ ~beatdur * 4 }),
 		'theta', Pwhite(-pi, pi), 'phi', Pwhite(-0.5pi, 0.5pi),
-		'inds', Pfunc({ [1, 1, 3].bubble }), 'amps', Pfunc({ Array.rand(3, 0.5, 1.0).bubble }),
-		'env', Pfunc({ Env.perc.asArray.bubble }),
-		'delta', ~beatdur / 5.4, 'type', Pwrand([\note, \rest], [0.7, 0.3], inf),
-		'freqs', Pfunc({|ev| var freqs = ~freqmap.collect(_.choose).scramble; if (ev['type'] == \note) { freqs.postln} ; freqs.bubble }),
+		'inds', Pfunc({ [1, 1, 5].bubble }), 'amps', Pfunc({ Array.rand(3, 0.5, 1.0).bubble }),
+		'env', Pfunc({ Env.sine.asArray.bubble }),
+		'delta', ~beatdur * 2, 'type', Pwrand([\note, \rest], [0.7, 0.3], inf),
+		'freqs', Pfunc({|ev|
+			var freqs = ~freqmap.collect(_.choose).scramble;
+			if (ev['type'] == \note) { freqs.postln} ;
+			freqs.bubble
+		}),
 	)
 )
+
+Pdef('x00').clear
+
+Pdef('x01',
+	Pbind('instrument', 'grain', 'addAction', 'addBefore', 'target', ~decoder.synth,
+		'out', ~decoder.bus, 'amp', Pwhite(0.05, 0.1), 'efx', ~rbus, 'emp', 0.01,
+		'dur', Pfunc({ ~beatdur / 4 }),
+		'theta', Pwhite(-pi, pi), 'phi', Pwhite(-0.5pi, 0.5pi),
+		'inds', Pfunc({ [1, 2, 3].bubble }), 'amps', Pfunc({ Array.rand(3, 0.5, 1.0).bubble }),
+		'env', Pfunc({ Env.perc.asArray.bubble }),
+		'delta', ~beatdur / 2, 'type', Pwrand([\note, \rest], [0.7, 0.3], inf),
+		'keys', Pseq(~keys ++ ~keys[0], inf),
+		'freqs', Pfunc({|ev|
+			var freqs, degs;
+			freqs = Array.fill(3, 0);
+			degs = (0..6).scramble.keep(3);
+			degs.sort;
+			3.do({|i|
+				var scale = ~makeScale.(ev['keys'], i+1);
+				freqs[i] = scale[degs[i]];
+			});
+			if (ev['type'] == \note) { freqs.postln} ;
+			freqs.bubble
+		})
+	)
+)
+
 
 
 (
@@ -55,7 +97,7 @@ Pdef('x00',
 )
 ~rev.free
 
-~rev.set('revamp', 0.03, 'revtime', 5.0, 'dry', 1.0)
+~rev.set('revamp', 1.0, 'revtime', 10.0, 'dry', 1.0)
 
 ~rev.free
 
@@ -82,9 +124,12 @@ p.next
 
 Tdef('cloud').clear
 
-Pdef('x00').play
+Pdef('x01').play
 
-Pdef('x00').stop
+Pdef('x01').stop
 
+MasterEQ(2)
 
 Array.primes(7000, 7999).
+
+Server.killAll

@@ -27,7 +27,7 @@ SparseMatrix
 s.scope(2)
 
 
-~matrix.setBPM(70)
+~matrix.setBPM(99)
 
 
 (

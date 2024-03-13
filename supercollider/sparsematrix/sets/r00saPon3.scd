@@ -14,11 +14,11 @@ s.stopRecording
 
 Server.killAll
 
-~ins.ins[0].set('amp', 1.0, 'revamp', 0.4, 'revtime', 5.1)
+~ins.ins[0].set('amp', 0.1, 'revamp', 0.4, 'revtime', 5.1)
 
 ~ins.startEfx('cyclicWarp', 0)
 
-~ins.setEfx('cyclicWarp', ['amp', 1.0, 'iwrp', 2.0, 'ibufscale', 1.0, 'wsz', 1.0, 'dns', 4, 'rnd', 0.2, 'rev', 0.1])
+~ins.setEfx('cyclicWarp', ['amp', 0.3, 'iwrp', 2.0, 'ibufscale', 1.0, 'wsz', 1.0, 'dns', 4, 'rnd', 0.2, 'rev', 0.1])
 
 ~ins.stopEfx('cyclicWarp')
 
@@ -48,7 +48,7 @@ Server.killAll
 ~ins.stopEfx('feedbackSpectrum')
 
 ~ins.startEfx('cliqSaw', 0)
-~ins.setEfx('cliqSaw', ['amp', 0.0])
+~ins.setEfx('cliqSaw', ['amp', 1.0])
 ~ins.stopEfx('cliqSaw')
 
 s.scope(2)
