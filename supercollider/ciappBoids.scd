@@ -16,7 +16,6 @@
 
 ~graphics.sendBoidPattern(2, 0, 0);
 
-~graphics.sendBoidPattern(3, 1, 4);
 
 ~graphics.sendBoidPattern(4, 0, 0);
 

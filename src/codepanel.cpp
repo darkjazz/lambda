@@ -47,7 +47,7 @@ void CodePanel::createTexture()
 //	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 //	layout.addLine( title );
 	
-	layout.setFont(Font("Noteworthy Bold", 15));
+	layout.setFont(Font("Krungthep", 17));
 	layout.setColor(Color(0.7f, 0.41f, 1.0f));
 	layout.addLine("------------------------------------------------------------------------------------------------------------------------");
 		

@@ -10,8 +10,7 @@ e.playWarp('w0', 'revwrpm', ~kvbufs[~ind], a, ~matrix.beatdur, 1.0, 1 );
 
 e.setPwarp('w0', a, ~matrix.beatdur)
 
-e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 1.0, 'iamp', 1,
-	'ramp', 0.06, 'rate', 1, 'freq', 1])
+e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 1.0, 'iamp', 1, 'ramp', 0.4, 'rate', 1, 'freq', 1])
 
 
 e.freeWarp('w0')

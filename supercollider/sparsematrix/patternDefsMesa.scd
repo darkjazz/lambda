@@ -187,42 +187,42 @@
 	);
 
 	matrix.addPatternDubDef('d08', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().keep(6),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $1).and(key.asString.find("fill").isNil)}).keep(4),
 		0, "d8", 'bufproto', matrix.buffers.perc.drop(24).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d09', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(6).keep(6),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $2).and(key.asString.find("fill").isNil)}).keep(5),
 		0, "d9", 'bufproto', matrix.buffers.perc.drop(28).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d10', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(12).keep(6),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $3).and(key.asString.find("fill").isNil)}).keep(6),
 		0, "d10", 'bufproto', matrix.buffers.perc.drop(32).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d11', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(18).keep(6),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $9).and(key.asString.find("fill").isNil)}).keep(6),
 		0, "d11", 'bufproto', matrix.buffers.perc.drop(36).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d12', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(29).keep(8),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $4).and(key.asString.find("fill").isNil)}).keep(5),
 		0, "d12", 'bufproto', matrix.buffers.perc.drop(40).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d13', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(51).keep(8),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $5).and(key.asString.find("fill").isNil)}).keep(6),
 		0, "d13", 'bufproto', matrix.buffers.perc.drop(44).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d14', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(59).keep(7),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $6).and(key.asString.find("fill").isNil)}).keep(5),
 		0, "d14", 'bufproto', matrix.buffers.perc.drop(48).keep(4), 'bitSt3', false
 	);
 
 	matrix.addPatternDubDef('d15', (0..15), 4, 4,
-		SparseMatrix.patternsDnB.keys(Array).sort().drop(66).keep(5),
+		SparseMatrix.patternsDnB.keys(Array).select({|key| (key.asString.last == $7).and(key.asString.find("fill").isNil)}).keep(5),
 		0, "d15", 'bufproto', matrix.buffers.perc.drop(52).keep(4), 'bitSt3', false
 	);
 

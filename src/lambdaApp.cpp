@@ -44,7 +44,7 @@ public:
 	
 private:
 	int _winSizeX, _winSizeY;
-	int _frameRate, _inport, _outport, _windowMode;
+	int _frameRate, _inport, _outport, _windowMode, _fullScreen;
 	string _remoteHost;
     string _bitMacAddress;
     int _bitFrameRate;
@@ -64,6 +64,7 @@ void LambdaApp::prepareSettings(Settings *settings) {
 	_inport = 7000;
 	_outport = 57120;
 	_windowMode = 0;
+    _fullScreen = 0;
     _bitMacAddress = "/dev/tty.bitalino-DevB";
     _bitFrameRate = 100;
 	
@@ -91,6 +92,9 @@ void LambdaApp::prepareSettings(Settings *settings) {
 		else if (args[i].compare("-wmode") == 0) {
 			_windowMode = atoi(args[i+1].c_str());
 		}
+        else if (args[i].compare("-full") == 0) {
+            _fullScreen = atoi(args[i+1].c_str());
+        }
 	}
 	
 	settings->setWindowSize( _winSizeX, _winSizeY );
@@ -102,7 +106,10 @@ void LambdaApp::prepareSettings(Settings *settings) {
 
 	settings->setBorderless( true );
 	settings->setFrameRate( _frameRate );
-		
+    
+    if (_fullScreen > 0)
+        settings->setFullScreen();
+
 	oscMessenger = new OSCMessenger(_remoteHost, _outport, _inport);
     //bitalino = new BitalinoCtr(_bitMacAddress, _bitFrameRate);
 }

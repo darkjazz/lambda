@@ -37,7 +37,7 @@ e.playWarp('w0', 'revwrpm', ~buf, a, ~matrix.beatdur / 2, 1, ~rate);
 
 Synth(\bitSt3, ['out', ~decoder.bus, 'efx', 512, 'amp', 0.5, 'emp', 0.0, 'buf', ~matrix.buffers['evo'][48], 'dur', 2.0, 'env', Env.sine] );
 
-~amps = 0;
-~ampk = 0
+~amps = 1;
+~ampk = 1
 
 e.freeWarp('w0')

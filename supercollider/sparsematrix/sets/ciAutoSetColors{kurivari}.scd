@@ -1,26 +1,29 @@
 
 (
+~viewstart = 50.0;
 ~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/{--kurivar-envir--}_++.postln.scd", "r");
 ~code = ~file.readAllString;
 ~file.close;
-~sendarr = ~code.split($%);
+~sendarr = ~code.split(Char.nl);
 ~sendCode = {
 	Tdef('code', {
 		loop({
 			~sendarr.do({|code|
 				var usr = "{}kurivari$ ";
-				code.split(Char.nl).do({|line|
-					if (line.size > 0) {
-						~graphics.sendCodeLine(usr ++ line)
-					}
-				});
-				rrand(3.0, 7.0).wait;
+				~graphics.sendCodeLine(usr ++ code);
+				if (code.size == 0) {
+					rrand(6.0, 10.0).wait;
+
+				}
+				{
+					rrand(0.1, 0.5).wait;
+				}
 			})
 		})
 	}).play
 };
 ~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
-~wrldsz = 31;
+~wrldsz = 23;
 ~initMsg = {
 	Tdef(\sendVector, {
 		loop({
@@ -30,7 +33,7 @@
 	}).play;
 };
 Tdef('init', {
-	~graphics = CinderApp(1000, 800, mode: 1, path: ~path);
+	~graphics = CinderApp(1000, 800, mode: 0, path: ~path, fullScreen: true);
 	~graphics.open;
 	3.wait;
 	~graphics.initWorld(~wrldsz, ~wrldsz, ~wrldsz, 20);
@@ -38,23 +41,87 @@ Tdef('init', {
 	~graphics.initGenerations([ 4, 10, 14, 15, 21, 23 ], [ 6, 13, 25, 26 ], 23);
 	1.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 0.0, -100.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, ~viewstart, 0.0, 0.0, 0.0, 0.0);
 	~initMsg.();
 	1.wait;
 	~activePatterns = Array();
 	~graphics.activateSwarm(13, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 	0.2.wait;
-	~graphics.setPattern(0, 1, 1.0, 0, 0, 0.0, 0.6, 1.0);
-	~graphics.sendCodeTitle("{}kurivari");
+	~graphics.setPattern(5, 1, 1.0, 1, 1, 0.0, 0.5, 1.0);
+	~graphics.sendCodeTitle("{}악당");
+	~graphics.sendGenRule(*[[ 2, 3, 5, 6] * 2,[ 1, 4, 5, 6], 17]);
+	1.0.wait;
+	~graphics.sendBoidPattern(3, 1, 4);
 	Post << "Initialised..." << Char.nl;
 }).play
 )
+
+e.scopeWindow.window.alpha = 0.17;
+e.scopeWindow.scopeView.waveColors = [Color.green, Color.green];
+e.scopeWindow.window.bounds = Rect(1280, 0, 1280, 800);
+
+~graphics.hideCodePanel
+
+~graphics.setViewpoint(0.0, 173.0, 0.0, 0.0, 0.0, 0.0);
+
+
+~graphics.setViewpoint(0.0, 170.0, 0.0, 0.0, 0.0, 0.0);
+
+
+(
+~sendCode.value();
+Tdef('viewp', {
+	var start, end, time, sps, value, step;
+	start = ~viewstart; end = 220.0; time = 120; sps = 10;
+	step = end - start / (time*sps);
+	value = start;
+	(time*sps).do({
+		value = value + step;
+		~graphics.setViewpoint(0.0, value, 0.0, 0.0, 0.0, 0.0);
+		sps.reciprocal.wait;
+	});
+	~graphics.mapCodePanel;
+	~graphics.setPattern(1, 1, 1.0, 1, 1, 0.7, 0.1, 1.0);
+}).play
+)
+
+(
+~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/koreanbeckett.scd", "r");
+~code = ~file.readAllString;
+~file.close;
+~sendarr = ~code.split(Char.nl);
+~sendarr = ~sendarr.scramble;
+~sendCode = {
+	Tdef('code', {
+		loop({
+			~sendarr.do({|code|
+				var usr = "{}kurivari$ ";
+				~graphics.sendCodeLine(usr ++ code);
+				if (code.size == 0) {
+					rrand(6.0, 10.0).wait;
+
+				}
+				{
+					rrand(0.1, 0.5).wait;
+				}
+			})
+		})
+	}).play
+};
+)
+
+~sendarr.first.size
+
+Tdef('code').stop
 
 ~graphics.showCodePanel
 
 ~graphics.mapCodePanel
 
-~sendCode.value()
+~graphics.hideCodePanel
+
+
+
 
 Tdef('ciAuto').clear
 
@@ -65,15 +132,13 @@ Tdef('ciAuto').clear
 });
 )
 
+
 (
 ~ruleWeight = 0.1;
 ~changeWeight = 0.1;
 ~maxPatterns = 2;
 ~initWaitTime = 0;
-~rotWeight = 0.1;
-)
-
-(
+~rotWeight = 0.01;
 ~lasttime = SystemClock.seconds;
 ~meanamp = 0;
 ~meandur = 0;
@@ -125,7 +190,7 @@ Tdef('ciAuto').clear
 	[1.0, 1, 1, 0.1, 0.6, 1.0],
 	[0.5, 1, 1, 1.0, 1.0, 0.0], //10
 	[1.0, 0, 1, 0.0, 1.0, 1.0],
-	[1.0, 1, 1, 0.2, 0.4, 0.6],
+	[1.0, 1, 1, 0.5, 0.0, 0.5],
 	[1.0, 0, 1, 0.6, 1.0, 0.0],
 	[1.0, 0, 0, 0.3, 0.7, 1.0],
 	[1.0, 0, 0, 1.0, 1.0, 1.0], //15
@@ -142,20 +207,20 @@ Tdef('ciAuto').clear
 	[0.4, 1, 1, 0.1, 0.2, 0.3],
 	[0.3, 1, 1, 0.4, 0.5, 0.1],
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
-	[0.5, 0, 0, 0.6, 0.9, 1.0],
+	[0.5, 1, 1, 0.3, 0.0, 0.6],
 	[1.0, 1, 1, 0.0, 1.0, 1.0], //30
-	[0.4, 1, 1, 1.0, 0.0, 1.0],
+	[0.4, 1, 1, 0.3, 0.0, 0.3],
 	[1.0, 1, 1, 0.0, 0.04, 0.04],
 	[0.5, 1, 1, 0.4, 0.0, 0.2],
 	[0.4, 1, 1, 0.4, 0.4, 0.7],
-	[1.0, 0, 1, 0.0, 0.0, 0.5], //35
-	[1.0, 0, 0, 1.0, 1.0, 1.0],
-	[1.0, 1, 1, 0.2, 0.2, 0.2],
+	[1.0, 1, 1, 0.1, 0.0, 0.1], //35
+	[0.1, 0, 0, 1.0, 1.0, 1.0],
+	[0.3, 1, 1, 0.3, 0.1, 0.5],
 	[1.0, 0, 0, 1.0, 1.0, 1.0],
 	[1.0, 1, 1, 0.5, 1.0, 1.0]
 ];
 
-~graphPatterns = [0, 1, 7, 8, 9, 12, 13, 17, 18, 20, 22, 31];
+~graphPatterns = [0, 1, 3, 5, 9, 11, 12, 17, 18, 19, 22, 24, 29, 31, 34, 35, 36, 37];
 
 Tdef('ciAuto', {|mfcc|
 	~initWaitTime.wait;
@@ -183,9 +248,9 @@ Tdef('ciAuto', {|mfcc|
 				~graphics.setPattern(*args);
 			}
 		};
-		if (~ruleWeight.coin) {
-			~graphics.sendGenRule(*~getRule.(~rules.size.rand));
-		};
+		// if (~ruleWeight.coin) {
+		// 	~graphics.sendGenRule(*~getRule.(~rules.size.rand));
+		// };
 
 		if (~rotWeight.coin) {
 			~graphics.stopRotation;

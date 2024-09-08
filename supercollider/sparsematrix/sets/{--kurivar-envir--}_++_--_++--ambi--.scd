@@ -5,8 +5,9 @@
 ~mdefs = (0..3).collect({|i| ("m0" ++ i.asString).asSymbol });
 
 ~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2,
-	screenX: 1024, screenY: 768, mode: 1, decoderType: 'binaural',
-	'localDecoder': true, 'ambiOrder': 3, 'decoderFilePath': "",
+	screenX: 1024, screenY: 768, mode: 1, decoderType: 'hoa',
+	localDecoder: true, ambiOrder: 3,
+	decoderFilePath: (Paths.matrixDir +/+ "sets" +/+ "smcTHSC.json"),
 	bpm: 119, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00",
 	patdefs: "patternDefsMesa.scd",
 	initPdefs: ~rdefs ++ ~bdefs ++ ~ddefs ++ ~mdefs, worldDim: 21, ip: "127.0.0.1"
@@ -15,10 +16,29 @@ e = SpEnvir(~settings)
 
 )
 
-s.scope(2)
+
+
+
+~decoder.channelCheck(0, 1, 0.5)
+~decoder.runChannelCheck((0..11) ++ 15, 1.0, 0.6)
+
+~decoder.synth.set(\subamp, 1.0)
+
+
+
 s.queryAllNodes
 
+Tdef(\channelcheck).stop
+
+FoaDecoder
+
+s.scope(2)
+~matrix.decoder.numChannels
+
+
 Server.killAll
+
+PanAmbi3O
 e.setPat('r12', 1.0, [0.5, 0.7], [0.05, 0.1], 0.0);
 
 
@@ -683,27 +703,27 @@ Tdef('drone').clear
 
 ~matrix.activateSkismSynth('primeTam')
 
-~matrix.setSkismAmp('primeTam', 0.3 )
+~matrix.setSkismAmp('primeTam', 0.2 )
 
 ~matrix.deactivateSkismSynth('primeTam')
 
 
 
-~matrix.activateSkismSynth('latchOnset')
-
-~matrix.setSkismAmp('latchOnset', 0.03)
-
-~matrix.deactivateSkismSynth('latchOnset')
-
-
-
-
-
 ~matrix.activateSkismSynth('magFreeze')
 
-~matrix.setSkismAmp('magFreeze', 0.4)
+~matrix.setSkismAmp('magFreeze', 0.1)
 
 ~matrix.deactivateSkismSynth('magFreeze')
+
+
+
+
+
+~matrix.activateSkismSynth('cliqSaw')
+
+~matrix.setSkismAmp('cliqSaw', 0.1)
+
+~matrix.deactivateSkismSynth('cliqSaw')
 
 
 ~matrix.buffers['evo'].size

@@ -14,14 +14,20 @@
 
 ~graphics = CinderApp(ciAddr: NetAddr("169.254.184.218", 7000));
 
-~graphics = CinderApp(1024, 768, mode: 1)
+1024/768
 
-~graphics = CinderApp(800, 800, mode: 0, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app")
+
+
+~graphics = CinderApp(1024, 768, mode: 0, path: "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app", fullScreen: true)
+
+~graphics.open
+
+~graphics = CinderApp(1920, 1080, mode: 1, path:"/Users/alo/dev/lambda/ciapp/lambda.app")
 
 ~graphics.setFrameRate(11.0)
 
 ~graphics.patternLib.select({|pat| pat.active == 1 })
-send
+
 
 
 [
@@ -88,7 +94,7 @@ send
 
 ~graphics.setInterpolation(1, 2)
 
-~graphics.setBackground(0.2, 0.2, 0.4)
+~graphics.setBackground(0.9, 0.9, 0.9)
 ~graphics.setBackground(0.0, 0.0, 0.0)
 
 (
@@ -106,16 +112,16 @@ send
 
 Tdef(\sendVector).clear
 
-
+false.asInteger
 
 (
-~graphics = CinderApp(1000, 760, mode: 0, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app");
-~size = 29;
+~graphics = CinderApp(1024, 768, mode: 1, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app");
+~size = 23;
 ~startMessaging = {
 	Tdef(\sendVector, {
 		loop({
 			~graphics.sendSOMVector( Array.rand(20, 0.0, 1.0) );
-			rrand(0.3, 1.0).round(0.214).wait;
+			rrand(0.3, 1.0).round(0.05).wait;
 		});
 	});
 
@@ -126,110 +132,104 @@ Tdef('run', {
 	3.wait;
 	~graphics.initWorld(~size, ~size, ~size, 20);
 	0.5.wait;
-	~graphics.initGenerations( [ 4, 5, 6, 7, 26 ], [ 3, 6, 7, 11, 12, 13, 18, 23, 24, 25 ], 16 );
+	~graphics.initGenerations( [ 4, 6, 11, 14, 16, 25 ], [ 4, 10, 14, 19, 25, 26 ], 7 );
 	0.5.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 140.0, -140.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, 170.0, 120.0, 0.0, 0.0, 0.0);
 	~startMessaging.();
 	Post << "Initialised.." << Char.nl;
 }).play
 )
 
-~graphics.fullScreen
 
-[1334, 750] * 0.8
-
-
-27/3
-
-43**3
-
-
-1400/5
-
+Tdef('color').stop
 
 Tdef('color', {
 	var red, green, blue;
-	red = Pbrown(0.0, 1.0, 0.1, inf).asStream;
-	green = Pbrown(0.0, 1.0, 0.1, inf).asStream;
-	blue = Pbrown(0.0, 1.0, 0.1, inf).asStream;
+	red = Pbrown(0.0, 0.5, 0.01, inf).asStream;
+	green = Pbrown(0.0, 0.5, 0.01, inf).asStream;
+	blue = Pbrown(0.0, 0.5, 0.01, inf).asStream;
 	inf.do({
+		~graphics.setBackground(red.next, green.next, blue.next);
 		// ~graphics.setBackground(1-red.next, 1-green.next, 1-blue.next);
-		~graphics.setPattern(0, 1, 1.0, 1, 1, red.next, green.next, blue.next);
-		~graphics.setPattern(1, 1, 1.0, 1, 1, red.next, green.next, blue.next);
-		~graphics.setPattern(3, 1, 1.0, 1, 1, red.next, green.next, blue.next);
+		// ~graphics.setPattern(0, 1, 1.0, 1, 1, red.next, green.next, blue.next);
+		// ~graphics.setPattern(11, 1, 1.0, 1, 1, red.next, green.next, blue.next);
+		// ~graphics.setPattern(12, 1, 1.0, 1, 1, red.next, green.next, blue.next);
 		0.1.wait;
 	})
 }).play
 
-~graphics.setPattern(0, 1, 1.0, 1, 1, 1.0, 1.0, 0.0);
+
+
+~graphics.setPattern(0, 1, 1.0, 1, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(1, 1, 1.0, 1, 0, 1.0, 1.0, 1.0);
 
 
 
 
 ~graphics.setPattern(0, 1, 1.0, 1, 1, 0.0, 0.5, 1.0);
 
-~graphics.setPattern(1, 1, 1.0, 1, 1, 0.7, 0.1, 1.0);
+~graphics.setPattern(1, 0, 1.0, 1, 1, 0.7, 0.1, 1.0);
 
 
 ~graphics.setPattern(2, 0, 1.0, 0, 0, 0.9, 1.0, 0.9);
 
-~graphics.setPattern(3, 1, 1.0, 1, 1, 1.0, 0.0, 0.33);
+~graphics.setPattern(3, 0, 1.0, 1, 1, 1.0, 0.0, 0.33);
 
 ~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(5, 0, 1.0, 0, 0, 0.0, 1.0, 0.0);
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.0, 0.5, 1.0);
 
-~graphics.setPattern(6, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(6, 1, 1.0, 0, 0, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(7, 0, 1.0, 0, 0, 0.0, 0.4, 0.5);
+~graphics.setPattern(7, 0, 1.0, 1, 0, 1.0, 0.0, 1.0);
 
 ~graphics.setPattern(8, 0, 1.0, 1, 1, 1.0, 0.0, 0.6);
 
-~graphics.setPattern(9, 1, 1.0, 0, 0, 0.0, 0.3, 1.0);
+~graphics.setPattern(9, 0, 0.5, 0, 0, 1.0, 0.0, 0.0);
 
 
-~graphics.setPattern(10, 0, 0.3, 1, 1, 0.0, 0.4, 0.0);
+~graphics.setPattern(10, 0, 1.0, 0, 0, 0.0, 0.4, 0.0);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.0, 1.0);
 
-~graphics.setPattern(12, 0, 1.0 , 1, 1, 0.0, 0.0, 0.8);
+~graphics.setPattern(12, 1, 1.0, 1, 1, 0.5, 0.0, 0.5);
 
-~graphics.setPattern(13, 0, 1.0, 0, 1, 0.2, 0.8, 1.0);
+~graphics.setPattern(13, 0, 1.0, 0, 0, 0.2, 0.8, 1.0);
 
 ~graphics.setPattern(14, 0, 1.0, 1, 1, 0.0, 0.7, 1.0);
 
-~graphics.setPattern(15, 0, 0.2, 0, 0, 0.0, 1.0, 1.0);
+~graphics.setPattern(15, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
 
 ~graphics.setPattern(16, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(17, 0, 1.0, 1, 1, 1.0, 0.0, 1.0);
+~graphics.setPattern(17, 0, 1.0, 1, 1, 1.0, 0.0, 0.0);
 
-~graphics.setPattern(18, 0, 0.3, 1, 1, 0.0, 1.0, 0.0);
+~graphics.setPattern(18, 0, 1.0, 1, 1, 0.0, 1.0, 0.0);
 
 ~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(20, 0, 1.0, 1, 1, 1.0, 0.0, 0.5);
 
-~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
+~graphics.setPattern(21, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(22, 0, 0.4, 1, 1, 0.0, 0.4, 1.0);
+~graphics.setPattern(22, 0, 1.0, 0, 0, 0.2, 0.4, 1.0);
 
-~graphics.setPattern(23, 1, 0.6, 0, 0, 1.0, 0.0, 1.0);
+~graphics.setPattern(23, 0, 0.6, 0, 0, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(24, 0, 1.0, 1, 1, 0.0, 0.6, 0.7);
+~graphics.setPattern(24, 1, 1.0, 1, 1, 0.0, 0.6, 0.7);
 
-~graphics.setPattern(25, 0, 1.0, 1, 1, 0.0, 0.8, 0.8);
+~graphics.setPattern(25, 1, 1.0, 1, 1, 0.0, 0.8, 0.8);
 
-~graphics.setPattern(26, 0, 1.0, 1, 1, 0.0, 0.4, 0.1);
+~graphics.setPattern(26, 0, 1.0, 0, 0, 0.0, 0.4, 0.1);
 
 ~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.0, 0.04);
 
 ~graphics.setPattern(28, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(29, 0, 0.4, 0, 0, 0.3, 0.0, 0.6);
+~graphics.setPattern(29, 0, 1.0, 1, 1, 0.3, 0.0, 0.6);
 
-~graphics.setPattern(30, 1, 1.0, 1, 1, 0.3, 0.3, 0.3);
+~graphics.setPattern(30, 0, 1.0, 1, 1, 0.3, 0.3, 0.3);
 
 ~graphics.setPattern(31, 0, 1.0, 1, 1, 0.3, 0.0, 0.3);
 
@@ -237,17 +237,17 @@ Tdef('color', {
 
 ~graphics.setPattern(33, 0, 0.2, 1, 1, 0.4, 0.0, 0.2);
 
-~graphics.setPattern(34, 0, 0.4, 1, 1, 0.2, 0.1, 0.7);
+~graphics.setPattern(34, 0, 1.0, 0, 0, 0.2, 0.0, 1.0);
 
-~graphics.setPattern(35, 0, 0.1, 0, 0, 0.3, 0.6, 0.8);
+~graphics.setPattern(35, 0, 1.0, 1, 1, 0.1, 0.0, 0.1);
 
-~graphics.setPattern(36, 0, 1.0, 0, 0, 0.1, 0.1, 0.1);
+~graphics.setPattern(36, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(37, 0, 1.0, 1, 1, 0.4, 0.4, 0.6);
+~graphics.setPattern(37, 0, 1.0, 1, 1, 0.3, 0.1, 0.5);
 
 ~graphics.setPattern(38, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(39, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(39, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
 
 Tdef(\sendVector, {
@@ -280,11 +280,11 @@ Ndef('graphics', {
 
 24.do({|i| (i%4).postln })
 
-~rot = Rotation(-100.0, 0.0, -100.0, 0.0, -100.0, 0.01, 0.0, 0.0);
+~rot = Rotation(-170.0, 0.0, -170.0, 0.0, -170.0, 0.01, 0.0, 0.0);
 
 ~rot = Rotation(90.0, 0.015, 120.0, 50.0, 0.01, 0.002, 0.01, 0.01);
 
-~rot = Rotation(120.0, 0.03, 120.0, 100.0, 0.1, 0.03, 0.1, 0.01);
+~rot = Rotation(150.0, 0.03, 150.0, 50.0, 0.1, 0.03, 0.1, 0.01);
 
 ~graphics.setCameraRotation(~rot, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 ~graphics.rotateCamera
@@ -330,7 +330,7 @@ Tdef('rule').clear
 
 ~graphics.sendPredefined3DRule(\belzhab)
 
-~graphics.sendPredefined3DRule(\glisserati)
+~graphics.sendPredefined3DRule(\wanderers)
 
 
 ~graphics.sendPredefined3DRule(\transers)
@@ -388,12 +388,11 @@ Tdef('rule').clear
 
 (
 ~graphics.sendGenRule(*
-[ [ 4, 6, 11, 14, 16, 25 ], [ 4, 10, 14, 19, 25, 26 ], 7 ]
-
+[[2,3,5,6]*2,[1,4,5,6],17]
 )
 )
 
-
+[[2,3,5,6]*2,[1,4,5,6],16]
 
 Generations
 

@@ -611,44 +611,44 @@ void GraphicsRenderer::pattern02(int x, int y, int z) {
 
     glDisable( GL_LIGHTING );
     glEnable( GL_TEXTURE_2D );
-    img[7].bind();
+    img[0].bind();
     gl::pushMatrices();
     
     gl::color(red, green, blue, alpha);
 			
 	if (x == 0) {
-        gl::drawCube( Vec3f(x * fragSizeX, yB, zF), Vec3f( fragSizeX * 0.1, yH, zD ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX * 0.25, fragSizeY, fragSizeZ ) );
 //		fillRect(1);
 	}
 	
 	if (y == 0) {
-        gl::drawCube( Vec3f(xL, y * fragSizeY, zF), Vec3f( xW, fragSizeY * 0.1, zD ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX, fragSizeY * 0.25, fragSizeZ ) );
 //        fillRect(2);
 	}
 	
 	if (z == 0) {
-        gl::drawCube( Vec3f(xL, yB, z * fragSizeZ), Vec3f( xW, yH, fragSizeZ * 0.1 ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX, fragSizeY, fragSizeZ * 0.25 ) );
 //        fillRect(0);
 	}
 	
 	if (x == ptrWorld->sizeX()-1) {
-        gl::drawCube( Vec3f(x * fragSizeX + fragSizeX, yB, zF), Vec3f( fragSizeX * 0.1, yH, zD ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX * 0.25, fragSizeY, fragSizeZ ) );
 //		xL += (xW * cstate);
 //		fillRect(1);
 	}
 	if (y == ptrWorld->sizeY()-1 ) {
-        gl::drawCube( Vec3f(xL, y * fragSizeY + fragSizeY, zF), Vec3f( xW, fragSizeY * 0.1, zD ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX, fragSizeY * 0.25, fragSizeZ ) );
 //		yB += (yH * cstate);
 //		fillRect(2);
 	}
 	if (z == ptrWorld->sizeZ()-1 ) {
-        gl::drawCube( Vec3f(xL, yB, z * fragSizeZ + fragSizeZ), Vec3f( xW, yH, fragSizeZ * 0.1 ) );
+        gl::drawCube( Vec3f(xL, yB, zF), Vec3f( fragSizeX, fragSizeY, fragSizeZ * 0.25 ) );
 //		zF += (zD * cstate);
 //		fillRect(0);
 	}
     
     gl::popMatrices();
-    img[7].unbind();
+    img[0].unbind();
     glDisable( GL_TEXTURE_2D );
     
 
@@ -1042,10 +1042,43 @@ void GraphicsRenderer::pattern05(int x, int y, int z) {
 		if ((y == ptrWorld->sizeY() / 2 && isEven(state)) || (y == ptrWorld->sizeY() / 2 - 1 && !isEven(state))) {
 			fillRect(2);
 		}
-		
+
 		if ((z == ptrWorld->sizeZ() / 2 && isEven(state)) || (z == ptrWorld->sizeZ() / 2 - 1 && !isEven(state))) {
-			fillRect(0);			
+			fillRect(0);
 		}
+
+        alpha = patternLib[5].alpha * abs(patternLib[5].alphamap - unmap);
+
+        float sizes[] = {1.0, 0.5, 0.25, 0.125};
+        
+        for (int i=0; i < 4; i++) {
+            xL = (float)x * fragSizeX + (fragSizeX * sizes[i]) - (fragSizeX * unmap);
+            yB = (float)y * fragSizeY + (fragSizeY * sizes[i]) - (fragSizeY * unmap);
+            zF = (float)z * fragSizeZ + (fragSizeZ * sizes[i]) - (fragSizeZ * unmap);
+            
+            xW = fragSizeX * unmap * (1 / sizes[i]);
+            yH = fragSizeY * unmap * (1 / sizes[i]);
+            zD = fragSizeZ * unmap * (1 / sizes[i]);
+
+            xL -= hx;
+            yB -= hx;
+            zF -= hx;
+            
+            alpha *= 0.87;
+                                      
+            if ((x == ptrWorld->sizeX() / 2 && isEven(state)) || (x == ptrWorld->sizeX() / 2 - 1 && !isEven(state))) {
+                strokeRect(1, 1.0);
+            }
+
+            if ((y == ptrWorld->sizeY() / 2 && isEven(state)) || (y == ptrWorld->sizeY() / 2 - 1 && !isEven(state))) {
+                strokeRect(2, 1.0);
+            }
+            
+            if ((z == ptrWorld->sizeZ() / 2 && isEven(state)) || (z == ptrWorld->sizeZ() / 2 - 1 && !isEven(state))) {
+                strokeRect(0, 1.0);
+            }
+
+        }
 		
 		/*
 
