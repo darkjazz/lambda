@@ -9,24 +9,22 @@
 ~buf = ~kvbufs[~ind];
 ~lbpm = ~kvbufs.loops[~buf.path.basename.asSymbol].bpm;
 
-x={Dust.ar}.play
-
-x.free
-
 b = [
 	\rx, Pwhite(-pi, pi, inf),
 	\ry, Pbrown(0, 2pi, 0.125pi, inf),
 	\rz, Pbrown(0, 2pi, 0.125pi, inf),
-	\ramp, Pseq(( (0.05 ! 24) ++ [1.0, 1.0, 0.1, 1.0, 0.0, 0.3, 0.1, 0.0] ) * 0.1, inf),
+	\ramp, Pseq(( (0.05 ! 24) ++ [1.0, 1.0, 0.1, 1.0, 0.0, 0.3, 0.1, 0.0] ) * 0.5, inf),
 	\fnc, Pfunc({
-		Pdef('mx1',
-			Ppar(['r11', 'r15', 'r17'].collect({|nm| Pdef(nm) }))
-		).play;
+		Pdef('r17').play;
+		// Pdef('mx1',
+		// 	Ppar(['r11', 'r15', 'r17'].collect({|nm| Pdef(nm) }))
+		// ).play;
 		1
 	})
 ];
-e.playWarp('w1', 'wrprevm', ~buf, b, ~matrix.beatdur*4, 0.1, 1);
+e.playWarp('w1', 'wrprevm', ~buf, b, ~matrix.beatdur*4, 1.0, (~lbpm*1.5) / ~bpm);
 )
+
 
 (
 e.setWarp('w1', ['amp', 1, 'wrp', 0.25, 'wamp', 0.4])
@@ -55,9 +53,12 @@ e.setPat('r17', 1.0, [0.3, 0.3], nil, 0.1);
 Pdef('r17').play
 
 (
-e.setPat('r11', 0.0, [0.2, 0.4], [0.07, 0.1], 0.1);
-e.setPat('r15', 0.0, [0.2, 0.4], [0.07, 0.1], 0.1);
-e.setPat('r17', 0.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r09', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r10', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r11', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r15', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r16', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
+e.setPat('r17', 1.0, [0.2, 0.4], [0.07, 0.1], 0.1);
 
 )
 
@@ -128,7 +129,6 @@ Pdef('mx10').clear;
 //hmm not sure
 e.freeWarp('w1');
 Pdef('mx10').clear;
-e.freeWarp('w1');
 ~ind3 = 99;
 ~buf3 = ~mesabufs[~ind3];
 ~loop3 = ~mesabufs.loopsAtBuf(~buf3);

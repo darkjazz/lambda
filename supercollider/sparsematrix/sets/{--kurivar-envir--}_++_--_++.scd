@@ -26,10 +26,6 @@ e.setPat('r12', 1.0, [0.5, 0.7], [0.05, 0.1], 0.0);
 Pdef('r12').play
 
 
-
-SparseMatrix
-
-
 (
 [ 'r08', 'r09', 'r10', 'r11', 'r15', 'r16', 'r17' ].do({|name|
 	var pat = e.getPat(name);

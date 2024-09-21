@@ -68,7 +68,6 @@
 		5928B9FA15B9E55200792C66 /* fxd_pos_y.png in Resources */ = {isa = PBXBuildFile; fileRef = 5928B9F415B9E55200792C66 /* fxd_pos_y.png */; };
 		5928B9FB15B9E55200792C66 /* fxd_pos_z.png in Resources */ = {isa = PBXBuildFile; fileRef = 5928B9F515B9E55200792C66 /* fxd_pos_z.png */; };
 		592981A81C4E76D900B66EF7 /* bitalino.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592981A61C4E76D900B66EF7 /* bitalino.cpp */; };
-		592981AB1C4E8A2B00B66EF7 /* bit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592981A91C4E8A2B00B66EF7 /* bit.cpp */; };
 		592ADB1315B05CD1001FBC4F /* boids.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 592ADB1215B05CD1001FBC4F /* boids.cpp */; };
 		59590A4B14B349AD00EF570A /* lambdaApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590A4A14B349AD00EF570A /* lambdaApp.cpp */; };
 		59590AAB14B47F6200EF570A /* ogl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59590AA514B47F6200EF570A /* ogl.cpp */; };
@@ -134,14 +133,13 @@
 		59ED00E51BA8157100CD2ECA /* OscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59ED00CA1BA8157100CD2ECA /* OscMessage.cpp */; };
 		59ED00E61BA8157100CD2ECA /* OscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59ED00CC1BA8157100CD2ECA /* OscSender.cpp */; };
 		59ED00E71BA8157100CD2ECA /* OscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59ED00CC1BA8157100CD2ECA /* OscSender.cpp */; };
-		59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */; };
 		59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0091D8F80E81B9330029341E /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
-		0097E3E40F3E9819005A4392 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		0097E3E40F3E9819005A4392 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /Users/kurivari/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		00C073570FF32F8B004801EA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		00C073580FF32F8B004801EA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		00C073590FF32F8B004801EA /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
@@ -197,8 +195,6 @@
 		5928B9F515B9E55200792C66 /* fxd_pos_z.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fxd_pos_z.png; sourceTree = "<group>"; };
 		592981A61C4E76D900B66EF7 /* bitalino.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bitalino.cpp; sourceTree = "<group>"; };
 		592981A71C4E76D900B66EF7 /* bitalino.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitalino.h; sourceTree = "<group>"; };
-		592981A91C4E8A2B00B66EF7 /* bit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bit.cpp; sourceTree = "<group>"; };
-		592981AA1C4E8A2B00B66EF7 /* bit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bit.h; sourceTree = "<group>"; };
 		592ADB1115B05CD1001FBC4F /* boids.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = boids.h; path = ../src/boids.h; sourceTree = "<group>"; };
 		592ADB1215B05CD1001FBC4F /* boids.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = boids.cpp; path = ../src/boids.cpp; sourceTree = "<group>"; };
 		59590A4A14B349AD00EF570A /* lambdaApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lambdaApp.cpp; path = ../src/lambdaApp.cpp; sourceTree = SOURCE_ROOT; };
@@ -271,8 +267,6 @@
 		59ED00CB1BA8157100CD2ECA /* OscMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscMessage.h; sourceTree = "<group>"; };
 		59ED00CC1BA8157100CD2ECA /* OscSender.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OscSender.cpp; sourceTree = "<group>"; };
 		59ED00CD1BA8157100CD2ECA /* OscSender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OscSender.h; sourceTree = "<group>"; };
-		59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fluidParticles.h; sourceTree = "<group>"; };
-		59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fluidParticles.cpp; sourceTree = "<group>"; };
 		59EF1F0919B0F3B5005CA9B2 /* Particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Particle.cpp; sourceTree = "<group>"; };
 		59EF1F1919B0F496005CA9B2 /* Particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Particle.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* xcode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = folder; name = xcode; path = ../xcode; sourceTree = "<group>"; };
@@ -343,10 +337,6 @@
 				5928B62715B8223200792C66 /* cubemap.cpp */,
 				5990345D15D5B16A0078E3A5 /* codepanel.h */,
 				5990345E15D5B16A0078E3A5 /* codepanel.cpp */,
-				59EF1EDA19B0F10A005CA9B2 /* fluidParticles.h */,
-				59EF1EDB19B0F10A005CA9B2 /* fluidParticles.cpp */,
-				592981A91C4E8A2B00B66EF7 /* bit.cpp */,
-				592981AA1C4E8A2B00B66EF7 /* bit.h */,
 			);
 			name = src;
 			path = ../src;
@@ -756,10 +746,8 @@
 				59590BA514B4F4D200EF570A /* rule.cpp in Sources */,
 				5990B62815AC5CE000210DBD /* swarm.cpp in Sources */,
 				592ADB1315B05CD1001FBC4F /* boids.cpp in Sources */,
-				592981AB1C4E8A2B00B66EF7 /* bit.cpp in Sources */,
 				5928B62815B8223200792C66 /* cubemap.cpp in Sources */,
 				5990345F15D5B16A0078E3A5 /* codepanel.cpp in Sources */,
-				59EF1EDC19B0F10A005CA9B2 /* fluidParticles.cpp in Sources */,
 				59ED00E21BA8157100CD2ECA /* OscListener.cpp in Sources */,
 				59ED00E61BA8157100CD2ECA /* OscSender.cpp in Sources */,
 				59EF1F0B19B0F3B5005CA9B2 /* Particle.cpp in Sources */,

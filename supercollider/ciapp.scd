@@ -115,8 +115,8 @@ Tdef(\sendVector).clear
 false.asInteger
 
 (
-~graphics = CinderApp(1024, 768, mode: 1, path:"/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app");
-~size = 23;
+~graphics = CinderApp(1024, 768, mode: 0, path:"/Users/kurivari/dev/lambda/lambda.app");
+~size = 37;
 ~startMessaging = {
 	Tdef(\sendVector, {
 		loop({
