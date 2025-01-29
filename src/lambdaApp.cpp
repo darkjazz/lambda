@@ -127,6 +127,8 @@ void LambdaApp::setup()
 	oscMessenger->setWorld(world);
 	
 	ogl->setupOgl();
+        
+    
 
 }
 
@@ -150,19 +152,6 @@ void LambdaApp::draw()
 	if (world->initialized()) {
 		
 		int x, y, z;
-/*
-        if (bitalino->activated) {
-            std::stringstream fmt;
-            fmt << "Mean: " << bitalino->mean;
-            ogl->codePanel.putLine(0, fmt.str());
-            fmt << "Variance: " << bitalino->variance;
-            ogl->codePanel.putLine(1, fmt.str());
-            fmt << "Std dev: " << bitalino->stdDev;
-            ogl->codePanel.putLine(2, fmt.str());
-            ogl->codePanel.show = true;
-//            world->rule()->setAdd(bitalino->mapValues());
-        }
-*/
 		world->prepareNext();
 		
 		for (x = 0; x < world->sizeX(); x++) {

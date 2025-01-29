@@ -1,32 +1,75 @@
 (
-~ind = 7;
-~buf = ~kvbufs[~ind];
-~lbpm = ~kvbufs.loops[~buf.path.basename.asSymbol].bpm;
-~playpat = false;
+~bpm = 119;
+~matrix.setBPM(~bpm);
+~ind1 = 48;
+~buf1 = ~kvbufs[~ind1];
+~loop1 = ~kvbufs.loopsAtBuf(~buf1);
+~lbpm1 = ~loop1.bpm;
 a = [
 	\rx, Pwhite(-pi, pi, inf),
 	\ry, Pwhite(-pi, pi, inf),
-	\rz, Pwhite(-pi, pi, inf),
-	\buf, Pseq((7..10).collect({|ind| ~kvbufs[ind] }), inf),
-	\ramp, Pseq(SparseMatrix.patterns12['Tiriba'].keep(3).flat + 0.1 * 0.5, inf),
-	\wamp, Pseq(SparseMatrix.patterns12['Soli'].drop(3).keep(3).flat + 0.1, inf),
-	\fnc, Pfunc({
-		~pfnc.()
-	})
+	\rz, Pwhite(-pi, pi, inf)
 ];
-e.playWarp('w0', 'revwrpm', ~kvbufs[~ind], a, ~matrix.beatdur * 2, 0.0, ~bpm / ~lbpm );
+e.playWarp('w0', 'revwrpm', ~buf1, a, ~matrix.beatdur * 4, 0.5, ~bpm / ~lbpm1 * 2 );
+
+~ind2 = 22;
+~buf2 = ~kvbufs[~ind2];
+~loop2 = ~kvbufs.loopsAtBuf(~buf2);
+~lbpm2 = ~loop2.bpm;
+b = [
+	\rx, Pwhite(-pi, pi, inf),
+	\ry, Pwhite(-pi, pi, inf),
+	\rz, Pwhite(-pi, pi, inf)
+];
+e.playWarp('w1', 'revwrpm', ~buf2, b, ~matrix.beatdur * 4, 0.3, ~bpm / ~lbpm2 );
+
+~ind3 = 40;
+~buf3 = ~kvbufs[~ind3];
+~lbpm3 = ~kvbufs.loopsAtBuf(~buf3).bpm;
+c = [
+	\rx, Pwhite(-pi, pi, inf),
+	\ry, Pwhite(-pi, pi, inf),
+	\rz, Pwhite(-pi, pi, inf)
+];
+e.playWarp('w2', 'revwrpm', ~buf3, c, ~matrix.beatdur * 4, 0.4, ~bpm / ~lbpm3 * 2 );
+
+~ind4 = 66;
+~buf4 = ~kvbufs[~ind4];
+~lbpm4 = ~kvbufs.loopsAtBuf(~buf4).bpm;
+d = [
+	\rx, Pwhite(-pi, pi, inf),
+	\ry, Pwhite(-pi, pi, inf),
+	\rz, Pwhite(-pi, pi, inf)
+];
+e.playWarp('w3', 'revwrpm', ~buf4, d, ~matrix.beatdur * 4, 0.0, ~bpm / ~lbpm4 * 2 );
 )
 
-~playpat = true
+~kvbufs.loops
+~kvbufs.searchDuration( ~loop2.start + ~loop2.nframes / ~buf2.sampleRate)
+~kvbufs.search(60.0).do(_.postln)
+
+~kvbufs.loopsAtBuf(~buf2)
+
+
+Scale.minor.ratios.scramble.keep(3)
+
+~kvbufs.search(~lbpm).do(_.postln)
 
 e.setPwarp('w0', a, ~matrix.beatdur)
 
-e.setWarp('w0', ['amp', 1.0, 'iamp', 0.7])
+e.setWarp('w1', ['amp', 1.0, 'iamp', 0.7])
 
 
-e.setWarp('w0', ['buf', ~kvbufs[10]])
+e.setWarp('w0', ['wamp', 1.0, 'ramp', 0.0, 'iamp', 0.0])
+e.setWarp('w1', ['wamp', 0.0, 'ramp', 0.0, 'iamp', 1.0])
+e.setWarp('w2', ['wamp', 0.4, 'ramp', 0.05, 'iamp', 0.0, 'wrp', 0.5, 'freq', 0.5])
+e.setWarp('w3', ['wamp', 1.0, 'ramp', 0.1, 'iamp', 0.0, 'wrp', 0.25])
 
-e.freeWarp('w0')
+
+e.freeWarp('w0');
+e.freeWarp('w1');
+e.freeWarp('w2');
+e.freeWarp('w3');
 
 
 Pdef('r00').play
@@ -41,7 +84,7 @@ e.setPat('r06', 0.1, [0.3, 0.5], [0.07, 0.15], 0.1);
 
 
 (
-~ind = 0;
+~ind = 138;
 ~buf = ~kvbufs[~ind];
 ~lbpm = ~kvbufs.loops[~buf.path.basename.asSymbol].bpm;
 ~pfnc = {1};
@@ -54,8 +97,10 @@ b = [
 		~pfnc.()
 	})
 ];
-e.playWarp('w1', 'revwrpm', ~buf, b, ~matrix.beatdur, 1.0, ~bpm / ~lbpm);
+e.playWarp('w1', 'revwrpm', ~buf, b, ~matrix.beatdur, 1.0, ~bpm / ~lbpm * 2);
 )
+
+
 
 
 (

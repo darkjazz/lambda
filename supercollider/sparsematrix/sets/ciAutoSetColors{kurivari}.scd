@@ -1,7 +1,7 @@
 
 (
 ~viewstart = 50.0;
-~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/{--kurivar-envir--}_++.postln.scd", "r");
+~file = File("/Users/kurivari/dev/lambda/supercollider/sparsematrix/sets/{--kurivar-envir--}_++.postln.scd", "r");
 ~code = ~file.readAllString;
 ~file.close;
 ~sendarr = ~code.split(Char.nl);
@@ -22,7 +22,7 @@
 		})
 	}).play
 };
-~path = "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app";
+~path = "/Users/kurivari/dev/lambda/lambda.app";
 ~wrldsz = 23;
 ~initMsg = {
 	Tdef(\sendVector, {
@@ -33,7 +33,7 @@
 	}).play;
 };
 Tdef('init', {
-	~graphics = CinderApp(1000, 800, mode: 0, path: ~path, fullScreen: true);
+	~graphics = CinderApp(1000, 800, mode: 1, path: ~path, fullScreen: true);
 	~graphics.open;
 	3.wait;
 	~graphics.initWorld(~wrldsz, ~wrldsz, ~wrldsz, 20);

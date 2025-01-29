@@ -15,16 +15,12 @@ e = SpEnvir(~settings)
 
 )
 
-s.scope(2)
-s.queryAllNodes
-
-Server.killAll
 e.setPat('r12', 1.0, [0.5, 0.7], [0.05, 0.1], 0.0);
-
-
 
 Pdef('r12').play
 
+
+Server.default.scope(2)
 
 (
 [ 'r08', 'r09', 'r10', 'r11', 'r15', 'r16', 'r17' ].do({|name|
@@ -41,8 +37,43 @@ Pdef('r12').play
 })
 )
 
+(
+~db = CouchDB(NetAddr("127.0.0.1", 5984), "ges_synth_features_wav");
+~ids = (Paths.matrixDir +/+ "sets/{--kurivari-gep-synths--}.scd").load;
+~docs = ~db.getKeys("loop-data", ~ids)
+)
+
+~docs.size
+
+~row = ~docs["rows"][0]["value"]
+
+~row["nframes"].asFloat
 
 
+GESBufferLoader.dbname
+
+~ldr = GESBufferLoader();
+~keyspath = Paths.matrixDir +/+ "sets/{--kurivari-gep-synths--}.scd";
+~ldr.loadFromDb(~keyspath)
+
+~ldr[146]
+
+~keysdict = (Paths.matrixDir +/+ "sets/___ei_saa_aru_synths.scd").load;
+~keysdict.values.do({|name|
+	Post << "'" << name.split($.)[0] << "'," << Char.nl
+})
+
+~msl = GESBufferLoader();
+~keyspath = Paths.matrixDir +/+ "sets/__mesa_synths.scd";
+~msl.loadFromDb(~keyspath)
+
+~msl.size
+
+~ldr.loopsAtBuf(~ldr[146])
+
+~ldr.loops.keys
+
+~keys = (Paths.matr
 
 (
 ~ind = 2;

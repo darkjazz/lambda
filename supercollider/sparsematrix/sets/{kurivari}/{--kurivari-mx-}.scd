@@ -6,27 +6,17 @@ Pdef('mx22',
 Pdef('efx').play
 
 
-~matrix.efxamps['efx1'] = 0.1
+~matrix.efxamps['efx1'] = 0.05
 
 ~matrix.defsAt('r00').assignEfx(
 	(efx1: (0..15))
 )
 
 
-~preset = ~rdefs.keep(4).collect({|nm|
-	~matrix.patterndefs[nm].ctrls.select({|ctr|
-		ctr.active == 1
-	})
-})
-
-~preset.do({|ctr|
-	ctr.postcs
-})
-
 
 (
-e.setPat('r00', 0.0, [0.5, 0.5], [0.05, 0.1], 0.2);
-e.setPat('r01', 0.0, [0.5, 0.5], [0.04, 0.2], 0.0);
+e.setPat('r00', 0.0, [0.3, 0.6], [0.05, 0.1], 0.1);
+e.setPat('r01', 0.0, [0.3, 0.6], [0.04, 0.2], 0.0);
 e.setPat('r02', 0.0, [0.4, 0.7], [0.05, 0.1], 0.0);
 e.setPat('r03', 0.0, [0.4, 0.7], [0.01, 0.3], 0.0);
 

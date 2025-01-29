@@ -150,7 +150,7 @@ void GraphicsRenderer::setupBoidShader() {
 void GraphicsRenderer::reshape() {
 
 	mCam.setPerspective(45.0, getWindowAspectRatio(), 0.1f, 2000.0f);
-	gl::setMatrices( mCam );	
+	gl::setMatrices( mCam );
 
 }
 

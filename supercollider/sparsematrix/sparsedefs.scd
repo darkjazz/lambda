@@ -291,6 +291,83 @@ SynthDef('wrpdrn', {|out, wrp, freq, wsize, dens, randr,
 	Out.ar(out, LeakDC.ar(bf));
 }).add;
 
+SynthDef('pvmwrprevm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
+		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf1, buf2, rx=0, ry=0, rz=0|
+	var input1, input2, warpsig, wrp1, wrp2, revsig, bf, fft1, fft2, fftw1, fftw2;
+	input1 = PlayBuf.ar(1, buf1, rate, 1, start * BufFrames.kr(buf1), 1) ** 0.3 * amp;
+	input2 = PlayBuf.ar(1, buf2, rate, 1, start * BufFrames.kr(buf2), 1) ** 0.3 * amp;
+	fft1 = FFT(LocalBuf(2048), input1);
+	fft2 = FFT(LocalBuf(2048), input2);
+	wrp1 = Warp0.ar(
+		buffer: buf1,
+		warpFactor: wrp,
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	wrp2 = Warp0.ar(
+		buffer: buf2,
+		warpFactor: wrp,
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	fftw1 = FFT(LocalBuf(2048), wrp1);
+	fftw2 = FFT(LocalBuf(2048), wrp2);
+	warpsig = IFFT(PV_CopyPhase(fftw1, fftw2));
+	revsig = GVerb.ar(warpsig, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
+	bf = FoaEncode.ar(IFFT(PV_CopyPhase(fft1, fft2)) * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(warpsig.dup * wamp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(revsig * ramp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/2);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+SynthDef('pvmrevwrpm', {|out, rate=1, start=0, wrp=0.125, freq=1.0, wsize=0.1, dens=6, randr=0.01,
+		room=200, rtime=6.0, ramp=0, iamp=0, amp=0, wamp=0, buf1, buf2, rx=0, ry=0, rz=0|
+	var input1, input2, warpsig, revsig, wrp1, wrp2, rev1, rev2, bf, tr, fft1, fft2, fftw1, fftw2, fftr1, fftr2;
+	input1 = PlayBuf.ar(1, buf1, rate, 1, start * BufFrames.kr(buf1), 1) ** 0.3 * amp;
+	input2 = PlayBuf.ar(1, buf2, rate, 1, start * BufFrames.kr(buf2), 1) ** 0.3 * amp;
+	fft1 = FFT(LocalBuf(2048), input1);
+	fft2 = FFT(LocalBuf(2048), input2);
+	rev1 = GVerb.ar(input1, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
+	rev2 = GVerb.ar(input2, room, rtime, drylevel: 0, earlyreflevel: 0.7, taillevel: 1);
+	wrp1 = WarpIn.ar(
+		in: rev1,
+		buffer: LocalBuf(BufSampleRate.kr(buf1), 2),
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	wrp2 = WarpIn.ar(
+		in: rev2,
+		buffer: LocalBuf(BufSampleRate.kr(buf2), 2),
+		warpFactor: [wrp, wrp*15/16],
+		freqScale: freq,
+		windowSize: wsize,
+		overlaps: dens,
+		windowRandRatio: randr
+	);
+	fftw1 = FFT(LocalBuf(2048, 2), wrp1);
+	fftw2 = FFT(LocalBuf(2048, 2), wrp2);
+	warpsig = IFFT(PV_CopyPhase(fftw1, fftw2));
+	fftr1 = FFT(LocalBuf(2048, 2), rev1);
+	fftr2 = FFT(LocalBuf(2048, 2), rev2);
+	revsig = IFFT(PV_CopyPhase(fftr1, fftr2));
+	bf = FoaEncode.ar(IFFT(PV_CopyPhase(fft1, fft2)) * iamp, FoaEncoderMatrix.newDirection) +
+	FoaEncode.ar(revsig * ramp, FoaEncoderMatrix.newStereo) +
+	FoaEncode.ar(warpsig * wamp, FoaEncoderMatrix.newStereo);
+	bf = FoaTransform.ar(bf, 'focus', pi/3);
+	bf = FoaTransform.ar(bf, 'rtt', rx, ry, rz);
+	Out.ar(out, LeakDC.ar(bf));
+}).add;
+
+
 /** WRPREVCONV END **/
 
 

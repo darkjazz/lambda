@@ -41,7 +41,23 @@ e.setPat('r17', 0.0, [0.3, 0.6], [0.07, 0.1], 0.1);
 
 
 (
-e.freeWarp('w0');
+~sy.free;
+~ind1 = 5;
+~buf1 = ~mesabufs[~ind1];
+~ind2 = 3;
+~buf2 = ~mesabufs[~ind2];
+
+~sy = Synth.tail(~matrix.group, 'pvmrevwrpm', ['out', ~decoder.bus, 'amp', 1.0, 'iamp', 0.3, 'buf1', ~buf1, 'buf2', ~buf2])
+
+)
+
+~sy.set('iamp', 1.0, 'wamp', 1.0, 'ramp', 0.0, 'freq', 1.0)
+
+
+
+
+(
+// e.freeWarp('w0');
 ~ind1 = 1;
 ~buf1 = ~mesabufs[~ind1];
 ~loop1 = ~mesabufs.loopsAtBuf(~buf1);
@@ -91,7 +107,7 @@ e.setPwarp('w1', ~pw0, ~matrix.beatdur / 2)
 e.setWarp('w1', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1, 'freq', 1])
 
 
-
+e.freeWarp('w1');
 
 
 

@@ -20,6 +20,7 @@
 
 ~graphics = CinderApp(1024, 768, mode: 0, path: "/Users/alo/dev/lambda/xcode/DerivedData/lambdaApp/Build/Products/Release/lambda.app", fullScreen: true)
 
+
 ~graphics.open
 
 ~graphics = CinderApp(1920, 1080, mode: 1, path:"/Users/alo/dev/lambda/ciapp/lambda.app")
@@ -115,8 +116,8 @@ Tdef(\sendVector).clear
 false.asInteger
 
 (
-~graphics = CinderApp(1024, 768, mode: 0, path:"/Users/kurivari/dev/lambda/lambda.app");
-~size = 37;
+~graphics = CinderApp(1024, 768, mode: 1, path:"/Users/kurivari/dev/lambda/lambda.app", fullScreen: true);
+~size = 23;
 ~startMessaging = {
 	Tdef(\sendVector, {
 		loop({
@@ -135,7 +136,7 @@ Tdef('run', {
 	~graphics.initGenerations( [ 4, 6, 11, 14, 16, 25 ], [ 4, 10, 14, 19, 25, 26 ], 7 );
 	0.5.wait;
 	~graphics.setSymmetry(11);
-	~graphics.setViewpoint(0.0, 170.0, 120.0, 0.0, 0.0, 0.0);
+	~graphics.setViewpoint(0.0, 150.0, 160.0, 0.0, 0.0, 0.0);
 	~startMessaging.();
 	Post << "Initialised.." << Char.nl;
 }).play
@@ -146,13 +147,13 @@ Tdef('color').stop
 
 Tdef('color', {
 	var red, green, blue;
-	red = Pbrown(0.0, 0.5, 0.01, inf).asStream;
-	green = Pbrown(0.0, 0.5, 0.01, inf).asStream;
+	red = Pbrown(0.0, 0.5, 0.02, inf).asStream;
+	green = Pbrown(0.0, 0.5, 0.03, inf).asStream;
 	blue = Pbrown(0.0, 0.5, 0.01, inf).asStream;
 	inf.do({
-		~graphics.setBackground(red.next, green.next, blue.next);
+		// ~graphics.setBackground(red.next, green.next, blue.next);
 		// ~graphics.setBackground(1-red.next, 1-green.next, 1-blue.next);
-		// ~graphics.setPattern(0, 1, 1.0, 1, 1, red.next, green.next, blue.next);
+		~graphics.setPattern(12, 1, 1.0, 1, 1, red.next, green.next, blue.next);
 		// ~graphics.setPattern(11, 1, 1.0, 1, 1, red.next, green.next, blue.next);
 		// ~graphics.setPattern(12, 1, 1.0, 1, 1, red.next, green.next, blue.next);
 		0.1.wait;
@@ -160,8 +161,7 @@ Tdef('color', {
 }).play
 
 
-
-~graphics.setPattern(0, 1, 1.0, 1, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(0, 0, 1.0, 1, 0, 1.0, 1.0, 1.0);
 ~graphics.setPattern(1, 1, 1.0, 1, 0, 1.0, 1.0, 1.0);
 
 
@@ -169,7 +169,7 @@ Tdef('color', {
 
 ~graphics.setPattern(0, 1, 1.0, 1, 1, 0.0, 0.5, 1.0);
 
-~graphics.setPattern(1, 0, 1.0, 1, 1, 0.7, 0.1, 1.0);
+~graphics.setPattern(1, 1, 1.0, 1, 1, 0.7, 0.1, 1.0);
 
 
 ~graphics.setPattern(2, 0, 1.0, 0, 0, 0.9, 1.0, 0.9);
@@ -178,7 +178,7 @@ Tdef('color', {
 
 ~graphics.setPattern(4, 0, 1.0, 1, 1, 1.0, 1.0, 1.0);
 
-~graphics.setPattern(5, 0, 1.0, 1, 1, 0.0, 0.5, 1.0);
+~graphics.setPattern(5, 1, 1.0, 1, 1, 0.0, 0.5, 1.0);
 
 ~graphics.setPattern(6, 1, 1.0, 0, 0, 0.0, 1.0, 1.0);
 
@@ -186,14 +186,14 @@ Tdef('color', {
 
 ~graphics.setPattern(8, 0, 1.0, 1, 1, 1.0, 0.0, 0.6);
 
-~graphics.setPattern(9, 0, 0.5, 0, 0, 1.0, 0.0, 0.0);
+~graphics.setPattern(9, 0, 1.0, 1, 1, 0.0, 0.7, 1.0);
 
 
 ~graphics.setPattern(10, 0, 1.0, 0, 0, 0.0, 0.4, 0.0);
 
 ~graphics.setPattern(11, 0, 1.0, 0, 0, 0.0, 0.0, 1.0);
 
-~graphics.setPattern(12, 1, 1.0, 1, 1, 0.5, 0.0, 0.5);
+~graphics.setPattern(12, 0, 1.0, 1, 1, 0.5, 0.0, 0.5);
 
 ~graphics.setPattern(13, 0, 1.0, 0, 0, 0.2, 0.8, 1.0);
 
@@ -217,11 +217,11 @@ Tdef('color', {
 
 ~graphics.setPattern(23, 0, 0.6, 0, 0, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(24, 1, 1.0, 1, 1, 0.0, 0.6, 0.7);
+~graphics.setPattern(24, 0, 1.0, 1, 1, 0.0, 0.6, 0.7);
 
-~graphics.setPattern(25, 1, 1.0, 1, 1, 0.0, 0.8, 0.8);
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.0, 0.8, 0.8);
 
-~graphics.setPattern(26, 0, 1.0, 0, 0, 0.0, 0.4, 0.1);
+~graphics.setPattern(26, 1, 1.0, 1, 1, 0.0, 0.3, 0.1);
 
 ~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.0, 0.04);
 
@@ -322,7 +322,7 @@ Tdef('rule', {
 
 Tdef('rule').clear
 
-~graphics.sendPredefined3DRule(\nova)
+~graphics.sendPredefined3DRule(\cooties)
 
 ~graphics.sendPredefined3DRule(\frozenspirals)
 
