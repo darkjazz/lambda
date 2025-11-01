@@ -10,7 +10,7 @@
 
 ~graphics.activateSwarm(23, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 
-~graphics.sendBoidPattern(0, 0, 0);
+~graphics.sendBoidPattern(0, 1, 0);
 
 ~graphics.sendBoidPattern(1, 0, 0);
 

@@ -35,7 +35,7 @@ CodePanel::CodePanel()
 	opacity	= 0.0f;
     max_opacity = 0.8f;
 	fadeTime = 150;
-	maxLines = 19;
+	maxLines = 67;
 	counter = 0;
 	title = "sc.code";
 }
@@ -47,9 +47,9 @@ void CodePanel::createTexture()
 //	layout.setColor( Color(1.0f, 0.08f, 0.58f) );
 //	layout.addLine( title );
 	
-	layout.setFont(Font("Krungthep", 17));
-	layout.setColor(Color(0.7f, 0.41f, 1.0f));
-	layout.addLine("------------------------------------------------------------------------------------------------------------------------");
+	layout.setFont(Font("Spot Mono", 11));
+	layout.setColor(Color(0.8f, 0.8f, 0.8f));
+//	layout.addLine("------------------------------------------------------------------------------------------------------------------------");
 		
 	for (int i = lines.size() - 1; i >= 0; i--) {
 		layout.addLine(lines[i]);

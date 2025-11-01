@@ -86,7 +86,7 @@ e.setPat('r06', 0.1, [0.3, 0.5], [0.07, 0.15], 0.1);
 (
 ~ind = 138;
 ~buf = ~kvbufs[~ind];
-~lbpm = ~kvbufs.loops[~buf.path.basename.asSymbol].bpm;
+// ~lbpm = ~kvbufs.loops[~buf.path.basename.asSymbol].bpm;
 ~pfnc = {1};
 ~bufstr = Pseq(~matrix.buffers['evo'][(2..9)], inf).asStream;
 b = [
@@ -97,7 +97,7 @@ b = [
 		~pfnc.()
 	})
 ];
-e.playWarp('w1', 'revwrpm', ~buf, b, ~matrix.beatdur, 1.0, ~bpm / ~lbpm * 2);
+e.playWarp('w1', 'revwrpm', ~buf, b, ~matrix.beatdur, 1.0, 1);
 )
 
 

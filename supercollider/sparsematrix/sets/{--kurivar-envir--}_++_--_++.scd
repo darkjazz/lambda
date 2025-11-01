@@ -1,19 +1,18 @@
 (
-~rdefs = ( {|i| ("r" ++ i.asString.padLeft(2, "0")).asSymbol } ! 18 );
-~bdefs = ( {|i| ("b" ++ i.asString.padLeft(2, "0")).asSymbol } ! 18 );
-~ddefs = ( {|i| ("d" ++ i.asString.padLeft(2, "0")).asSymbol } ! 16 );
-~mdefs = (0..3).collect({|i| ("m0" ++ i.asString).asSymbol });
-
 ~settings = ( ncoef: 20, rate: 20, headsize: 14, numgenes: 4, quant: 2,
 	screenX: 1024, screenY: 768, mode: 1, decoderType: 'binaural',
-	'localDecoder': true, 'ambiOrder': 3, 'decoderFilePath': "",
+	'localDecoder': true, 'ambiOrder': 3,
 	bpm: 119, channels: 2, foa: #[zoom,push], dbname: "ges_ld_00",
-	patdefs: "patternDefsMesa.scd",
-	initPdefs: ~rdefs ++ ~bdefs ++ ~ddefs ++ ~mdefs, worldDim: 21, ip: "127.0.0.1"
+	patdefs: "patternDefsMesa.scd", worldDim: 21, ip: "127.0.0.1"
 );
 e = SpEnvir(~settings)
 
 )
+
+
+Server.killAll
+
+~matrix.patterndefs.keys(Array)
 
 e.setPat('r12', 1.0, [0.5, 0.7], [0.05, 0.1], 0.0);
 
@@ -433,7 +432,7 @@ e.freeWarp('w3')
 
 s.scope(2)
 
-s.sendMsg("/n_free", 1014)2
+s.sendMsg("/n_free", 1008)
 
 
 s.queryAllNodes

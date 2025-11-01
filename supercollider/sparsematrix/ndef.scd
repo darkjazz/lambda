@@ -1,7 +1,7 @@
 Ndef(\hit, {|rate=60,size=20,rule=30,del=0.0625,amp=0.3,dur=0.3,freq=59|
 	var trig;
 	trig = Impulse.kr(1);
-	(VarSaw.ar(Select.kr(TIRand.kr(0,7), Array.primesN(7, 60)), 0.25, 0.01, 20).clip(-0.5, 0.5)).dup 
+	(VarSaw.ar(Select.kr(TIRand.kr(0,7), Array.primesN(7, 60)), 0.25, 0.01, 20).clip(-0.5, 0.5)).dup
 		* EnvGen.kr(Env.perc, trig, timeScale: dur)
 })
 
@@ -24,6 +24,19 @@ Ndef(\efx, {|amp=0.1, del=0.25, rmp=0.1, rt=4.0|
 }).ar(2)
 
 
+
+(
+SynthDef('hit', {|freq=37, dur=0.5, amp=1.0|
+	var sig = Decimator.ar(SinOsc.ar(freq, 0, 17).softclip, 11111, 23, 2)
+	* EnvGen.kr(Env.perc(0.005), levelScale: amp, timeScale: dur, doneAction: 2);
+	Out.ar(0, Pan2.ar(sig))
+}).add
+)
+
+Array.primeSeries(777, 37, 3).last
+
+
+Synth('hit', ['dur', 0.3])
 
 Ndef(\hit).play
 

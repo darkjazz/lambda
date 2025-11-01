@@ -1,5 +1,8 @@
 ~graphics = CinderApp(800, 800, mode: 1)
 
+~graphics = CinderApp(1024, 768, mode: 1, path: "/Users/kurivari/dev/lambda/xcode/build/Products/Release/lambda.app", fullScreen: true)
+
+
 ~graphics.open
 
 ~graphics.initWorld(17, 17, 17, 20);
@@ -10,7 +13,7 @@
 
 ~graphics.resetWorld(8, 8, 8, 4, 4, 4)
 
-~graphics.setViewpoint(80.0, 80.0, 80.0, 0.0, 0.0, 0.0)
+~graphics.setViewpoint(100.0, 100.0, 100.0, 0.0, 0.0, 0.0)
 
 
 ~graphics.setInterpolation(1, 8)
@@ -34,7 +37,7 @@ Tdef(\sendVector).play
 
 
 
-~graphics.setPattern(0, 1, 1.0, 1, 1, 1.0, 0.0, 0.4);
+~graphics.setPattern(0, 0, 1.0, 1, 1, 1.0, 0.0, 0.4);
 
 ~graphics.setPattern(1, 1, 1.0, 1, 1, 1.0, 0.1, 0.4);
 
@@ -44,7 +47,7 @@ Tdef(\sendVector).play
 
 ~graphics.setPattern(4, 0, 1.0, 0, 0, 0.4, 0.4, 0.4);
 
-~graphics.setPattern(5, 1, 1.0, 1, 1, 0.6, 1.0, 0.3);
+~graphics.setPattern(5, 0, 1.0, 1, 1, 0.6, 1.0, 0.3);
 
 ~graphics.setPattern(6, 0, 1.0, 1, 1, 0.5, 0.9, 0.8);
 
@@ -78,17 +81,17 @@ Tdef(\sendVector).play
 
 ~graphics.setPattern(21, 0, 1.0, 1, 1, 1.0, 1.0, 0.0);
 
-~graphics.setPattern(22, 1, 1.0, 1, 1, 0.4, 0.8, 1.0);
+~graphics.setPattern(22, 0, 1.0, 1, 1, 0.4, 0.8, 1.0);
 
-~graphics.setPattern(23, 0, 1.0, 1, 1, 0.9, 0.0, 0.3);
+~graphics.setPattern(23, 1, 1.0, 1, 1, 0.9, 0.0, 0.3);
 
 ~graphics.setPattern(24, 1, 1.0, 1, 1, 0.5, 0.6, 0.7);
 
 ~graphics.setPattern(25, 0, 1.0, 1, 1, 0.8, 0.8, 0.8);
 
-~graphics.setPattern(26, 0, 0.4, 1, 1, 0.3, 0.4, 0.7);
+~graphics.setPattern(26, 0, 0.9, 1, 1, 0.3, 0.4, 0.7);
 
-~graphics.setPattern(27, 0, 0.3, 1, 1, 0.4, 0.7, 0.1);
+~graphics.setPattern(27, 0, 0.9, 1, 1, 0.9, 0.9, 0.9);
 
 ~graphics.setPattern(28, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
@@ -96,9 +99,9 @@ Tdef(\sendVector).play
 
 ~graphics.setPattern(30, 0, 1.0, 1, 1, 0.0, 1.0, 1.0);
 
-~graphics.setPattern(31, 0, 0.3, 0, 0, 1.0, 0.0, 1.0);
+~graphics.setPattern(31, 0, 0.2, 1, 1, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(32, 0, 1.0, 0, 0, 0.0, 0.04, 0.04);
+~graphics.setPattern(32, 0, 0.1, 1, 1, 0.8, 0.8, 0.8);
 
 ~graphics.setPattern(33, 0, 1.0, 0, 0, 0.4, 0.0, 0.2);
 

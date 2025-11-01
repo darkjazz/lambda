@@ -139,7 +139,7 @@ e.freeWarp('w1');
 ~bpm1 = ~loop1.bpm;
 ~matrix.setBPM(~bpm1);
 ~lrate1= 1.0;
-~ind2 = 72;
+~ind2 = 71;
 ~buf2 = ~mesabufs[~ind2];
 ~loop2 = ~mesabufs.loopsAtBuf(~buf2);
 ~bpm2 = ~loop2.bpm;
@@ -238,7 +238,7 @@ Pdef('mx1').stop
 
 (
 e.freeWarp('w2');
-~bpm = 153;
+~bpm = 152;
 ~matrix.setBPM(~bpm);
 ~ind2=51;
 ~pw2 = [
@@ -305,7 +305,7 @@ Pdef('mx11').clear;
 ~lbpm = ~kvbufs.loopsAtBuf(~buf).bpm;
 ~rate = ~bpm/~lbpm;
 ~counter = 0;
-~ampk = 0;
+~ampk = 1;
 ~amps = 0;
 ~amph = 0;
 a = [
@@ -395,7 +395,7 @@ e.setPwarp('w0', a, ~matrix.beatdur / 2)
 
 ~matrix.deactivateSkismSynth('roosaBufWrp')
 
-
+s.queryAllNodes
 
 e.freeWarp('w0')
 
@@ -404,7 +404,7 @@ e.freeWarp('w0')
 
 
 (
-[ 'd08', 'd09', 'd10', 'd12'].do({|name|
+[ 'd01', 'd03'].do({|name|
 	var pat = e.getPat(name);
 	pat.ctrls.keysValuesDo({|key, ctrl|
 		var on = pat.patterns[key].select(_.odd).size;
@@ -414,11 +414,11 @@ e.freeWarp('w0')
 });
 // e.freeWarp('w1');
 Pdef('mx11').clear;
-~ind0 = 118;
+~ind0 = 116;
 ~buf0 = ~mesabufs[~ind0];
 ~loop0 = ~mesabufs.loopsAtBuf(~buf0);
-~bpm0 = ~loop0.bpm;
-~matrix.setBPM(~bpm0);
+// ~bpm0 = ~loop0.bpm;
+// ~matrix.setBPM(~bpm0);
 ~pw0 = [
 	[
 		\rx, Pbrown(-pi, pi, pi/45, inf),
@@ -432,13 +432,11 @@ Pdef('mx11').clear;
 	]
 ];
 e.playParWarp('w0', 'revwrpm', ~buf0, ~pw0, 0.0, 1, false );
-e.setPat('d08', 0.0, [0.1, 0.3], nil, 0.0);
-e.setPat('d09', 0.0, [0.1, 0.3], nil, 0.0);
-e.setPat('d10', 0.0, [0.3, 0.7], nil, 0.0);
-e.setPat('d12', 0.0, [0.1, 0.4], nil, 0.0);
+e.setPat('d01', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d03', 0.0, [0.1, 0.3], nil, 0.0);
 Pdef('mx10',
 	Ppar(
-		['d08', 'd09', 'd10', 'd12', 'w0'].collect({|name|
+		['d01', 'd03', 'w0'].collect({|name|
 			Pdef(name)
 		})
 	)
@@ -447,18 +445,17 @@ e.setWarp('w0', ['wamp', 0.7, 'ramp', 0.5, 'iamp', 1.0, 'wrp', 1.0]);
 
 )
 
-e.setWarp('w0', ['iamp', 1.0, 'wamp', 0.0, 'ramp', 0.6]);
+e.setWarp('w0', ['iamp', 1.0, 'wamp', 1.0, 'ramp', 0.0]);
 
 
 e.freeWarp('w0');
-Pdef('mx10').stop;
+Pdef('mx10').clear;
 
 
 
-e.setPat('d08', 0.0, [0.2, 0.4], nil, 0.0);
-e.setPat('d09', 0.0, [0.1, 0.3], nil, 0.0);
-e.setPat('d10', 0.0, [0.3, 0.3], nil, 0.0);
-e.setPat('d12', 0.0, [0.1, 0.5], nil, 0.0);
+e.setPat('d03', 1.0, [0.2, 0.4], nil, 0.0);
+e.setPat('d09', 1.0, [0.1, 0.3], nil, 0.0);
+
 
 
 
@@ -542,9 +539,9 @@ Pdef('mx1', Ppar([Pdef('r05'), Pdef('r02'), Pdef('r03'), Pdef('r06'), Pdef('r07'
 e.freeWarp('w0');
 Pdef('mx08').stop;
 
-~ind1=57;
-~buf1 = ~mesabufs[~ind1];
-~loop1 = ~mesabufs.loopsAtBuf(~buf1);
+~ind1=56;
+~buf1 = ~kvbufs[~ind1];
+~loop1 = ~kvbufs.loopsAtBuf(~buf1);
 ~bpm1 = ~loop1.bpm;
 ~matrix.setBPM(~bpm1);
 ~pw0 = [
@@ -578,13 +575,13 @@ e.playParWarp('w0', 'wrprevm', ~mesabufs[~ind1], ~pw0, 0.0, ~rt0, false );
 e.playParWarp('w1', 'wrprevm', ~mesabufs[~ind1], ~pw1, 0.0, 1, false );
 Pdef('mx07',
 	Ppar(
-		['r00', 'r02', 'r05', 'b10', 'b11', 'w0', 'w1'].collect({|name|
+		['d01', 'w0', 'w1'].collect({|name|
 			Pdef(name)
 		})
 	)
 ).play;
-e.setWarp('w0', ['amp', 0.2, 'wrp', 0.25]);
-e.setWarp('w1', ['amp', 0.2, 'wrp', 0.25, 'wamp', 0.1]);
+e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25]);
+e.setWarp('w1', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.1]);
 )
 
 
@@ -599,7 +596,7 @@ Pdef('mx07').clear
 
 
 (
-e.setPat('r00', 0.4, [0.2, 0.3], [0.07, 0.15], 0.1);
+e.setPat('d01', 0.0, [0.2, 0.3], [0.07, 0.15], 0.1);
 e.setPat('r05', 0.3, [0.2, 0.3], [0.01, 0.15], 0.1);
 e.setPat('r02', 0.3, [0.3, 0.3], [0.07, 0.15], 0.1);
 e.setPat('b10', 0.2, [0.3, 0.7], [0.07, 0.15], 0.1);
@@ -612,7 +609,7 @@ e.freeWarp('w0');
 e.freeWarp('w1');
 Pdef('mx07').clear;
 
-~ind1=57;
+~ind1=56;
 ~buf1 = ~mesabufs[~ind1];
 ~loop1 = ~mesabufs.loopsAtBuf(~buf1);
 ~bpm1 = ~loop1.bpm;
@@ -627,7 +624,7 @@ Pdef('mx07').clear;
 	]
 ];
 e.playParWarp('w0', 'wrprevm', ~mesabufs[~ind1], ~pw0, 1.0, ~rt0, false );
-e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.3, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1]);
+e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.7, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1]);
 Pdef('mx08',
 	Ppar(
 		['b07', 'b08', 'b06', 'w0'].collect({|name|

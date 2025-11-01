@@ -1,3 +1,8 @@
+Pdef('mx1',
+	Ppar(~rdefs.keep(4).collect({|nm| Pdef(nm) }))
+).play
+
+
 Tdef('r0', {
 	loop({
 		var defs = ['r00', 'r01', 'r02', 'r03'];
@@ -16,6 +21,12 @@ Tdef('r0', {
 
 	})
 }).play
+
+
+e.setPat('r00', 0.0, [0.3, 0.6], [0.05, 0.1], 0.1);
+e.setPat('r01', 0.0, [0.3, 0.6], [0.04, 0.2], 0.0);
+e.setPat('r02', 0.0, [0.4, 0.7], [0.05, 0.1], 0.0);
+e.setPat('r03', 0.0, [0.4, 0.7], [0.01, 0.3], 0.0);
 
 
 
@@ -54,7 +65,7 @@ Tdef('b1', {
 
 
 
-Tdef('b0').clear
+Tdef('r0').clear
 
 
 ~matrix.defsAt('b05').setActives(nil, { rrand(0.1, 0.01) });
