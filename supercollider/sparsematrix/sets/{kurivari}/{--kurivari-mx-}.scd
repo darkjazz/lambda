@@ -5,7 +5,7 @@
 		var len, on;
 		on = pat.patterns[key].select(_.odd).size;
 		len = pat.patterns[key].size;
-		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.05, 0.2);
+		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.07, 0.2);
 	})
 });
 ~matrix.patterndefs.keys.select({|key| key.asString.contains("u")}).do({|name|
@@ -14,7 +14,7 @@
 		var len, on;
 		on = pat.patterns[key].select(_.odd).size;
 		len = pat.patterns[key].size;
-		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.05, 0.2);
+		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.05, 0.1);
 	})
 });
 
@@ -25,8 +25,8 @@
 (
 ~rdefs = ( {|i| ("r" ++ i.asString.padLeft(2, "0")).asSymbol } ! 18 );
 ~bdefs = ( {|i| ("b" ++ i.asString.padLeft(2, "0")).asSymbol } ! 18 );
-~ddefs = ( {|i| ("d" ++ (i+1).asString.padLeft(2, "0")).asSymbol } ! 9 );
-~odefs = ( {|i| ("o" ++ (i+1).asString.padLeft(2, "0")).asSymbol } ! 9 );
+~ddefs = ( {|i| ("d" ++ i.asString.padLeft(2, "0")).asSymbol } ! 89 );
+~odefs = ( {|i| ("o" ++ i.asString.padLeft(2, "0")).asSymbol } ! 10 );
 ~mdefs = (0..3).collect({|i| ("m0" ++ i.asString).asSymbol });
 ~udefs = ~matrix.patterndefs.keys(Array).select({|key| key.asString.contains("u") });
 ~udefs.sort;
@@ -237,6 +237,8 @@ nil.booleanValue
 
 
 
+~matrix.patterndefs.keys.select({|key| key.asString.contains("d")}).asArray.sort
+
 
 (
 (0..15).do({|num|
@@ -262,46 +264,151 @@ s.queryAllNodes
 
 Pdef('efx').play
 
+
+(1..~matrix.defsAt('d00').patterns.size) - 1
+
 ~matrix.efxamps['efx3'] = 0.1
 
-~matrix.defsAt('d08').assignEfx(
+~matrix.defsAt('d00').assignEfx(
 	(efx3: (0..15))
 )
 
 
 ~matrix.efxamps['efx2'] = 0.1
 
-~matrix.defsAt('d09').assignEfx(
+~matrix.defsAt('d01').assignEfx(
 	(efx2: (0..15))
 )
 
 
 ~matrix.efxamps['efx1'] = 0.1
 
-~matrix.defsAt('d12').assignEfx(
+~matrix.defsAt('d00').assignEfx(
 	(efx1: (0..15))
 )
 
 
 Pdef('mxd',
-	Ppar(~ddefs.drop(8).keep(8).collect({|nm| Pdef(nm) }))
+	Ppar(~ddefs.keep(11).collect({|nm| Pdef(nm) }))
 ).play
 
 
 (
-e.setPat('d08', 0.1, [0.2, 0.4], nil, 0.1);
-e.setPat('d09', 0.1, [0.2, 0.3], nil, 0.1);
-e.setPat('d10', 0.1, nil, nil, 0.0);
-e.setPat('d11', 0.1, nil, nil, 0.0);
-e.setPat('d12', 0.3, [0.2, 0.4], nil, 0.1);
-e.setPat('d13', 0.2, nil, nil, 0.0);
-e.setPat('d14', 0.0, nil, nil, 0.0);
-e.setPat('d15', 0.0, [0.3, 0.5], nil, 0.0);
+e.setPat('d00', 0.0, [0.2, 0.4], nil, 0.1);
+e.setPat('d01', 0.0, [0.1, 0.3], nil, 0.1);
+e.setPat('d02', 0.0, [0.1, 0.2], nil, 0.0);
+e.setPat('d03', 0.0, [0.1, 0.2], nil, 0.0);
+e.setPat('d04', 0.0, [0.1, 0.2], nil, 0.1);
+e.setPat('d05', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d06', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d07', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d08', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d09', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d10', 0.0, [0.2, 0.4], nil, 0.0);
 )
 
 Pdef('mxd').clear
 
 
+Pdef('mxd',
+	Ppar(~ddefs.drop(11).keep(11).collect({|nm| Pdef(nm) }))
+).play
+
+
+(
+e.setPat('d11', 0.0, [0.1, 0.3], nil, 0.1);
+e.setPat('d12', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d13', 0.0, [0.1, 0.2], nil, 0.0);
+e.setPat('d14', 0.0, [0.1, 0.2], nil, 0.1);
+e.setPat('d15', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d16', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d17', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d18', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d19', 0.0, [0.1, 0.3], nil, 0.0);
+e.setPat('d20', 0.0, [0.2, 0.4], nil, 0.0);
+e.setPat('d21', 0.0, [0.2, 0.4], nil, 0.0);
+)
+
+
+Pdef('mxd',
+	Ppar(~ddefs.drop(22).keep(11).collect({|nm| Pdef(nm) }))
+).play
+
+
+(
+e.setPat('d22', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d23', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d24', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d25', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d26', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d27', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d28', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d29', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d30', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d31', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d32', 0.0, [0.2, 0.3], nil, 0.0);
+)
+
+
+Pdef('mxd',
+	Ppar(~ddefs.drop(33).keep(11).collect({|nm| Pdef(nm) }))
+).play
+
+(
+e.setPat('d33', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d34', 1.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d35', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d36', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d37', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d38', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d39', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d40', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d41', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d42', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d43', 0.0, [0.2, 0.3], nil, 0.0);
+)
+
+Pdef('mxd',
+	Ppar(~ddefs.drop(44).keep(11).collect({|nm| Pdef(nm) }))
+).play
+
+(
+e.setPat('d44', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d45', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d46', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d47', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d48', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d49', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d50', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d51', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d52', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d53', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d54', 0.0, [0.2, 0.3], nil, 0.1);
+)
+
+
+
+Pdef('mxd',
+	Ppar(~ddefs.drop(55).keep(11).collect({|nm| Pdef(nm) }))
+).play
+
+(
+e.setPat('d55', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d56', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d57', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d58', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d59', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d60', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d61', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d62', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d63', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d64', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d65', 0.0, [0.2, 0.3], nil, 0.1);
+)
+
+
+
+Pdef('mxd').clear
 
 ~matrix.buffers.perc.drop(24).keep(4).collect(_.path).do(_.postln)
 
@@ -510,6 +617,13 @@ e.setPat('d09', 0.0, [0.3, 0.5], nil, 0.0);
 
 
 
+SparseMatrix.patternsDnB.keysValuesDo({|key, pat|
+	Post << key << Char.tab << pat.size << Char.nl
+})
+
+
+
+~matrix.patterndefs.keys.select({|key| key.asString.contains("d")})
 
 
 

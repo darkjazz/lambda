@@ -23,7 +23,7 @@
 	{|freq=37| PMOsc.ar(freq, LFSaw.kr(freq/8).range(freq/4,freq/2), 11) },
 	{|freq=73| PMOsc.ar(SinOsc.kr(17).range(freq, freq*1.5), SinOsc.kr(13).range(1693,401)) },
 	{|freq=59| Mix(PMOsc.ar(Array.primeSeries(5, 13, 3), Array.primeSeries(5, 5, 2).reverse, 13, 0, 0.5)) },
-	{|freq=23| Mix(SinOsc.ar(Array.primesN(5, 40), 0.5pi, SmoothDecimator.ar(Mix(LFSaw.ar(Array.primeSeries(7,7,5), 0.5)), 11050, 0.8))) },
+	{|freq=173| Mix(SinOsc.ar(Array.primesN(5, 40) + SinOsc.ar(Array.geom(5, freq, 16/15), 0, pi**pi), 0.5pi)) },
 	{|freq=37| Decimator.ar(SinOsc.ar(freq, 0, 17).softclip, 11111, 23, 2) },
 
 // 24

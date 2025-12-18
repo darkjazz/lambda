@@ -8,18 +8,28 @@
 ~graphics.initWorld(20, 20, 20, 20);
 
 
-~graphics.activateSwarm(23, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
+~graphics.activateSwarm(37, 200.0, 200.0, 200.0, 0.8, 50.0, 8.0, 15.0, 100.0);
 
 ~graphics.sendBoidPattern(0, 1, 0);
-
-~graphics.sendBoidPattern(1, 0, 0);
-
-~graphics.sendBoidPattern(2, 0, 0);
+~graphics.sendBoidColor(1, 0.0, 0.2, 1.0)
 
 
-~graphics.sendBoidPattern(4, 0, 4);
+~graphics.sendBoidPattern(1, 1, 0);
 
-~graphics.sendBoidPattern(3, 1, 0);
+~graphics.sendBoidColor(1, 0.0, 0.2, 1.0)
+
+
+~graphics.sendBoidPattern(2, 1, 0);
+
+~graphics.sendBoidColor(2, 1.0, 0.2, 1.0)
+
+~graphics.sendBoidPattern(3, 0, 0);
+
+~graphics.sendBoidColor(3, 0.0, 0.0, 0.7)
+
+
+~graphics.sendBoidPattern(4, 0, 0);
+
 
 ~graphics.setViewpoint(180.0,180.0,-180.0, 0.0, 0.0, 0.0)
 
@@ -27,7 +37,7 @@
 
 ~graphics.killSwarm
 
-~graphics.setBoidCam( false, false)
+~graphics.setBoidCam( false, false )
 
 
 Server.killAll

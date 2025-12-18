@@ -145,94 +145,102 @@
 	);
 
 
+	~fncindx = 0;
 
-	matrix.addPatternSynthDef('d00', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0001")).collect(_.asSymbol).keep(8),
-		2, "d00", 'r03', false, false);
+	SparseMatrix.patternsDnB.keysValuesDo({|key, value, i|
+		var indxs, name = ("d" ++ i.asString.padLeft(2, "0"));
+		indxs = (~fncindx..(~fncindx + value.size -1)).collect(_.wrap(0, matrix.deffuncs.lastIndex));
+		matrix.addPatternSynthDef(name.asSymbol, indxs, value.size, 4, [key], 0, name, 'r00', false, false);
+		~fncindx = ~fncindx + value.size;
+	});
 
-
-	matrix.addPatternSynthDef('o00', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0001")).collect(_.asSymbol).keep(8),
-		2, "o00", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d01', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0002")).collect(_.asSymbol) ++ ['Double_0001'],
-		2, "d01", 'r03', false, false);
-
-
-	matrix.addPatternSynthDef('o01', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0002")).collect(_.asSymbol) ++ ['Double_0001'],
-		2, "o01", 'r03', false, true);
-
-
-	matrix.addPatternSynthDef('d02', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0003")).collect(_.asSymbol),
-		2, "d02", 'r03', false, false);
-
-
-	matrix.addPatternSynthDef('o02', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0003")).collect(_.asSymbol),
-		2, "o02", 'r03', false, true);
-
-
-	matrix.addPatternSynthDef('d03', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0004")).collect(_.asSymbol),
-		2, "d03", 'r03', false, false);
-
-
-	matrix.addPatternSynthDef('o03', (47..55).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0004")).collect(_.asSymbol),
-		2, "o03", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d04', (40..47).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0005")).collect(_.asSymbol),
-		2, "d04", 'r03', false, false);
-
-
-	matrix.addPatternSynthDef('o04', (40..47).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0005")).collect(_.asSymbol),
-		2, "o04", 'r03', false, true);
-
-
-	matrix.addPatternSynthDef('d05', (32..39).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0006")).collect(_.asSymbol),
-		2, "d05", 'r03', false, false);
-
-	matrix.addPatternSynthDef('o05', (32..39).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0006")).collect(_.asSymbol),
-		2, "o05", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d06', (24..31).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0007")).collect(_.asSymbol) ++ ['Offbeat_0011'],
-		2, "d06", 'r03', false, false);
-
-	matrix.addPatternSynthDef('o06', (24..31).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0007")).collect(_.asSymbol) ++ ['Offbeat_0011'],
-		2, "o06", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d07', (16..23).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0008")).collect(_.asSymbol) ++ ['Breakbeat_0012'],
-		2, "d07", 'r03', false, false);
-
-	matrix.addPatternSynthDef('o07', (16..23).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0008")).collect(_.asSymbol) ++ ['Offbeat_0012'],
-		2, "o07", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d08', (8..15).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0009")).collect(_.asSymbol) ++ ['Breakbeat_0013'],
-		2, "d08", 'r03', false, false);
-
-	matrix.addPatternSynthDef('o08', (8..15).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0009")).collect(_.asSymbol) ++ ['Offbeat_0013'],
-		2, "o08", 'r03', false, true);
-
-	matrix.addPatternSynthDef('d09', (0..7).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0010")).collect(_.asSymbol) ++ ['Breakbeat_0014'],
-		2, "d09", 'r03', false, false);
-
-	matrix.addPatternSynthDef('o09', (0..7).lace(32), 8, 4,
-		SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0010")).collect(_.asSymbol) ++ ['Offbeat_0014'],
-		2, "o09", 'r03', false, true);
+	// matrix.addPatternSynthDef('d00', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0001")).collect(_.asSymbol).keep(8),
+	// 2, "d00", 'r03', false, false);
+	//
+	//
+	// matrix.addPatternSynthDef('o00', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0001")).collect(_.asSymbol).keep(8),
+	// 2, "o00", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d01', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0002")).collect(_.asSymbol) ++ ['Double_0001'],
+	// 2, "d01", 'r03', false, false);
+	//
+	//
+	// matrix.addPatternSynthDef('o01', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0002")).collect(_.asSymbol) ++ ['Double_0001'],
+	// 2, "o01", 'r03', false, true);
+	//
+	//
+	// matrix.addPatternSynthDef('d02', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0003")).collect(_.asSymbol),
+	// 2, "d02", 'r03', false, false);
+	//
+	//
+	// matrix.addPatternSynthDef('o02', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0003")).collect(_.asSymbol),
+	// 2, "o02", 'r03', false, true);
+	//
+	//
+	// matrix.addPatternSynthDef('d03', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0004")).collect(_.asSymbol),
+	// 2, "d03", 'r03', false, false);
+	//
+	//
+	// matrix.addPatternSynthDef('o03', (47..55).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0004")).collect(_.asSymbol),
+	// 2, "o03", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d04', (40..47).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0005")).collect(_.asSymbol),
+	// 2, "d04", 'r03', false, false);
+	//
+	//
+	// matrix.addPatternSynthDef('o04', (40..47).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0005")).collect(_.asSymbol),
+	// 2, "o04", 'r03', false, true);
+	//
+	//
+	// matrix.addPatternSynthDef('d05', (32..39).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0006")).collect(_.asSymbol),
+	// 2, "d05", 'r03', false, false);
+	//
+	// matrix.addPatternSynthDef('o05', (32..39).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0006")).collect(_.asSymbol),
+	// 2, "o05", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d06', (24..31).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0007")).collect(_.asSymbol) ++ ['Offbeat_0011'],
+	// 2, "d06", 'r03', false, false);
+	//
+	// matrix.addPatternSynthDef('o06', (24..31).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0007")).collect(_.asSymbol) ++ ['Offbeat_0011'],
+	// 2, "o06", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d07', (16..23).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0008")).collect(_.asSymbol) ++ ['Breakbeat_0012'],
+	// 2, "d07", 'r03', false, false);
+	//
+	// matrix.addPatternSynthDef('o07', (16..23).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0008")).collect(_.asSymbol) ++ ['Offbeat_0012'],
+	// 2, "o07", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d08', (8..15).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0009")).collect(_.asSymbol) ++ ['Breakbeat_0013'],
+	// 2, "d08", 'r03', false, false);
+	//
+	// matrix.addPatternSynthDef('o08', (8..15).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0009")).collect(_.asSymbol) ++ ['Offbeat_0013'],
+	// 2, "o08", 'r03', false, true);
+	//
+	// matrix.addPatternSynthDef('d09', (0..7).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0010")).collect(_.asSymbol) ++ ['Breakbeat_0014'],
+	// 2, "d09", 'r03', false, false);
+	//
+	// matrix.addPatternSynthDef('o09', (0..7).lace(32), 8, 4,
+	// 	SparseMatrix.patternsDnB.keys(Array).collect(_.asString).select(_.contains("0010")).collect(_.asSymbol) ++ ['Offbeat_0014'],
+	// 2, "o09", 'r03', false, true);
 
 	~fncindx = 0;
 

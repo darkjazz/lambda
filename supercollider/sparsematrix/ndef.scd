@@ -19,9 +19,10 @@ Ndef(\efx, {|amp=0.1, del=0.25, rmp=0.1, rt=4.0|
 	var input, sig, n = 5;
 	input = Ndef.ar(\hit) * amp;
 	sig = Decimator.ar(DelayL.ar(input, del, del), 8800, 8);
-	sig = Decimator.ar(Reverb.ar(sig * rmp, rt), 44100, 24);
+	sig = Decimator.ar(FreeVerb1.ar(sig * rmp, rt), 44100, 24);
 	input.dup + sig.dup
 }).ar(2)
+
 
 
 

@@ -10,6 +10,13 @@ e = SpEnvir(~settings)
 )
 
 
+// RUN GRAPHICS !!!!!!!
+
+// AND INIT PATTERNS !!!!
+
+
+~zone.(10)
+
 SparseMatrix
 
 Server.killAll
@@ -34,15 +41,167 @@ s.queryAllNodes
 		len = pat.patterns[key].size;
 		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.04, 0.15);
 	})
-})
+});
+~ddefs = ( {|i| ("d" ++ i.asString.padLeft(2, "0")).asSymbol } ! 89 );
 )
 
 
 
 (
+// --------- timenu  ----------//
+~zone.(0);
+~ind0 = 13; // 4
+~buf0 = ~mesabufs[~ind0];
+~loop0 = ~mesabufs.loopsAtBuf(~buf0);
+~rate0 = 1;
+~bpm0 = 60 * 16 / (~loop0.dur / ~rate0);
+~matrix.setBPM(~bpm0);
+Post << "bpm: " << ~bpm0 << Char.nl;
 
+~pw0 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf)
+	// \iamp, Pseq([1, 1, 0] * 0.5, inf),
+	// \wamp, Pseq([0.5, 0.5, 0.5, 0.0, 0.5, 0.0], inf),
+	// \freq, Prand(Scale.minor.ratios.scramble.keep(3), inf)
+	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
+	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
+];
+e.playWarp('w0', 'wrprevm', ~buf0, ~pw0, 1, 1, ~rate0);
+
+~ind1 = 1; // 4
+~buf1 = ~mesabufs[~ind1];
+~loop1 = ~mesabufs.loopsAtBuf(~buf1);
+~rate1 = ~loop1.dur.reciprocal / ~loop0.dur.reciprocal;
+
+~pw0 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf)
+	// \iamp, Pseq([1, 1, 0] * 0.5, inf),
+	// \wamp, Pseq([0.5, 0.5, 0.5, 0.0, 0.5, 0.0], inf),
+	// \freq, Prand(Scale.minor.ratios.scramble.keep(3), inf)
+	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
+	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
+];
+e.playWarp('w1', 'wrprevm', ~buf1, ~pw1, 1, 1, ~rate1);
+Pdef('mx01', Ppar([
+	Pdef('b00'),
+	Pdef('b16'),
+	Pdef('b17')
+])).play;
+
+)
+
+~matrix.patterndefs['b17'].ctrls['b1722']
+
+(
+[
+	[ 'b1617', 0.3350798150615, 0.21154130244024 ],
+	[ 'b1623', 0.21649539460438, 0.22501815401866 ],
+	[ 'b1630', 0.20647043385056, 0.34722324222462 ],
+	[ 'b1605', 0.28198236332029, 0.32081471591999 ],
+	[ 'b1621', 0.20829764420246, 0.21144534772633 ],
+	[ 'b1705', 0.21411641519958, 0.29974852533787 ]
+].do({|arr|
+	var args, pkey;
+	pkey = arr.first.asString.keep(3).asSymbol;
+	args = arr.insert(1, 1) ++ 0.1;
+	args.postln;
+	~matrix.defsAt(pkey).setControl(*args)
+})
+)
+
+
+
+e.setWarp('w0', ['wamp', 0.5, 'iamp', 1.0, 'ramp', 0.1]);
+
+e.setWarp('w1', ['wamp', 0.5, 'iamp', 1.0, 'ramp', 0.1]);
+
+e.setWarp('w2', ['wamp', 0.5, 'iamp', 1.0, 'ramp', 0.1]);
+
+
+(
+e.setPat('b00', 0.0, [0.8, 1.3], [0.05, 0.1], 0.1);
+e.setPat('b16', 0.0, [0.3, 0.6], [0.05, 0.1], 0.1);
+e.setPat('b17', 0.0, [0.3, 0.6], [0.05, 0.2], 0.1);
+)
+
+~matrix.defsAt('b16').setActives({rrand(0.2, 0.4)}, {rrand(0.1, 0.3)}, 0.1)
+
+
+~ind0 = 114;
+e.setWarp('w0', ['buf', ~mesabufs[ ~ind0]]);
+
+
+~mesabufs.searchDur(~loop0.dur).do(_.postln)
+
+
+
+(
+// e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1]);
+~ind2 = 114; //113, 114, 76, 127
+~buf2 = ~mesabufs[~ind2];
+~loop2 = ~mesabufs.loopsAtBuf(~buf2);
+~rate2 = ~loop2.dur.reciprocal / ~loop0.dur.reciprocal;
+
+~pw2 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf)
+	// \iamp, Pseq([1, 1, 0] * 0.5, inf),
+	// \wamp, Pseq([0.5, 0.5, 0.5, 0.0, 0.5, 0.0], inf),
+	// \freq, Prand(Scale.minor.ratios.scramble.keep(3), inf)
+	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
+	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
+];
+e.playWarp('w2', 'wrprevm', ~buf2, ~pw2, 1, 1.0, ~rate2);
+)
+
+
+e.setWarp('w1', ['wamp', 0.5, 'iamp', 1.0, 'ramp', 0.0]);
+e.setWarp('w2', ['iamp', 1.0])
+
+
+e.setWarp('w2', ['iamp', 0.5, 'buf', ~mesabufs[127]])
+
+~matrix.defsAt('b16').ctrls.select({|it| it.active.booleanValue }).keysValuesDo({|key, val|
+	[key, val.dur, val.amp].postln
+})
+~matrix.defsAt('b17').ctrls.select({|it| it.active.booleanValue }).keysValuesDo({|key, val|
+	[key, val.dur, val.amp].postln
+})
+
+e.setWarp('w0', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
+
+e.freeWarp('w0');
+
+e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1, 'freq', 15/16]);
+
+e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.5, 'ramp', 0.0, 'freq', 15/16]);
+
+
+e.freeWarp('w1');
+
+Pdef('mx01').clear
+
+
+
+
+
+
+(
 // --------- vaskeresi i  ----------//
-~zone0.();
+
+Pdef('mx01').clear;
+e.freeWarp('w0');
+e.freeWarp('w1');
+e.freeWarp('w2');
+
+~ddefs = ( {|i| ("d" ++ i.asString.padLeft(2, "0")).asSymbol } ! 89 );
+
+~zone.(1);
 ~ind = 146; // 4
 ~buf = ~kvbufs[~ind];
 ~loop = ~kvbufs.loopsAtBuf(~buf);
@@ -78,6 +237,7 @@ e.playWarp('w0', 'wrprevm', ~buf, ~pw, 1/2, 0.5, 1.5);
 
 ~ind2 = 205;
 ~buf2 = ~kvbufs[~ind2];
+
 ~loop2 = ~kvbufs.loopsAtBuf(~buf2);
 
 ~rate2 = (~loop2.dur*2).reciprocal/(~loop.dur * 1.5.reciprocal).reciprocal;
@@ -88,28 +248,37 @@ e.playWarp('w0', 'wrprevm', ~buf, ~pw, 1/2, 0.5, 1.5);
 	\ramp, Pseq(( (0.05 ! 24) ++ [1.0, 1.0, 0.1, 1.0, 0.0, 0.3, 0.1, 0.0] ) * 0.3, inf)
 ];
 e.playWarp('w2', 'wrprevm', ~buf2, ~pw2, 1/2, 0.0, ~rate2);
-Pdef('mx11',
-	Ppar(['d01', 'd02', 'd03', 'd04'].collect({|name|
-		Pdef(name)
-	}))
+Pdef('mx01',
+	Ppar(~ddefs.drop(11).keep(11).collect({|nm| Pdef(nm) }))
 ).play;
-
 )
 
 x.free
 
 
-Pdef('mx11').clear
+Pdef('mx01').clear
 
 (
-e.setPat('d04', 0.0, [0.1, 0.2]);
-e.setPat('d03', 0.0, [0.1, 0.2]);
-e.setPat('d01', 0.0, [0.1, 0.2]);
-e.setPat('d02', 0.0, [0.1, 0.2]);
+e.setPat('d11', 1.0, [0.2, 0.3]);
+e.setPat('d16', 0.0, [0.2, 0.3]);
+e.setPat('d19', 1.0, [0.2, 0.3]);
+e.setPat('d21', 0.0, [0.2, 0.3]);
 )
 
 
-e.setWarp('w2', ['iamp', 0.0, 'wamp', 0.0])
+(
+e.setPat('d12', 0.0, [0.2, 0.3]);
+e.setPat('d13', 0.0, [0.2, 0.3]);
+e.setPat('d14', 0.0, [0.2, 0.3]);
+e.setPat('d15', 0.0, [0.2, 0.3]);
+e.setPat('d17', 0.0, [0.2, 0.4]);
+e.setPat('d18', 1.0, [0.2, 0.3]);
+e.setPat('d20', 0.0, [0.2, 0.3]);
+)
+
+
+e.setWarp('w2', ['iamp', 0.4, 'wamp', 0.3])
+
 
 e.setWarp('w0', ['amp', 1.0, 'wrp', 0.0, 'wamp', 0.0])
 
@@ -126,7 +295,7 @@ e.freeWarp('w0');
 e.freeWarp('w1');
 e.freeWarp('w2');
 
-Pdef('mx11').clear;
+Pdef('mx01').clear;
 
 
 
@@ -136,8 +305,14 @@ Pdef('mx11').clear;
 // --------- unelangva ----------//
 
 (
-~zone1.();
-~ind0 = 206; // 17, 180, 206, 212
+~zone.(2);
+e.freeWarp('w0');
+e.freeWarp('w1');
+e.freeWarp('w2');
+
+Pdef('mx01').clear;
+
+~ind0 = 206;
 ~buf0 = ~kvbufs[~ind0];
 ~loop0 = ~kvbufs.loopsAtBuf(~buf0);
 // ~rate0 = 1.0;
@@ -165,21 +340,26 @@ Pdef('mx01', Ppar([
 	Pdef('u04'),
 	Pdef('r16')
 ])).play;
-e.setWarp('w0', ['ramp', 0.1]);
+e.setWarp('w0', ['ramp', 0.05]);
 )
 
 
+e.setWarp('w0', ['ramp', 0.0]);
+
+
 (
-e.setPat('u04', 0.0, [0.1, 0.3], nil, 0.1);
-e.setPat('u03', 0.0, [0.1, 0.3], nil, 0.1);
-e.setPat('u02', 0.3, [0.1, 0.3], nil, 0.1);
-e.setPat('u01', 1.0, [0.1, 0.3], nil, 0.1);
+e.setPat('u04', 1.0, [0.2, 0.3], nil, 0.1);
+e.setPat('u03', 1.0, [0.2, 0.3], nil, 0.1);
+e.setPat('u02', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('u01', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('r16', 0.0, [0.2, 0.6], [0.04, 0.2], 0.1);
 )
 
 
 
 (
-~ind0 = 17;
+e.setPat('u04', 0.4, [0.2, 0.3], nil, 0.1);
+~ind0 = 17; // 17, 180, 206, 212
 ~buf0 = ~kvbufs[~ind0];
 ~loop0 = ~kvbufs.loopsAtBuf(~buf0);
 ~rate0 = 1.0;
@@ -198,7 +378,7 @@ Pdef('mx01').clear
 e.freeWarp('w0');
 
 (
-~ind0 = 237; // 4
+~ind0 = ~kvbufs.size.rand; // 4
 ~buf0 = ~kvbufs[~ind0];
 ~loop0 = ~kvbufs.loopsAtBuf(~buf0);
 // ~rate0 = 1;
@@ -218,9 +398,9 @@ e.freeWarp('w0');
 	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
 	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
 ];
-e.playWarp('w0', 'revwrpm', ~buf0, ~pw0, 1/4, 0, 1);
+e.playWarp('w1', 'revwrpm', ~buf0, ~pw0, 1/4, 0, 1);
 
-~ind1 = 236; // 4
+~ind1 = ~kvbufs.size.rand; // 4
 ~buf1 = ~kvbufs[~ind1];
 ~loop1 = ~kvbufs.loopsAtBuf(~buf1);
 ~rate1 = 1;
@@ -236,7 +416,7 @@ e.playWarp('w0', 'revwrpm', ~buf0, ~pw0, 1/4, 0, 1);
 	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
 	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
 ];
-e.playWarp('w1', 'revwrpm', ~buf1, ~pw1, 1/4, 0, 1);
+e.playWarp('w2', 'revwrpm', ~buf1, ~pw1, 1/4, 0, 1);
 
 Pdef('mx01', Ppar([
 	Pdef('u01'),
@@ -248,9 +428,11 @@ Pdef('mx01', Ppar([
 )
 
 
+e.freeWarp('w0');
+
 e.freeWarp('w1');
 
-
+e.freeWarp('w2');
 
 e.setWarp('w0', ['ramp', 0.0]);
 e.setWarp('w1', ['ramp', 0.05]);
@@ -263,7 +445,8 @@ e.setWarp('w1', ['ramp', 0.05]);
 
 // --------- viookileel  ----------//
 (
-~zone3.();
+~zone.(3);
+
 e.freeWarp('w0');
 e.freeWarp('w1');
 e.freeWarp('w2');
@@ -279,7 +462,7 @@ Pdef('mx01').clear;
 		ctrl.dur = (1.0 / on).linlin(1/len, 1, 0.05, 0.2);
 	})
 });
-e.freeWarp('w0');
+
 ~ind = 146; // 4
 ~buf = ~kvbufs[~ind];
 ~loop = ~kvbufs.loopsAtBuf(~buf);
@@ -319,53 +502,133 @@ e.freeWarp('w0');
 	]
 ];
 e.playParWarp('w0', 'wrprevm', ~buf0, ~pw0, 0.0, ~rate0, false );
-e.setPat('r03', 0.0, [0.5, 1.0], [0.1, 0.2], 0.0);
-e.setPat('b10', 0.1, [0.5, 1.0], [0.1, 0.2], 0.0);
-e.setPat('b11', 0.1, [0.5, 1.0], [0.1, 0.2], 0.0);
-e.setPat('b12', 0.2, [0.4, 1.0], [0.1, 0.2], 0.0);
-Pdef('mx10',
+e.setPat('r03', 0.1, [0.5, 0.8], [0.1, 0.2], 0.0);
+e.setPat('b10', 0.1, [0.5, 0.7], [0.1, 0.2], 0.0);
+e.setPat('b11', 0.1, [0.5, 0.6], [0.1, 0.2], 0.0);
+e.setPat('b12', 0.1, [0.4, 0.6], [0.1, 0.2], 0.0);
+Pdef('mx01',
 	Ppar(
 		['b04', 'b10', 'b11', 'b12', 'r03', 'w0'].collect({|name|
 			Pdef(name)
 		})
 	)
 ).play;
-e.setWarp('w0', ['iamp', 0.0, 'wrp', 0.5, 'ramp', 0.1]);
+e.setWarp('w0', ['iamp', 0.0, 'wrp', 0.0, 'ramp', 0.0]);
 
 )
 
 (
-e.setPat('r03', 0.5, [0.3, 0.5], [0.01, 0.1], 0.0);
-e.setPat('b10', 0.0, [0.5, 1.0], [0.1, 0.2], 0.0);
-e.setPat('b11', 0.0, [0.5, 1.0], [0.1, 0.1], 0.0);
-e.setPat('b12', 0.3, [0.4, 1.0], [0.1, 0.1], 0.0);
+e.setPat('r03', 0.3, [0.3, 0.5], [0.01, 0.1], 0.0);
+e.setPat('b10', 0.1, [0.5, 0.7], [0.1, 0.2], 0.0);
+e.setPat('b11', 0.1, [0.5, 0.7], [0.1, 0.3], 0.0);
+e.setPat('b12', 0.1, [0.4, 0.7], [0.1, 0.3], 0.0);
 )
 
 e.setPat('b04', 0.3, [0.2, 0.4], [2.0, 4.0], 0.0);
 
 
 
-e.setWarp('w0', ['iamp', 0.0, 'wamp', 0.3, 'ramp', 0.1]);
+e.setWarp('w0', ['iamp', 0.0, 'wamp', 0.0, 'ramp', 0.0]);
 e.setWarp('w2', ['iamp', 0.0, 'wamp', 0.2, 'ramp', 0.1]);
 
 
-e.freeWarp('w2');
-Pdef('mx10').clear;
+e.freeWarp('w0');
+Pdef('mx01').clear;
 
 e.setWarp('w0', ['iamp', 0.0, 'wrp', 0.5, 'ramp', 0.1]);
 
 
+(
+~rkeys = ~matrix.patterndefs.keys.select({|key| key.asString.contains("u")}).asArray.scramble.keep(8);
+~patterns = ~matrix.patterndefs.keys.select({|key| key.asString.contains("u") }).asArray.collect({|name|
+	~matrix.patterndefs[name].patterns.values.select({|arr|
+		(arr.occurrencesOf(1) > 8).and(arr.occurrencesOf(1) < 28)
+	})
+}).flatten(1);
+~ratios = Scale.minor.ratios.mirror * ((1 ! 7) ++ (0.6 ! 6));
 
+~patchoice = Array.fill(8, { ~patterns.choose });
+
+~ind1 = 115; ~ind2 = 110; ~ind3 = 11;
+
+~buf1 = ~mesabufs[~ind1];
+~loop1 = ~mesabufs.loopsAtBuf(~buf1);
+~rate1 = (~loop.dur / 1.5).reciprocal / ~loop1.dur.reciprocal;
+~pw1 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf),
+	\wamp, Pdefn('w1w', Pseq(~patchoice[2] * 0.4, inf)),
+	\iamp, Pdefn('w1i', Pseq([0], inf)),
+	\freq, Pseq(~ratios.scramble.keep(4.rand + 1), inf)
+];
+e.playWarp('w1', 'wrprevm', ~buf1, ~pw1, 1/4, 0.0, ~rate1 );
+
+~buf2 = ~mesabufs[~ind2];
+~loop2 = ~mesabufs.loopsAtBuf(~buf2);
+~rate2 = (~loop.dur / 1.5).reciprocal / ~loop2.dur.reciprocal;
+~pw2 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf),
+	\wamp, Pdefn('w2w', Pseq([0], inf)),
+	\iamp, Pdefn('w2i', Pseq(~patchoice[5] * 0.4, inf)),
+	\freq, Pseq(~ratios.scramble.keep(4.rand + 1), inf)
+];
+e.playWarp('w2', 'wrprevm', ~buf2, ~pw2, 1/4, 0.0, ~rate2 );
+
+~buf3 = ~mesabufs[~ind3];
+~loop3 = ~mesabufs.loopsAtBuf(~buf3);
+~rate3 = (~loop.dur / 1.5).reciprocal / ~loop3.dur.reciprocal;
+~pw3 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf),
+	\wamp, Pdefn('w3w', Pseq([0], inf)),
+	\iamp, Pdefn('w3i', Pseq(~patchoice[7] * 0.4, inf)),
+	\freq, Pseq(~ratios.scramble.keep(4.rand + 1), inf),
+
+];
+e.playWarp('w3', 'wrprevm', ~buf3, ~pw3, 1/2, 0.0, ~rate3 );
+Post << "~ind0 = " << ~ind0 << "; ~ind1 = " << ~ind1 << "; ~ind2 = " << ~ind2 << "; ~ind3 = " << ~ind3 << Char.nl;
+
+)
+
+
+
+e.setWarp('w1', ['buf', ~mesabufs.choose]);
+Pdefn('w1w', Pseq(~patchoice[2] * 0.3, inf));
+Pdefn('w1i', Pseq(~patchoice[3] * 0.4, inf));
+
+
+e.setWarp('w2', ['buf', ~mesabufs.choose]);
+Pdefn('w2w', Pseq(~patchoice[4] * 0.4, inf));
+Pdefn('w2i', Pseq(~patchoice[5] * 0.4, inf));
+
+
+e.setWarp('w3', ['buf', ~mesabufs.choose]);
+Pdefn('w3w', Pseq(~patchoice[6] * 0.3, inf));
+Pdefn('w3i', Pseq(~patchoice[7] * 0.4, inf));
+
+
+
+
+
+Server.default.record(numChannels: 2)
+
+Server.default.stopRecording
 
 
 
 // --------- tekaniim  ----------//
 
 (
-~zone2.();
+~zone.(4);
 e.freeWarp('w0');
+e.freeWarp('w1');
 e.freeWarp('w2');
-Pdef('mx11').clear;
+e.freeWarp('w3');
+Pdef('mx01').clear;
 
 
 ~ind = 146; // 4
@@ -423,41 +686,33 @@ e.playWarp('w2', 'wrprevm', ~buf2, ~pw2, 1/4, 0.0, ~rate2 );
 )
 
 (
-e.setPat('u26', 1.0, [0.2, 0.3], nil, 0.0);
-e.setPat('u31', 1.0, [0.2, 0.35], nil, 0.0);
+e.setPat('u26', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('u31', 0.0, [0.2, 0.35], nil, 0.0);
 )
 
 
 Pdef('mx00').clear
 
 
+
 (
+e.setPat('u26', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('u31', 0.0, [0.1, 0.35], nil, 0.0);
+e.setWarp('w0', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1]);
+e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1]);
+e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.1]);
+)
+
+
+
+(
+e.setPat('u26', 1.0, [0.2, 0.3], nil, 0.0);
+e.setPat('u31', 1.0, [0.2, 0.35], nil, 0.0);
 e.setWarp('w0', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
 e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
 e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
-e.setPat('u31', 0.0, [0.2, 0.4], nil, 0.0);
-e.setPat('u26', 0.0, [0.2, 0.4], nil, 0.0);
 )
 
-
-
-(
-e.setPat('u09', 0.0, [0.2, 0.5], nil, 0.0);
-e.setPat('u08', 0.0, [0.1, 0.3], nil, 0.0);
-e.setWarp('w0', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.2]);
-e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.4]);
-e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.2]);
-)
-
-
-(
-e.setWarp('w0', ['wamp', 0.4, 'iamp', 0.4, 'ramp', 0.0]);
-e.setWarp('w1', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
-e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.0, 'ramp', 0.0]);
-e.setPat('u26', 1.0, [0.2, 0.4], nil, 0.0);
-e.setPat('u31', 0.0, [0.2, 0.35], nil, 0.0);
-
-)
 
 
 
@@ -465,7 +720,7 @@ e.freeWarp('w0');
 e.freeWarp('w1');
 e.freeWarp('w2');
 
-Pdef('mx00').clear
+Pdef('mx00').clear;
 
 
 
@@ -473,7 +728,17 @@ Pdef('mx00').clear
 
 // --------- givusina  ----------//
 
+~kvbufs.searchDur(~loop2.dur).do(_.postln)
+
 (
+e.freeWarp('w0');
+e.freeWarp('w1');
+e.freeWarp('w2');
+
+Pdef('mx00').clear;
+
+~zone.(5);
+
 ~ind2=217;
 ~buf2 = ~kvbufs[~ind2];
 ~loop2 = ~kvbufs.loopsAtBuf(~buf2);
@@ -503,7 +768,7 @@ Post << "bpm: " << ~bpm2 << Char.nl;
 	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
 ];
 e.playWarp('w2', 'wrprevm', ~buf2, ~pw2, 4, 0.7, ~rate2);
-e.setWarp('w2', ['wamp', 0.6, 'iamp', 0.4]);
+e.setWarp('w2', ['wamp', 0.4, 'iamp', 0.3]);
 
 
 // ~bpm2 = 60 * 16 / ~loop2.dur;
@@ -516,19 +781,50 @@ Pdef('mx01', Ppar([
 	Pdef('u11')
 ])).play;
 
-e.setPat('u10', 1.0, [0.1, 1.0], nil, 0.1);
-e.setPat('u11', 1.0, [0.1, 0.9], nil, 0.1);
+e.setPat('u10', 1.0, [0.1, 0.4], nil, 0.1);
+e.setPat('u11', 1.0, [0.1, 0.4], nil, 0.1);
 
 )
 
 e.freeWarp('w2');
 Pdef('mx01').clear;
 
-
-e.setPat('u10', 0.0, [0.1, 1.0], nil, 0.1);
-e.setPat('u11', 0.0, [0.1, 0.9], nil, 0.1);
+e.setWarp('w2', ['wamp', 0.0, 'iamp', 0.3]);
 
 
+e.setPat('u10', 0.0, [0.1, 0.4], nil, 0.1);
+e.setPat('u11', 0.0, [0.1, 0.4], nil, 0.1);
+
+
+(
+~ind1 = 73; //135, 171, 73
+~buf1 = ~kvbufs[~ind1];
+~loop1 = ~kvbufs.loopsAtBuf(~buf1);
+~rate1 = ~loop1.dur.reciprocal / ~loop2.dur.reciprocal;
+
+~pw1 = [
+	\rx, Prand(Array.series(17, 0, 2pi/17), inf),
+	\ry, Prand(Array.series(17, 0, 2pi/17), inf),
+	\rz, Prand(Array.series(17, 0, 2pi/17), inf)
+	// \iamp, Pseq([1, 1, 0] * 0.5, inf),
+	// \wamp, Pseq([0.5, 0.5, 0.5, 0.0, 0.5, 0.0], inf),
+	// \freq, Prand(Scale.minor.ratios.scramble.keep(3), inf)
+	// // \wamp, Pseq( [0.05, 0.4, 0.05, 0.4, 0.2, 0.3, 0.05, 0.3]*2, inf),
+	// \rate, Pseq(Scale.minor.ratios.scramble.keep(3), inf )
+];
+e.playWarp('w1', 'wrprevm', ~buf1, ~pw1, 1, 0.5, ~rate1);
+e.setPat('u10', 1.0, [0.1, 0.4], nil, 0.1);
+e.setPat('u11', 1.0, [0.1, 0.4], nil, 0.1);
+e.setWarp('w1', ['wamp', 0.5, 'iamp', 0.5, 'ramp', 0.3]);
+
+)
+
+
+
+
+
+
+~kvbufs.searchDur(~loop1.dur).do(_postln);
 
 
 // --------- tuurrõukut  ----------//
@@ -539,7 +835,9 @@ e.freeWarp('w0');
 e.freeWarp('w1');
 e.freeWarp('w2');
 
-Pdef('mx00').clear;
+Pdef('mx01').clear;
+
+~zone.(6);
 
 ~ind1=257;
 ~buf1 = ~kvbufs[~ind1];
@@ -566,9 +864,9 @@ e.playWarp('w1', 'wrprevm', ~buf1, ~pw1, 4, 0.6, ~rate1 );
 Pdef('mx01', Ppar([
 	Pdef('u08'),
 	Pdef('u09'),
-	Pdef('b10'),
-	Pdef('b11'),
-	Pdef('b12')
+	Pdef('b15'),
+	Pdef('b14'),
+	Pdef('b13')
 ])).play;
 e.setPat('u08', 0.0, [0.15, 0.3], nil, 0.1);
 e.setPat('b10', 0.0, [0.5, 2.0], [0.08, 0.3], 0.1);
@@ -577,14 +875,18 @@ e.setPat('b11', 0.0, [0.5, 2.0], [0.05, 0.3], 0.1);
 )
 
 
-e.setPat('u08', 0.0, [0.1, 0.3], nil, 0.1);
+e.setPat('u08', 0.0, [0.2, 0.4], nil, 0.1);
 e.setPat('u09', 0.0, [0.2, 0.4], nil, 0.1);
 
 
 
-e.setPat('b10', 0.0, [0.5, 1.0], [0.08, 0.3], 0.1);
-e.setPat('b11', 0.0, [0.5, 1.0], [0.05, 0.3], 0.1);
-e.setPat('b12', 0.0, [0.5, 1.0], [0.05, 0.2], 0.1);
+e.setPat('b15', 0.0, [0.5, 0.7], [0.08, 0.1], 0.1);
+e.setPat('b14', 0.0, [0.5, 0.7], [0.05, 0.1], 0.1);
+e.setPat('b13', 0.0, [0.5, 0.7], [0.05, 0.1], 0.1);
+e.setWarp('w1', ['buf', ~kvbufs[257], 'wamp', 0.0]); // 250, 36, 61, 164
+
+e.setPat('u08', 0.3, [0.1, 0.3], nil, 0.1);
+e.setPat('u09', 0.3, [0.2, 0.3], nil, 0.1);
 
 
 
@@ -596,11 +898,12 @@ e.setPat('b12', 0.0, [0.5, 1.0], [0.05, 0.2], 0.1);
 // --------- rasvekesi ii  ----------//
 
 (
-~zone4.();
+~zone.(7);
 // e.freeWarp('w0');
 // Pdef('mx10').clear;
 
 e.freeWarp('w0');
+
 e.freeWarp('w1');
 e.freeWarp('w2');
 
@@ -643,8 +946,8 @@ e.playParWarp('w0', 'wrprevm', ~mesabufs[~ind1], ~pw0, 0.0, ~rt0, false );
 ];
 e.playParWarp('w1', 'wrprevm', ~mesabufs[~ind1], ~pw1, 0.0, 1, false );
 
-Pdef('mx07',
-	Ppar(['d01', 'd02', 'd03', 'd04', 'w0', 'w1'].collect({|name|
+Pdef('mx00',
+	Ppar(['d25', 'd26', 'd27', 'd28', 'd32', 'd34', 'w0', 'w1'].collect({|name|
 		Pdef(name)
 	}))
 ).play;
@@ -652,46 +955,51 @@ Pdef('mx07',
 
 e.setWarp('w0', ['amp', 1.0, 'iamp', 0.0, 'wamp', 0.0]);
 e.setWarp('w1', ['amp', 1.0, 'iamp', 0.0, 'wamp', 0.0]);
+
+e.setPat('d25', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d26', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d27', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d28', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d32', 0.0, [0.2, 0.3], nil, 0.0);
+e.setPat('d34', 0.0, [0.2, 0.3], nil, 0.0);
+
 )
 
-
+SparseMatrix
 
 e.setPwarp('w0', ~pw0, ~matrix.beatdur / 2)
 
 
-e.setWarp('w0', ['amp', 1.0, 'wamp', 0.5, 'iamp', 0.3, 'ramp', 0]);
+e.setWarp('w0', ['amp', 1.0, 'wamp', 0.3, 'iamp', 0.0, 'ramp', 0.1]);
 
-e.setWarp('w1', ['amp', 1.0, 'wamp', 0.4, 'iamp', 0.5, 'ramp', 0])
+e.setWarp('w1', ['amp', 1.0, 'wamp', 0.3, 'iamp', 0.0, 'ramp', 0.1])
 
 e.freeWarp('w0');
 e.freeWarp('w1');
 
-Pdef('mx07').clear
+Pdef('mx00').clear
 
 
 (
-e.setPat('d04', 0.0, [0.1, 0.4], nil, 0.1);
-e.setPat('d01', 0.0, [0.1, 0.4], nil, 0.1);
-e.setPat('d02', 0.0, [0.1, 0.3], nil, 0.1);
-e.setPat('b10', 0.0, [0.3, 0.7], [0.07, 0.15], 0.1);
-e.setPat('b11', 0.0, [0.3, 0.7], [0.07, 0.15], 0.1);
+e.setPat('d25', 0.0, [0.2, 0.4], nil, 0.1);
+e.setPat('d26', 0.0, [0.2, 0.4], nil, 0.1);
+e.setPat('d27', 0.0, [0.2, 0.4], nil, 0.1);
+e.setPat('d28', 0.0, [0.2, 0.3], nil, 0.1);
+e.setPat('d32', 0.0, [0.3, 0.4], nil, 0.1);
+e.setPat('d34', 0.0, [0.3, 0.4], nil, 0.1);
 )
 
 
-(
-e.setPat('d04', 0.0, [0.04, 0.1]);
-e.setPat('d03', 0.0, [0.2, 0.3]);
-e.setPat('d01', 0.0, [0.2, 0.3]);
-e.setPat('d02', 0.0, [0.2, 0.3]);
-)
 
 
 
 
 // --------- surmasurd  ----------//
 
-(
-~zone5.();
+(]x1
+
+
+~zone.(8);
 e.freeWarp('w0');
 e.freeWarp('w1');
 Pdef('mx07').clear;
@@ -701,7 +1009,7 @@ Pdef('mx07').clear;
 ~loop1 = ~mesabufs.loopsAtBuf(~buf1);
 ~bpm1 = ~loop1.bpm;
 ~matrix.setBPM(~bpm1);
-~pw0 = [
+~pw1 = [
 	[
 		\rx, Prand(Array.series(17, 0, 2pi/17), inf),
 		\ry, Prand(Array.series(17, 0, 2pi/17), inf),
@@ -710,7 +1018,7 @@ Pdef('mx07').clear;
 		\delta, ~matrix.beatdur * 8
 	]
 ];
-e.playParWarp('w0', 'wrprevm', ~mesabufs[~ind1], ~pw0, 0.7, ~rt0, false );
+e.playParWarp('w0', 'wrprevm', ~mesabufs[~ind1], ~pw1, 0.7, 1, false );
 e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.7, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1]);
 Pdef('mx08',
 	Ppar(
@@ -723,12 +1031,14 @@ Pdef('mx08',
 )
 
 
-e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.8, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1]);
+e.setWarp('w0', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.7, 'iamp', 0.4, 'ramp', 0.0, 'rate', 1]);
 
-e.setWarp('w1', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.8, 'iamp', 0.0, 'ramp', 0.0, 'rate', 1]);
+e.setWarp('w1', ['amp', 1.0, 'wrp', 0.25, 'wamp', 0.7, 'iamp', 0.5, 'ramp', 0.0, 'rate', 1]);
 
-e.setPat('b07', 0.0, [0.1, 0.4], [0.05, 0.3], 0.0);
-e.setPat('b08', 1.0, [0.1, 0.5], [0.04, 0.3], 0.0);
+e.setPat('b07', 0.0, [0.4, 0.5], [0.05, 0.1], 0.0);
+e.setPat('b08', 0.0, [0.4, 0.5], [0.04, 0.1], 0.0);
+
+e.setPat('b06', 0.0, [0.1, 0.5], [1.0, 2.0], 0.0);
 
 
 e.freeWarp('w0');
@@ -768,7 +1078,7 @@ e.setPat('b07', 0.0, [0.4, 0.7], [0.01, 0.1], 0.0);
 
 
 
-
+~zone.(0)
 
 
 
@@ -776,7 +1086,7 @@ e.setPat('b07', 0.0, [0.4, 0.7], [0.01, 0.1], 0.0);
 // --------- kamaak  ----------//
 
 (
-~zone6.();
+~zone.(9);
 e.freeWarp('w0');
 Pdef('mx08').clear;
 e.freeWarp('w1');
@@ -789,7 +1099,7 @@ e.freeWarp('w2');
 ~loop = ~kvbufs.loopsAtBuf(~buf);
 
 ~bpm = 60 * 16 / (~loop.dur / 1.5);
-~matrix.setBPM(~bpm);
+~matrix.setBPM(~bpm*0.53);
 
 ~rhystreams = [8, 6, 2].collect({|div|
 	Pseq(24.collect({|i| if (i%div == 0) {1} {0} }), inf).asStream
@@ -842,8 +1152,8 @@ e.playWarp('w0', 'revwrpm', ~buf, ~p1, 1/4, 0.7, 1.3);
 
 
 ~rhyamps[0] = 1;
-~rhyamps[1] = 1
-~rhyamps[2] = 1
+~rhyamps[1] = 1;
+~rhyamps[2] = 1;
 
 
 ~rhyamps = Array.fill(~rhystreams.size, {
@@ -918,7 +1228,7 @@ a = [
 		1
 	})
 ];
-e.setPwarp('w0', a, 1 / 4);
+e.setPwarp('w0', a, 1 / 2);
 ~rhyamps = Array.fill(~rhystreams.size, {
 	[1.0, 0.0].wchoose([1.0, 0.0])
 })
@@ -933,7 +1243,7 @@ e.freeWarp('w0')
 
 ~matrix.activateSkismSynth('primeTam')
 
-~matrix.setSkismAmp('primeTam', 0.5 )
+~matrix.setSkismAmp('primeTam', 0.1 )
 
 ~matrix.deactivateSkismSynth('primeTam')
 

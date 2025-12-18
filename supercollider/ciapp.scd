@@ -209,7 +209,7 @@ Tdef('color', {
 
 ~graphics.setPattern(18, 0, 1.0, 1, 1, 0.0, 1.0, 0.0);
 
-~graphics.setPattern(19, 1, 1.0, 1, 1, 1.0, 1.0, 1.0);
+~graphics.setPattern(19, 0, 1.0, 0, 0, 1.0, 1.0, 1.0);
 
 ~graphics.setPattern(20, 0, 1.0, 1, 1, 1.0, 0.0, 0.5);
 
@@ -219,11 +219,11 @@ Tdef('color', {
 
 ~graphics.setPattern(23, 0, 0.6, 0, 0, 1.0, 0.0, 1.0);
 
-~graphics.setPattern(24, 1, 1.0, 1, 1, 0.0, 0.6, 0.7);
+~graphics.setPattern(24, 0, 1.0, 0, 0, 0.0, 0.6, 0.7);
 
-~graphics.setPattern(25, 0, 0.6, 0, 0, 1.0, 1.0, 1.0);
+~graphics.setPattern(25, 0, 1.0, 1, 1, 0.0, 0.6, 0.7);
 
-~graphics.setPattern(26, 0, 0.3, 1, 1, 0.0, 0.3, 0.1);
+~graphics.setPattern(26, 0, 1.0, 1, 1, 0.0, 0.3, 0.6);
 
 ~graphics.setPattern(27, 0, 1.0, 1, 1, 0.2, 0.0, 0.04);
 
@@ -509,7 +509,7 @@ Document.current.keyDownAction = {|doc, char, mod, uni, key|
 }
 )
 
-~file = File("/Users/alo/dev/lambda/supercollider/sparsematrix/sets/_lg_r_v__A___U_E.scd", "r")
+~file = File("/Users/kurivari/dev/lambda/supercollider/sparsematrix/sets/_lg_r_v__A___U_E.scd", "r")
 
 ~code = ~file.readAllString
 

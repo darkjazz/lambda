@@ -104,7 +104,7 @@ SynthDef(\bitSt3, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 
 
 SynthDef(\bitSt4, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
-	var ply, sig, flt, resfr, fund, hoa;
+	var ply, sig, flt, resfr, fund, hoa, thud;
 	fund = Control.names([\rfrq]).ir(Array.primesN(17, 73));
 	resfr = Array.fill(3, {
 		Select.kr(IRand(0, fund.lastIndex), fund)
@@ -116,8 +116,9 @@ SynthDef(\bitSt4, {|out, efx, amp, emp, buf, dur, rotx, roty, rotz|
 		),
 		0.99
 	) * EnvGen.kr(\env.kr(Env.newClear(8).asArray), timeScale: dur);
+	thud = Mix(SinOsc.ar(Array.geom(3, pi**pi, 16/15), 0.5pi)) * EnvGen.kr(Env.perc(0.001, 0.01, 1.0, -16));
 	flt = CombC.ar(ply * XLine.kr(amp, 0.001, dur / 2), dur, dur, dur*4);
-	sig = (ply + flt) * EnvGen.kr(Env([1.0, 1.0, 0.0], [1.0, 0.0]), timeScale: dur * 3, doneAction: 2);
+	sig = (ply + flt + thud) * EnvGen.kr(Env([1.0, 1.0, 0.0], [1.0, 0.0]), timeScale: dur * 3, doneAction: 2);
 	sig = Compander.ar(sig, sig, 1.0, 1.0, 0.1, 0.002, 0.1);
 	Out.ar(efx, sig * emp);
 	hoa = HoaEncodeMatrix.ar(sig * amp, HoaMatrixEncoder.newDirections([[45, 0], [135, 0]].degrad, order: ~ambiOrder));
